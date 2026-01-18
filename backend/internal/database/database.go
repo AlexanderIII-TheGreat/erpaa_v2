@@ -11,7 +11,7 @@ import (
 
 
 func DataCon() *sql.DB{
-	err := godotenv.Load("C:/Users/user/Documents/ERPAA/backend/.env")
+	err := godotenv.Load(".env")
 	if err != nil {
 		panic(err)
 	}
