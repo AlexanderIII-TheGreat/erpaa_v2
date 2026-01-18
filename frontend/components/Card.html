@@ -1,0 +1,62 @@
+<div class="erpaa-card">
+  <div class="flex items-start justify-between mb-4">
+    <div>
+      <h3 class="text-xl font-bold text-gray-800 mb-2">{{title}}</h3>
+      {{#if subtitle}}
+      <p class="text-gray-600 mb-3">{{subtitle}}</p>
+      {{/if}}
+    </div>
+    {{#if icon}}
+    <div class="p-3 rounded-lg {{iconBg}}">
+      <i class="{{icon}} {{iconColor}} text-xl"></i>
+    </div>
+    {{/if}}
+  </div>
+  
+  <div class="mb-4">
+    <slot></slot>
+  </div>
+  
+  {{#if actionText}}
+  <div class="border-t border-gray-100 pt-4">
+    <button class="text-erpaa-blue hover:text-blue-700 font-medium text-sm">
+      {{actionText}} <i class="fas fa-arrow-right ml-1"></i>
+    </button>
+  </div>
+  {{/if}}
+</div>
+
+<script>
+// Templating sederhana untuk card
+class ErpaaCard extends HTMLElement {
+  constructor() {
+    super()
+    this.template = this.innerHTML
+  }
+  
+  connectedCallback() {
+    const title = this.getAttribute('title') || ''
+    const subtitle = this.getAttribute('subtitle') || ''
+    const icon = this.getAttribute('icon') || ''
+    const iconBg = this.getAttribute('icon-bg') || 'bg-blue-100'
+    const iconColor = this.getAttribute('icon-color') || 'text-erpaa-blue'
+    const actionText = this.getAttribute('action-text') || ''
+    
+    let content = this.template
+      .replace('{{title}}', title)
+      .replace('{{subtitle}}', subtitle)
+      .replace('{{icon}}', icon)
+      .replace('{{iconBg}}', iconBg)
+      .replace('{{iconColor}}', iconColor)
+      .replace('{{actionText}}', actionText)
+    
+    // Handle slot
+    const slotContent = this.innerHTML
+    content = content.replace('<slot></slot>', slotContent)
+    
+    this.innerHTML = content
+  }
+}
+
+customElements.define('erpaa-card', ErpaaCard)
+</script>

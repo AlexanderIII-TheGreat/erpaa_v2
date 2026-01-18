@@ -1,0 +1,2504 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Daily Business Brief - Flashboard ERP Modern</title>
+    <!-- Tailwind CSS via CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Font Awesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Animate.css for smooth animations -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css">
+    
+    <style>
+        :root {
+            --soft-blue: #4A90E2;
+            --soft-blue-light: #E3F2FD;
+            --soft-blue-dark: #2A6EBB;
+            --neutral-gray: #F5F7FA;
+            --neutral-gray-dark: #E1E8F0;
+            --neutral-text: #4A5568;
+            --soft-green: #48BB78;
+            --soft-purple: #9F7AEA;
+            --soft-pink: #ED64A6;
+            --soft-cyan: #0BC5EA;
+        }
+        
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            color: var(--neutral-text);
+            overflow-x: hidden;
+            background: linear-gradient(to bottom right, #eff6ff, #f3f4f6, #f9fafb);
+        }
+        
+        /* Struktur layout utama */
+        .app-container {
+            display: flex;
+            min-height: 100vh;
+            width: 100%;
+        }
+        
+        .main-wrapper {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            max-height: 100vh;
+            overflow: hidden;
+        }
+        
+        .content-wrapper {
+            flex: 1;
+            overflow-y: auto;
+            overflow-x: hidden;
+            -webkit-overflow-scrolling: touch;
+            padding: 2rem;
+            background: linear-gradient(to bottom, #f8fafc, #f1f5f9);
+        }
+        
+        /* Custom animations */
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        
+        @keyframes slideInLeft {
+            from {
+                opacity: 0;
+                transform: translateX(-20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateX(0);
+            }
+        }
+        
+        @keyframes slideInRight {
+            from {
+                opacity: 0;
+                transform: translateX(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateX(0);
+            }
+        }
+        
+        @keyframes pulseSoft {
+            0%, 100% {
+                opacity: 1;
+                transform: scale(1);
+            }
+            50% {
+                opacity: 0.8;
+                transform: scale(1.02);
+            }
+        }
+        
+        @keyframes float {
+            0%, 100% {
+                transform: translateY(0);
+            }
+            50% {
+                transform: translateY(-10px);
+            }
+        }
+        
+        @keyframes shimmer {
+            0% {
+                background-position: -200% center;
+            }
+            100% {
+                background-position: 200% center;
+            }
+        }
+        
+        @keyframes typingDot {
+            0%, 60%, 100% { transform: translateY(0); }
+            30% { transform: translateY(-8px); }
+        }
+        
+        @keyframes slideInFromLeft {
+            from {
+                opacity: 0;
+                transform: translateX(-30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateX(0);
+            }
+        }
+        
+        @keyframes bounceIn {
+            0% {
+                opacity: 0;
+                transform: scale(0.3);
+            }
+            50% {
+                opacity: 1;
+                transform: scale(1.05);
+            }
+            70% {
+                transform: scale(0.9);
+            }
+            100% {
+                transform: scale(1);
+            }
+        }
+        
+        @keyframes ripple {
+            0% {
+                transform: scale(0);
+                opacity: 1;
+            }
+            100% {
+                transform: scale(4);
+                opacity: 0;
+            }
+        }
+        
+        .animate-fade-in-up {
+            animation: fadeInUp 0.6s ease-out forwards;
+        }
+        
+        .animate-slide-in-left {
+            animation: slideInLeft 0.5s ease-out forwards;
+        }
+        
+        .animate-slide-in-right {
+            animation: slideInRight 0.5s ease-out forwards;
+        }
+        
+        .animate-pulse-soft {
+            animation: pulseSoft 2s infinite ease-in-out;
+        }
+        
+        .animate-float {
+            animation: float 3s ease-in-out infinite;
+        }
+        
+        .animate-shimmer {
+            animation: shimmer 3s infinite linear;
+            background: linear-gradient(90deg, #F5F7FA 0%, #E3F2FD 50%, #F5F7FA 100%);
+            background-size: 200% auto;
+        }
+        
+        .animate-slide-in-from-left {
+            animation: slideInFromLeft 0.6s ease-out forwards;
+        }
+        
+        .animate-bounce-in {
+            animation: bounceIn 0.6s ease-out forwards;
+        }
+        
+        .animate-ripple {
+            animation: ripple 0.6s linear forwards;
+        }
+        
+        /* Custom scrollbar */
+        ::-webkit-scrollbar {
+            width: 8px;
+            height: 8px;
+        }
+        
+        ::-webkit-scrollbar-track {
+            background: var(--neutral-gray);
+            border-radius: 4px;
+        }
+        
+        ::-webkit-scrollbar-thumb {
+            background: linear-gradient(135deg, #4A90E2, #2A6EBB);
+            border-radius: 4px;
+        }
+        
+        ::-webkit-scrollbar-thumb:hover {
+            background: linear-gradient(135deg, #2A6EBB, #4A90E2);
+        }
+        
+        /* Smooth transitions */
+        .smooth-transition {
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        
+        /* Glass effect */
+        .glass-effect {
+            backdrop-filter: blur(10px);
+            background: rgba(255, 255, 255, 0.92);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+        
+        /* Card hover effect */
+        .hover-lift {
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        
+        .hover-lift:hover {
+            transform: translateY(-8px) scale(1.01);
+            box-shadow: 0 15px 30px -10px rgba(74, 144, 226, 0.2);
+        }
+        
+        /* Gradient backgrounds */
+        .gradient-blue {
+            background: linear-gradient(135deg, #E3F2FD 0%, #F5F7FA 100%);
+        }
+        
+        .gradient-green {
+            background: linear-gradient(135deg, #F0FFF4 0%, #F5F7FA 100%);
+        }
+        
+        .gradient-purple {
+            background: linear-gradient(135deg, #F5F3FF 0%, #F5F7FA 100%);
+        }
+        
+        .gradient-cyan {
+            background: linear-gradient(135deg, #E6FFFA 0%, #F5F7FA 100%);
+        }
+        
+        .gradient-orange {
+            background: linear-gradient(135deg, #FEEBC8 0%, #F5F7FA 100%);
+        }
+        
+        .gradient-red {
+            background: linear-gradient(135deg, #FED7D7 0%, #F5F7FA 100%);
+        }
+        
+        /* Progress bars */
+        .progress-bar {
+            height: 8px;
+            background-color: #E2E8F0;
+            border-radius: 4px;
+            overflow: hidden;
+        }
+        
+        .progress-bar-fill {
+            height: 100%;
+            border-radius: 4px;
+            transition: width 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        
+        /* Status indicators */
+        .status-indicator {
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+            display: inline-block;
+            margin-right: 8px;
+            position: relative;
+        }
+        
+        .status-indicator::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            border-radius: 50%;
+            animation: pulseSoft 2s infinite;
+        }
+        
+        .status-critical {
+            background-color: #F56565;
+        }
+        
+        .status-critical::after {
+            background-color: #F56565;
+        }
+        
+        .status-warning {
+            background-color: #ECC94B;
+        }
+        
+        .status-warning::after {
+            background-color: #ECC94B;
+        }
+        
+        .status-good {
+            background-color: #48BB78;
+        }
+        
+        .status-good::after {
+            background-color: #48BB78;
+        }
+        
+        /* Data visualization */
+        .data-trend-up {
+            color: #48BB78;
+            position: relative;
+        }
+        
+        .data-trend-up::before {
+            content: "↗";
+            margin-right: 4px;
+        }
+        
+        .data-trend-down {
+            color: #F56565;
+            position: relative;
+        }
+        
+        .data-trend-down::before {
+            content: "↘";
+            margin-right: 4px;
+        }
+        
+        /* AI Assistant specific */
+        .ai-message {
+            max-width: 80%;
+            padding: 12px 16px;
+            border-radius: 18px;
+            margin-bottom: 12px;
+            position: relative;
+        }
+        
+        .ai-message.user {
+            background: linear-gradient(135deg, #4A90E2, #2A6EBB);
+            color: white;
+            margin-left: auto;
+            border-bottom-right-radius: 4px;
+        }
+        
+        .ai-message.assistant {
+            background: #F7FAFC;
+            color: #2D3748;
+            border: 1px solid #E2E8F0;
+            margin-right: auto;
+            border-bottom-left-radius: 4px;
+        }
+        
+        .ai-typing-indicator {
+            display: flex;
+            align-items: center;
+            padding: 12px 16px;
+            background: #F7FAFC;
+            border-radius: 18px;
+            width: fit-content;
+            margin-bottom: 12px;
+            border: 1px solid #E2E8F0;
+        }
+        
+        .ai-typing-dot {
+            width: 8px;
+            height: 8px;
+            background-color: #A0AEC0;
+            border-radius: 50%;
+            margin: 0 2px;
+            animation: typingDot 1.5s infinite ease-in-out;
+        }
+        
+        .ai-typing-dot:nth-child(1) { animation-delay: 0s; }
+        .ai-typing-dot:nth-child(2) { animation-delay: 0.2s; }
+        .ai-typing-dot:nth-child(3) { animation-delay: 0.4s; }
+        
+        /* Container untuk pertanyaan cepat AI */
+        .ai-quick-questions-container {
+            display: flex;
+            overflow-x: auto;
+            gap: 8px;
+            padding: 12px 4px 16px 4px;
+            margin-bottom: 4px;
+            scrollbar-width: thin;
+            scrollbar-color: #4A90E2 #F5F7FA;
+            -webkit-overflow-scrolling: touch;
+        }
+        
+        .ai-quick-questions-container::-webkit-scrollbar {
+            height: 6px;
+            display: block;
+        }
+        
+        .ai-quick-questions-container::-webkit-scrollbar-track {
+            background: #F5F7FA;
+            border-radius: 4px;
+            margin: 0 4px;
+        }
+        
+        .ai-quick-questions-container::-webkit-scrollbar-thumb {
+            background: linear-gradient(135deg, #4A90E2, #2A6EBB);
+            border-radius: 4px;
+            border: 1px solid #E2E8F0;
+        }
+        
+        .ai-quick-questions-container::-webkit-scrollbar-thumb:hover {
+            background: linear-gradient(135deg, #2A6EBB, #4A90E2);
+        }
+        
+        .ai-quick-question {
+            flex: 0 0 auto;
+            white-space: nowrap;
+            padding: 8px 12px;
+            background: #EBF8FF;
+            border: 1px solid #BEE3F8;
+            border-radius: 8px;
+            font-size: 12px;
+            color: #2C5282;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        
+        .ai-quick-question:hover {
+            background: #BEE3F8;
+            border-color: #90CDF4;
+            transform: translateY(-2px);
+        }
+        
+        /* Ripple effect */
+        .ripple-effect {
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .ripple-effect::after {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 5px;
+            height: 5px;
+            background: rgba(255, 255, 255, 0.5);
+            opacity: 0;
+            border-radius: 100%;
+            transform: scale(1, 1) translate(-50%);
+            transform-origin: 50% 50%;
+        }
+        
+        .ripple-effect:focus:not(:active)::after {
+            animation: ripple 0.6s ease-out;
+        }
+        
+        /* Loading animation */
+        .loading-spinner {
+            width: 40px;
+            height: 40px;
+            border: 3px solid #E2E8F0;
+            border-top: 3px solid #4A90E2;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+        }
+        
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+        
+        /* Page transitions */
+        .page-transition {
+            animation: fadeInUp 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        
+        /* Custom Animation System */
+        .animate-on-scroll {
+            opacity: 0;
+            transform: translateY(30px);
+            transition: opacity 0.6s ease, transform 0.6s ease;
+        }
+        
+        .animate-on-scroll.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+        
+        .animate-on-scroll.delay-100 {
+            transition-delay: 0.1s;
+        }
+        
+        .animate-on-scroll.delay-200 {
+            transition-delay: 0.2s;
+        }
+        
+        .animate-on-scroll.delay-300 {
+            transition-delay: 0.3s;
+        }
+        
+        .animate-on-scroll.delay-400 {
+            transition-delay: 0.4s;
+        }
+        
+        .animate-on-scroll.delay-500 {
+            transition-delay: 0.5s;
+        }
+        
+        /* Force GPU acceleration */
+        .gpu-accelerate {
+            transform: translateZ(0);
+            backface-visibility: hidden;
+            perspective: 1000px;
+        }
+        
+        /* Initial animation untuk konten yang terlihat langsung */
+        .initial-animate {
+            animation: fadeInUp 0.8s ease-out forwards;
+        }
+        
+        /* Memastikan semua konten ter-render */
+        .force-render {
+            will-change: transform, opacity;
+            contain: layout style paint;
+        }
+        
+        /* Submenu styling */
+        .submenu-item {
+            transition: all 0.3s ease;
+            position: relative;
+        }
+        
+        .submenu-item:hover {
+            transform: translateX(5px);
+        }
+        
+        .submenu-item.active {
+            background-color: #4A90E2;
+            color: white;
+        }
+        
+        /* Chevron animation */
+        .fa-chevron-down, .fa-chevron-up {
+            transition: transform 0.3s ease;
+        }
+        
+        .fa-chevron-up {
+            transform: rotate(180deg);
+        }
+        
+        /* Priority indicators */
+        .priority-high {
+            background: linear-gradient(135deg, #FED7D7, #FEB2B2);
+            color: #742A2A;
+            border-left: 4px solid #F56565;
+        }
+        
+        .priority-medium {
+            background: linear-gradient(135deg, #FEEBC8, #FBD38D);
+            color: #744210;
+            border-left: 4px solid #ECC94B;
+        }
+        
+        .priority-low {
+            background: linear-gradient(135deg, #C6F6D5, #9AE6B4);
+            color: #22543D;
+            border-left: 4px solid #48BB78;
+        }
+        
+        /* Action buttons */
+        .action-btn {
+            padding: 8px 16px;
+            border-radius: 8px;
+            font-weight: 500;
+            transition: all 0.3s ease;
+        }
+        
+        .action-btn.primary {
+            background: linear-gradient(135deg, #4A90E2, #2A6EBB);
+            color: white;
+        }
+        
+        .action-btn.primary:hover {
+            background: linear-gradient(135deg, #2A6EBB, #4A90E2);
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(74, 144, 226, 0.3);
+        }
+        
+        .action-btn.secondary {
+            background: #F7FAFC;
+            color: #4A5568;
+            border: 1px solid #E2E8F0;
+        }
+        
+        .action-btn.secondary:hover {
+            background: #EDF2F7;
+            border-color: #CBD5E0;
+            transform: translateY(-2px);
+        }
+        
+        /* Logout button di navbar */
+        .nav-logout-btn {
+            padding: 8px 16px;
+            border-radius: 8px;
+            background: #FEF2F2;
+            color: #DC2626;
+            border: 1px solid #FECACA;
+            transition: all 0.3s ease;
+        }
+        
+        .nav-logout-btn:hover {
+            background: #FEE2E2;
+            border-color: #FCA5A5;
+            transform: translateY(-2px);
+        }
+        
+        /* Daily Brief specific */
+        .brief-stat-card {
+            transition: all 0.3s ease;
+        }
+        
+        .brief-stat-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.1);
+        }
+        
+        .insight-card {
+            border-left: 4px solid;
+            padding-left: 16px;
+        }
+        
+        .insight-card.critical {
+            border-left-color: #F56565;
+            background: linear-gradient(to right, rgba(245, 101, 101, 0.05), transparent);
+        }
+        
+        .insight-card.warning {
+            border-left-color: #ECC94B;
+            background: linear-gradient(to right, rgba(236, 201, 75, 0.05), transparent);
+        }
+        
+        .insight-card.success {
+            border-left-color: #48BB78;
+            background: linear-gradient(to right, rgba(72, 187, 120, 0.05), transparent);
+        }
+        
+        .insight-card.info {
+            border-left-color: #4A90E2;
+            background: linear-gradient(to right, rgba(74, 144, 226, 0.05), transparent);
+        }
+        
+        /* Metric gauge */
+        .metric-gauge {
+            height: 6px;
+            border-radius: 3px;
+            background: #E2E8F0;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .metric-gauge-fill {
+            height: 100%;
+            border-radius: 3px;
+            transition: width 0.8s ease-out;
+        }
+        
+        /* Grid Section Card */
+        .grid-section-card {
+            min-height: 500px;
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+        }
+        
+        .card-content-wrapper {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+        }
+        
+        .card-body-scrollable {
+            flex: 1;
+            overflow-y: auto;
+            max-height: 380px;
+            padding-right: 5px;
+        }
+        
+        /* Horizontal scroll container */
+        .horizontal-scroll-container {
+            display: flex;
+            overflow-x: auto;
+            padding: 1rem 0.5rem;
+            gap: 1rem;
+            scrollbar-width: thin;
+            scrollbar-color: #CBD5E0 #F5F7FA;
+            -webkit-overflow-scrolling: touch;
+        }
+        
+        .horizontal-scroll-container::-webkit-scrollbar {
+            height: 6px;
+        }
+        
+        .horizontal-scroll-container::-webkit-scrollbar-track {
+            background: #F5F7FA;
+            border-radius: 3px;
+        }
+        
+        .horizontal-scroll-container::-webkit-scrollbar-thumb {
+            background: linear-gradient(135deg, #4A90E2, #2A6EBB);
+            border-radius: 3px;
+        }
+        
+        .horizontal-card {
+            flex: 0 0 auto;
+            width: 320px;
+            min-height: 240px;
+            display: flex;
+            flex-direction: column;
+        }
+        
+        /* Perbaikan untuk bagian tanggal di header */
+        #currentDate {
+            font-size: 14px;
+            font-weight: 600;
+            color: #4A5568;
+            white-space: nowrap;
+            text-align: right;
+        }
+    </style>
+</head>
+<body class="page-transition">
+    <div class="app-container">
+        <!-- Sidebar -->
+       <aside class="w-64 bg-white/90 border-r border-gray-200/50 flex flex-col shadow-sm glass-effect">
+    <div class="p-6 border-b border-gray-100/50">
+        <div class="flex items-center space-x-3">
+            <div class="w-10 h-10 rounded-lg bg-gradient-to-br from-blue-400 to-blue-600 flex items-center justify-center animate-float">
+                <i class="fas fa-chart-line text-white"></i>
+            </div>
+            <h1 class="text-xl font-bold text-gray-800">A2M ERPAA</h1>
+        </div>
+    </div>
+    
+    <nav class="flex-1 p-4 space-y-2">
+        <!-- Dashboard dengan Submenu -->
+        <div class="mb-2">
+            <div class="flex items-center justify-between p-3 rounded-lg bg-blue-50 text-blue-600 cursor-pointer smooth-transition hover:bg-blue-100 hover-lift ripple-effect" id="dashboard-menu">
+                <div class="flex items-center space-x-3">
+                    <i class="fas fa-tachometer-alt w-5 text-center"></i>
+                    <span class="font-medium">Business Monitoring</span>
+                </div>
+                <i class="fas fa-chevron-down text-sm" id="dashboard-chevron"></i>
+            </div>
+            <div class="ml-8 mt-1 space-y-1" id="dashboard-submenu">
+                <a href="/dashboard/" class="block p-2 text-sm rounded-lg bg-blue-100 text-blue-600 smooth-transition hover:bg-blue-200 hover-lift ripple-effect">
+                    <i class="fas fa-chart-bar w-4 text-center mr-2"></i>
+                    Dashboard Overview
+                </a>
+                <a href="/dashboard/daily/" class="block p-2 text-sm rounded-lg text-gray-700 smooth-transition hover:bg-gray-100 hover-lift ripple-effect">
+                    <i class="fas fa-briefcase w-4 text-center mr-2"></i>
+                    Daily Business Brief
+                </a>
+            </div>
+        </div>
+                <a href="/product/" class="flex items-center space-x-3 p-3 rounded-lg text-gray-700 smooth-transition hover:bg-gray-100 hover-lift ripple-effect">
+                    <i class="fas fa-boxes w-5 text-center"></i>
+                    <span class="font-medium">Product Management</span>
+                </a>
+                <a href="/inventory/" class="flex items-center space-x-3 p-3 rounded-lg text-gray-700 smooth-transition hover:bg-gray-100 hover-lift ripple-effect">
+                    <i class="fas fa-warehouse w-5 text-center"></i>
+                    <span class="font-medium">Inventory</span>
+                </a>
+                <a href="/shipping/" class="flex items-center space-x-3 p-3 rounded-lg text-gray-700 smooth-transition hover:bg-gray-100 hover-lift ripple-effect">
+                    <i class="fas fa-shipping-fast w-5 text-center"></i>
+                    <span class="font-medium">Shipping Tracking</span>
+                </a>
+                <a href="/salesforecasting/" class="flex items-center space-x-3 p-3 rounded-lg text-gray-700 smooth-transition hover:bg-gray-100 hover-lift ripple-effect">
+                    <i class="fas fa-chart-bar w-5 text-center"></i>
+                    <span class="font-medium">Sales Forecasting</span>
+                </a>
+                <a href="/integrasi/" class="flex items-center space-x-3 p-3 rounded-lg text-gray-700 smooth-transition hover:bg-gray-100 hover-lift ripple-effect">
+                    <i class="fas fa-store w-5 text-center"></i>
+                    <span class="font-medium">Integrasi</span>
+                </a>
+            </nav>
+            
+            <div class="p-4 border-t border-gray-100/50">
+                <div class="flex items-center space-x-3 p-3 rounded-lg bg-gradient-to-r from-blue-50 to-gray-50 hover-lift smooth-transition">
+                    <div class="w-8 h-8 rounded-full bg-gradient-to-r from-blue-100 to-blue-200 flex items-center justify-center">
+                        <i class="fas fa-user text-blue-600 text-sm"></i>
+                    </div>
+                    <div>
+                        <p class="text-sm font-medium">Admin</p>
+                        <p class="text-xs text-gray-500">admin@flashboard.com</p>
+                    </div>
+                </div>
+            </div>
+        </aside>
+        
+        <!-- Main Content -->
+        <div class="main-wrapper">
+            <!-- Header with AI Assistant in top right -->
+            <header class="sticky top-0 z-20 bg-white/80 glass-effect border-b border-gray-200/50 px-8 py-4 shrink-0">
+                <div class="flex justify-between items-center">
+                    <div>
+                        <h2 class="text-2xl font-bold text-gray-800 initial-animate">
+                            <i class=" text-blue-600 mr-3"></i>
+                            Daily Business Brief
+                        </h2>
+                        <p class="text-gray-600 initial-animate" style="animation-delay: 0.1s">Dashboard bukan untuk melihat data, tapi untuk menentukan fokus hari ini</p>
+                    </div>
+                    <div class="flex items-center space-x-6">
+                        <!-- AI Assistant Button - Enhanced -->
+                        <div class="relative">
+                            <button id="aiAssistantBtn" class="flex items-center space-x-2 px-4 py-2 rounded-lg bg-gradient-to-r from-blue-500 to-blue-600 text-white smooth-transition hover:from-blue-600 hover:to-blue-700 hover-lift shadow-md relative overflow-hidden group">
+                                <i class="fas fa-robot"></i>
+                                <span class="font-medium">AI Assistant</span>
+                                <div class="absolute inset-0 bg-gradient-to-r from-cyan-500 to-blue-500 opacity-0 group-hover:opacity-20 smooth-transition"></div>
+                            </button>
+                            
+                            <!-- Enhanced AI Assistant Panel -->
+                            <div id="aiAssistantPanel" class="fixed right-8 top-20 w-96 bg-white rounded-xl shadow-2xl border border-gray-200 hidden animate-fade-in-up z-50 overflow-hidden" style="height: 600px;">
+                                <!-- AI Assistant Header -->
+                                <div class="bg-gradient-to-r from-blue-500 to-blue-600 p-4 text-white">
+                                    <div class="flex justify-between items-center">
+                                        <div class="flex items-center space-x-3">
+                                            <div class="w-10 h-10 rounded-full bg-white/20 flex items-center justify-center">
+                                                <i class="fas fa-robot text-xl"></i>
+                                            </div>
+                                            <div>
+                                                <h3 class="font-bold text-lg">Daily Brief AI</h3>
+                                                <p class="text-sm text-blue-100">Membantu analisis prioritas bisnis hari ini</p>
+                                            </div>
+                                        </div>
+                                        <div class="flex items-center space-x-2">
+                                            <button class="w-8 h-8 rounded-full bg-white/20 flex items-center justify-center hover:bg-white/30 smooth-transition">
+                                                <i class="fas fa-cog"></i>
+                                            </button>
+                                            <button id="closeAIPanel" class="w-8 h-8 rounded-full bg-white/20 flex items-center justify-center hover:bg-white/30 smooth-transition">
+                                                <i class="fas fa-times"></i>
+                                            </button>
+                                        </div>
+                                    </div>
+                                    
+                                    <!-- AI Mode Selector -->
+                                    <div class="flex space-x-2 mt-4">
+                                        <button class="ai-mode-btn active flex-1 py-2 rounded-lg bg-white/20 text-sm font-medium smooth-transition hover:bg-white/30" data-mode="brief">
+                                            <i class="fas fa-briefcase mr-1"></i> Daily Brief
+                                        </button>
+                                        <button class="ai-mode-btn flex-1 py-2 rounded-lg bg-white/10 text-sm font-medium smooth-transition hover:bg-white/20" data-mode="priority">
+                                            <i class="fas fa-exclamation-triangle mr-1"></i> Prioritas
+                                        </button>
+                                        <button class="ai-mode-btn flex-1 py-2 rounded-lg bg-white/10 text-sm font-medium smooth-transition hover:bg-white/20" data-mode="action">
+                                            <i class="fas fa-tasks mr-1"></i> Aksi
+                                        </button>
+                                    </div>
+                                </div>
+                                
+                                <!-- AI Assistant Content -->
+                                <div class="flex flex-col h-full">
+                                    <!-- AI Chat Container -->
+                                    <div id="aiChatContainer" class="flex-1 overflow-y-auto p-4 space-y-3" style="max-height: 380px;">
+                                        <!-- Initial AI Message -->
+                                        <div class="ai-message assistant">
+                                            <div class="flex items-start space-x-2">
+                                                <div class="w-6 h-6 rounded-full bg-blue-100 flex items-center justify-center flex-shrink-0 mt-1">
+                                                    <i class="fas fa-robot text-blue-600 text-xs"></i>
+                                                </div>
+                                                <div>
+                                                    <p class="font-medium text-gray-800 mb-1">Halo! Saya AI Assistant khusus Daily Business Brief.</p>
+                                                    <p class="text-gray-700 text-sm">Saya dapat membantu Anda menganalisis prioritas hari ini, memberikan insight tentang masalah utama, dan merekomendasikan tindakan. Apa yang bisa saya bantu?</p>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        
+                                        <!-- Sample conversation -->
+                                        <div class="ai-message user">
+                                            <div class="flex items-center justify-between">
+                                                <p>Apa prioritas utama hari ini?</p>
+                                                <i class="fas fa-user ml-2"></i>
+                                            </div>
+                                        </div>
+                                        
+                                        <div class="ai-message assistant">
+                                            <div class="flex items-start space-x-2">
+                                                <div class="w-6 h-6 rounded-full bg-blue-100 flex items-center justify-center flex-shrink-0 mt-1">
+                                                    <i class="fas fa-robot text-blue-600 text-xs"></i>
+                                                </div>
+                                                <div>
+                                                    <p class="font-medium text-gray-800 mb-1">Prioritas Utama Hari Ini</p>
+                                                    <p class="text-gray-700 text-sm">Berdasarkan analisis data terkini, 3 prioritas utama hari ini:<br>1. <strong>Stok Produk A hampir habis</strong> (sisa 5 unit, habis dalam 2-3 hari)<br>2. <strong>Margin Produk C turun 13%</strong> karena biaya pengiriman naik<br>3. <strong>Traffic website turun 15%</strong> namun konversi stabil</p>
+                                                    <div class="mt-2 flex space-x-2">
+                                                        <button class="text-xs px-2 py-1 bg-blue-100 text-blue-700 rounded smooth-transition hover:bg-blue-200">Lihat Detail</button>
+                                                        <button class="text-xs px-2 py-1 bg-green-100 text-green-700 rounded smooth-transition hover:bg-green-200">Buat Rencana</button>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    
+                                    <!-- AI Quick Actions - Container bisa di-scroll dengan scrollbar jelas -->
+                                    <div class="p-4 border-t border-gray-200">
+                                        <p class="text-sm font-medium text-gray-700 mb-2">Pertanyaan Cepat Daily Brief:</p>
+                                        <div class="ai-quick-questions-container">
+                                            <button class="ai-quick-question">
+                                                Prioritas utama hari ini
+                                            </button>
+                                            <button class="ai-quick-question">
+                                                Analisis risiko stok
+                                            </button>
+                                            <button class="ai-quick-question">
+                                                Saran tindakan cepat
+                                            </button>
+                                            <button class="ai-quick-question">
+                                                Notifikasi lintas modul
+                                            </button>
+                                            <button class="ai-quick-question">
+                                                Prediksi bisnis besok
+                                            </button>
+                                            <button class="ai-quick-question">
+                                                Analisis kompetitor
+                                            </button>
+                                            <button class="ai-quick-question">
+                                                Rekomendasi optimasi
+                                            </button>
+                                            <button class="ai-quick-question">
+                                                Health score bisnis
+                                            </button>
+                                        </div>
+                                    </div>
+                                    
+                                    <!-- AI Input -->
+                                    <div class="p-4 border-t border-gray-200 bg-gray-50">
+                                        <div class="relative">
+                                            <input type="text" id="aiQuestionInput" placeholder="Tanyakan tentang prioritas bisnis hari ini..." class="w-full p-3 pr-12 rounded-lg bg-white border border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent">
+                                            <button id="sendAIQuestion" class="absolute right-3 top-3 text-blue-600 hover:text-blue-800 smooth-transition">
+                                                <i class="fas fa-paper-plane"></i>
+                                            </button>
+                                        </div>
+                                        <p class="text-xs text-gray-500 mt-2 text-center">
+                                            <i class="fas fa-shield-alt mr-1"></i> Data Anda aman dan dianalisis secara real-time
+                                        </p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="flex items-center space-x-4">
+                            <!-- Logout Button di Navbar -->
+                            <form action="/logout/" method="post" class="ml-2">
+                                <button type="submit" class="nav-logout-btn flex items-center space-x-2 text-sm font-medium ripple-effect">
+                                    <i class="fas fa-sign-out-alt"></i>
+                                    <span>Logout</span>
+                                </button>
+                            </form>
+                            
+                            <div class="relative">
+                                <i class="fas fa-bell text-gray-500 text-xl hover:text-blue-500 smooth-transition cursor-pointer ripple-effect" id="notificationBell"></i>
+                                <span class="absolute -top-1 -right-1 w-3 h-3 bg-red-500 rounded-full animate-pulse-soft"></span>
+                            </div>
+                            <!-- Tanggal -->
+                            <div class="text-sm text-gray-600">
+                                <span id="currentDate" class="font-medium"></span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </header>
+            
+            <!-- Content -->
+            <div class="content-wrapper">
+                <!-- AI Generated Summary Header -->
+                <section class="force-render mb-8">
+                    <div class="bg-gradient-to-r from-blue-50 to-purple-50 rounded-2xl border border-blue-200 p-6 animate-fade-in-up hover-lift">
+                        <div class="flex items-start justify-between">
+                            <div class="flex-1">
+                                <div class="flex items-center mb-4">
+                                    <div class="w-12 h-12 rounded-full bg-gradient-to-r from-blue-100 to-purple-100 flex items-center justify-center mr-4">
+                                        <i class="fas fa-brain text-blue-600 text-xl"></i>
+                                    </div>
+                                    <div>
+                                        <h3 class="text-xl font-bold text-gray-800">🤖 AI-Generated Business Brief</h3>
+                                        <p class="text-gray-600">Ringkasan bisnis hari ini berdasarkan analisis data terkini dari semua modul</p>
+                                    </div>
+                                </div>
+                                
+                                <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-6">
+                                    <div class="brief-stat-card bg-white p-4 rounded-xl border border-gray-200">
+                                        <div class="flex items-center justify-between mb-3">
+                                            <div class="text-sm font-medium text-gray-700">Health Score</div>
+                                            <div class="w-8 h-8 rounded-full bg-green-100 flex items-center justify-center">
+                                                <i class="fas fa-heartbeat text-green-600"></i>
+                                            </div>
+                                        </div>
+                                        <div class="text-3xl font-bold text-gray-800 mb-2">82%</div>
+                                        <div class="metric-gauge">
+                                            <div class="metric-gauge-fill bg-gradient-to-r from-green-400 to-green-500" style="width: 82%"></div>
+                                        </div>
+                                        <p class="text-xs text-gray-600 mt-2">↑ 3% dari kemarin</p>
+                                    </div>
+                                    
+                                    <div class="brief-stat-card bg-white p-4 rounded-xl border border-gray-200">
+                                        <div class="flex items-center justify-between mb-3">
+                                            <div class="text-sm font-medium text-gray-700">Risiko Tinggi</div>
+                                            <div class="w-8 h-8 rounded-full bg-red-100 flex items-center justify-center">
+                                                <i class="fas fa-exclamation-triangle text-red-600"></i>
+                                            </div>
+                                        </div>
+                                        <div class="text-3xl font-bold text-gray-800 mb-2">3</div>
+                                        <div class="metric-gauge">
+                                            <div class="metric-gauge-fill bg-gradient-to-r from-red-400 to-red-500" style="width: 60%"></div>
+                                        </div>
+                                        <p class="text-xs text-gray-600 mt-2">Perlu tindakan segera</p>
+                                    </div>
+                                    
+                                    <div class="brief-stat-card bg-white p-4 rounded-xl border border-gray-200">
+                                        <div class="flex items-center justify-between mb-3">
+                                            <div class="text-sm font-medium text-gray-700">Waktu Tindakan</div>
+                                            <div class="w-8 h-8 rounded-full bg-blue-100 flex items-center justify-center">
+                                                <i class="fas fa-clock text-blue-600"></i>
+                                            </div>
+                                        </div>
+                                        <div class="text-3xl font-bold text-gray-800 mb-2">4.5<span class="text-lg"> jam</span></div>
+                                        <div class="metric-gauge">
+                                            <div class="metric-gauge-fill bg-gradient-to-r from-blue-400 to-blue-500" style="width: 75%"></div>
+                                        </div>
+                                        <p class="text-xs text-gray-600 mt-2">Estimasi penyelesaian</p>
+                                    </div>
+                                </div>
+                                
+                                <div class="bg-white/80 p-4 rounded-xl border border-gray-200">
+                                    <div class="flex items-start">
+                                        <i class="fas fa-lightbulb text-yellow-500 mt-1 mr-3 text-xl"></i>
+                                        <div>
+                                            <h4 class="font-bold text-gray-800 mb-2">📌 Executive Summary:</h4>
+                                            <p class="text-gray-700">
+                                                Performa bisnis hari ini <span class="font-semibold text-green-600">cukup positif dengan Health Score 82%</span>. Penjualan meningkat 8.5% dari minggu lalu, namun ada <span class="font-semibold text-red-600">3 area kritis</span> yang memerlukan perhatian segera: 
+                                                (1) Stok Produk A hampir habis (5 unit tersisa), (2) Margin Produk C turun 13%, dan (3) Traffic website turun 15%. 
+                                                <span class="font-semibold">Fokus hari ini: restok produk prioritas dan evaluasi strategi marketing.</span>
+                                            </p>
+                                        </div>
+                                    </div>
+                                </div>
+                                
+                                <div class="flex items-center justify-between mt-6 pt-4 border-t border-gray-200">
+                                    <div class="flex items-center text-sm text-gray-500">
+                                        <i class="fas fa-sync-alt mr-2 text-blue-500"></i>
+                                        <span>Terakhir diperbarui: <span id="lastUpdatedTime">07:30 WIB</span></span>
+                                    </div>
+                                    <div class="flex space-x-2">
+                                        <button id="regenerateBrief" class="flex items-center space-x-2 px-4 py-2 bg-gradient-to-r from-blue-500 to-blue-600 text-white rounded-lg smooth-transition hover:from-blue-600 hover:to-blue-700 hover-lift">
+                                            <i class="fas fa-redo-alt"></i>
+                                            <span>Perbarui Brief</span>
+                                        </button>
+                                        <button id="exportBrief" class="flex items-center space-x-2 px-4 py-2 bg-white border border-gray-300 text-gray-700 rounded-lg smooth-transition hover:bg-gray-50 hover-lift">
+                                            <i class="fas fa-download"></i>
+                                            <span>Export PDF</span>
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+                
+                <!-- Grid Utama: Masalah & Solusi -->
+                <div class="grid grid-cols-1 lg:grid-cols-2 gap-8 mb-8">
+                    <!-- Masalah Utama Hari Ini -->
+                    <section class="animate-on-scroll delay-100">
+                        <div class="flex items-center justify-between mb-4">
+                            <h3 class="text-lg font-semibold text-gray-800">🚨 Masalah Utama Hari Ini</h3>
+                            <div class="flex items-center space-x-2">
+                                <span class="text-xs px-2 py-1 bg-red-100 text-red-700 rounded-full animate-pulse-soft">3 Prioritas</span>
+                                <button class="text-xs text-blue-600 hover:text-blue-800 smooth-transition">
+                                    <i class="fas fa-plus mr-1"></i> Tambah Catatan
+                                </button>
+                            </div>
+                        </div>
+                        
+                        <div class="bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden hover-lift force-render grid-section-card">
+                            <div class="p-5 border-b border-gray-100 gradient-red">
+                                <div class="flex items-center justify-between">
+                                    <div class="flex items-center space-x-3">
+                                        <div class="w-10 h-10 rounded-full bg-gradient-to-r from-red-100 to-red-200 flex items-center justify-center animate-pulse-soft">
+                                            <i class="fas fa-exclamation-triangle text-red-600"></i>
+                                        </div>
+                                        <div>
+                                            <h4 class="font-bold text-gray-800">Analisis Masalah Prioritas</h4>
+                                            <p class="text-sm text-gray-600">3 masalah kritis yang perlu segera ditangani</p>
+                                        </div>
+                                    </div>
+                                    <div class="text-right">
+                                        <p class="text-2xl font-bold text-gray-800">3</p>
+                                        <p class="text-xs text-gray-600">Masalah Kritis</p>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="p-5 card-content-wrapper">
+                                <div class="card-body-scrollable">
+                                    <div class="space-y-6">
+                                        <!-- Masalah 1 -->
+                                        <div class="insight-card critical p-4">
+                                            <div class="flex items-start">
+                                                <div class="flex-1">
+                                                    <div class="flex items-center mb-2">
+                                                        <span class="status-indicator status-critical"></span>
+                                                        <h4 class="font-bold text-gray-800">Stok Produk A Hampir Habis</h4>
+                                                    </div>
+                                                    <p class="text-gray-700 text-sm mb-3">
+                                                        Stok tersisa hanya <span class="font-bold text-red-600">5 unit</span>, akan habis dalam <span class="font-bold">2-3 hari</span> berdasarkan tren penjualan 7 hari terakhir. 
+                                                        Produk ini menyumbang <span class="font-bold">32% dari total pendapatan</span>.
+                                                    </p>
+                                                    
+                                                    <div class="grid grid-cols-2 gap-3 mb-3">
+                                                        <div class="bg-red-50 p-2 rounded-lg">
+                                                            <p class="text-xs text-gray-600">Permintaan Harian</p>
+                                                            <p class="font-bold text-gray-800">4 unit/hari</p>
+                                                        </div>
+                                                        <div class="bg-red-50 p-2 rounded-lg">
+                                                            <p class="text-xs text-gray-600">Dampak Finansial</p>
+                                                            <p class="font-bold text-gray-800">Rp 18.5Jt/bulan</p>
+                                                        </div>
+                                                    </div>
+                                                    
+                                                    <div class="flex items-center justify-between">
+                                                        <div class="flex items-center space-x-2">
+                                                            <i class="fas fa-history text-gray-400 text-sm"></i>
+                                                            <span class="text-xs text-gray-600">Terakhir restok: 5 hari lalu</span>
+                                                        </div>
+                                                        <div class="flex space-x-2">
+                                                            <button class="text-xs px-3 py-1 bg-red-100 text-red-700 rounded smooth-transition hover:bg-red-200">
+                                                                <i class="fas fa-clipboard-list mr-1"></i> PO
+                                                            </button>
+                                                            <button class="text-xs px-3 py-1 bg-blue-100 text-blue-700 rounded smooth-transition hover:bg-blue-200">
+                                                                <i class="fas fa-chart-line mr-1"></i> Analisis
+                                                            </button>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        
+                                        <!-- Masalah 2 -->
+                                        <div class="insight-card warning p-4">
+                                            <div class="flex items-start">
+                                                <div class="flex-1">
+                                                    <div class="flex items-center mb-2">
+                                                        <span class="status-indicator status-warning"></span>
+                                                        <h4 class="font-bold text-gray-800">Margin Produk C Turun 13%</h4>
+                                                    </div>
+                                                    <p class="text-gray-700 text-sm mb-3">
+                                                        Margin turun dari <span class="font-bold">37% ke 24%</span> dalam 30 hari terakhir karena kenaikan biaya pengiriman sebesar <span class="font-bold text-red-600">18%</span>. 
+                                                        Produk ini berkontribusi <span class="font-bold">15% dari total penjualan</span>.
+                                                    </p>
+                                                    
+                                                    <div class="grid grid-cols-2 gap-3 mb-3">
+                                                        <div class="bg-yellow-50 p-2 rounded-lg">
+                                                            <p class="text-xs text-gray-600">Margin Saat Ini</p>
+                                                            <p class="font-bold text-gray-800">24%</p>
+                                                        </div>
+                                                        <div class="bg-yellow-50 p-2 rounded-lg">
+                                                            <p class="text-xs text-gray-600">Kenaikan Biaya</p>
+                                                            <p class="font-bold text-gray-800">18%</p>
+                                                        </div>
+                                                    </div>
+                                                    
+                                                    <div class="flex items-center justify-between">
+                                                        <div class="flex items-center space-x-2">
+                                                            <i class="fas fa-chart-line text-gray-400 text-sm"></i>
+                                                            <span class="text-xs text-gray-600">Turun dari 37% bulan lalu</span>
+                                                        </div>
+                                                        <div class="flex space-x-2">
+                                                            <button class="text-xs px-3 py-1 bg-yellow-100 text-yellow-700 rounded smooth-transition hover:bg-yellow-200">
+                                                                <i class="fas fa-calculator mr-1"></i> Hitung Ulang
+                                                            </button>
+                                                            <button class="text-xs px-3 py-1 bg-blue-100 text-blue-700 rounded smooth-transition hover:bg-blue-200">
+                                                                <i class="fas fa-truck mr-1"></i> Supplier
+                                                            </button>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        
+                                        <!-- Masalah 3 -->
+                                        <div class="insight-card info p-4">
+                                            <div class="flex items-start">
+                                                <div class="flex-1">
+                                                    <div class="flex items-center mb-2">
+                                                        <span class="status-indicator status-warning"></span>
+                                                        <h4 class="font-bold text-gray-800">Traffic Website Turun 15%</h4>
+                                                    </div>
+                                                    <p class="text-gray-700 text-sm mb-3">
+                                                        Penurunan traffic sejak <span class="font-bold">5 hari lalu</span>, namun konversi tetap stabil di <span class="font-bold">2.8%</span>. 
+                                                        Rata-rata nilai order website <span class="font-bold text-green-600">Rp 151.200</span> (tertinggi diantara semua channel).
+                                                    </p>
+                                                    
+                                                    <div class="grid grid-cols-2 gap-3 mb-3">
+                                                        <div class="bg-blue-50 p-2 rounded-lg">
+                                                            <p class="text-xs text-gray-600">Pengunjung (7 hari)</p>
+                                                            <p class="font-bold text-gray-800">1,245</p>
+                                                        </div>
+                                                        <div class="bg-blue-50 p-2 rounded-lg">
+                                                            <p class="text-xs text-gray-600">Penurunan</p>
+                                                            <p class="font-bold text-red-600">15%</p>
+                                                        </div>
+                                                    </div>
+                                                    
+                                                    <div class="flex items-center justify-between">
+                                                        <div class="flex items-center space-x-2">
+                                                            <i class="fas fa-users text-gray-400 text-sm"></i>
+                                                            <span class="text-xs text-gray-600">Konversi stabil di 2.8%</span>
+                                                        </div>
+                                                        <div class="flex space-x-2">
+                                                            <button class="text-xs px-3 py-1 bg-blue-100 text-blue-700 rounded smooth-transition hover:bg-blue-200">
+                                                                <i class="fas fa-search mr-1"></i> SEO Audit
+                                                            </button>
+                                                            <button class="text-xs px-3 py-1 bg-purple-100 text-purple-700 rounded smooth-transition hover:bg-purple-200">
+                                                                <i class="fas fa-ad mr-1"></i> Marketing
+                                                            </button>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                
+                                <div class="mt-6 pt-4 border-t border-gray-200">
+                                    <div class="flex items-start space-x-2">
+                                        <i class="fas fa-brain text-red-500 mt-1 animate-pulse-soft"></i>
+                                        <div>
+                                            <p class="text-sm text-gray-700 font-medium mb-1">Kesimpulan AI:</p>
+                                            <p class="text-xs text-gray-600">
+                                                3 masalah diatas memerlukan tindakan berbeda: (1) Restok Produk A <span class="font-semibold">urgent</span>, (2) Evaluasi biaya pengiriman <span class="font-semibold">strategis</span>, (3) Analisis traffic website <span class="font-semibold">jangka panjang</span>. Rekomendasi: fokus pada masalah 1 hari ini, masalah 2 minggu ini, masalah 3 bulan ini.
+                                            </p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </section>
+                    
+                    <!-- Penyebab & Saran Tindakan -->
+                    <section class="animate-on-scroll delay-200">
+                        <div class="flex items-center justify-between mb-4">
+                            <h3 class="text-lg font-semibold text-gray-800">💡 Penyebab & Saran Tindakan</h3>
+                            <div class="flex items-center space-x-2">
+                                <span class="text-xs px-2 py-1 bg-green-100 text-green-700 rounded-full">AI Recommendations</span>
+                            </div>
+                        </div>
+                        
+                        <div class="bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden hover-lift force-render grid-section-card">
+                            <div class="p-5 border-b border-gray-100 gradient-green">
+                                <div class="flex items-center justify-between">
+                                    <div class="flex items-center space-x-3">
+                                        <div class="w-10 h-10 rounded-full bg-gradient-to-r from-green-100 to-green-200 flex items-center justify-center animate-pulse-soft">
+                                            <i class="fas fa-lightbulb text-green-600"></i>
+                                        </div>
+                                        <div>
+                                            <h4 class="font-bold text-gray-800">Root Cause Analysis & Action Plan</h4>
+                                            <p class="text-sm text-gray-600">Analisis akar masalah dan rekomendasi solusi</p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="p-5 card-content-wrapper">
+                                <div class="card-body-scrollable">
+                                    <div class="space-y-6">
+                                        <!-- Analisis 1 -->
+                                        <div class="border-l-4 border-red-500 pl-4">
+                                            <h4 class="font-bold text-gray-800 mb-2">Untuk Stok Produk A:</h4>
+                                            
+                                            <div class="mb-4">
+                                                <p class="text-sm font-medium text-gray-800 mb-1">Penyebab paling mungkin:</p>
+                                                <div class="bg-red-50 p-3 rounded-lg">
+                                                    <ul class="text-sm text-gray-700 space-y-1">
+                                                        <li class="flex items-start">
+                                                            <i class="fas fa-circle text-red-500 text-xs mt-1 mr-2"></i>
+                                                            <span>Lead time pemasok meningkat dari 3 ke 5 hari</span>
+                                                        </li>
+                                                        <li class="flex items-start">
+                                                            <i class="fas fa-circle text-red-500 text-xs mt-1 mr-2"></i>
+                                                            <span>Permintaan naik 25% minggu ini karena promo di Tokopedia</span>
+                                                        </li>
+                                                        <li class="flex items-start">
+                                                            <i class="fas fa-circle text-red-500 text-xs mt-1 mr-2"></i>
+                                                            <span>Safety stock setting terlalu rendah (10% vs rekomendasi 20%)</span>
+                                                        </li>
+                                                    </ul>
+                                                </div>
+                                            </div>
+                                            
+                                            <div>
+                                                <p class="text-sm font-medium text-gray-800 mb-1">Saran tindakan langsung:</p>
+                                                <div class="bg-green-50 p-3 rounded-lg">
+                                                    <ol class="text-sm text-gray-700 space-y-2">
+                                                        <li class="flex items-start">
+                                                            <span class="bg-green-100 text-green-800 rounded-full w-5 h-5 flex items-center justify-center text-xs mr-2 flex-shrink-0">1</span>
+                                                            <span><strong class="text-gray-800">HARI INI:</strong> Buat purchase order 50 unit ke supplier utama (PT ABC Jaya)</span>
+                                                        </li>
+                                                        <li class="flex items-start">
+                                                            <span class="bg-green-100 text-green-800 rounded-full w-5 h-5 flex items-center justify-center text-xs mr-2 flex-shrink-0">2</span>
+                                                            <span><strong class="text-gray-800">HARI INI:</strong> Hubungi backup supplier untuk emergency stock 20 unit</span>
+                                                        </li>
+                                                        <li class="flex items-start">
+                                                            <span class="bg-green-100 text-green-800 rounded-full w-5 h-5 flex items-center justify-center text-xs mr-2 flex-shrink-0">3</span>
+                                                            <span><strong class="text-gray-800">BESOK:</strong> Atur limit pembelian maksimal 2 unit/customer untuk memperpanjang stok</span>
+                                                        </li>
+                                                        <li class="flex items-start">
+                                                            <span class="bg-green-100 text-green-800 rounded-full w-5 h-5 flex items-center justify-center text-xs mr-2 flex-shrink-0">4</span>
+                                                            <span><strong class="text-gray-800">MINGGU INI:</strong> Review safety stock setting untuk semua produk prioritas</span>
+                                                        </li>
+                                                    </ol>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        
+                                        <!-- Analisis 2 -->
+                                        <div class="border-l-4 border-yellow-500 pl-4">
+                                            <h4 class="font-bold text-gray-800 mb-2">Untuk Margin Produk C:</h4>
+                                            
+                                            <div class="mb-4">
+                                                <p class="text-sm font-medium text-gray-800 mb-1">Penyebab paling mungkin:</p>
+                                                <div class="bg-yellow-50 p-3 rounded-lg">
+                                                    <ul class="text-sm text-gray-700 space-y-1">
+                                                        <li class="flex items-start">
+                                                            <i class="fas fa-circle text-yellow-500 text-xs mt-1 mr-2"></i>
+                                                            <span>Kenaikan tarif pengiriman ke luar Jawa sebesar 22% mulai minggu lalu</span>
+                                                        </li>
+                                                        <li class="flex items-start">
+                                                            <i class="fas fa-circle text-yellow-500 text-xs mt-1 mr-2"></i>
+                                                            <span>Proporsi penjualan ke luar Jawa meningkat dari 35% ke 48%</span>
+                                                        </li>
+                                                        <li class="flex items-start">
+                                                            <i class="fas fa-circle text-yellow-500 text-xs mt-1 mr-2"></i>
+                                                            <span>Kompetitor belum menaikkan harga, membuat kita kurang kompetitif</span>
+                                                        </li>
+                                                    </ul>
+                                                </div>
+                                            </div>
+                                            
+                                            <div>
+                                                <p class="text-sm font-medium text-gray-800 mb-1">Saran tindakan langsung:</p>
+                                                <div class="bg-green-50 p-3 rounded-lg">
+                                                    <ol class="text-sm text-gray-700 space-y-2">
+                                                        <li class="flex items-start">
+                                                            <span class="bg-green-100 text-green-800 rounded-full w-5 h-5 flex items-center justify-center text-xs mr-2 flex-shrink-0">1</span>
+                                                            <span><strong class="text-gray-800">MINGGU INI:</strong> Negosiasi ulang kontrak dengan JNE & TIKI untuk diskon volume 8-10%</span>
+                                                        </li>
+                                                        <li class="flex items-start">
+                                                            <span class="bg-green-100 text-green-800 rounded-full w-5 h-5 flex items-center justify-center text-xs mr-2 flex-shrink-0">2</span>
+                                                            <span><strong class="text-gray-800">MINGGU INI:</strong> Evaluasi kemungkinan menaikkan harga 5% dengan penawaran bundling</span>
+                                                        </li>
+                                                        <li class="flex items-start">
+                                                            <span class="bg-green-100 text-green-800 rounded-full w-5 h-5 flex items-center justify-center text-xs mr-2 flex-shrink-0">3</span>
+                                                            <span><strong class="text-gray-800">2 MINGGU:</strong> Optimasi packaging untuk mengurangi berat dan dimensi</span>
+                                                        </li>
+                                                        <li class="flex items-start">
+                                                            <span class="bg-green-100 text-green-800 rounded-full w-5 h-5 flex items-center justify-center text-xs mr-2 flex-shrink-0">4</span>
+                                                            <span><strong class="text-gray-800">BULAN INI:</strong> Diversifikasi supplier pengiriman untuk bargaining power lebih baik</span>
+                                                        </li>
+                                                    </ol>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                
+                                <div class="mt-6 pt-4 border-t border-gray-200">
+                                    <div class="flex items-center justify-between">
+                                        <div>
+                                            <p class="text-sm text-gray-600">
+                                                <i class="fas fa-clock text-blue-500 mr-2"></i>
+                                                Estimasi waktu eksekusi: <span class="font-medium">3-5 jam kerja</span>
+                                            </p>
+                                            <p class="text-xs text-gray-500">Prioritas 1: 1 jam | Prioritas 2: 2 jam | Prioritas 3: 1.5 jam</p>
+                                        </div>
+                                        <button class="action-btn primary flex items-center">
+                                            <i class="fas fa-play-circle mr-2"></i>
+                                            Mulai Eksekusi
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </section>
+                </div>
+                
+                <!-- Notifikasi Lintas Modul -->
+                <section class="animate-on-scroll delay-300 mb-8">
+                    <div class="flex items-center justify-between mb-4">
+                        <h3 class="text-lg font-semibold text-gray-800">🔔 Notifikasi Penting Lintas Modul</h3>
+                        <div class="flex items-center space-x-2">
+                            <span class="text-xs px-2 py-1 bg-purple-100 text-purple-700 rounded-full">5 Baru</span>
+                            <button class="text-xs text-blue-600 hover:text-blue-800 smooth-transition">
+                                <i class="fas fa-filter mr-1"></i> Filter
+                            </button>
+                        </div>
+                    </div>
+                    
+                    <div class="bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden hover-lift">
+                        <div class="p-5 border-b border-gray-100 gradient-purple">
+                            <div class="flex items-center justify-between">
+                                <div class="flex items-center space-x-3">
+                                    <div class="w-10 h-10 rounded-full bg-gradient-to-r from-purple-100 to-purple-200 flex items-center justify-center animate-pulse-soft">
+                                        <i class="fas fa-bell text-purple-600"></i>
+                                    </div>
+                                    <div>
+                                        <h4 class="font-bold text-gray-800">Cross-Module Notifications</h4>
+                                        <p class="text-sm text-gray-600">5 notifikasi dari berbagai sistem yang perlu perhatian</p>
+                                    </div>
+                                </div>
+                                <div class="text-right">
+                                    <p class="text-lg font-bold text-purple-600">5</p>
+                                    <p class="text-xs text-gray-600">Notifikasi Baru</p>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="p-5">
+                            <div class="space-y-4">
+                                <!-- Notif 1 -->
+                                <div class="flex items-start p-4 bg-red-50 rounded-lg border-l-4 border-red-500 hover-lift smooth-transition">
+                                    <div class="flex-shrink-0 w-10 h-10 rounded-full bg-red-100 flex items-center justify-center mr-4">
+                                        <i class="fas fa-exclamation-circle text-red-600"></i>
+                                    </div>
+                                    <div class="flex-1">
+                                        <div class="flex items-center justify-between mb-1">
+                                            <h4 class="font-bold text-gray-800">[INVENTORY] Stok Kritis - Produk X</h4>
+                                            <div class="flex items-center">
+                                                <span class="text-xs text-gray-500 mr-3">10 menit lalu</span>
+                                                <span class="text-xs bg-red-200 text-red-800 px-2 py-1 rounded">Kritis</span>
+                                            </div>
+                                        </div>
+                                        <p class="text-sm text-gray-700 mb-2">Stok produk X tersisa 8 unit, akan habis dalam 2 hari berdasarkan tren penjualan. Perlu restok 45 unit.</p>
+                                        <div class="flex items-center">
+                                            <div class="flex-1">
+                                                <div class="flex items-center text-xs text-gray-600">
+                                                    <i class="fas fa-box mr-2"></i>
+                                                    <span>ID: #P002 • Kategori: Fashion</span>
+                                                </div>
+                                            </div>
+                                            <button class="text-xs text-blue-600 hover:text-blue-800 smooth-transition flex items-center">
+                                                <i class="fas fa-external-link-alt mr-1"></i> Buka Modul Inventory
+                                            </button>
+                                        </div>
+                                    </div>
+                                </div>
+                                
+                                <!-- Notif 2 -->
+                                <div class="flex items-start p-4 bg-yellow-50 rounded-lg border-l-4 border-yellow-500 hover-lift smooth-transition">
+                                    <div class="flex-shrink-0 w-10 h-10 rounded-full bg-yellow-100 flex items-center justify-center mr-4">
+                                        <i class="fas fa-truck text-yellow-600"></i>
+                                    </div>
+                                    <div class="flex-1">
+                                        <div class="flex items-center justify-between mb-1">
+                                            <h4 class="font-bold text-gray-800">[SHIPPING] Pengiriman Tertunda</h4>
+                                            <div class="flex items-center">
+                                                <span class="text-xs text-gray-500 mr-3">45 menit lalu</span>
+                                                <span class="text-xs bg-yellow-200 text-yellow-800 px-2 py-1 rounded">Peringatan</span>
+                                            </div>
+                                        </div>
+                                        <p class="text-sm text-gray-700 mb-2">5 paket ke wilayah Jabodetabek mengalami keterlambatan 1-2 hari karena cuaca buruk. 2 customer telah mengkonfirmasi keluhan.</p>
+                                        <div class="flex items-center">
+                                            <div class="flex-1">
+                                                <div class="flex items-center text-xs text-gray-600">
+                                                    <i class="fas fa-map-marker-alt mr-2"></i>
+                                                    <span>Jabodetabek • Kurir: JNE & Sicepat</span>
+                                                </div>
+                                            </div>
+                                            <button class="text-xs text-blue-600 hover:text-blue-800 smooth-transition flex items-center">
+                                                <i class="fas fa-external-link-alt mr-1"></i> Lacak Pengiriman
+                                            </button>
+                                        </div>
+                                    </div>
+                                </div>
+                                
+                                <!-- Notif 3 -->
+                                <div class="flex items-start p-4 bg-green-50 rounded-lg border-l-4 border-green-500 hover-lift smooth-transition">
+                                    <div class="flex-shrink-0 w-10 h-10 rounded-full bg-green-100 flex items-center justify-center mr-4">
+                                        <i class="fas fa-chart-line text-green-600"></i>
+                                    </div>
+                                    <div class="flex-1">
+                                        <div class="flex items-center justify-between mb-1">
+                                            <h4 class="font-bold text-gray-800">[SALES] Performa Tokopedia +18%</h4>
+                                            <div class="flex items-center">
+                                                <span class="text-xs text-gray-500 mr-3">2 jam lalu</span>
+                                                <span class="text-xs bg-green-200 text-green-800 px-2 py-1 rounded">Positif</span>
+                                            </div>
+                                        </div>
+                                        <p class="text-sm text-gray-700 mb-2">Penjualan di Tokopedia meningkat 18% minggu ini, konversi naik dari 2.8% ke 3.4%. Produk X dan Y menyumbang 72% dari pertumbuhan.</p>
+                                        <div class="flex items-center">
+                                            <div class="flex-1">
+                                                <div class="flex items-center text-xs text-gray-600">
+                                                    <i class="fas fa-store mr-2"></i>
+                                                    <span>98 pesanan • Rp 12.1Jt pendapatan</span>
+                                                </div>
+                                            </div>
+                                            <button class="text-xs text-blue-600 hover:text-blue-800 smooth-transition flex items-center">
+                                                <i class="fas fa-external-link-alt mr-1"></i> Lihat Analisis
+                                            </button>
+                                        </div>
+                                    </div>
+                                </div>
+                                
+                                <!-- Notif 4 -->
+                                <div class="flex items-start p-4 bg-blue-50 rounded-lg border-l-4 border-blue-500 hover-lift smooth-transition">
+                                    <div class="flex-shrink-0 w-10 h-10 rounded-full bg-blue-100 flex items-center justify-center mr-4">
+                                        <i class="fas fa-sync-alt text-blue-600"></i>
+                                    </div>
+                                    <div class="flex-1">
+                                        <div class="flex items-center justify-between mb-1">
+                                            <h4 class="font-bold text-gray-800">[INTEGRASI] Sync Data Tertunda</h4>
+                                            <div class="flex items-center">
+                                                <span class="text-xs text-gray-500 mr-3">3 jam lalu</span>
+                                                <span class="text-xs bg-blue-200 text-blue-800 px-2 py-1 rounded">Info</span>
+                                            </div>
+                                        </div>
+                                        <p class="text-sm text-gray-700 mb-2">Sync data dengan Shopify tertunda 2 jam, mempengaruhi update stok real-time. 12 transaksi belum tersinkronisasi.</p>
+                                        <div class="flex items-center">
+                                            <div class="flex-1">
+                                                <div class="flex items-center text-xs text-gray-600">
+                                                    <i class="fas fa-plug mr-2"></i>
+                                                    <span>Shopify API • Delay: 2 jam 15 menit</span>
+                                                </div>
+                                            </div>
+                                            <button class="text-xs text-blue-600 hover:text-blue-800 smooth-transition flex items-center">
+                                                <i class="fas fa-external-link-alt mr-1"></i> Periksa Koneksi
+                                            </button>
+                                        </div>
+                                    </div>
+                                </div>
+                                
+                                <!-- Notif 5 -->
+                                <div class="flex items-start p-4 bg-purple-50 rounded-lg border-l-4 border-purple-500 hover-lift smooth-transition">
+                                    <div class="flex-shrink-0 w-10 h-10 rounded-full bg-purple-100 flex items-center justify-center mr-4">
+                                        <i class="fas fa-robot text-purple-600"></i>
+                                    </div>
+                                    <div class="flex-1">
+                                        <div class="flex items-center justify-between mb-1">
+                                            <h4 class="font-bold text-gray-800">[AI] Rekomendasi Optimasi Tersedia</h4>
+                                            <div class="flex items-center">
+                                                <span class="text-xs text-gray-500 mr-3">5 jam lalu</span>
+                                                <span class="text-xs bg-purple-200 text-purple-800 px-2 py-1 rounded">AI</span>
+                                            </div>
+                                        </div>
+                                        <p class="text-sm text-gray-700 mb-2">AI telah menganalisis data dan memberikan 3 rekomendasi optimasi inventori yang dapat meningkatkan efisiensi 15%.</p>
+                                        <div class="flex items-center">
+                                            <div class="flex-1">
+                                                <div class="flex items-center text-xs text-gray-600">
+                                                    <i class="fas fa-brain mr-2"></i>
+                                                    <span>3 rekomendasi • Potensi saving: Rp 8.5Jt/bulan</span>
+                                                </div>
+                                            </div>
+                                            <button class="text-xs text-blue-600 hover:text-blue-800 smooth-transition flex items-center">
+                                                <i class="fas fa-external-link-alt mr-1"></i> Lihat Rekomendasi
+                                            </button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="mt-6 pt-4 border-t border-gray-200">
+                                <div class="flex items-center justify-between">
+                                    <p class="text-sm text-gray-600">Menampilkan 5 dari 12 notifikasi terbaru</p>
+                                    <button class="text-blue-600 text-sm font-medium flex items-center space-x-1 smooth-transition hover:text-blue-800 group">
+                                        <i class="fas fa-history mr-1"></i>
+                                        <span>Lihat Riwayat Lengkap</span>
+                                        <i class="fas fa-chevron-right text-xs group-hover:translate-x-1 smooth-transition"></i>
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+                
+                <!-- AI Insights & Action Plan -->
+                <div class="grid grid-cols-1 lg:grid-cols-3 gap-8 animate-on-scroll delay-400">
+                    <!-- Peran AI -->
+                    <div class="bg-gradient-to-br from-blue-50 to-cyan-50 rounded-xl border border-blue-200 p-6 hover-lift">
+                        <div class="flex items-center mb-4">
+                            <div class="w-12 h-12 rounded-full bg-gradient-to-r from-blue-100 to-cyan-100 flex items-center justify-center mr-4">
+                                <i class="fas fa-robot text-blue-600 text-xl"></i>
+                            </div>
+                            <div>
+                                <h3 class="text-lg font-bold text-gray-800">🤖 Peran AI</h3>
+                                <p class="text-sm text-gray-600">Bagaimana AI menyaring data</p>
+                            </div>
+                        </div>
+                        
+                        <div class="space-y-4">
+                            <div class="flex items-start p-3 bg-white rounded-lg border border-gray-200">
+                                <div class="w-10 h-10 rounded-full bg-blue-100 flex items-center justify-center mr-3 flex-shrink-0">
+                                    <i class="fas fa-filter text-blue-500"></i>
+                                </div>
+                                <div>
+                                    <p class="font-medium text-gray-800 mb-1">Menyaring Semua Data</p>
+                                    <p class="text-sm text-gray-600">AI menganalisis 15K+ data point dari 7 sistem berbeda setiap hari</p>
+                                </div>
+                            </div>
+                            
+                            <div class="flex items-start p-3 bg-white rounded-lg border border-gray-200">
+                                <div class="w-10 h-10 rounded-full bg-green-100 flex items-center justify-center mr-3 flex-shrink-0">
+                                    <i class="fas fa-bullseye text-green-500"></i>
+                                </div>
+                                <div>
+                                    <p class="font-medium text-gray-800 mb-1">Menentukan Prioritas</p>
+                                    <p class="text-sm text-gray-600">Menggunakan algoritma prioritas berdasarkan dampak bisnis dan urgensi</p>
+                                </div>
+                            </div>
+                            
+                            <div class="flex items-start p-3 bg-white rounded-lg border border-gray-200">
+                                <div class="w-10 h-10 rounded-full bg-purple-100 flex items-center justify-center mr-3 flex-shrink-0">
+                                    <i class="fas fa-edit text-purple-500"></i>
+                                </div>
+                                <div>
+                                    <p class="font-medium text-gray-800 mb-1">Menulis Ringkasan</p>
+                                    <p class="text-sm text-gray-600">Generative AI menulis ringkasan dalam bahasa natural yang mudah dipahami</p>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="mt-6 pt-4 border-t border-gray-200">
+                            <p class="text-sm text-gray-700">
+                                <i class="fas fa-info-circle text-blue-500 mr-2"></i>
+                                AI memproses data setiap jam untuk memastikan ringkasan selalu terkini.
+                            </p>
+                        </div>
+                    </div>
+                    
+                    <!-- Action Plan -->
+                    <div class="bg-gradient-to-br from-green-50 to-emerald-50 rounded-xl border border-green-200 p-6 hover-lift lg:col-span-2">
+                        <div class="flex items-center mb-4">
+                            <div class="w-12 h-12 rounded-full bg-gradient-to-r from-green-100 to-emerald-100 flex items-center justify-center mr-4">
+                                <i class="fas fa-tasks text-green-600 text-xl"></i>
+                            </div>
+                            <div>
+                                <h3 class="text-lg font-bold text-gray-800">📋 Rencana Aksi Hari Ini</h3>
+                                <p class="text-sm text-gray-600">3 aksi utama yang harus diselesaikan hari ini</p>
+                            </div>
+                        </div>
+                        
+                        <div class="space-y-4">
+                            <!-- Aksi 1 -->
+                            <div class="flex items-center p-4 bg-white rounded-lg border border-red-200 hover-lift smooth-transition">
+                                <div class="flex-shrink-0 w-10 h-10 rounded-full bg-red-100 flex items-center justify-center mr-4">
+                                    <span class="text-red-600 font-bold">1</span>
+                                </div>
+                                <div class="flex-1">
+                                    <div class="flex items-center justify-between mb-1">
+                                        <h4 class="font-bold text-gray-800">Restok Produk A (50 unit)</h4>
+                                        <div class="flex items-center">
+                                            <span class="text-xs bg-red-100 text-red-800 px-2 py-1 rounded mr-2">URGENT</span>
+                                            <span class="text-xs text-gray-500">Estimasi: 1 jam</span>
+                                        </div>
+                                    </div>
+                                    <p class="text-sm text-gray-600 mb-2">Supplier: PT ABC Jaya • Lead time: 2-3 hari • Budget: Rp 12.5 juta</p>
+                                    <div class="flex items-center">
+                                        <div class="flex-1">
+                                            <div class="flex items-center text-xs text-gray-500">
+                                                <i class="fas fa-user mr-1"></i>
+                                                <span class="mr-3">Penanggung jawab: Admin Inventory</span>
+                                                <i class="fas fa-calendar mr-1"></i>
+                                                <span>Deadline: EOD Today</span>
+                                            </div>
+                                        </div>
+                                        <div class="flex space-x-2">
+                                            <button class="text-xs px-3 py-1 bg-red-100 text-red-700 rounded smooth-transition hover:bg-red-200">
+                                                Mulai
+                                            </button>
+                                            <button class="text-xs px-3 py-1 bg-gray-100 text-gray-700 rounded smooth-transition hover:bg-gray-200">
+                                                Tunda
+                                            </button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <!-- Aksi 2 -->
+                            <div class="flex items-center p-4 bg-white rounded-lg border border-yellow-200 hover-lift smooth-transition">
+                                <div class="flex-shrink-0 w-10 h-10 rounded-full bg-yellow-100 flex items-center justify-center mr-4">
+                                    <span class="text-yellow-600 font-bold">2</span>
+                                </div>
+                                <div class="flex-1">
+                                    <div class="flex items-center justify-between mb-1">
+                                        <h4 class="font-bold text-gray-800">Negosiasi Tarif Pengiriman</h4>
+                                        <div class="flex items-center">
+                                            <span class="text-xs bg-yellow-100 text-yellow-800 px-2 py-1 rounded mr-2">MEDIUM</span>
+                                            <span class="text-xs text-gray-500">Estimasi: 2 jam</span>
+                                        </div>
+                                    </div>
+                                    <p class="text-sm text-gray-600 mb-2">Kontak: JNE & TIKI • Target diskon: 8-10% • Timeline: Minggu ini</p>
+                                    <div class="flex items-center">
+                                        <div class="flex-1">
+                                            <div class="flex items-center text-xs text-gray-500">
+                                                <i class="fas fa-user mr-1"></i>
+                                                <span class="mr-3">Penanggung jawab: Admin Purchasing</span>
+                                                <i class="fas fa-calendar mr-1"></i>
+                                                <span>Deadline: Jumat ini</span>
+                                            </div>
+                                        </div>
+                                        <div class="flex space-x-2">
+                                            <button class="text-xs px-3 py-1 bg-yellow-100 text-yellow-700 rounded smooth-transition hover:bg-yellow-200">
+                                                Jadwalkan
+                                            </button>
+                                            <button class="text-xs px-3 py-1 bg-gray-100 text-gray-700 rounded smooth-transition hover:bg-gray-200">
+                                                Delegasikan
+                                            </button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <!-- Aksi 3 -->
+                            <div class="flex items-center p-4 bg-white rounded-lg border border-blue-200 hover-lift smooth-transition">
+                                <div class="flex-shrink-0 w-10 h-10 rounded-full bg-blue-100 flex items-center justify-center mr-4">
+                                    <span class="text-blue-600 font-bold">3</span>
+                                </div>
+                                <div class="flex-1">
+                                    <div class="flex items-center justify-between mb-1">
+                                        <h4 class="font-bold text-gray-800">Analisis Traffic Website</h4>
+                                        <div class="flex items-center">
+                                            <span class="text-xs bg-blue-100 text-blue-800 px-2 py-1 rounded mr-2">LOW</span>
+                                            <span class="text-xs text-gray-500">Estimasi: 1.5 jam</span>
+                                        </div>
+                                    </div>
+                                    <p class="text-sm text-gray-600 mb-2">Fokus: SEO audit & konten marketing • Tools: Google Analytics, SEMrush</p>
+                                    <div class="flex items-center">
+                                        <div class="flex-1">
+                                            <div class="flex items-center text-xs text-gray-500">
+                                                <i class="fas fa-user mr-1"></i>
+                                                <span class="mr-3">Penanggung jawab: Marketing Team</span>
+                                                <i class="fas fa-calendar mr-1"></i>
+                                                <span>Deadline: 2 hari kerja</span>
+                                            </div>
+                                        </div>
+                                        <div class="flex space-x-2">
+                                            <button class="text-xs px-3 py-1 bg-blue-100 text-blue-700 rounded smooth-transition hover:bg-blue-200">
+                                                Jadwalkan
+                                            </button>
+                                            <button class="text-xs px-3 py-1 bg-gray-100 text-gray-700 rounded smooth-transition hover:bg-gray-200">
+                                                Reminder
+                                            </button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="mt-6 pt-4 border-t border-gray-200">
+                            <div class="flex items-center justify-between">
+                                <div>
+                                    <p class="text-sm font-medium text-gray-800">Total Estimasi Waktu: <span class="text-blue-600">4.5 jam</span></p>
+                                    <p class="text-xs text-gray-600">Progress hari ini: <span class="font-medium">0/3 tugas</span></p>
+                                </div>
+                                <button class="action-btn primary flex items-center">
+                                    <i class="fas fa-play-circle mr-2"></i>
+                                    Mulai Semua Tugas
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- JavaScript untuk interaktivitas -->
+    <script>
+        // ================= FUNGSI UTAMA =================
+        
+        // Fungsi untuk update tanggal sederhana
+        function updateDate() {
+            const now = new Date();
+            
+            // Format hari dalam Bahasa Indonesia
+            const days = ['Minggu', 'Senin', 'Selasa', 'Rabu', 'Kamis', 'Jumat', 'Sabtu'];
+            const months = ['Januari', 'Februari', 'Maret', 'April', 'Mei', 'Juni', 
+                           'Juli', 'Agustus', 'September', 'Oktober', 'November', 'Desember'];
+            
+            const dayName = days[now.getDay()];
+            const date = now.getDate();
+            const monthName = months[now.getMonth()];
+            const year = now.getFullYear();
+            
+            // Format untuk tanggal: "Selasa, 2 Januari 2026"
+            const formattedDate = `${dayName}, ${date} ${monthName} ${year}`;
+            
+            // Update elemen
+            const dateElement = document.getElementById('currentDate');
+            if (dateElement) {
+                dateElement.textContent = formattedDate;
+            }
+        }
+        
+        // Fungsi untuk update waktu terakhir diperbarui
+        function updateLastUpdatedTime() {
+            const now = new Date();
+            const hours = now.getHours().toString().padStart(2, '0');
+            const minutes = now.getMinutes().toString().padStart(2, '0');
+            const lastUpdatedElement = document.getElementById('lastUpdatedTime');
+            if (lastUpdatedElement) {
+                lastUpdatedElement.textContent = `${hours}:${minutes} WIB`;
+            }
+        }
+        
+        // Scroll Animator untuk animasi saat scroll
+        class ScrollAnimator {
+            constructor() {
+                this.observer = null;
+                this.init();
+            }
+            
+            init() {
+                const options = {
+                    root: null,
+                    rootMargin: '0px 0px -50px 0px',
+                    threshold: 0.1
+                };
+                
+                this.observer = new IntersectionObserver((entries) => {
+                    entries.forEach(entry => {
+                        if (entry.isIntersecting) {
+                            entry.target.classList.add('visible');
+                        }
+                    });
+                }, options);
+                
+                document.querySelectorAll('.animate-on-scroll').forEach(el => {
+                    this.observer.observe(el);
+                });
+            }
+        }
+        
+        // Force render semua konten saat halaman dimuat
+        function forceRenderAllContent() {
+            const elements = document.querySelectorAll('.animate-on-scroll');
+            const viewportHeight = window.innerHeight;
+            
+            elements.forEach(el => {
+                const rect = el.getBoundingClientRect();
+                if (rect.top < viewportHeight - 100) {
+                    el.classList.add('visible');
+                }
+            });
+            
+            document.body.classList.add('force-render');
+            setTimeout(() => {
+                document.body.style.opacity = '1';
+            }, 50);
+        }
+        
+        // ================= EVENT LISTENERS =================
+        
+        document.addEventListener('DOMContentLoaded', function() {
+            // 1. Inisialisasi tanggal
+            updateDate();
+            updateLastUpdatedTime();
+            
+            // 2. Inisialisasi Scroll Animator
+            const animator = new ScrollAnimator();
+            
+            // 3. Force render semua konten
+            forceRenderAllContent();
+            
+            // 4. Render tambahan setelah semua aset dimuat
+            window.addEventListener('load', function() {
+                setTimeout(forceRenderAllContent, 100);
+            });
+            
+            // 5. Toggle submenu dashboard
+            const dashboardMenu = document.getElementById('dashboard-menu');
+            const dashboardSubmenu = document.getElementById('dashboard-submenu');
+            const dashboardChevron = document.getElementById('dashboard-chevron');
+            
+            if (dashboardMenu && dashboardSubmenu) {
+                // Buka submenu dashboard secara default
+                dashboardSubmenu.classList.remove('hidden');
+                dashboardChevron.classList.remove('fa-chevron-down');
+                dashboardChevron.classList.add('fa-chevron-up');
+                
+                dashboardMenu.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    e.stopPropagation();
+                    
+                    dashboardSubmenu.classList.toggle('hidden');
+                    
+                    if (dashboardSubmenu.classList.contains('hidden')) {
+                        dashboardChevron.classList.remove('fa-chevron-up');
+                        dashboardChevron.classList.add('fa-chevron-down');
+                    } else {
+                        dashboardChevron.classList.remove('fa-chevron-down');
+                        dashboardChevron.classList.add('fa-chevron-up');
+                    }
+                });
+            }
+            
+            // 6. Toggle submenu inventory
+            const inventoryMenu = document.getElementById('inventory-menu');
+            const inventorySubmenu = document.getElementById('inventory-submenu');
+            const inventoryChevron = document.getElementById('inventory-chevron');
+            
+            if (inventoryMenu && inventorySubmenu) {
+                inventoryMenu.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    e.stopPropagation();
+                    
+                    inventorySubmenu.classList.toggle('hidden');
+                    
+                    if (inventorySubmenu.classList.contains('hidden')) {
+                        inventoryChevron.classList.remove('fa-chevron-up');
+                        inventoryChevron.classList.add('fa-chevron-down');
+                    } else {
+                        inventoryChevron.classList.remove('fa-chevron-down');
+                        inventoryChevron.classList.add('fa-chevron-up');
+                    }
+                });
+            }
+            
+            // 7. AI Assistant Panel
+            const aiAssistantBtn = document.getElementById('aiAssistantBtn');
+            const aiAssistantPanel = document.getElementById('aiAssistantPanel');
+            const closeAIPanel = document.getElementById('closeAIPanel');
+            
+            // Open AI Assistant Panel
+            aiAssistantBtn.addEventListener('click', function(e) {
+                e.stopPropagation();
+                aiAssistantPanel.classList.toggle('hidden');
+                setTimeout(() => {
+                    const chatContainer = document.getElementById('aiChatContainer');
+                    chatContainer.scrollTop = chatContainer.scrollHeight;
+                }, 100);
+            });
+            
+            closeAIPanel.addEventListener('click', function() {
+                aiAssistantPanel.classList.add('hidden');
+            });
+            
+            // Close AI panel when clicking outside
+            document.addEventListener('click', function(e) {
+                if (!aiAssistantPanel.contains(e.target) && !aiAssistantBtn.contains(e.target)) {
+                    aiAssistantPanel.classList.add('hidden');
+                }
+            });
+            
+            // 8. AI Mode Selector
+            const aiModeButtons = document.querySelectorAll('.ai-mode-btn');
+            aiModeButtons.forEach(button => {
+                button.addEventListener('click', function() {
+                    aiModeButtons.forEach(btn => {
+                        btn.classList.remove('active', 'bg-white/20');
+                        btn.classList.add('bg-white/10');
+                    });
+                    this.classList.add('active', 'bg-white/20');
+                    this.classList.remove('bg-white/10');
+                    
+                    const mode = this.dataset.mode;
+                    changeAIMode(mode);
+                });
+            });
+            
+            function changeAIMode(mode) {
+                const aiHeader = document.querySelector('.bg-gradient-to-r.from-blue-500.to-blue-600 h3');
+                const aiSubtitle = document.querySelector('.bg-gradient-to-r.from-blue-500.to-blue-600 p');
+                
+                switch(mode) {
+                    case 'brief':
+                        aiHeader.textContent = 'Daily Brief AI';
+                        aiSubtitle.textContent = 'Membantu analisis prioritas bisnis hari ini';
+                        break;
+                    case 'priority':
+                        aiHeader.textContent = 'Priority AI Assistant';
+                        aiSubtitle.textContent = 'Analisis prioritas dan dampak bisnis';
+                        break;
+                    case 'action':
+                        aiHeader.textContent = 'Action Plan AI';
+                        aiSubtitle.textContent = 'Membuat rencana aksi dan estimasi waktu';
+                        break;
+                }
+                
+                addAIMessage(`Mode AI telah diubah ke: ${mode.charAt(0).toUpperCase() + mode.slice(1)}. Bagaimana saya bisa membantu Anda?`, 'assistant');
+            }
+            
+            // 9. AI Quick Questions - khusus daily brief
+            const aiQuickQuestions = document.querySelectorAll('.ai-quick-question');
+            
+            aiQuickQuestions.forEach(button => {
+                button.addEventListener('click', function() {
+                    const question = this.textContent;
+                    addAIMessage(question, 'user');
+                    
+                    showTypingIndicator();
+                    
+                    setTimeout(() => {
+                        removeTypingIndicator();
+                        generateDailyBriefAIResponse(question);
+                    }, 1500);
+                });
+            });
+            
+            // 10. Send AI Question
+            const aiQuestionInput = document.getElementById('aiQuestionInput');
+            const sendAIQuestion = document.getElementById('sendAIQuestion');
+            
+            sendAIQuestion.addEventListener('click', function() {
+                if (aiQuestionInput.value.trim() !== '') {
+                    const question = aiQuestionInput.value;
+                    addAIMessage(question, 'user');
+                    aiQuestionInput.value = '';
+                    
+                    showTypingIndicator();
+                    
+                    setTimeout(() => {
+                        removeTypingIndicator();
+                        generateDailyBriefAIResponse(question);
+                    }, 2000);
+                }
+            });
+            
+            // Enter key to send question
+            aiQuestionInput.addEventListener('keypress', function(e) {
+                if (e.key === 'Enter') {
+                    sendAIQuestion.click();
+                }
+            });
+            
+            // 11. Regenerate Brief Button
+            const regenerateBriefBtn = document.getElementById('regenerateBrief');
+            if (regenerateBriefBtn) {
+                regenerateBriefBtn.addEventListener('click', function() {
+                    const btnText = regenerateBriefBtn.innerHTML;
+                    regenerateBriefBtn.innerHTML = '<i class="fas fa-spinner fa-spin mr-1"></i> Memproses...';
+                    regenerateBriefBtn.disabled = true;
+                    
+                    // Simulasi AI processing
+                    setTimeout(() => {
+                        updateLastUpdatedTime();
+                        regenerateBriefBtn.innerHTML = '<i class="fas fa-redo-alt mr-1"></i> Perbarui Brief';
+                        regenerateBriefBtn.disabled = false;
+                        
+                        // Update beberapa data statistik secara acak
+                        const healthScore = document.querySelector('.brief-stat-card:nth-child(1) .text-3xl');
+                        const riskCount = document.querySelector('.brief-stat-card:nth-child(2) .text-3xl');
+                        
+                        if (healthScore && riskCount) {
+                            // Update dengan sedikit variasi
+                            const currentHealth = parseInt(healthScore.textContent);
+                            const currentRisk = parseInt(riskCount.textContent);
+                            
+                            const newHealth = Math.min(100, Math.max(70, currentHealth + (Math.random() > 0.5 ? 1 : -1)));
+                            const newRisk = Math.max(0, Math.min(5, currentRisk + (Math.random() > 0.7 ? 1 : -1)));
+                            
+                            healthScore.textContent = `${newHealth}%`;
+                            riskCount.textContent = `${newRisk}`;
+                            
+                            // Update progress bars
+                            document.querySelector('.brief-stat-card:nth-child(1) .metric-gauge-fill').style.width = `${newHealth}%`;
+                            document.querySelector('.brief-stat-card:nth-child(2) .metric-gauge-fill').style.width = `${newRisk * 20}%`;
+                        }
+                        
+                        // Tampilkan notifikasi
+                        showNotification('Daily Business Brief berhasil diperbarui dengan data terkini!', 'success');
+                    }, 2000);
+                });
+            }
+            
+            // 12. Export Brief Button
+            const exportBriefBtn = document.getElementById('exportBrief');
+            if (exportBriefBtn) {
+                exportBriefBtn.addEventListener('click', function() {
+                    showNotification('Mengekspor Daily Brief ke PDF...', 'info');
+                    
+                    setTimeout(() => {
+                        showNotification('Daily Brief berhasil diekspor ke PDF!', 'success');
+                    }, 1500);
+                });
+            }
+            
+            // 13. Action buttons
+            document.querySelectorAll('.action-btn.primary').forEach(btn => {
+                btn.addEventListener('click', function() {
+                    const actionText = this.closest('.flex.items-center')?.querySelector('h4')?.textContent || 'Tindakan';
+                    showNotification(`Memulai eksekusi: ${actionText}`, 'info');
+                });
+            });
+            
+            // 14. Progress bar animations
+            const progressBars = document.querySelectorAll('.progress-bar-fill, .metric-gauge-fill');
+            const observer = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        const bar = entry.target;
+                        const width = bar.style.width;
+                        bar.style.width = '0%';
+                        
+                        setTimeout(() => {
+                            bar.style.width = width;
+                        }, 300);
+                        
+                        observer.unobserve(bar);
+                    }
+                });
+            }, { threshold: 0.5 });
+            
+            progressBars.forEach(bar => observer.observe(bar));
+            
+            // 15. Interactive notification bell
+            const notificationBell = document.getElementById('notificationBell');
+            if (notificationBell) {
+                notificationBell.addEventListener('click', function() {
+                    const notificationPopup = document.createElement('div');
+                    notificationPopup.className = 'fixed top-20 right-8 w-72 bg-white rounded-xl shadow-lg border border-gray-200 p-4 animate-fade-in-up z-40';
+                    notificationPopup.innerHTML = `
+                        <div class="flex justify-between items-center mb-3">
+                            <h4 class="font-bold text-gray-800">Notifikasi Daily Brief</h4>
+                            <button class="text-gray-400 hover:text-gray-600 close-notif">
+                                <i class="fas fa-times"></i>
+                            </button>
+                        </div>
+                        <div class="space-y-3">
+                            <div class="flex items-start space-x-3 p-2 rounded-lg bg-red-50">
+                                <i class="fas fa-exclamation-circle text-red-500 mt-1"></i>
+                                <div>
+                                    <p class="text-sm font-medium">3 Prioritas Hari Ini</p>
+                                    <p class="text-xs text-gray-600">Perlu tindakan segera</p>
+                                </div>
+                            </div>
+                            <div class="flex items-start space-x-3 p-2 rounded-lg bg-green-50">
+                                <i class="fas fa-check-circle text-green-500 mt-1"></i>
+                                <div>
+                                    <p class="text-sm font-medium">Brief diperbarui 07:30</p>
+                                    <p class="text-xs text-gray-600">Data terkini sudah tersedia</p>
+                                </div>
+                            </div>
+                            <div class="flex items-start space-x-3 p-2 rounded-lg bg-blue-50">
+                                <i class="fas fa-info-circle text-blue-500 mt-1"></i>
+                                <div>
+                                    <p class="text-sm font-medium">AI telah menganalisis data</p>
+                                    <p class="text-xs text-gray-600">3 rekomendasi tersedia</p>
+                                </div>
+                            </div>
+                        </div>
+                    `;
+                    
+                    document.body.appendChild(notificationPopup);
+                    
+                    const closeBtn = notificationPopup.querySelector('.close-notif');
+                    closeBtn.addEventListener('click', function() {
+                        notificationPopup.remove();
+                    });
+                    
+                    setTimeout(() => {
+                        if (notificationPopup.parentNode) {
+                            notificationPopup.remove();
+                        }
+                    }, 5000);
+                });
+            }
+            
+            // 16. Initialize with a welcome message from AI
+            setTimeout(() => {
+                if (!document.querySelector('.ai-message.user')) {
+                    addAIMessage("Selamat datang di Daily Business Brief! Saya telah menganalisis data dari semua sistem dan mengidentifikasi 3 prioritas utama hari ini. Apa yang ingin Anda ketahui lebih detail?", 'assistant');
+                }
+            }, 1000);
+            
+            // 17. Auto-update date setiap menit
+            setInterval(updateDate, 60000);
+            
+            // 18. Tambahkan event listener untuk scroll
+            window.addEventListener('scroll', function() {
+                animator.observer.disconnect();
+                animator.init();
+            });
+            
+            // 19. Highlight active menu item
+            function highlightActiveMenu() {
+                const currentPath = window.location.pathname;
+                
+                // Dashboard submenu items
+                const dashboardLinks = document.querySelectorAll('#dashboard-submenu a');
+                dashboardLinks.forEach(link => {
+                    if (link.getAttribute('href') === currentPath) {
+                        link.classList.add('bg-blue-100', 'text-blue-600');
+                        link.classList.remove('text-gray-700');
+                    } else {
+                        link.classList.remove('bg-blue-100', 'text-blue-600');
+                        link.classList.add('text-gray-700');
+                    }
+                });
+                
+                // Inventory submenu items
+                const inventoryLinks = document.querySelectorAll('#inventory-submenu a');
+                inventoryLinks.forEach(link => {
+                    if (link.getAttribute('href') === currentPath) {
+                        link.classList.add('bg-blue-100', 'text-blue-600', 'font-medium');
+                        link.classList.remove('text-gray-700');
+                    } else {
+                        link.classList.remove('bg-blue-100', 'text-blue-600', 'font-medium');
+                        link.classList.add('text-gray-700');
+                    }
+                });
+                
+                // Main menu items
+                const mainLinks = document.querySelectorAll('aside nav > a:not(.submenu-item)');
+                mainLinks.forEach(link => {
+                    if (link.getAttribute('href') === currentPath) {
+                        link.classList.add('bg-blue-50', 'text-blue-600');
+                        link.classList.remove('text-gray-700');
+                    } else {
+                        link.classList.remove('bg-blue-50', 'text-blue-600');
+                        link.classList.add('text-gray-700');
+                    }
+                });
+            }
+            
+            highlightActiveMenu();
+        });
+        
+        // ================= FUNGSI BANTUAN =================
+        
+        // AI Chat Functions
+        function addAIMessage(text, sender) {
+            const chatContainer = document.getElementById('aiChatContainer');
+            const messageDiv = document.createElement('div');
+            messageDiv.className = `ai-message ${sender}`;
+            
+            if (sender === 'user') {
+                messageDiv.innerHTML = `
+                    <div class="flex items-center justify-between">
+                        <p>${text}</p>
+                        <i class="fas fa-user ml-2"></i>
+                    </div>
+                `;
+            } else {
+                messageDiv.innerHTML = `
+                    <div class="flex items-start space-x-2">
+                        <div class="w-6 h-6 rounded-full bg-blue-100 flex items-center justify-center flex-shrink-0 mt-1">
+                            <i class="fas fa-robot text-blue-600 text-xs"></i>
+                        </div>
+                        <div>
+                            <p class="text-gray-700">${text}</p>
+                        </div>
+                    </div>
+                `;
+            }
+            
+            chatContainer.appendChild(messageDiv);
+            chatContainer.scrollTop = chatContainer.scrollHeight;
+        }
+        
+        function showTypingIndicator() {
+            const chatContainer = document.getElementById('aiChatContainer');
+            const typingDiv = document.createElement('div');
+            typingDiv.className = 'ai-typing-indicator';
+            typingDiv.id = 'typingIndicator';
+            typingDiv.innerHTML = `
+                <div class="w-6 h-6 rounded-full bg-blue-100 flex items-center justify-center flex-shrink-0 mr-2">
+                    <i class="fas fa-robot text-blue-600 text-xs"></i>
+                </div>
+                <div class="flex">
+                    <div class="ai-typing-dot"></div>
+                    <div class="ai-typing-dot"></div>
+                    <div class="ai-typing-dot"></div>
+                </div>
+            `;
+            
+            chatContainer.appendChild(typingDiv);
+            chatContainer.scrollTop = chatContainer.scrollHeight;
+        }
+        
+        function removeTypingIndicator() {
+            const typingIndicator = document.getElementById('typingIndicator');
+            if (typingIndicator) {
+                typingIndicator.remove();
+            }
+        }
+        
+        // Respons AI khusus untuk daily brief
+        function generateDailyBriefAIResponse(question) {
+            let response = '';
+            let actions = '';
+            
+            const questionLower = question.toLowerCase();
+            
+            if (questionLower.includes('prioritas') || questionLower.includes('utama') || questionLower.includes('fokus')) {
+                
+                response = `Berdasarkan analisis data terkini, berikut 3 prioritas utama hari ini:<br><br>
+                <strong>1. 🚨 Stok Produk A Hampir Habis (PRIORITAS TINGGI)</strong><br>
+                • Sisa: 5 unit (habis dalam 2-3 hari)<br>
+                • Dampak: Potensi kehilangan Rp 18.5 juta/bulan<br>
+                • Tindakan: Restok 50 unit hari ini<br><br>
+                <strong>2. ⚠️ Margin Produk C Turun 13% (PRIORITAS MENENGAH)</strong><br>
+                • Margin: 24% (turun dari 37%)<br>
+                • Penyebab: Biaya pengiriman naik 18%<br>
+                • Tindakan: Negosiasi tarif kurir<br><br>
+                <strong>3. ℹ️ Traffic Website Turun 15% (PRIORITAS RENDAH)</strong><br>
+                • Traffic: -15% (1,245 pengunjung/7 hari)<br>
+                • Konversi: Stabil 2.8%<br>
+                • Tindakan: SEO audit & konten marketing<br><br>
+                Rekomendasi: Fokus pada prioritas 1 hari ini, prioritas 2 minggu ini, prioritas 3 bulan ini.`;
+                
+                actions = `<div class="mt-2 flex space-x-2">
+                    <button class="text-xs px-2 py-1 bg-blue-100 text-blue-700 rounded smooth-transition hover:bg-blue-200">Buat Rencana Aksi</button>
+                    <button class="text-xs px-2 py-1 bg-green-100 text-green-700 rounded smooth-transition hover:bg-green-200">Delegasikan Tugas</button>
+                </div>`;
+                
+            } else if (questionLower.includes('risiko') || questionLower.includes('stok kritis') || questionLower.includes('habis')) {
+                
+                response = `Analisis risiko stok berdasarkan data 7 hari terakhir:<br><br>
+                <strong>Produk dengan Risiko Tertinggi:</strong><br>
+                1. <strong>Produk A (ID: P002)</strong> - Habis dalam 2-3 hari<br>
+                • Stok: 5 unit • Permintaan: 4 unit/hari<br>
+                • Dampak finansial: Rp 18.5 juta/bulan<br>
+                • Rekomendasi: Restok 50 unit segera<br><br>
+                2. <strong>Produk X (ID: P001)</strong> - Habis dalam 5 hari<br>
+                • Stok: 8 unit • Permintaan: 1.6 unit/hari<br>
+                • Dampak finansial: Rp 12.1 juta/bulan<br>
+                • Rekomendasi: Restok 30 unit minggu ini<br><br>
+                3. <strong>Produk Y (ID: P003)</strong> - Habis dalam 7 hari<br>
+                • Stok: 28 unit • Permintaan: 4 unit/hari<br>
+                • Dampak finansial: Rp 9.8 juta/bulan<br>
+                • Rekomendasi: Restok 40 unit minggu depan<br><br>
+                Total kebutuhan restok: 120 unit (Rp 187.5 juta).`;
+                
+                actions = `<div class="mt-2 flex space-x-2">
+                    <button class="text-xs px-2 py-1 bg-blue-100 text-blue-700 rounded smooth-transition hover:bg-blue-200">Buat Purchase Order</button>
+                    <button class="text-xs px-2 py-1 bg-red-100 text-red-700 rounded smooth-transition hover:bg-red-200">Hubungi Supplier</button>
+                </div>`;
+                
+            } else if (questionLower.includes('saran') || questionLower.includes('tindakan') || questionLower.includes('rekomendasi')) {
+                
+                response = `Saran tindakan berdasarkan prioritas:<br><br>
+                <strong>HARI INI (Urgent):</strong><br>
+                1. Buat purchase order 50 unit Produk A ke supplier utama<br>
+                2. Hubungi backup supplier untuk emergency stock 20 unit<br>
+                3. Atur limit pembelian 2 unit/customer untuk Produk A<br><br>
+                <strong>MINGGU INI (Strategic):</strong><br>
+                1. Negosiasi tarif pengiriman dengan JNE & TIKI (target diskon 8-10%)<br>
+                2. Evaluasi kenaikan harga 5% untuk Produk C dengan bundling<br>
+                3. Review safety stock setting untuk semua produk prioritas<br><br>
+                <strong>BULAN INI (Long-term):</strong><br>
+                1. SEO audit & optimasi konten untuk website<br>
+                2. Diversifikasi supplier pengiriman<br>
+                3. Implementasi sistem reorder point otomatis<br><br>
+                Estimasi waktu eksekusi: 4.5 jam kerja.`;
+                
+                actions = `<div class="mt-2 flex space-x-2">
+                    <button class="text-xs px-2 py-1 bg-blue-100 text-blue-700 rounded smooth-transition hover:bg-blue-200">Buat Timeline</button>
+                    <button class="text-xs px-2 py-1 bg-green-100 text-green-700 rounded smooth-transition hover:bg-green-200">Assign Tugas</button>
+                </div>`;
+                
+            } else if (questionLower.includes('notifikasi') || questionLower.includes('alert') || questionLower.includes('peringatan')) {
+                
+                response = `Notifikasi lintas modul yang perlu perhatian:<br><br>
+                <strong>1. [INVENTORY] Stok Kritis - Produk X</strong><br>
+                • Status: Kritis • Waktu: 10 menit lalu<br>
+                • Detail: Stok 8 unit, habis dalam 2 hari<br><br>
+                <strong>2. [SHIPPING] Pengiriman Tertunda</strong><br>
+                • Status: Peringatan • Waktu: 45 menit lalu<br>
+                • Detail: 5 paket ke Jabodetabek terlambat 1-2 hari<br><br>
+                <strong>3. [SALES] Performa Tokopedia +18%</strong><br>
+                • Status: Positif • Waktu: 2 jam lalu<br>
+                • Detail: Konversi naik ke 3.4%, 98 pesanan<br><br>
+                <strong>4. [INTEGRASI] Sync Data Tertunda</strong><br>
+                • Status: Info • Waktu: 3 jam lalu<br>
+                • Detail: Shopify API delay 2 jam 15 menit<br><br>
+                <strong>5. [AI] Rekomendasi Optimasi Tersedia</strong><br>
+                • Status: AI • Waktu: 5 jam lalu<br>
+                • Detail: 3 rekomendasi, potensi saving Rp 8.5 juta/bulan`;
+                
+                actions = `<div class="mt-2 flex space-x-2">
+                    <button class="text-xs px-2 py-1 bg-blue-100 text-blue-700 rounded smooth-transition hover:bg-blue-200">Lihat Semua</button>
+                    <button class="text-xs px-2 py-1 bg-purple-100 text-purple-700 rounded smooth-transition hover:bg-purple-200">Atur Notifikasi</button>
+                </div>`;
+                
+            } else if (questionLower.includes('prediksi') || questionLower.includes('besok') || questionLower.includes('ramalan')) {
+                
+                response = `Prediksi bisnis untuk besok berdasarkan data historis dan tren:<br><br>
+                <strong>Penjualan:</strong> Rp 5.9-6.3 juta (stabil dengan sedikit penurunan dari hari ini)<br>
+                <strong>Pesanan:</strong> 48-52 pesanan<br>
+                <strong>Risiko Stok:</strong> Produk A mungkin habis jika tidak direstok hari ini<br>
+                <strong>Performa Channel:</strong><br>
+                • Shopee: 42% volume (stabil)<br>
+                • Tokopedia: 27% volume (+18% minggu ini)<br>
+                • Website: 12% volume (perlu perhatian)<br><br>
+                <strong>Rekomendasi:</strong> Siapkan notifikasi out-of-stock untuk Produk A, persiapkan campaign marketing untuk website, monitor performa Tokopedia.`;
+                
+                actions = `<div class="mt-2 flex space-x-2">
+                    <button class="text-xs px-2 py-1 bg-blue-100 text-blue-700 rounded smooth-transition hover:bg-blue-200">Lihat Prediksi Detail</button>
+                    <button class="text-xs px-2 py-1 bg-yellow-100 text-yellow-700 rounded smooth-transition hover:bg-yellow-200">Siapkan Mitigasi</button>
+                </div>`;
+                
+            } else if (questionLower.includes('health score') || questionLower.includes('kesehatan') || questionLower.includes('score')) {
+                
+                response = `Health Score bisnis saat ini: <strong>82%</strong> (↑ 3% dari kemarin)<br><br>
+                <strong>Komponen Health Score:</strong><br>
+                1. Penjualan: 92% (meningkat 8.5% minggu ini)<br>
+                2. Inventory: 65% (3 produk stok kritis)<br>
+                3. Operasional: 88% (pengiriman lancar, sync data tertunda)<br>
+                4. Keuangan: 85% (margin turun 13% untuk produk C)<br>
+                5. Customer: 90% (rating 4.7/5, konversi stabil)<br><br>
+                <strong>Area Perbaikan:</strong><br>
+                1. Inventory management (prioritas utama)<br>
+                2. Margin optimization (prioritas menengah)<br>
+                3. Website traffic (prioritas rendah)<br><br>
+                Target Health Score bulan ini: 90%.`;
+                
+                actions = `<div class="mt-2 flex space-x-2">
+                    <button class="text-xs px-2 py-1 bg-blue-100 text-blue-700 rounded smooth-transition hover:bg-blue-200">Analisis Detail</button>
+                    <button class="text-xs px-2 py-1 bg-green-100 text-green-700 rounded smooth-transition hover:bg-green-200">Rencana Perbaikan</button>
+                </div>`;
+                
+            } else {
+                response = `Saya telah menganalisis Daily Business Brief Anda. Health Score bisnis saat ini 82% dengan 3 prioritas utama: (1) Stok Produk A hampir habis, (2) Margin Produk C turun 13%, (3) Traffic website turun 15%. Ada 5 notifikasi penting dari berbagai modul yang perlu perhatian. Apa aspek spesifik yang ingin Anda dalami lebih lanjut?`;
+                actions = `<div class="mt-2 flex space-x-2">
+                    <button class="text-xs px-2 py-1 bg-blue-100 text-blue-700 rounded smooth-transition hover:bg-blue-200">Analisis Lengkap</button>
+                    <button class="text-xs px-2 py-1 bg-green-100 text-green-700 rounded smooth-transition hover:bg-green-200">Rekomendasi Prioritas</button>
+                </div>`;
+            }
+            
+            const chatContainer = document.getElementById('aiChatContainer');
+            const messageDiv = document.createElement('div');
+            messageDiv.className = 'ai-message assistant';
+            messageDiv.innerHTML = `
+                <div class="flex items-start space-x-2">
+                    <div class="w-6 h-6 rounded-full bg-blue-100 flex items-center justify-center flex-shrink-0 mt-1">
+                        <i class="fas fa-robot text-blue-600 text-xs"></i>
+                    </div>
+                    <div>
+                        <p class="text-gray-700">${response}</p>
+                        ${actions}
+                    </div>
+                </div>
+            `;
+            
+            chatContainer.appendChild(messageDiv);
+            chatContainer.scrollTop = chatContainer.scrollHeight;
+        }
+        
+        // Notification System
+        function showNotification(message, type = 'info') {
+            const notification = document.createElement('div');
+            notification.className = `fixed top-24 right-8 px-4 py-3 rounded-lg shadow-lg z-50 animate-slide-in-right`;
+            
+            let bgColor = 'bg-blue-100 text-blue-800 border border-blue-200';
+            let icon = 'fas fa-info-circle';
+            
+            if (type === 'success') {
+                bgColor = 'bg-green-100 text-green-800 border border-green-200';
+                icon = 'fas fa-check-circle';
+            } else if (type === 'warning') {
+                bgColor = 'bg-yellow-100 text-yellow-800 border border-yellow-200';
+                icon = 'fas fa-exclamation-triangle';
+            } else if (type === 'error') {
+                bgColor = 'bg-red-100 text-red-800 border border-red-200';
+                icon = 'fas fa-times-circle';
+            }
+            
+            notification.className += ` ${bgColor}`;
+            notification.innerHTML = `
+                <div class="flex items-center space-x-3">
+                    <i class="${icon}"></i>
+                    <span>${message}</span>
+                </div>
+            `;
+            
+            document.body.appendChild(notification);
+            
+            setTimeout(() => {
+                if (notification.parentNode) {
+                    notification.style.animation = 'slideInRight 0.3s reverse forwards';
+                    setTimeout(() => {
+                        if (notification.parentNode) {
+                            notification.remove();
+                        }
+                    }, 300);
+                }
+            }, 3000);
+        }
+    </script>
+</body>
+</html>

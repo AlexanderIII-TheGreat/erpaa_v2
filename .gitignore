@@ -1,0 +1,25 @@
+# ===== ENV =====
+.env
+.env.*
+!.env.example
+
+# ===== GO =====
+/bin/
+*.exe
+*.out
+*.test
+
+# ===== NODE =====
+node_modules/
+npm-debug.log*
+yarn-error.log*
+
+# ===== TEMP & LOG =====
+*.log
+/tmp/
+
+# ===== IDE =====
+.vscode/
+.idea/
+.DS_Store
+Thumbs.db

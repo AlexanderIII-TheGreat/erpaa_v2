@@ -1,0 +1,536 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI Analyst - ERPAA</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="/asset/output.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
+        body { font-family: 'Inter', sans-serif; }
+        
+        .erpaa-card {
+            transition: all 0.3s ease;
+        }
+        .erpaa-card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 25px -5px rgba(59, 130, 246, 0.1);
+        }
+        
+        .sidebar {
+            height: calc(100vh - 64px);
+        }
+        
+        .active-menu {
+            background-color: #3B82F6;
+            color: white;
+        }
+        .active-menu i {
+            color: white;
+        }
+        
+        .ai-question-btn {
+            transition: all 0.3s ease;
+        }
+        .ai-question-btn:hover {
+            border-color: #3B82F6;
+            background-color: rgba(59, 130, 246, 0.05);
+        }
+    </style>
+</head>
+<body class="bg-gray-50">
+    <!-- Navbar -->
+    <nav class="bg-white shadow-sm border-b border-gray-200 fixed top-0 left-0 right-0 z-50">
+        <div class="px-6 py-4">
+            <div class="flex items-center justify-between">
+                <!-- Logo & Brand -->
+                <div class="flex items-center space-x-4">
+                    <button id="sidebarToggle" class="lg:hidden text-gray-600">
+                        <i class="fas fa-bars text-xl"></i>
+                    </button>
+                    <div class="flex items-center space-x-3">
+                        <div class="w-10 h-10 bg-blue-500 rounded-lg flex items-center justify-center">
+                            <i class="fas fa-brain text-white text-xl"></i>
+                        </div>
+                        <div>
+                            <h1 class="text-2xl font-bold text-gray-800">ERP<span class="text-blue-500">AA</span></h1>
+                            <p class="text-xs text-gray-500">AI Business Intelligence</p>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Search & Notifications -->
+                <div class="flex items-center space-x-6">
+                    <div class="hidden md:block relative">
+                        <i class="fas fa-search absolute left-3 top-3 text-gray-400"></i>
+                        <input type="text" placeholder="Search..." 
+                               class="pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500">
+                    </div>
+                    
+                    <div class="flex items-center space-x-4">
+                        <div class="relative">
+                            <i class="fas fa-bell text-gray-600 text-xl hover:text-blue-500 cursor-pointer"></i>
+                            <span class="absolute -top-1 -right-1 bg-red-500 text-white text-xs rounded-full h-5 w-5 flex items-center justify-center">3</span>
+                        </div>
+                        
+                        <div class="relative">
+                            <i class="fas fa-comment text-gray-600 text-xl hover:text-blue-500 cursor-pointer"></i>
+                            <span class="absolute -top-1 -right-1 bg-yellow-500 text-white text-xs rounded-full h-5 w-5 flex items-center justify-center">5</span>
+                        </div>
+                        
+                        <div class="flex items-center space-x-3">
+                            <div class="w-10 h-10 bg-blue-500 rounded-full flex items-center justify-center text-white font-bold">
+                                AJ
+                            </div>
+                            <div class="hidden md:block">
+                                <p class="font-medium text-gray-800">Ahmad Junaidi</p>
+                                <p class="text-xs text-gray-500">Owner</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Sidebar -->
+    <aside id="sidebar" class="hidden lg:block bg-white border-r border-gray-200 fixed left-0 top-16 sidebar w-64 z-40 overflow-y-auto">
+        <div class="p-6">
+            <!-- Menu Navigation -->
+            <nav class="space-y-2 mb-8">
+                <a href="dashboard.html" class="flex items-center space-x-3 px-4 py-3 rounded-lg text-gray-700 hover:bg-gray-100 transition-colors">
+                    <i class="fas fa-chart-line text-gray-500 w-6"></i>
+                    <span>Dashboard</span>
+                </a>
+                
+                <a href="products.html" class="flex items-center space-x-3 px-4 py-3 rounded-lg text-gray-700 hover:bg-gray-100 transition-colors">
+                    <i class="fas fa-box text-gray-500 w-6"></i>
+                    <span>Produk</span>
+                </a>
+                
+                <a href="inventory.html" class="flex items-center space-x-3 px-4 py-3 rounded-lg text-gray-700 hover:bg-gray-100 transition-colors">
+                    <i class="fas fa-warehouse text-gray-500 w-6"></i>
+                    <span>Inventory</span>
+                </a>
+                
+                <a href="shipping.html" class="flex items-center space-x-3 px-4 py-3 rounded-lg text-gray-700 hover:bg-gray-100 transition-colors">
+                    <i class="fas fa-shipping-fast text-gray-500 w-6"></i>
+                    <span>Pengiriman</span>
+                </a>
+                
+                <a href="ai.html" class="active-menu flex items-center space-x-3 px-4 py-3 rounded-lg transition-colors">
+                    <i class="fas fa-robot text-white w-6"></i>
+                    <span>AI Analyst</span>
+                </a>
+            </nav>
+            
+            <!-- Quick Stats -->
+            <div class="border-t border-gray-200 pt-6">
+                <h3 class="text-sm font-medium text-gray-700 mb-4">Statistik Cepat</h3>
+                <div class="space-y-3">
+                    <div class="flex items-center justify-between">
+                        <span class="text-sm text-gray-600">Penjualan Hari Ini</span>
+                        <span class="font-medium text-green-500">Rp 42.8jt</span>
+                    </div>
+                    <div class="flex items-center justify-between">
+                        <span class="text-sm text-gray-600">Order Tertunda</span>
+                        <span class="font-medium text-yellow-500">12</span>
+                    </div>
+                    <div class="flex items-center justify-between">
+                        <span class="text-sm text-gray-600">Stok Rendah</span>
+                        <span class="font-medium text-red-500">5</span>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- AI Alert -->
+            <div class="mt-8 p-4 bg-blue-50 border border-blue-200 rounded-lg">
+                <div class="flex items-start">
+                    <i class="fas fa-lightbulb text-blue-500 mt-1 mr-3"></i>
+                    <div>
+                        <p class="text-sm font-medium text-gray-800">AI Status</p>
+                        <p class="text-xs text-gray-600 mt-1">Aktif & siap analisis</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </aside>
+
+    <!-- Main Content -->
+    <main class="lg:ml-64 pt-16 px-4 md:px-6">
+        <div class="max-w-7xl mx-auto">
+            <!-- Header -->
+            <div class="mb-8">
+                <div class="flex items-center justify-between">
+                    <div>
+                        <h1 class="text-2xl md:text-3xl font-bold text-gray-800">AI Analyst</h1>
+                        <p class="text-gray-600 mt-2">Simulasi dan analisis bisnis dengan AI terarah</p>
+                    </div>
+                    <div class="flex items-center space-x-2">
+                        <span class="text-sm text-gray-600">Status AI:</span>
+                        <span class="flex items-center text-green-500">
+                            <i class="fas fa-circle text-xs mr-1"></i>
+                            Aktif & Menganalisis
+                        </span>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- AI Introduction -->
+            <div class="erpaa-card bg-gradient-to-r from-blue-50 to-cyan-50 border border-blue-200 p-6 mb-8">
+                <div class="flex items-start">
+                    <div class="p-4 bg-blue-500 rounded-xl mr-6">
+                        <i class="fas fa-robot text-white text-3xl"></i>
+                    </div>
+                    <div class="flex-1">
+                        <h2 class="text-2xl font-bold text-gray-800 mb-3">ERPAA AI Analyst</h2>
+                        <p class="text-gray-700 mb-4">AI yang membantu mengambil keputusan bisnis dengan simulasi dan analisis data nyata. Bukan chatbot biasa, tapi asisten analis yang proaktif.</p>
+                        <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mt-6">
+                            <div class="p-3 bg-white rounded-lg border border-blue-100">
+                                <i class="fas fa-bolt text-yellow-500 mb-2"></i>
+                                <p class="font-medium text-gray-800">Proaktif</p>
+                                <p class="text-sm text-gray-600">Tidak menunggu ditanya</p>
+                            </div>
+                            <div class="p-3 bg-white rounded-lg border border-blue-100">
+                                <i class="fas fa-database text-green-500 mb-2"></i>
+                                <p class="font-medium text-gray-800">Data-Driven</p>
+                                <p class="text-sm text-gray-600">Berdasarkan data nyata</p>
+                            </div>
+                            <div class="p-3 bg-white rounded-lg border border-blue-100">
+                                <i class="fas fa-bullseye text-red-500 mb-2"></i>
+                                <p class="font-medium text-gray-800">Terarah</p>
+                                <p class="text-sm text-gray-600">Fokus ke tindakan</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Predefined Questions -->
+            <div class="mb-8">
+                <h2 class="text-xl font-bold text-gray-800 mb-4">Pilih Pertanyaan untuk Analisis AI</h2>
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                    <button class="ai-question-btn p-4 border-2 border-gray-200 rounded-xl text-left hover:border-blue-500 hover:bg-blue-50 transition-all">
+                        <div class="flex items-center">
+                            <div class="w-8 h-8 rounded-full bg-blue-500 flex items-center justify-center mr-3">
+                                <i class="fas fa-question text-white"></i>
+                            </div>
+                            <span class="font-medium text-gray-800">Jika harga naik 5%?</span>
+                        </div>
+                        <p class="text-sm text-gray-600 mt-2">Analisis dampak ke penjualan dan profit</p>
+                    </button>
+                    
+                    <button class="ai-question-btn p-4 border-2 border-gray-200 rounded-xl text-left hover:border-blue-500 hover:bg-blue-50 transition-all">
+                        <div class="flex items-center">
+                            <div class="w-8 h-8 rounded-full bg-blue-500 flex items-center justify-center mr-3">
+                                <i class="fas fa-question text-white"></i>
+                            </div>
+                            <span class="font-medium text-gray-800">Jika tambah biaya gudang?</span>
+                        </div>
+                        <p class="text-sm text-gray-600 mt-2">Analisis dampak ke biaya operasional</p>
+                    </button>
+                    
+                    <button class="ai-question-btn p-4 border-2 border-gray-200 rounded-xl text-left hover:border-blue-500 hover:bg-blue-50 transition-all">
+                        <div class="flex items-center">
+                            <div class="w-8 h-8 rounded-full bg-blue-500 flex items-center justify-center mr-3">
+                                <i class="fas fa-question text-white"></i>
+                            </div>
+                            <span class="font-medium text-gray-800">Apa dampaknya ke profit?</span>
+                        </div>
+                        <p class="text-sm text-gray-600 mt-2">Analisis perubahan profit margin</p>
+                    </button>
+                </div>
+            </div>
+            
+            <!-- AI Simulations -->
+            <div class="mb-8">
+                <h2 class="text-xl font-bold text-gray-800 mb-4">Simulasi & Analisis AI</h2>
+                
+                <div class="space-y-6">
+                    <!-- Simulation 1 -->
+                    <div class="erpaa-card bg-white rounded-xl shadow-sm border border-gray-200 p-6 border-l-4 border-yellow-500">
+                        <div class="flex items-start justify-between">
+                            <div class="flex-1">
+                                <div class="flex items-center mb-4">
+                                    <div class="p-2 bg-yellow-100 rounded-lg mr-3">
+                                        <i class="fas fa-chart-bar text-yellow-500"></i>
+                                    </div>
+                                    <div>
+                                        <h3 class="text-lg font-bold text-gray-800">Jika harga naik 5%?</h3>
+                                        <div class="flex items-center mt-1">
+                                            <span class="text-xs font-medium px-2 py-1 bg-yellow-100 text-yellow-800 rounded-full">
+                                                Mixed Impact
+                                            </span>
+                                            <span class="text-xs text-gray-500 ml-3">
+                                                <i class="fas fa-brain mr-1"></i>
+                                                Confidence: 85%
+                                            </span>
+                                        </div>
+                                    </div>
+                                </div>
+                                
+                                <div class="bg-gray-50 p-4 rounded-lg mb-4">
+                                    <p class="text-gray-700">Revenue naik ±Rp 2.1jt/bulan, tapi sales bisa turun 3-8% tergantung produk. Produk dengan margin rendah lebih sensitif terhadap kenaikan harga.</p>
+                                </div>
+                                
+                                <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                                    <div class="p-3 bg-gray-50 rounded-lg">
+                                        <p class="text-xs text-gray-500 mb-1">Sumber Data</p>
+                                        <p class="font-medium text-gray-800">Sales + Inventory</p>
+                                    </div>
+                                    <div class="p-3 bg-gray-50 rounded-lg">
+                                        <p class="text-xs text-gray-500 mb-1">Periode Analisis</p>
+                                        <p class="font-medium text-gray-800">90 hari terakhir</p>
+                                    </div>
+                                    <div class="p-3 bg-gray-50 rounded-lg">
+                                        <p class="text-xs text-gray-500 mb-1">Tipe Rekomendasi</p>
+                                        <p class="font-medium text-gray-800">Kondisional</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Simulation 2 -->
+                    <div class="erpaa-card bg-white rounded-xl shadow-sm border border-gray-200 p-6 border-l-4 border-red-500">
+                        <div class="flex items-start justify-between">
+                            <div class="flex-1">
+                                <div class="flex items-center mb-4">
+                                    <div class="p-2 bg-red-100 rounded-lg mr-3">
+                                        <i class="fas fa-chart-line text-red-500"></i>
+                                    </div>
+                                    <div>
+                                        <h3 class="text-lg font-bold text-gray-800">Jika tambah biaya gudang?</h3>
+                                        <div class="flex items-center mt-1">
+                                            <span class="text-xs font-medium px-2 py-1 bg-red-100 text-red-800 rounded-full">
+                                                Negative Impact
+                                            </span>
+                                            <span class="text-xs text-gray-500 ml-3">
+                                                <i class="fas fa-brain mr-1"></i>
+                                                Confidence: 92%
+                                            </span>
+                                        </div>
+                                    </div>
+                                </div>
+                                
+                                <div class="bg-gray-50 p-4 rounded-lg mb-4">
+                                    <p class="text-gray-700">Profit turun ±Rp 1.8jt/bulan. Rekomendasi: optimasi layout gudang dulu sebelum ekspansi, pertimbangkan sistem rak yang lebih efisien.</p>
+                                </div>
+                                
+                                <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                                    <div class="p-3 bg-gray-50 rounded-lg">
+                                        <p class="text-xs text-gray-500 mb-1">Sumber Data</p>
+                                        <p class="font-medium text-gray-800">Operational Cost</p>
+                                    </div>
+                                    <div class="p-3 bg-gray-50 rounded-lg">
+                                        <p class="text-xs text-gray-500 mb-1">Periode Analisis</p>
+                                        <p class="font-medium text-gray-800">6 bulan terakhir</p>
+                                    </div>
+                                    <div class="p-3 bg-gray-50 rounded-lg">
+                                        <p class="text-xs text-gray-500 mb-1">Tipe Rekomendasi</p>
+                                        <p class="font-medium text-gray-800">Langsung</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- New Simulation Form -->
+            <div class="erpaa-card bg-white rounded-xl shadow-sm border border-gray-200 p-6">
+                <h2 class="text-xl font-bold text-gray-800 mb-4">Buat Simulasi Baru</h2>
+                
+                <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
+                    <!-- Form -->
+                    <div>
+                        <div class="mb-6">
+                            <label class="block text-sm font-medium text-gray-700 mb-2">Parameter Utama</label>
+                            <select class="w-full border border-gray-300 rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500">
+                                <option>Pilih parameter...</option>
+                                <option>Harga produk</option>
+                                <option>Biaya operasional</option>
+                                <option>Stok level</option>
+                                <option>Biaya pengiriman</option>
+                                <option>Diskon/promo</option>
+                            </select>
+                        </div>
+                        
+                        <div class="mb-6">
+                            <label class="block text-sm font-medium text-gray-700 mb-2">Perubahan</label>
+                            <div class="flex items-center">
+                                <select class="border border-gray-300 rounded-lg px-4 py-2 mr-2 focus:outline-none focus:ring-2 focus:ring-blue-500">
+                                    <option>Naik</option>
+                                    <option>Turun</option>
+                                    <option>Pertahankan</option>
+                                </select>
+                                <input type="number" class="border border-gray-300 rounded-lg px-4 py-2 w-24 mr-2 focus:outline-none focus:ring-2 focus:ring-blue-500" value="5">
+                                <span class="text-gray-700">%</span>
+                            </div>
+                        </div>
+                        
+                        <div class="mb-6">
+                            <label class="block text-sm font-medium text-gray-700 mb-2">Produk/Channel Spesifik</label>
+                            <select class="w-full border border-gray-300 rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500">
+                                <option>Semua produk</option>
+                                <option>Produk elektronik saja</option>
+                                <option>Marketplace A saja</option>
+                                <option>Produk margin rendah</option>
+                            </select>
+                        </div>
+                        
+                        <button class="bg-blue-500 text-white px-4 py-2 rounded-lg hover:bg-blue-600 transition-colors w-full">
+                            <i class="fas fa-play-circle mr-2"></i>
+                            Jalankan Simulasi AI
+                        </button>
+                    </div>
+                    
+                    <!-- Examples -->
+                    <div>
+                        <h3 class="font-medium text-gray-800 mb-4">Contoh Simulasi Berguna:</h3>
+                        <div class="space-y-4">
+                            <div class="p-3 bg-gray-50 border border-gray-200 rounded-lg">
+                                <div class="flex items-start">
+                                    <i class="fas fa-check text-green-500 mt-1 mr-3"></i>
+                                    <div>
+                                        <p class="font-medium text-gray-800">"Jika stok dikurangi 20%?"</p>
+                                        <p class="text-sm text-gray-600">Analisis dampak ke cash flow dan risk of stockout</p>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="p-3 bg-gray-50 border border-gray-200 rounded-lg">
+                                <div class="flex items-start">
+                                    <i class="fas fa-check text-green-500 mt-1 mr-3"></i>
+                                    <div>
+                                        <p class="font-medium text-gray-800">"Jika buka channel baru?"</p>
+                                        <p class="text-sm text-gray-600">Estimasi ROI dan resource yang dibutuhkan</p>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="p-3 bg-gray-50 border border-gray-200 rounded-lg">
+                                <div class="flex items-start">
+                                    <i class="fas fa-check text-green-500 mt-1 mr-3"></i>
+                                    <div>
+                                        <p class="font-medium text-gray-800">"Jika harga turun 10%?"</p>
+                                        <p class="text-sm text-gray-600">Analisis volume needed untuk maintain profit</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="mt-6 p-4 bg-blue-50 border border-blue-200 rounded-lg">
+                            <div class="flex items-start">
+                                <i class="fas fa-info-circle text-blue-500 mt-1 mr-2"></i>
+                                <p class="text-sm text-gray-700">AI akan menganalisis data historis dan trend untuk memberikan estimasi yang akurat.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- AI Capabilities -->
+            <div class="mt-8">
+                <h2 class="text-xl font-bold text-gray-800 mb-4">Kemampuan AI Analyst</h2>
+                
+                <div class="grid grid-cols-1 md:grid-cols-4 gap-4">
+                    <div class="erpaa-card bg-white rounded-xl shadow-sm border border-gray-200 p-6 text-center">
+                        <div class="p-3 bg-purple-100 rounded-lg w-12 h-12 flex items-center justify-center mx-auto mb-3">
+                            <i class="fas fa-project-diagram text-purple-500"></i>
+                        </div>
+                        <h3 class="font-medium text-gray-800">Korelasi Data</h3>
+                        <p class="text-sm text-gray-600 mt-1">Mengkaitkan sales, inventory, shipping</p>
+                    </div>
+                    
+                    <div class="erpaa-card bg-white rounded-xl shadow-sm border border-gray-200 p-6 text-center">
+                        <div class="p-3 bg-green-100 rounded-lg w-12 h-12 flex items-center justify-center mx-auto mb-3">
+                            <i class="fas fa-chart-line text-green-500"></i>
+                        </div>
+                        <h3 class="font-medium text-gray-800">Forecasting</h3>
+                        <p class="text-sm text-gray-600 mt-1">Prediksi berdasarkan data historis</p>
+                    </div>
+                    
+                    <div class="erpaa-card bg-white rounded-xl shadow-sm border border-gray-200 p-6 text-center">
+                        <div class="p-3 bg-yellow-100 rounded-lg w-12 h-12 flex items-center justify-center mx-auto mb-3">
+                            <i class="fas fa-balance-scale text-yellow-500"></i>
+                        </div>
+                        <h3 class="font-medium text-gray-800">Risk Analysis</h3>
+                        <p class="text-sm text-gray-600 mt-1">Identifikasi risiko bisnis tersembunyi</p>
+                    </div>
+                    
+                    <div class="erpaa-card bg-white rounded-xl shadow-sm border border-gray-200 p-6 text-center">
+                        <div class="p-3 bg-red-100 rounded-lg w-12 h-12 flex items-center justify-center mx-auto mb-3">
+                            <i class="fas fa-bullseye text-red-500"></i>
+                        </div>
+                        <h3 class="font-medium text-gray-800">Actionable Insight</h3>
+                        <p class="text-sm text-gray-600 mt-1">Rekomendasi spesifik, bukan teori</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <script>
+        // Toggle sidebar on mobile
+        document.getElementById('sidebarToggle')?.addEventListener('click', function() {
+            document.getElementById('sidebar').classList.toggle('hidden');
+        });
+
+        // Set active menu based on current page
+        document.addEventListener('DOMContentLoaded', function() {
+            const currentPage = window.location.pathname.split('/').pop();
+            const menuItems = document.querySelectorAll('aside nav a');
+            
+            menuItems.forEach(item => {
+                item.classList.remove('active-menu');
+                item.classList.add('text-gray-700', 'hover:bg-gray-100');
+                const icon = item.querySelector('i');
+                if (icon) {
+                    icon.classList.remove('text-white');
+                    icon.classList.add('text-gray-500');
+                }
+                
+                // Check if this link points to current page
+                if (item.getAttribute('href') === currentPage) {
+                    item.classList.add('active-menu');
+                    item.classList.remove('text-gray-700', 'hover:bg-gray-100');
+                    const icon = item.querySelector('i');
+                    if (icon) {
+                        icon.classList.add('text-white');
+                        icon.classList.remove('text-gray-500');
+                    }
+                }
+            });
+
+            // Add interactivity for AI question buttons
+            const aiButtons = document.querySelectorAll('.ai-question-btn');
+            aiButtons.forEach(btn => {
+                btn.addEventListener('click', function() {
+                    // Remove active state from all buttons
+                    aiButtons.forEach(b => {
+                        b.classList.remove('border-blue-500', 'bg-blue-50');
+                        b.classList.add('border-gray-200');
+                    });
+                    
+                    // Add active state to clicked button
+                    this.classList.add('border-blue-500', 'bg-blue-50');
+                    this.classList.remove('border-gray-200');
+                    
+                    // Show loading state
+                    const originalHTML = this.innerHTML;
+                    this.innerHTML = '<div class="flex items-center justify-center"><i class="fas fa-spinner fa-spin mr-2"></i> AI Analyzing...</div>';
+                    
+                    // Simulate AI processing
+                    setTimeout(() => {
+                        this.innerHTML = originalHTML;
+                        alert('AI analysis completed! Check the simulations section for detailed results.');
+                    }, 1500);
+                });
+            });
+        });
+    </script>
+</body>
+</html>

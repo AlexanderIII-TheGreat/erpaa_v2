@@ -1,0 +1,2224 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sales Forecasting - Flashboard ERP Modern</title>
+    <!-- Tailwind CSS via CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Font Awesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Chart.js for graphs -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <!-- Animate.css for smooth animations -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css">
+    
+    <style>
+        :root {
+            --soft-blue: #4A90E2;
+            --soft-blue-light: #E3F2FD;
+            --soft-blue-dark: #2A6EBB;
+            --neutral-gray: #F5F7FA;
+            --neutral-gray-dark: #E1E8F0;
+            --neutral-text: #4A5568;
+            --soft-green: #48BB78;
+            --soft-purple: #9F7AEA;
+            --soft-pink: #ED64A6;
+            --soft-cyan: #0BC5EA;
+        }
+        
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            color: var(--neutral-text);
+            overflow-x: hidden;
+            background: linear-gradient(to bottom right, #eff6ff, #f3f4f6, #f9fafb);
+        }
+        
+        /* Struktur layout utama */
+        .app-container {
+            display: flex;
+            min-height: 100vh;
+            width: 100%;
+        }
+        
+        .main-wrapper {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            max-height: 100vh;
+            overflow: hidden;
+        }
+        
+        .content-wrapper {
+            flex: 1;
+            overflow-y: auto;
+            overflow-x: hidden;
+            -webkit-overflow-scrolling: touch;
+            padding: 2rem;
+            background: linear-gradient(to bottom, #f8fafc, #f1f5f9);
+        }
+        
+        /* Custom animations */
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        
+        @keyframes slideInLeft {
+            from {
+                opacity: 0;
+                transform: translateX(-20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateX(0);
+            }
+        }
+        
+        @keyframes slideInRight {
+            from {
+                opacity: 0;
+                transform: translateX(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateX(0);
+            }
+        }
+        
+        @keyframes pulseSoft {
+            0%, 100% {
+                opacity: 1;
+                transform: scale(1);
+            }
+            50% {
+                opacity: 0.8;
+                transform: scale(1.02);
+            }
+        }
+        
+        @keyframes float {
+            0%, 100% {
+                transform: translateY(0);
+            }
+            50% {
+                transform: translateY(-10px);
+            }
+        }
+        
+        @keyframes shimmer {
+            0% {
+                background-position: -200% center;
+            }
+            100% {
+                background-position: 200% center;
+            }
+        }
+        
+        @keyframes slideInFromLeft {
+            from {
+                opacity: 0;
+                transform: translateX(-30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateX(0);
+            }
+        }
+        
+        @keyframes bounceIn {
+            0% {
+                opacity: 0;
+                transform: scale(0.3);
+            }
+            50% {
+                opacity: 1;
+                transform: scale(1.05);
+            }
+            70% {
+                transform: scale(0.9);
+            }
+            100% {
+                transform: scale(1);
+            }
+        }
+        
+        @keyframes ripple {
+            0% {
+                transform: scale(0);
+                opacity: 1;
+            }
+            100% {
+                transform: scale(4);
+                opacity: 0;
+            }
+        }
+        
+        @keyframes typingDot {
+            0%, 60%, 100% { transform: translateY(0); }
+            30% { transform: translateY(-8px); }
+        }
+        
+        .animate-fade-in-up {
+            animation: fadeInUp 0.6s ease-out forwards;
+        }
+        
+        .animate-slide-in-left {
+            animation: slideInLeft 0.5s ease-out forwards;
+        }
+        
+        .animate-slide-in-right {
+            animation: slideInRight 0.5s ease-out forwards;
+        }
+        
+        .animate-pulse-soft {
+            animation: pulseSoft 2s infinite ease-in-out;
+        }
+        
+        .animate-float {
+            animation: float 3s ease-in-out infinite;
+        }
+        
+        .animate-shimmer {
+            animation: shimmer 3s infinite linear;
+            background: linear-gradient(90deg, #F5F7FA 0%, #E3F2FD 50%, #F5F7FA 100%);
+            background-size: 200% auto;
+        }
+        
+        .animate-slide-in-from-left {
+            animation: slideInFromLeft 0.6s ease-out forwards;
+        }
+        
+        .animate-bounce-in {
+            animation: bounceIn 0.6s ease-out forwards;
+        }
+        
+        .animate-ripple {
+            animation: ripple 0.6s linear forwards;
+        }
+        
+        /* Custom scrollbar */
+        ::-webkit-scrollbar {
+            width: 8px;
+            height: 8px;
+        }
+        
+        ::-webkit-scrollbar-track {
+            background: var(--neutral-gray);
+            border-radius: 4px;
+        }
+        
+        ::-webkit-scrollbar-thumb {
+            background: linear-gradient(135deg, #4A90E2, #2A6EBB);
+            border-radius: 4px;
+        }
+        
+        ::-webkit-scrollbar-thumb:hover {
+            background: linear-gradient(135deg, #2A6EBB, #4A90E2);
+        }
+        
+        /* Smooth transitions */
+        .smooth-transition {
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        
+        /* Glass effect */
+        .glass-effect {
+            backdrop-filter: blur(10px);
+            background: rgba(255, 255, 255, 0.92);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+        
+        /* Card hover effect */
+        .hover-lift {
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        
+        .hover-lift:hover {
+            transform: translateY(-8px) scale(1.01);
+            box-shadow: 0 15px 30px -10px rgba(74, 144, 226, 0.2);
+        }
+        
+        /* Gradient backgrounds */
+        .gradient-blue {
+            background: linear-gradient(135deg, #E3F2FD 0%, #F5F7FA 100%);
+        }
+        
+        .gradient-green {
+            background: linear-gradient(135deg, #F0FFF4 0%, #F5F7FA 100%);
+        }
+        
+        .gradient-purple {
+            background: linear-gradient(135deg, #F5F3FF 0%, #F5F7FA 100%);
+        }
+        
+        .gradient-cyan {
+            background: linear-gradient(135deg, #E6FFFA 0%, #F5F7FA 100%);
+        }
+        
+        .gradient-orange {
+            background: linear-gradient(135deg, #FEEBC8 0%, #F5F7FA 100%);
+        }
+        
+        .gradient-red {
+            background: linear-gradient(135deg, #FED7D7 0%, #F5F7FA 100%);
+        }
+        
+        /* Horizontal scroll container */
+        .horizontal-scroll-container {
+            display: flex;
+            overflow-x: auto;
+            padding: 1rem 0.5rem;
+            gap: 1rem;
+            scrollbar-width: thin;
+            scrollbar-color: #CBD5E0 #F5F7FA;
+            -webkit-overflow-scrolling: touch;
+        }
+        
+        .horizontal-scroll-container::-webkit-scrollbar {
+            height: 6px;
+        }
+        
+        .horizontal-scroll-container::-webkit-scrollbar-track {
+            background: #F5F7FA;
+            border-radius: 3px;
+        }
+        
+        .horizontal-scroll-container::-webkit-scrollbar-thumb {
+            background: linear-gradient(135deg, #4A90E2, #2A6EBB);
+            border-radius: 3px;
+        }
+        
+        .horizontal-card {
+            flex: 0 0 auto;
+            width: 320px;
+            min-height: 180px;
+        }
+        
+        /* Progress bars */
+        .progress-bar {
+            height: 8px;
+            background-color: #E2E8F0;
+            border-radius: 4px;
+            overflow: hidden;
+        }
+        
+        .progress-bar-fill {
+            height: 100%;
+            border-radius: 4px;
+            transition: width 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        
+        /* Status indicators */
+        .status-indicator {
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+            display: inline-block;
+            margin-right: 8px;
+            position: relative;
+        }
+        
+        .status-indicator::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            border-radius: 50%;
+            animation: pulseSoft 2s infinite;
+        }
+        
+        .status-critical {
+            background-color: #F56565;
+        }
+        
+        .status-critical::after {
+            background-color: #F56565;
+        }
+        
+        .status-warning {
+            background-color: #ECC94B;
+        }
+        
+        .status-warning::after {
+            background-color: #ECC94B;
+        }
+        
+        .status-good {
+            background-color: #48BB78;
+        }
+        
+        .status-good::after {
+            background-color: #48BB78;
+        }
+        
+        /* Data visualization */
+        .data-trend-up {
+            color: #48BB78;
+            position: relative;
+        }
+        
+        .data-trend-up::before {
+            content: "↗";
+            margin-right: 4px;
+        }
+        
+        .data-trend-down {
+            color: #F56565;
+            position: relative;
+        }
+        
+        .data-trend-down::before {
+            content: "↘";
+            margin-right: 4px;
+        }
+        
+        /* Forecast specific */
+        .confidence-bar {
+            height: 6px;
+            border-radius: 3px;
+            background: #E2E8F0;
+            overflow: hidden;
+            margin-top: 8px;
+        }
+        
+        .confidence-fill {
+            height: 100%;
+            border-radius: 3px;
+            transition: width 1s ease-in-out;
+        }
+        
+        .confidence-high { background: linear-gradient(to right, #48BB78, #68D391); }
+        .confidence-medium { background: linear-gradient(to right, #ECC94B, #F6E05E); }
+        .confidence-low { background: linear-gradient(to right, #F56565, #FC8181); }
+        
+        .forecast-card {
+            border-left: 4px solid;
+            transition: all 0.3s ease;
+        }
+        
+        .forecast-card.blue {
+            border-left-color: #4A90E2;
+        }
+        
+        .forecast-card.green {
+            border-left-color: #48BB78;
+        }
+        
+        .forecast-card.purple {
+            border-left-color: #9F7AEA;
+        }
+        
+        .forecast-card.orange {
+            border-left-color: #ED8936;
+        }
+        
+        /* AI Assistant specific */
+        .ai-message {
+            max-width: 80%;
+            padding: 12px 16px;
+            border-radius: 18px;
+            margin-bottom: 12px;
+            position: relative;
+        }
+        
+        .ai-message.user {
+            background: linear-gradient(135deg, #4A90E2, #2A6EBB);
+            color: white;
+            margin-left: auto;
+            border-bottom-right-radius: 4px;
+        }
+        
+        .ai-message.assistant {
+            background: #F7FAFC;
+            color: #2D3748;
+            border: 1px solid #E2E8F0;
+            margin-right: auto;
+            border-bottom-left-radius: 4px;
+        }
+        
+        .ai-typing-indicator {
+            display: flex;
+            align-items: center;
+            padding: 12px 16px;
+            background: #F7FAFC;
+            border-radius: 18px;
+            width: fit-content;
+            margin-bottom: 12px;
+            border: 1px solid #E2E8F0;
+        }
+        
+        .ai-typing-dot {
+            width: 8px;
+            height: 8px;
+            background-color: #A0AEC0;
+            border-radius: 50%;
+            margin: 0 2px;
+            animation: typingDot 1.5s infinite ease-in-out;
+        }
+        
+        .ai-typing-dot:nth-child(1) { animation-delay: 0s; }
+        .ai-typing-dot:nth-child(2) { animation-delay: 0.2s; }
+        .ai-typing-dot:nth-child(3) { animation-delay: 0.4s; }
+        
+        /* Container untuk pertanyaan cepat AI - DIPERBAIKI */
+        .ai-quick-questions-container {
+            display: flex;
+            overflow-x: auto;
+            gap: 8px;
+            padding: 12px 4px 16px 4px;
+            margin-bottom: 4px;
+            scrollbar-width: thin;
+            scrollbar-color: #4A90E2 #F5F7FA;
+            -webkit-overflow-scrolling: touch;
+        }
+        
+        .ai-quick-questions-container::-webkit-scrollbar {
+            height: 6px;
+            display: block;
+        }
+        
+        .ai-quick-questions-container::-webkit-scrollbar-track {
+            background: #F5F7FA;
+            border-radius: 4px;
+            margin: 0 4px;
+        }
+        
+        .ai-quick-questions-container::-webkit-scrollbar-thumb {
+            background: linear-gradient(135deg, #4A90E2, #2A6EBB);
+            border-radius: 4px;
+            border: 1px solid #E2E8F0;
+        }
+        
+        .ai-quick-questions-container::-webkit-scrollbar-thumb:hover {
+            background: linear-gradient(135deg, #2A6EBB, #4A90E2);
+        }
+        
+        .ai-quick-question {
+            flex: 0 0 auto;
+            white-space: nowrap;
+            padding: 8px 12px;
+            background: #EBF8FF;
+            border: 1px solid #BEE3F8;
+            border-radius: 8px;
+            font-size: 12px;
+            color: #2C5282;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        
+        .ai-quick-question:hover {
+            background: #BEE3F8;
+            border-color: #90CDF4;
+            transform: translateY(-2px);
+        }
+        
+        /* Ripple effect */
+        .ripple-effect {
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .ripple-effect::after {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 5px;
+            height: 5px;
+            background: rgba(255, 255, 255, 0.5);
+            opacity: 0;
+            border-radius: 100%;
+            transform: scale(1, 1) translate(-50%);
+            transform-origin: 50% 50%;
+        }
+        
+        .ripple-effect:focus:not(:active)::after {
+            animation: ripple 0.6s ease-out;
+        }
+        
+        /* Loading animation */
+        .loading-spinner {
+            width: 40px;
+            height: 40px;
+            border: 3px solid #E2E8F0;
+            border-top: 3px solid #4A90E2;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+        }
+        
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+        
+        /* Page transitions */
+        .page-transition {
+            animation: fadeInUp 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        
+        /* Custom Animation System */
+        .animate-on-scroll {
+            opacity: 0;
+            transform: translateY(30px);
+            transition: opacity 0.6s ease, transform 0.6s ease;
+        }
+        
+        .animate-on-scroll.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+        
+        .animate-on-scroll.delay-100 {
+            transition-delay: 0.1s;
+        }
+        
+        .animate-on-scroll.delay-200 {
+            transition-delay: 0.2s;
+        }
+        
+        .animate-on-scroll.delay-300 {
+            transition-delay: 0.3s;
+        }
+        
+        .animate-on-scroll.delay-400 {
+            transition-delay: 0.4s;
+        }
+        
+        .animate-on-scroll.delay-500 {
+            transition-delay: 0.5s;
+        }
+        
+        /* Force GPU acceleration */
+        .gpu-accelerate {
+            transform: translateZ(0);
+            backface-visibility: hidden;
+            perspective: 1000px;
+        }
+        
+        /* Initial animation untuk konten yang terlihat langsung */
+        .initial-animate {
+            animation: fadeInUp 0.8s ease-out forwards;
+        }
+        
+        /* Memastikan semua konten ter-render */
+        .force-render {
+            will-change: transform, opacity;
+            contain: layout style paint;
+        }
+        
+        /* Chart container */
+        .chart-container {
+            position: relative;
+            height: 300px;
+            width: 100%;
+        }
+        
+        /* Logout button di navbar */
+        .nav-logout-btn {
+            padding: 8px 16px;
+            border-radius: 8px;
+            background: #FEF2F2;
+            color: #DC2626;
+            border: 1px solid #FECACA;
+            transition: all 0.3s ease;
+        }
+        
+        .nav-logout-btn:hover {
+            background: #FEE2E2;
+            border-color: #FCA5A5;
+            transform: translateY(-2px);
+        }
+    </style>
+</head>
+<body class="page-transition">
+    <div class="app-container">
+        <!-- Sidebar dari halaman kedua -->
+        <aside class="w-64 bg-white/90 border-r border-gray-200/50 flex flex-col shadow-sm glass-effect">
+            <div class="p-6 border-b border-gray-100/50">
+                <div class="flex items-center space-x-3">
+                    <div class="w-10 h-10 rounded-lg bg-gradient-to-br from-blue-400 to-blue-600 flex items-center justify-center animate-float">
+                        <i class="fas fa-chart-line text-white"></i>
+                    </div>
+                    <h1 class="text-xl font-bold text-gray-800">Flashboard</h1>
+                </div>
+            </div>
+            
+            <nav class="flex-1 p-4 space-y-2">
+                <a href="/dashboard/" class="flex items-center space-x-3 p-3 rounded-lg text-gray-700 smooth-transition hover:bg-gray-100 hover-lift ripple-effect">
+                    <i class="fas fa-tachometer-alt w-5 text-center"></i>
+                    <span class="font-medium">Dashboard</span>
+                </a>
+                <a href="/product/" class="flex items-center space-x-3 p-3 rounded-lg text-gray-700 smooth-transition hover:bg-gray-100 hover-lift ripple-effect">
+                    <i class="fas fa-boxes w-5 text-center"></i>
+                    <span class="font-medium">Product Management</span>
+                </a>
+                <a href="/inventory/" class="flex items-center space-x-3 p-3 rounded-lg text-gray-700 smooth-transition hover:bg-gray-100 hover-lift ripple-effect">
+                    <i class="fas fa-warehouse w-5 text-center"></i>
+                    <span class="font-medium">Inventory</span>
+                </a>
+                <a href="/shipping/" class="flex items-center space-x-3 p-3 rounded-lg text-gray-700 smooth-transition hover:bg-gray-100 hover-lift ripple-effect">
+                    <i class="fas fa-shipping-fast w-5 text-center"></i>
+                    <span class="font-medium">Shipping Tracking</span>
+                </a>
+                <a href="/salesforecasting/" class="flex items-center space-x-3 p-3 rounded-lg bg-blue-50 text-blue-600 smooth-transition hover:bg-blue-100 hover-lift ripple-effect">
+                    <i class="fas fa-chart-bar w-5 text-center"></i>
+                    <span class="font-medium">Sales Forecasting</span>
+                </a>
+                <a href="/integrasi/" class="flex items-center space-x-3 p-3 rounded-lg text-gray-700 smooth-transition hover:bg-gray-100 hover-lift ripple-effect">
+                    <i class="fas fa-store w-5 text-center"></i>
+                    <span class="font-medium">Integrasi</span>
+                </a>
+            </nav>
+            
+            <div class="p-4 border-t border-gray-100/50">
+                <div class="flex items-center space-x-3 p-3 rounded-lg bg-gradient-to-r from-blue-50 to-gray-50 hover-lift smooth-transition">
+                    <div class="w-8 h-8 rounded-full bg-gradient-to-r from-blue-100 to-blue-200 flex items-center justify-center">
+                        <i class="fas fa-user text-blue-600 text-sm"></i>
+                    </div>
+                    <div>
+                        <p class="text-sm font-medium">Admin</p>
+                        <p class="text-xs text-gray-500">admin@flashboard.com</p>
+                    </div>
+                </div>
+            </div>
+        </aside>
+        
+        <!-- Main Content -->
+        <div class="main-wrapper">
+            <!-- Header dari halaman kedua dengan modifikasi untuk Sales Forecasting -->
+            <header class="sticky top-0 z-20 bg-white/80 glass-effect border-b border-gray-200/50 px-8 py-4 shrink-0">
+                <div class="flex justify-between items-center">
+                    <div>
+                        <h2 class="text-2xl font-bold text-gray-800 initial-animate">Sales Forecasting</h2>
+                        <p class="text-gray-600 initial-animate" style="animation-delay: 0.1s">Prediksi penjualan dan perencanaan stok berbasis AI</p>
+                    </div>
+                    <div class="flex items-center space-x-6">
+                        <!-- AI Assistant Button dari halaman pertama (untuk forecasting) -->
+                        <div class="relative">
+                            <button id="aiAssistantBtn" class="flex items-center space-x-2 px-4 py-2 rounded-lg bg-gradient-to-r from-blue-500 to-blue-600 text-white smooth-transition hover:from-blue-600 hover:to-blue-700 hover-lift shadow-md relative overflow-hidden group">
+                                <i class="fas fa-robot"></i>
+                                <span class="font-medium">AI Assistant</span>
+                                <div class="absolute inset-0 bg-gradient-to-r from-cyan-500 to-blue-500 opacity-0 group-hover:opacity-20 smooth-transition"></div>
+                    <!-- <span class="absolute -top-1 -right-1 w-3 h-3 bg-green-400 rounded-full animate-pulse-soft"></span> -->
+                            </button>
+                            
+                            <!-- Enhanced AI Assistant Panel dari halaman pertama (untuk forecasting) -->
+                            <div id="aiAssistantPanel" class="fixed right-8 top-20 w-96 bg-white rounded-xl shadow-2xl border border-gray-200 hidden animate-fade-in-up z-50 overflow-hidden" style="height: 600px;">
+                                <!-- AI Assistant Header -->
+                                <div class="bg-gradient-to-r from-blue-500 to-blue-600 p-4 text-white">
+                                    <div class="flex justify-between items-center">
+                                        <div class="flex items-center space-x-3">
+                                            <div class="w-10 h-10 rounded-full bg-white/20 flex items-center justify-center">
+                                                <i class="fas fa-robot text-xl"></i>
+                                            </div>
+                                            <div>
+                                                <h3 class="font-bold text-lg">AI Forecasting Assistant</h3>
+                                                <p class="text-sm text-blue-100">Siap membantu analisis dan prediksi penjualan</p>
+                                            </div>
+                                        </div>
+                                        <div class="flex items-center space-x-2">
+                                            <button class="w-8 h-8 rounded-full bg-white/20 flex items-center justify-center hover:bg-white/30 smooth-transition">
+                                                <i class="fas fa-cog"></i>
+                                            </button>
+                                            <button id="closeAIPanel" class="w-8 h-8 rounded-full bg-white/20 flex items-center justify-center hover:bg-white/30 smooth-transition">
+                                                <i class="fas fa-times"></i>
+                                            </button>
+                                        </div>
+                                    </div>
+                                    
+                                    <!-- AI Mode Selector untuk Forecasting -->
+                                    <div class="flex space-x-2 mt-4">
+                                        <button class="ai-mode-btn active flex-1 py-2 rounded-lg bg-white/20 text-sm font-medium smooth-transition hover:bg-white/30" data-mode="forecaster">
+                                            <i class="fas fa-chart-line mr-1"></i> Peramal
+                                        </button>
+                                        <button class="ai-mode-btn flex-1 py-2 rounded-lg bg-white/10 text-sm font-medium smooth-transition hover:bg-white/20" data-mode="planner">
+                                            <i class="fas fa-calendar-alt mr-1"></i> Perencana
+                                        </button>
+                                        <button class="ai-mode-btn flex-1 py-2 rounded-lg bg-white/10 text-sm font-medium smooth-transition hover:bg-white/20" data-mode="analyst">
+                                            <i class="fas fa-search mr-1"></i> Analis Tren
+                                        </button>
+                                    </div>
+                                </div>
+                                
+                                <!-- AI Assistant Content -->
+                                <div class="flex flex-col h-full">
+                                    <!-- AI Chat Container -->
+                                    <div id="aiChatContainer" class="flex-1 overflow-y-auto p-4 space-y-3" style="max-height: 380px;">
+                                        <!-- Initial AI Message -->
+                                        <div class="ai-message assistant">
+                                            <div class="flex items-start space-x-2">
+                                                <div class="w-6 h-6 rounded-full bg-blue-100 flex items-center justify-center flex-shrink-0 mt-1">
+                                                    <i class="fas fa-robot text-blue-600 text-xs"></i>
+                                                </div>
+                                                <div>
+                                                    <p class="font-medium text-gray-800 mb-1">Halo! Saya AI Forecasting Assistant khusus untuk penjualan Anda.</p>
+                                                    <p class="text-gray-700 text-sm">Saya dapat menganalisis tren penjualan, membuat prediksi akurat, dan membantu perencanaan stok. Apa yang bisa saya bantu hari ini?</p>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        
+                                        <!-- Sample conversation -->
+                                        <div class="ai-message user">
+                                            <div class="flex items-center justify-between">
+                                                <p>Prediksi penjualan bulan depan?</p>
+                                                <i class="fas fa-user ml-2"></i>
+                                            </div>
+                                        </div>
+                                        
+                                        <div class="ai-message assistant">
+                                            <div class="flex items-start space-x-2">
+                                                <div class="w-6 h-6 rounded-full bg-blue-100 flex items-center justify-center flex-shrink-0 mt-1">
+                                                    <i class="fas fa-robot text-blue-600 text-xs"></i>
+                                                </div>
+                                                <div>
+                                                    <p class="font-medium text-gray-800 mb-1">Prediksi Bulan Depan</p>
+                                                    <p class="text-gray-700 text-sm">Berdasarkan tren 3 bulan terakhir, prediksi penjualan bulan depan: <span class="font-semibold text-blue-700">Rp 1.2-1.4 Miliar</span> (naik 8-12%). Produk elektronik diprediksi tumbuh 15%.</p>
+                                                    <div class="mt-2 flex space-x-2">
+                                                        <button class="text-xs px-2 py-1 bg-blue-100 text-blue-700 rounded smooth-transition hover:bg-blue-200">Lihat Detail</button>
+                                                        <button class="text-xs px-2 py-1 bg-green-100 text-green-700 rounded smooth-transition hover:bg-green-200">Export Laporan</button>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    
+                                    <!-- AI Quick Actions - Container bisa di-scroll dengan scrollbar jelas -->
+                                    <div class="p-4 border-t border-gray-200">
+                                        <p class="text-sm font-medium text-gray-700 mb-2">Pertanyaan Cepat Forecasting:</p>
+                                        <div class="ai-quick-questions-container">
+                                            <button class="ai-quick-question">
+                                                Prediksi 30 hari ke depan
+                                            </button>
+                                            <button class="ai-quick-question">
+                                                Analisis tren musiman
+                                            </button>
+                                            <button class="ai-quick-question">
+                                                Kebutuhan stok minggu depan
+                                            </button>
+                                            <button class="ai-quick-question">
+                                                Produk dengan pertumbuhan tertinggi
+                                            </button>
+                                            <button class="ai-quick-question">
+                                                Faktor pengaruh cuaca
+                                            </button>
+                                            <button class="ai-quick-question">
+                                                Rekomendasi harga optimal
+                                            </button>
+                                        </div>
+                                    </div>
+                                    
+                                    <!-- AI Input -->
+                                    <div class="p-4 border-t border-gray-200 bg-gray-50">
+                                        <div class="relative">
+                                            <input type="text" id="aiQuestionInput" placeholder="Tanyakan apapun tentang prediksi penjualan..." class="w-full p-3 pr-12 rounded-lg bg-white border border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent">
+                                            <button id="sendAIQuestion" class="absolute right-3 top-3 text-blue-600 hover:text-blue-800 smooth-transition">
+                                                <i class="fas fa-paper-plane"></i>
+                                            </button>
+                                        </div>
+                                        <p class="text-xs text-gray-500 mt-2 text-center">
+                                            <i class="fas fa-shield-alt mr-1"></i> Data Anda aman dan dianalisis secara real-time
+                                        </p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="flex items-center space-x-4">
+                            <!-- Logout Button di Navbar dari halaman kedua -->
+                            <form action="/logout/" method="post" class="ml-2">
+                                <button type="submit" class="nav-logout-btn flex items-center space-x-2 text-sm font-medium ripple-effect">
+                                    <i class="fas fa-sign-out-alt"></i>
+                                    <span>Logout</span>
+                                </button>
+                            </form>
+                            
+                            <div class="relative">
+                                <i class="fas fa-bell text-gray-500 text-xl hover:text-blue-500 smooth-transition cursor-pointer ripple-effect" id="notificationBell"></i>
+                                <span class="absolute -top-1 -right-1 w-3 h-3 bg-red-500 rounded-full animate-pulse-soft"></span>
+                            </div>
+                            <div class="text-sm text-gray-600">
+                                <span class="font-medium">Selasa, 2 Jan 2026</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </header>
+            
+            <!-- Content dari halaman pertama (Sales Forecasting) -->
+            <div class="content-wrapper">
+                <!-- Forecasting Overview Cards -->
+                <section class="force-render">
+                    <div class="flex items-center justify-between mb-6">
+                        <h3 class="text-lg font-semibold text-gray-800">Ringkasan Prediksi Penjualan</h3>
+                        <div class="flex items-center space-x-4">
+                            <div class="flex space-x-2">
+                                <button class="shipping-filter active px-4 py-2 rounded-lg text-sm font-medium ripple-effect" data-period="7">7 Hari</button>
+                                <button class="shipping-filter px-4 py-2 rounded-lg text-sm font-medium bg-gray-100 ripple-effect" data-period="30">30 Hari</button>
+                                <button class="shipping-filter px-4 py-2 rounded-lg text-sm font-medium bg-gray-100 ripple-effect" data-period="90">90 Hari</button>
+                            </div>
+                            <button class="text-blue-600 text-sm font-medium flex items-center space-x-1 smooth-transition hover:text-blue-800 group" id="refreshForecastBtn">
+                                <i class="fas fa-sync-alt mr-1"></i> <span>Perbarui Prediksi</span>
+                            </button>
+                        </div>
+                    </div>
+                    
+                    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
+                        <!-- Total Forecasted Sales -->
+                        <div class="bg-white rounded-xl shadow-sm border border-gray-200 p-5 hover-lift gradient-blue initial-animate" style="animation-delay: 0.1s">
+                            <div class="flex justify-between items-start">
+                                <div>
+                                    <p class="text-sm text-gray-600">Prediksi Penjualan (30 hari)</p>
+                                    <p class="text-2xl font-bold text-gray-800 mt-1">Rp 1.34 M</p>
+                                    <div class="flex items-center mt-2">
+                                        <span class="text-xs text-green-600 data-trend-up mr-2">+8.5%</span>
+                                        <span class="text-xs text-gray-600">vs bulan lalu</span>
+                                    </div>
+                                </div>
+                                <div class="w-12 h-12 rounded-full bg-gradient-to-r from-blue-100 to-blue-200 flex items-center justify-center">
+                                    <i class="fas fa-chart-line text-blue-600 text-xl"></i>
+                                </div>
+                            </div>
+                            <div class="mt-4">
+                                <div class="confidence-bar">
+                                    <div class="confidence-fill confidence-high" style="width: 85%"></div>
+                                </div>
+                                <p class="text-xs text-gray-500 mt-1">Tingkat kepercayaan: 85%</p>
+                            </div>
+                        </div>
+                        
+                        <!-- Stock Requirements -->
+                        <div class="bg-white rounded-xl shadow-sm border border-gray-200 p-5 hover-lift gradient-green initial-animate" style="animation-delay: 0.2s">
+                            <div class="flex justify-between items-start">
+                                <div>
+                                    <p class="text-sm text-gray-600">Kebutuhan Stok (Minggu Depan)</p>
+                                    <p class="text-2xl font-bold text-gray-800 mt-1">142 Unit</p>
+                                    <div class="flex items-center mt-2">
+                                        <span class="text-xs text-green-600 data-trend-up mr-2">12 produk</span>
+                                        <span class="text-xs text-gray-600">perlu restok</span>
+                                    </div>
+                                </div>
+                                <div class="w-12 h-12 rounded-full bg-gradient-to-r from-green-100 to-green-200 flex items-center justify-center">
+                                    <i class="fas fa-boxes text-green-600 text-xl"></i>
+                                </div>
+                            </div>
+                            <div class="mt-4">
+                                <div class="confidence-bar">
+                                    <div class="confidence-fill confidence-medium" style="width: 72%"></div>
+                                </div>
+                                <p class="text-xs text-gray-500 mt-1">Tingkat kepercayaan: 72%</p>
+                            </div>
+                        </div>
+                        
+                        <!-- Growth Prediction -->
+                        <div class="bg-white rounded-xl shadow-sm border border-gray-200 p-5 hover-lift gradient-purple initial-animate" style="animation-delay: 0.3s">
+                            <div class="flex justify-between items-start">
+                                <div>
+                                    <p class="text-sm text-gray-600">Prediksi Pertumbuhan</p>
+                                    <p class="text-2xl font-bold text-gray-800 mt-1">12.3%</p>
+                                    <div class="flex items-center mt-2">
+                                        <span class="text-xs text-green-600 data-trend-up mr-2">Elektronik +18.5%</span>
+                                        <span class="text-xs text-gray-600">tren tertinggi</span>
+                                    </div>
+                                </div>
+                                <div class="w-12 h-12 rounded-full bg-gradient-to-r from-purple-100 to-purple-200 flex items-center justify-center">
+                                    <i class="fas fa-rocket text-purple-600 text-xl"></i>
+                                </div>
+                            </div>
+                            <div class="mt-4">
+                                <div class="confidence-bar">
+                                    <div class="confidence-fill confidence-high" style="width: 78%"></div>
+                                </div>
+                                <p class="text-xs text-gray-500 mt-1">Tingkat kepercayaan: 78%</p>
+                            </div>
+                        </div>
+                        
+                        <!-- Seasonal Impact -->
+                        <div class="bg-white rounded-xl shadow-sm border border-gray-200 p-5 hover-lift gradient-orange initial-animate" style="animation-delay: 0.4s">
+                            <div class="flex justify-between items-start">
+                                <div>
+                                    <p class="text-sm text-gray-600">Dampak Musiman</p>
+                                    <p class="text-2xl font-bold text-gray-800 mt-1">+23%</p>
+                                    <div class="flex items-center mt-2">
+                                        <span class="text-xs text-green-600 data-trend-up mr-2">Musim liburan</span>
+                                        <span class="text-xs text-gray-600">Januari 2026</span>
+                                    </div>
+                                </div>
+                                <div class="w-12 h-12 rounded-full bg-gradient-to-r from-orange-100 to-orange-200 flex items-center justify-center">
+                                    <i class="fas fa-sun text-orange-600 text-xl"></i>
+                                </div>
+                            </div>
+                            <div class="mt-4">
+                                <div class="confidence-bar">
+                                    <div class="confidence-fill confidence-low" style="width: 65%"></div>
+                                </div>
+                                <p class="text-xs text-gray-500 mt-1">Tingkat kepercayaan: 65%</p>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+                
+                <!-- Charts Section -->
+                <div class="grid grid-cols-1 lg:grid-cols-2 gap-8 mt-8">
+                    <!-- Sales Trend Chart -->
+                    <section class="animate-on-scroll delay-100">
+                        <div class="flex items-center justify-between mb-4">
+                            <h3 class="text-lg font-semibold text-gray-800">Tren Penjualan & Prediksi</h3>
+                            <div class="flex items-center space-x-2">
+                                <span class="text-xs px-2 py-1 bg-blue-100 text-blue-700 rounded-full animate-pulse-soft">Live Update</span>
+                            </div>
+                        </div>
+                        
+                        <div class="bg-white rounded-xl shadow-sm border border-gray-200 p-5 hover-lift force-render">
+                            <div class="p-5 border-b border-gray-100 gradient-blue">
+                                <div class="flex items-center justify-between">
+                                    <div class="flex items-center space-x-3">
+                                        <div class="w-10 h-10 rounded-full bg-gradient-to-r from-blue-100 to-blue-200 flex items-center justify-center animate-pulse-soft">
+                                            <i class="fas fa-chart-line text-blue-600"></i>
+                                        </div>
+                                        <div>
+                                            <h4 class="font-bold text-gray-800">Aktual vs Prediksi 90 Hari</h4>
+                                            <p class="text-sm text-gray-600">Analisis berbasis data historis 12 bulan</p>
+                                        </div>
+                                    </div>
+                                    <div class="text-right">
+                                        <p class="text-2xl font-bold text-gray-800">Rp 1.34M</p>
+                                        <p class="text-xs text-gray-600">Prediksi 30 hari</p>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="p-5">
+                                <div class="chart-container">
+                                    <canvas id="salesTrendChart"></canvas>
+                                </div>
+                                <div class="flex items-center justify-center space-x-6 mt-4 text-sm">
+                                    <div class="flex items-center">
+                                        <div class="w-3 h-3 rounded-full bg-blue-500 mr-2"></div>
+                                        <span class="text-gray-600">Aktual</span>
+                                    </div>
+                                    <div class="flex items-center">
+                                        <div class="w-3 h-3 rounded-full bg-green-500 mr-2"></div>
+                                        <span class="text-gray-600">Prediksi</span>
+                                    </div>
+                                    <div class="flex items-center">
+                                        <div class="w-3 h-3 rounded-full bg-yellow-500 mr-2"></div>
+                                        <span class="text-gray-600">Rentang Keyakinan</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </section>
+                    
+                    <!-- Product Performance Forecast -->
+                    <section class="animate-on-scroll delay-200">
+                        <div class="flex items-center justify-between mb-4">
+                            <h3 class="text-lg font-semibold text-gray-800">Prediksi Performa Produk</h3>
+                            <span class="text-xs px-2 py-1 bg-green-100 text-green-700 rounded-full">30 Hari ke Depan</span>
+                        </div>
+                        
+                        <div class="bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden hover-lift force-render">
+                            <div class="p-5 border-b border-gray-100 gradient-green">
+                                <div class="flex items-center justify-between">
+                                    <div class="flex items-center space-x-3">
+                                        <div class="w-10 h-10 rounded-full bg-gradient-to-r from-green-100 to-green-200 flex items-center justify-center animate-pulse-soft">
+                                            <i class="fas fa-box text-green-600"></i>
+                                        </div>
+                                        <div>
+                                            <h4 class="font-bold text-gray-800">Analisis per Kategori</h4>
+                                            <p class="text-sm text-gray-600">Berdasarkan tren dan data historis</p>
+                                        </div>
+                                    </div>
+                                    <select class="p-2 rounded-lg border border-gray-300 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent">
+                                        <option>Semua Kategori</option>
+                                        <option>Elektronik</option>
+                                        <option>Fashion</option>
+                                        <option>Rumah Tangga</option>
+                                        <option>Kecantikan</option>
+                                    </select>
+                                </div>
+                            </div>
+                            
+                            <div class="p-5">
+                                <div class="chart-container">
+                                    <canvas id="productForecastChart"></canvas>
+                                </div>
+                                <div class="text-center mt-4">
+                                    <p class="text-sm text-gray-600">Elektronik diprediksi tumbuh <span class="font-medium text-green-600">18.5%</span> bulan depan</p>
+                                </div>
+                            </div>
+                        </div>
+                    </section>
+                </div>
+                
+                <!-- Detailed Forecasts Table -->
+                <section class="animate-on-scroll delay-300 mt-8">
+                    <div class="flex items-center justify-between mb-4">
+                        <h3 class="text-lg font-semibold text-gray-800">Detail Prediksi per Produk</h3>
+                        <span class="text-xs px-3 py-1 bg-purple-100 text-purple-700 rounded-full">30 Hari ke Depan</span>
+                    </div>
+                    
+                    <div class="bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden hover-lift force-render">
+                        <div class="p-5 border-b border-gray-100 gradient-purple">
+                            <div class="flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
+                                <div class="flex items-center space-x-3">
+                                    <div class="w-10 h-10 rounded-full bg-gradient-to-r from-purple-100 to-purple-200 flex items-center justify-center animate-pulse-soft">
+                                        <i class="fas fa-chart-bar text-purple-600"></i>
+                                    </div>
+                                    <div>
+                                        <h4 class="font-bold text-gray-800">Estimasi Penjualan dan Kebutuhan Stok</h4>
+                                        <p class="text-sm text-gray-600">Berdasarkan analisis AI dan data historis</p>
+                                    </div>
+                                </div>
+                                <button class="px-4 py-2 bg-gradient-to-r from-blue-500 to-blue-600 text-white rounded-lg font-medium smooth-transition hover:from-blue-600 hover:to-blue-700 hover-lift ripple-effect">
+                                    <i class="fas fa-download mr-2"></i> Export Prediksi
+                                </button>
+                            </div>
+                        </div>
+                        
+                        <div class="overflow-x-auto">
+                            <table class="w-full shipping-table">
+                                <thead class="bg-gray-50">
+                                    <tr>
+                                        <th class="py-3 px-4 text-left text-xs font-medium text-gray-700 uppercase tracking-wider">Produk</th>
+                                        <th class="py-3 px-4 text-left text-xs font-medium text-gray-700 uppercase tracking-wider">Prediksi Penjualan</th>
+                                        <th class="py-3 px-4 text-left text-xs font-medium text-gray-700 uppercase tracking-wider">Kebutuhan Stok</th>
+                                        <th class="py-3 px-4 text-left text-xs font-medium text-gray-700 uppercase tracking-wider">Tren</th>
+                                        <th class="py-3 px-4 text-left text-xs font-medium text-gray-700 uppercase tracking-wider">Tindakan</th>
+                                    </tr>
+                                </thead>
+                                <tbody class="divide-y divide-gray-200">
+                                    <tr class="hover:bg-blue-50/50">
+                                        <td class="py-3 px-4">
+                                            <div class="flex items-center">
+                                                <div class="w-10 h-10 rounded-lg bg-gradient-to-r from-blue-100 to-blue-200 flex items-center justify-center mr-3">
+                                                    <i class="fas fa-mobile-alt text-blue-600"></i>
+                                                </div>
+                                                <div>
+                                                    <div class="text-sm font-medium text-gray-900">Smartphone X Pro</div>
+                                                    <div class="text-xs text-gray-500">Elektronik</div>
+                                                </div>
+                                            </div>
+                                        </td>
+                                        <td class="py-3 px-4">
+                                            <div class="text-sm font-medium text-gray-900">48-52 unit</div>
+                                            <div class="text-xs text-gray-500">Rp 408-442 Jt</div>
+                                        </td>
+                                        <td class="py-3 px-4">
+                                            <div class="text-sm font-medium text-gray-900">+20 unit</div>
+                                            <div class="text-xs text-gray-500">Stok saat ini: 42 unit</div>
+                                        </td>
+                                        <td class="py-3 px-4">
+                                            <span class="px-3 py-1 rounded-full text-xs font-medium bg-green-100 text-green-800">
+                                                <span class="data-trend-up">Tinggi (+15%)</span>
+                                            </span>
+                                        </td>
+                                        <td class="py-3 px-4">
+                                            <button class="px-3 py-1 text-xs bg-blue-100 text-blue-700 rounded-lg hover:bg-blue-200 smooth-transition">
+                                                Pesan Stok
+                                            </button>
+                                        </td>
+                                    </tr>
+                                    
+                                    <tr class="hover:bg-yellow-50/50">
+                                        <td class="py-3 px-4">
+                                            <div class="flex items-center">
+                                                <div class="w-10 h-10 rounded-lg bg-gradient-to-r from-pink-100 to-pink-200 flex items-center justify-center mr-3">
+                                                    <i class="fas fa-tshirt text-pink-600"></i>
+                                                </div>
+                                                <div>
+                                                    <div class="text-sm font-medium text-gray-900">Kaos Premium Cotton</div>
+                                                    <div class="text-xs text-gray-500">Fashion</div>
+                                                </div>
+                                            </div>
+                                        </td>
+                                        <td class="py-3 px-4">
+                                            <div class="text-sm font-medium text-gray-900">65-72 unit</div>
+                                            <div class="text-xs text-gray-500">Rp 9.7-10.7 Jt</div>
+                                        </td>
+                                        <td class="py-3 px-4">
+                                            <div class="text-sm font-medium text-red-600">+60 unit</div>
+                                            <div class="text-xs text-gray-500">Stok saat ini: 5 unit</div>
+                                        </td>
+                                        <td class="py-3 px-4">
+                                            <span class="px-3 py-1 rounded-full text-xs font-medium bg-red-100 text-red-800 animate-pulse-soft">
+                                                <span class="data-trend-up">Kritis (+85%)</span>
+                                            </span>
+                                        </td>
+                                        <td class="py-3 px-4">
+                                            <button class="px-3 py-1 text-xs bg-red-100 text-red-700 rounded-lg hover:bg-red-200 smooth-transition">
+                                                Prioritas!
+                                            </button>
+                                        </td>
+                                    </tr>
+                                    
+                                    <tr class="hover:bg-blue-50/50">
+                                        <td class="py-3 px-4">
+                                            <div class="flex items-center">
+                                                <div class="w-10 h-10 rounded-lg bg-gradient-to-r from-yellow-100 to-yellow-200 flex items-center justify-center mr-3">
+                                                    <i class="fas fa-home text-yellow-600"></i>
+                                                </div>
+                                                <div>
+                                                    <div class="text-sm font-medium text-gray-900">Lampu LED Smart Home</div>
+                                                    <div class="text-xs text-gray-500">Rumah Tangga</div>
+                                                </div>
+                                            </div>
+                                        </td>
+                                        <td class="py-3 px-4">
+                                            <div class="text-sm font-medium text-gray-900">32-38 unit</div>
+                                            <div class="text-xs text-gray-500">Rp 10.5-12.5 Jt</div>
+                                        </td>
+                                        <td class="py-3 px-4">
+                                            <div class="text-sm font-medium text-gray-900">+15 unit</div>
+                                            <div class="text-xs text-gray-500">Stok saat ini: 28 unit</div>
+                                        </td>
+                                        <td class="py-3 px-4">
+                                            <span class="px-3 py-1 rounded-full text-xs font-medium bg-green-100 text-green-800">
+                                                <span class="data-trend-up">Stabil (+8%)</span>
+                                            </span>
+                                        </td>
+                                        <td class="py-3 px-4">
+                                            <button class="px-3 py-1 text-xs bg-blue-100 text-blue-700 rounded-lg hover:bg-blue-200 smooth-transition">
+                                                Monitor
+                                            </button>
+                                        </td>
+                                    </tr>
+                                    
+                                    <tr class="hover:bg-blue-50/50">
+                                        <td class="py-3 px-4">
+                                            <div class="flex items-center">
+                                                <div class="w-10 h-10 rounded-lg bg-gradient-to-r from-purple-100 to-purple-200 flex items-center justify-center mr-3">
+                                                    <i class="fas fa-spa text-purple-600"></i>
+                                                </div>
+                                                <div>
+                                                    <div class="text-sm font-medium text-gray-900">Essential Oil Set</div>
+                                                    <div class="text-xs text-gray-500">Kecantikan</div>
+                                                </div>
+                                            </div>
+                                        </td>
+                                        <td class="py-3 px-4">
+                                            <div class="text-sm font-medium text-gray-900">42-48 unit</div>
+                                            <div class="text-xs text-gray-500">Rp 10.5-11.9 Jt</div>
+                                        </td>
+                                        <td class="py-3 px-4">
+                                            <div class="text-sm font-medium text-gray-900">+5 unit</div>
+                                            <div class="text-xs text-gray-500">Stok saat ini: 65 unit</div>
+                                        </td>
+                                        <td class="py-3 px-4">
+                                            <span class="px-3 py-1 rounded-full text-xs font-medium bg-yellow-100 text-yellow-800">
+                                                <span class="data-trend-up">Normal (+5%)</span>
+                                            </span>
+                                        </td>
+                                        <td class="py-3 px-4">
+                                            <button class="px-3 py-1 text-xs bg-gray-100 text-gray-700 rounded-lg hover:bg-gray-200 smooth-transition">
+                                                Cukup
+                                            </button>
+                                        </td>
+                                    </tr>
+                                    
+                                    <tr class="hover:bg-yellow-50/50">
+                                        <td class="py-3 px-4">
+                                            <div class="flex items-center">
+                                                <div class="w-10 h-10 rounded-lg bg-gradient-to-r from-blue-100 to-blue-200 flex items-center justify-center mr-3">
+                                                    <i class="fas fa-headphones text-blue-600"></i>
+                                                </div>
+                                                <div>
+                                                    <div class="text-sm font-medium text-gray-900">Wireless Headphone Pro</div>
+                                                    <div class="text-xs text-gray-500">Elektronik</div>
+                                                </div>
+                                            </div>
+                                        </td>
+                                        <td class="py-3 px-4">
+                                            <div class="text-sm font-medium text-gray-900">38-44 unit</div>
+                                            <div class="text-xs text-gray-500">Rp 49.4-57.2 Jt</div>
+                                        </td>
+                                        <td class="py-3 px-4">
+                                            <div class="text-sm font-medium text-red-600">+35 unit</div>
+                                            <div class="text-xs text-gray-500">Stok saat ini: 8 unit</div>
+                                        </td>
+                                        <td class="py-3 px-4">
+                                            <span class="px-3 py-1 rounded-full text-xs font-medium bg-red-100 text-red-800">
+                                                <span class="data-trend-up">Tinggi (+25%)</span>
+                                            </span>
+                                        </td>
+                                        <td class="py-3 px-4">
+                                            <button class="px-3 py-1 text-xs bg-red-100 text-red-700 rounded-lg hover:bg-red-200 smooth-transition">
+                                                Segera Restok
+                                            </button>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                        
+                        <div class="p-4 border-t border-gray-200 bg-gray-50">
+                            <div class="flex justify-between items-center">
+                                <p class="text-sm text-gray-600">Menampilkan 5 dari 23 produk yang diprediksi</p>
+                                <button class="text-blue-600 text-sm font-medium flex items-center space-x-1 smooth-transition hover:text-blue-800 group">
+                                    <span>Lihat Semua Produk</span>
+                                    <i class="fas fa-chevron-right text-xs group-hover:translate-x-1 smooth-transition"></i>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+                
+                <!-- AI Insights & Settings -->
+                <div class="grid grid-cols-1 lg:grid-cols-3 gap-8 mt-8">
+                    <!-- AI Forecasting Insights -->
+                    <section class="lg:col-span-2 animate-on-scroll delay-400">
+                        <div class="flex items-center justify-between mb-4">
+                            <h3 class="text-lg font-semibold text-gray-800">Insight AI Forecasting</h3>
+                            <span class="text-xs px-3 py-1 bg-blue-100 text-blue-700 rounded-full animate-pulse-soft">Analisis Real-time</span>
+                        </div>
+                        
+                        <div class="bg-gradient-to-r from-blue-50 to-cyan-50 rounded-xl shadow-sm border border-blue-100 p-5 hover-lift force-render">
+                            <div class="flex items-center mb-4">
+                                <div class="w-10 h-10 rounded-full bg-gradient-to-r from-blue-100 to-blue-200 flex items-center justify-center mr-3">
+                                    <i class="fas fa-brain text-blue-600"></i>
+                                </div>
+                                <div>
+                                    <h4 class="font-bold text-gray-800">Analisis berbasis data historis dan tren musiman</h4>
+                                    <p class="text-sm text-gray-600">Rekomendasi AI untuk optimasi penjualan</p>
+                                </div>
+                            </div>
+                            
+                            <div class="space-y-4">
+                                <div class="p-4 bg-white rounded-lg border border-blue-100 hover-lift smooth-transition gpu-accelerate">
+                                    <div class="flex items-start">
+                                        <i class="fas fa-exclamation-circle text-yellow-500 mt-1 mr-3"></i>
+                                        <div>
+                                            <p class="font-medium text-gray-800 mb-1">Perhatian: Kebutuhan Stok Mendesak</p>
+                                            <p class="text-sm text-gray-700">2 produk (<span class="font-semibold">Kaos Premium Cotton</span> dan <span class="font-semibold">Wireless Headphone Pro</span>) diprediksi akan habis dalam 5-7 hari berdasarkan tren penjualan saat ini.</p>
+                                        </div>
+                                    </div>
+                                </div>
+                                
+                                <div class="p-4 bg-white rounded-lg border border-green-100 hover-lift smooth-transition gpu-accelerate">
+                                    <div class="flex items-start">
+                                        <i class="fas fa-chart-line text-green-500 mt-1 mr-3"></i>
+                                        <div>
+                                            <p class="font-medium text-gray-800 mb-1">Peluang Pertumbuhan</p>
+                                            <p class="text-sm text-gray-700">Kategori Elektronik menunjukkan pertumbuhan konsisten <span class="font-semibold text-green-600">+18.5%</span>. Pertimbangkan untuk meningkatkan alokasi stok sebesar 20-25% untuk produk dalam kategori ini.</p>
+                                        </div>
+                                    </div>
+                                </div>
+                                
+                                <div class="p-4 bg-white rounded-lg border border-purple-100 hover-lift smooth-transition gpu-accelerate">
+                                    <div class="flex items-start">
+                                        <i class="fas fa-calendar-alt text-purple-500 mt-1 mr-3"></i>
+                                        <div>
+                                            <p class="font-medium text-gray-800 mb-1">Pola Musiman Terdeteksi</p>
+                                            <p class="text-sm text-gray-700">Berdasarkan data 2 tahun terakhir, penjualan diprediksi meningkat <span class="font-semibold text-purple-600">23%</span> selama musim liburan (Januari). Persiapkan stok tambahan mulai minggu depan.</p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="mt-6 grid grid-cols-1 md:grid-cols-3 gap-4">
+                                <div class="bg-white p-4 rounded-lg border border-gray-200 hover-lift smooth-transition gpu-accelerate">
+                                    <p class="text-xs font-medium text-gray-700 mb-1">Akurasi Prediksi (7 hari)</p>
+                                    <p class="text-lg font-bold text-gray-800">94.2%</p>
+                                    <div class="progress-bar mt-2">
+                                        <div class="progress-bar-fill bg-gradient-to-r from-green-500 to-green-400" style="width: 94%"></div>
+                                    </div>
+                                </div>
+                                
+                                <div class="bg-white p-4 rounded-lg border border-gray-200 hover-lift smooth-transition gpu-accelerate">
+                                    <p class="text-xs font-medium text-gray-700 mb-1">Akurasi Prediksi (30 hari)</p>
+                                    <p class="text-lg font-bold text-gray-800">87.5%</p>
+                                    <div class="progress-bar mt-2">
+                                        <div class="progress-bar-fill bg-gradient-to-r from-blue-500 to-blue-400" style="width: 87%"></div>
+                                    </div>
+                                </div>
+                                
+                                <div class="bg-white p-4 rounded-lg border border-gray-200 hover-lift smooth-transition gpu-accelerate">
+                                    <p class="text-xs font-medium text-gray-700 mb-1">Akurasi Prediksi (90 hari)</p>
+                                    <p class="text-lg font-bold text-gray-800">78.3%</p>
+                                    <div class="progress-bar mt-2">
+                                        <div class="progress-bar-fill bg-gradient-to-r from-yellow-500 to-yellow-400" style="width: 78%"></div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </section>
+                    
+                    <!-- Forecasting Settings & Tools -->
+                    <section class="animate-on-scroll delay-500">
+                        <div class="flex items-center justify-between mb-4">
+                            <h3 class="text-lg font-semibold text-gray-800">Pengaturan Forecasting</h3>
+                            <span class="text-xs px-3 py-1 bg-purple-100 text-purple-700 rounded-full">AI-Optimized</span>
+                        </div>
+                        
+                        <div class="bg-white rounded-xl shadow-sm border border-gray-200 p-5 hover-lift force-render">
+                            <div class="space-y-4">
+                                <div>
+                                    <label class="block text-sm font-medium text-gray-700 mb-2">Rentang Prediksi</label>
+                                    <select class="w-full p-3 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent">
+                                        <option value="7">7 Hari</option>
+                                        <option value="30" selected>30 Hari</option>
+                                        <option value="60">60 Hari</option>
+                                        <option value="90">90 Hari</option>
+                                    </select>
+                                </div>
+                                
+                                <div>
+                                    <label class="block text-sm font-medium text-gray-700 mb-2">Tingkat Keyakinan Minimum</label>
+                                    <div class="flex items-center space-x-4">
+                                        <span class="text-sm text-gray-600">65%</span>
+                                        <input type="range" min="50" max="95" value="75" class="w-full h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer">
+                                        <span class="text-sm text-gray-600">95%</span>
+                                    </div>
+                                    <p class="text-xs text-gray-500 mt-2">Meningkatkan keyakinan mengurangi rentang prediksi</p>
+                                </div>
+                                
+                                <div>
+                                    <label class="block text-sm font-medium text-gray-700 mb-2">Faktor yang Diperhitungkan</label>
+                                    <div class="space-y-2">
+                                        <label class="flex items-center">
+                                            <input type="checkbox" checked class="rounded border-gray-300 text-blue-600 focus:ring-blue-500">
+                                            <span class="ml-2 text-sm text-gray-700">Tren Musiman</span>
+                                        </label>
+                                        <label class="flex items-center">
+                                            <input type="checkbox" checked class="rounded border-gray-300 text-blue-600 focus:ring-blue-500">
+                                            <span class="ml-2 text-sm text-gray-700">Event & Promosi</span>
+                                        </label>
+                                        <label class="flex items-center">
+                                            <input type="checkbox" class="rounded border-gray-300 text-blue-600 focus:ring-blue-500">
+                                            <span class="ml-2 text-sm text-gray-700">Faktor Cuaca</span>
+                                        </label>
+                                    </div>
+                                </div>
+                                
+                                <div>
+                                    <label class="block text-sm font-medium text-gray-700 mb-2">Data Historis</label>
+                                    <select class="w-full p-3 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent">
+                                        <option value="3">3 Bulan</option>
+                                        <option value="6">6 Bulan</option>
+                                        <option value="12" selected>12 Bulan</option>
+                                        <option value="24">24 Bulan</option>
+                                    </select>
+                                </div>
+                                
+                                <button id="updateForecastBtn" class="w-full py-3 bg-gradient-to-r from-blue-500 to-blue-600 text-white rounded-lg font-medium smooth-transition hover:from-blue-600 hover:to-blue-700 hover-lift mt-4">
+                                    <i class="fas fa-sync-alt mr-2"></i> Perbarui Prediksi
+                                </button>
+                            </div>
+                            
+                            <div class="mt-6 pt-4 border-t border-gray-200">
+                                <p class="text-sm font-medium text-gray-800 mb-3">Prediksi Mendatang</p>
+                                <div class="space-y-2">
+                                    <div class="flex justify-between items-center">
+                                        <span class="text-xs text-gray-600">Minggu Depan</span>
+                                        <span class="text-xs font-medium text-green-600">+5.2%</span>
+                                    </div>
+                                    <div class="flex justify-between items-center">
+                                        <span class="text-xs text-gray-600">Bulan Depan</span>
+                                        <span class="text-xs font-medium text-green-600">+8.5%</span>
+                                    </div>
+                                    <div class="flex justify-between items-center">
+                                        <span class="text-xs text-gray-600">Kuarter Depan</span>
+                                        <span class="text-xs font-medium text-blue-600">+12.3%</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </section>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- JavaScript untuk interaktivitas -->
+    <script>
+        // Scroll Animator untuk animasi saat scroll
+        class ScrollAnimator {
+            constructor() {
+                this.observer = null;
+                this.init();
+            }
+            
+            init() {
+                const options = {
+                    root: null,
+                    rootMargin: '0px 0px -50px 0px',
+                    threshold: 0.1
+                };
+                
+                this.observer = new IntersectionObserver((entries) => {
+                    entries.forEach(entry => {
+                        if (entry.isIntersecting) {
+                            entry.target.classList.add('visible');
+                        }
+                    });
+                }, options);
+                
+                document.querySelectorAll('.animate-on-scroll').forEach(el => {
+                    this.observer.observe(el);
+                });
+            }
+        }
+        
+        // Force render semua konten saat halaman dimuat
+        function forceRenderAllContent() {
+            const elements = document.querySelectorAll('.animate-on-scroll');
+            const viewportHeight = window.innerHeight;
+            
+            elements.forEach(el => {
+                const rect = el.getBoundingClientRect();
+                if (rect.top < viewportHeight - 100) {
+                    el.classList.add('visible');
+                }
+            });
+            
+            document.body.classList.add('force-render');
+            setTimeout(() => {
+                document.body.style.opacity = '1';
+            }, 50);
+        }
+        
+        document.addEventListener('DOMContentLoaded', function() {
+            // Inisialisasi Scroll Animator
+            const animator = new ScrollAnimator();
+            
+            // Force render semua konten
+            forceRenderAllContent();
+            
+            // Render tambahan setelah semua aset dimuat
+            window.addEventListener('load', function() {
+                setTimeout(forceRenderAllContent, 100);
+            });
+            
+            // Initialize Charts
+            const salesTrendCtx = document.getElementById('salesTrendChart').getContext('2d');
+            const productForecastCtx = document.getElementById('productForecastChart').getContext('2d');
+            
+            // Sales Trend Chart
+            const salesTrendChart = new Chart(salesTrendCtx, {
+                type: 'line',
+                data: {
+                    labels: ['Minggu 1', 'Minggu 2', 'Minggu 3', 'Minggu 4', 'Minggu 5', 'Minggu 6', 'Minggu 7', 'Minggu 8', 'Minggu 9', 'Minggu 10', 'Minggu 11', 'Minggu 12'],
+                    datasets: [
+                        {
+                            label: 'Aktual',
+                            data: [320, 450, 510, 480, 520, 580, 620, 590, 630, 680, 720, 750],
+                            borderColor: '#4A90E2',
+                            backgroundColor: 'rgba(74, 144, 226, 0.1)',
+                            borderWidth: 3,
+                            fill: false,
+                            tension: 0.4
+                        },
+                        {
+                            label: 'Prediksi',
+                            data: [null, null, null, null, null, null, 620, 650, 680, 710, 740, 770],
+                            borderColor: '#48BB78',
+                            backgroundColor: 'rgba(72, 187, 120, 0.1)',
+                            borderWidth: 3,
+                            borderDash: [5, 5],
+                            fill: false,
+                            tension: 0.4
+                        },
+                        {
+                            label: 'Rentang Keyakinan',
+                            data: [null, null, null, null, null, null, 590, 620, 650, 680, 710, 740],
+                            backgroundColor: 'rgba(246, 224, 94, 0.2)',
+                            borderColor: 'transparent',
+                            fill: '+1'
+                        },
+                        {
+                            label: 'Rentang Keyakinan Atas',
+                            data: [null, null, null, null, null, null, 650, 680, 710, 740, 770, 800],
+                            backgroundColor: 'rgba(246, 224, 94, 0.2)',
+                            borderColor: 'transparent',
+                            fill: false
+                        }
+                    ]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: {
+                            display: false
+                        },
+                        tooltip: {
+                            mode: 'index',
+                            intersect: false
+                        }
+                    },
+                    scales: {
+                        y: {
+                            beginAtZero: false,
+                            grid: {
+                                color: 'rgba(0, 0, 0, 0.05)'
+                            },
+                            ticks: {
+                                callback: function(value) {
+                                    return 'Rp ' + value + 'jt';
+                                }
+                            }
+                        },
+                        x: {
+                            grid: {
+                                color: 'rgba(0, 0, 0, 0.05)'
+                            }
+                        }
+                    },
+                    interaction: {
+                        intersect: false,
+                        mode: 'nearest'
+                    }
+                }
+            });
+            
+            // Product Forecast Chart
+            const productForecastChart = new Chart(productForecastCtx, {
+                type: 'bar',
+                data: {
+                    labels: ['Elektronik', 'Fashion', 'Rumah Tangga', 'Kecantikan', 'Makanan'],
+                    datasets: [
+                        {
+                            label: 'Prediksi Pertumbuhan (%)',
+                            data: [18.5, 12.3, 8.7, 15.2, 6.4],
+                            backgroundColor: [
+                                'rgba(74, 144, 226, 0.8)',
+                                'rgba(237, 100, 166, 0.8)',
+                                'rgba(246, 224, 94, 0.8)',
+                                'rgba(159, 122, 234, 0.8)',
+                                'rgba(72, 187, 120, 0.8)'
+                            ],
+                            borderColor: [
+                                '#4A90E2',
+                                '#ED64A6',
+                                '#F6E05E',
+                                '#9F7AEA',
+                                '#48BB78'
+                            ],
+                            borderWidth: 1
+                        }
+                    ]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: {
+                            display: false
+                        },
+                        tooltip: {
+                            callbacks: {
+                                label: function(context) {
+                                    return context.parsed.y + '% pertumbuhan';
+                                }
+                            }
+                        }
+                    },
+                    scales: {
+                        y: {
+                            beginAtZero: true,
+                            grid: {
+                                color: 'rgba(0, 0, 0, 0.05)'
+                            },
+                            ticks: {
+                                callback: function(value) {
+                                    return value + '%';
+                                }
+                            }
+                        },
+                        x: {
+                            grid: {
+                                display: false
+                            }
+                        }
+                    }
+                }
+            });
+            
+            // AI Assistant Panel
+            const aiAssistantBtn = document.getElementById('aiAssistantBtn');
+            const aiAssistantPanel = document.getElementById('aiAssistantPanel');
+            const closeAIPanel = document.getElementById('closeAIPanel');
+            
+            // Open AI Assistant Panel
+            aiAssistantBtn.addEventListener('click', function(e) {
+                e.stopPropagation();
+                aiAssistantPanel.classList.toggle('hidden');
+                setTimeout(() => {
+                    const chatContainer = document.getElementById('aiChatContainer');
+                    chatContainer.scrollTop = chatContainer.scrollHeight;
+                }, 100);
+            });
+            
+            closeAIPanel.addEventListener('click', function() {
+                aiAssistantPanel.classList.add('hidden');
+            });
+            
+            // Close AI panel when clicking outside
+            document.addEventListener('click', function(e) {
+                if (!aiAssistantPanel.contains(e.target) && !aiAssistantBtn.contains(e.target)) {
+                    aiAssistantPanel.classList.add('hidden');
+                }
+            });
+            
+            // AI Mode Selector
+            const aiModeButtons = document.querySelectorAll('.ai-mode-btn');
+            aiModeButtons.forEach(button => {
+                button.addEventListener('click', function() {
+                    aiModeButtons.forEach(btn => {
+                        btn.classList.remove('active', 'bg-white/20');
+                        btn.classList.add('bg-white/10');
+                    });
+                    this.classList.add('active', 'bg-white/20');
+                    this.classList.remove('bg-white/10');
+                    
+                    const mode = this.dataset.mode;
+                    changeAIMode(mode);
+                });
+            });
+            
+            function changeAIMode(mode) {
+                const aiHeader = document.querySelector('.bg-gradient-to-r.from-blue-500.to-blue-600 h3');
+                const aiSubtitle = document.querySelector('.bg-gradient-to-r.from-blue-500.to-blue-600 p');
+                
+                switch(mode) {
+                    case 'forecaster':
+                        aiHeader.textContent = 'AI Forecasting Assistant';
+                        aiSubtitle.textContent = 'Membuat prediksi penjualan akurat';
+                        break;
+                    case 'planner':
+                        aiHeader.textContent = 'AI Planning Assistant';
+                        aiSubtitle.textContent = 'Membantu perencanaan stok dan produksi';
+                        break;
+                    case 'analyst':
+                        aiHeader.textContent = 'AI Trend Analyst';
+                        aiSubtitle.textContent = 'Menganalisis tren dan pola musiman';
+                        break;
+                }
+                
+                addAIMessage(`Mode AI telah diubah ke: ${mode.charAt(0).toUpperCase() + mode.slice(1)}. Bagaimana saya bisa membantu forecasting Anda?`, 'assistant');
+            }
+            
+            // AI Quick Questions - khusus forecasting
+            const aiQuickQuestions = document.querySelectorAll('.ai-quick-question');
+            
+            aiQuickQuestions.forEach(button => {
+                button.addEventListener('click', function() {
+                    const question = this.textContent;
+                    addAIMessage(question, 'user');
+                    
+                    showTypingIndicator();
+                    
+                    setTimeout(() => {
+                        removeTypingIndicator();
+                        generateForecastingAIResponse(question);
+                    }, 1500);
+                });
+            });
+            
+            // Send AI Question
+            const aiQuestionInput = document.getElementById('aiQuestionInput');
+            const sendAIQuestion = document.getElementById('sendAIQuestion');
+            
+            sendAIQuestion.addEventListener('click', function() {
+                if (aiQuestionInput.value.trim() !== '') {
+                    const question = aiQuestionInput.value;
+                    addAIMessage(question, 'user');
+                    aiQuestionInput.value = '';
+                    
+                    showTypingIndicator();
+                    
+                    setTimeout(() => {
+                        removeTypingIndicator();
+                        generateForecastingAIResponse(question);
+                    }, 2000);
+                }
+            });
+            
+            // Enter key to send question
+            aiQuestionInput.addEventListener('keypress', function(e) {
+                if (e.key === 'Enter') {
+                    sendAIQuestion.click();
+                }
+            });
+            
+            // AI Chat Functions
+            function addAIMessage(text, sender) {
+                const chatContainer = document.getElementById('aiChatContainer');
+                const messageDiv = document.createElement('div');
+                messageDiv.className = `ai-message ${sender}`;
+                
+                if (sender === 'user') {
+                    messageDiv.innerHTML = `
+                        <div class="flex items-center justify-between">
+                            <p>${text}</p>
+                            <i class="fas fa-user ml-2"></i>
+                        </div>
+                    `;
+                } else {
+                    messageDiv.innerHTML = `
+                        <div class="flex items-start space-x-2">
+                            <div class="w-6 h-6 rounded-full bg-blue-100 flex items-center justify-center flex-shrink-0 mt-1">
+                                <i class="fas fa-robot text-blue-600 text-xs"></i>
+                            </div>
+                            <div>
+                                <p class="text-gray-700">${text}</p>
+                            </div>
+                        </div>
+                    `;
+                }
+                
+                chatContainer.appendChild(messageDiv);
+                chatContainer.scrollTop = chatContainer.scrollHeight;
+            }
+            
+            function showTypingIndicator() {
+                const chatContainer = document.getElementById('aiChatContainer');
+                const typingDiv = document.createElement('div');
+                typingDiv.className = 'ai-typing-indicator';
+                typingDiv.id = 'typingIndicator';
+                typingDiv.innerHTML = `
+                    <div class="w-6 h-6 rounded-full bg-blue-100 flex items-center justify-center flex-shrink-0 mr-2">
+                        <i class="fas fa-robot text-blue-600 text-xs"></i>
+                    </div>
+                    <div class="flex">
+                        <div class="ai-typing-dot"></div>
+                        <div class="ai-typing-dot"></div>
+                        <div class="ai-typing-dot"></div>
+                    </div>
+                `;
+                
+                chatContainer.appendChild(typingDiv);
+                chatContainer.scrollTop = chatContainer.scrollHeight;
+            }
+            
+            function removeTypingIndicator() {
+                const typingIndicator = document.getElementById('typingIndicator');
+                if (typingIndicator) {
+                    typingIndicator.remove();
+                }
+            }
+            
+            // Respons AI khusus untuk forecasting
+            function generateForecastingAIResponse(question) {
+                let response = '';
+                let actions = '';
+                
+                const questionLower = question.toLowerCase();
+                
+                if (questionLower.includes('prediksi') && questionLower.includes('30 hari') || 
+                    questionLower.includes('bulan depan')) {
+                    
+                    response = `Berdasarkan analisis data 12 bulan terakhir, prediksi penjualan 30 hari ke depan: <span class="font-semibold text-blue-700">Rp 1.34-1.42 Miliar</span> (naik 8.5-12%). Detail prediksi:<br><br>
+                    1. <strong>Kategori Elektronik</strong>: Diprediksi tumbuh 18.5% dengan penjualan Rp 620-680 juta.<br>
+                    2. <strong>Produk Teratas</strong>: Smartphone X Pro (48-52 unit), Wireless Headphone Pro (38-44 unit).<br>
+                    3. <strong>Faktor Pengaruh</strong>: Musim liburan (+23%), event tahun baru, dan promosi akhir bulan.<br>
+                    4. <strong>Rekomendasi Stok</strong>: Tambah 20 unit untuk Smartphone X Pro, 35 unit untuk Wireless Headphone Pro.<br><br>
+                    Tingkat kepercayaan prediksi: 87.5% berdasarkan akurasi historis.`;
+                    
+                    actions = `<div class="mt-2 flex space-x-2">
+                        <button class="text-xs px-2 py-1 bg-blue-100 text-blue-700 rounded smooth-transition hover:bg-blue-200">Detail Prediksi</button>
+                        <button class="text-xs px-2 py-1 bg-green-100 text-green-700 rounded smooth-transition hover:bg-green-200">Export Laporan</button>
+                    </div>`;
+                    
+                } else if (questionLower.includes('analisis') && questionLower.includes('tren') || 
+                          questionLower.includes('musiman')) {
+                    
+                    response = `Analisis tren penjualan menunjukkan pola musiman yang kuat:<br><br>
+                    <strong>1. Pola Musiman Tahunan:</strong><br>
+                    • Januari: +23% (musim liburan)<br>
+                    • Juni-Juli: +18% (libur sekolah)<br>
+                    • Desember: +32% (natal & tahun baru)<br><br>
+                    <strong>2. Pola Mingguan:</strong><br>
+                    • Weekend: +35% vs weekday<br>
+                    • Jumat-Minggu: 52% dari total penjualan mingguan<br><br>
+                    <strong>3. Tren Kategori:</strong><br>
+                    • Elektronik: Stabil +15% per bulan<br>
+                    • Fashion: Meningkat di weekend (+28%)<br>
+                    • Rumah Tangga: Konsisten +8-10%<br><br>
+                    Rekomendasi: Optimalkan stok untuk weekend dan persiapkan promosi musiman.`;
+                    
+                    actions = `<div class="mt-2 flex space-x-2">
+                        <button class="text-xs px-2 py-1 bg-blue-100 text-blue-700 rounded smooth-transition hover:bg-blue-200">Grafik Tren</button>
+                        <button class="text-xs px-2 py-1 bg-yellow-100 text-yellow-700 rounded smooth-transition hover:bg-yellow-200">Data Historis</button>
+                    </div>`;
+                    
+                } else if (questionLower.includes('kebutuhan') && questionLower.includes('stok') || 
+                          questionLower.includes('minggu depan')) {
+                    
+                    response = `Analisis kebutuhan stok minggu depan:<br><br>
+                    <strong>Total Kebutuhan: 142 unit untuk 12 produk</strong><br><br>
+                    <strong>Prioritas Tinggi (Restok Segera):</strong><br>
+                    1. Kaos Premium Cotton: +60 unit (stok kritis: 5 unit)<br>
+                    2. Wireless Headphone Pro: +35 unit (stok rendah: 8 unit)<br><br>
+                    <strong>Prioritas Menengah (Monitor):</strong><br>
+                    3. Smartphone X Pro: +20 unit (stok cukup: 42 unit)<br>
+                    4. Lampu LED Smart Home: +15 unit (stok cukup: 28 unit)<br><br>
+                    <strong>Rekomendasi:</strong> Lakukan restok hari ini untuk 5 produk dengan tingkat penjualan >20 unit/minggu. Total estimasi biaya restok: Rp 450-500 juta.`;
+                    
+                    actions = `<div class="mt-2 flex space-x-2">
+                        <button class="text-xs px-2 py-1 bg-blue-100 text-blue-700 rounded smooth-transition hover:bg-blue-200">List Produk</button>
+                        <button class="text-xs px-2 py-1 bg-red-100 text-red-700 rounded smooth-transition hover:bg-red-200">Restok Prioritas</button>
+                    </div>`;
+                    
+                } else if (questionLower.includes('produk') && questionLower.includes('pertumbuhan') && 
+                          questionLower.includes('tertinggi')) {
+                    
+                    response = `Produk dengan prediksi pertumbuhan tertinggi 30 hari ke depan:<br><br>
+                    <strong>1. Smartphone X Pro (+15%)</strong><br>
+                    • Margin: 42%<br>
+                    • Repeat rate: 28%<br>
+                    • Prediksi: 48-52 unit (Rp 408-442 juta)<br><br>
+                    <strong>2. Wireless Headphone Pro (+25%)</strong><br>
+                    • Margin: 38%<br>
+                    • Repeat rate: 32%<br>
+                    • Prediksi: 38-44 unit (Rp 49.4-57.2 juta)<br><br>
+                    <strong>3. Essential Oil Set (+12%)</strong><br>
+                    • Margin: 45%<br>
+                    • Repeat rate: 65% (sangat tinggi)<br>
+                    • Prediksi: 42-48 unit (Rp 10.5-11.9 juta)<br><br>
+                    <strong>Kategori Terbaik:</strong> Elektronik secara keseluruhan +18.5%`;
+                    
+                    actions = `<div class="mt-2 flex space-x-2">
+                        <button class="text-xs px-2 py-1 bg-blue-100 text-blue-700 rounded smooth-transition hover:bg-blue-200">Analisis Produk</button>
+                        <button class="text-xs px-2 py-1 bg-purple-100 text-purple-700 rounded smooth-transition hover:bg-purple-200">Optimasi Kategori</button>
+                    </div>`;
+                    
+                } else if (questionLower.includes('faktor') && questionLower.includes('cuaca')) {
+                    
+                    response = `Analisis pengaruh cuaca terhadap penjualan:<br><br>
+                    <strong>Korelasi Cuaca-Penjualan:</strong><br>
+                    1. <strong>Hujan > 50mm/hari</strong>: Penjualan online +22%, offline -18%<br>
+                    2. <strong>Suhu > 30°C</strong>: Minuman +45%, elektronik pendingin +32%<br>
+                    3. <strong>Kelembaban tinggi</strong>: Produk kesehatan +28%, dehumidifier +35%<br><br>
+                    <strong>Prediksi Cuaca 7 Hari ke Depan:</strong><br>
+                    • Hari 1-3: Hujan ringan (prediksi penjualan online +15%)<br>
+                    • Hari 4-7: Cerah (prediksi penjualan offline +12%)<br><br>
+                    <strong>Rekomendasi:</strong> Tingkatkan stok produk kesehatan selama periode hujan, dan optimalkan promosi online saat cuaca buruk.`;
+                    
+                    actions = `<div class="mt-2 flex space-x-2">
+                        <button class="text-xs px-2 py-1 bg-blue-100 text-blue-700 rounded smooth-transition hover:bg-blue-200">Data Cuaca</button>
+                        <button class="text-xs px-2 py-1 bg-cyan-100 text-cyan-700 rounded smooth-transition hover:bg-cyan-200">Analisis Korelasi</button>
+                    </div>`;
+                    
+                } else if (questionLower.includes('rekomendasi') && questionLower.includes('harga')) {
+                    
+                    response = `Analisis harga optimal berdasarkan elastisitas permintaan:<br><br>
+                    <strong>1. Smartphone X Pro</strong><br>
+                    • Harga saat ini: Rp 8.5 juta<br>
+                    • Harga optimal: Rp 8.2-8.3 juta (+12% volume)<br>
+                    • Potensi revenue: +8% dengan diskon 3-4%<br><br>
+                    <strong>2. Kaos Premium Cotton</strong><br>
+                    • Harga saat ini: Rp 150.000<br>
+                    • Harga optimal: Rp 135.000 (+28% volume)<br>
+                    • Potensi revenue: +15% dengan diskon 10%<br><br>
+                    <strong>3. Wireless Headphone Pro</strong><br>
+                    • Harga saat ini: Rp 1.3 juta<br>
+                    • Harga optimal: Rp 1.25 juta (+18% volume)<br>
+                    • Potensi revenue: +9% dengan diskon 4%<br><br>
+                    <strong>Rekomendasi Umum:</strong> Implementasikan pricing dinamis dengan diskon 3-10% untuk produk dengan elastisitas tinggi.`;
+                    
+                    actions = `<div class="mt-2 flex space-x-2">
+                        <button class="text-xs px-2 py-1 bg-blue-100 text-blue-700 rounded smooth-transition hover:bg-blue-200">Simulasi Harga</button>
+                        <button class="text-xs px-2 py-1 bg-green-100 text-green-700 rounded smooth-transition hover:bg-green-200">Implementasi</button>
+                    </div>`;
+                    
+                } else {
+                    response = `Saya telah menganalisis data penjualan Anda. Prediksi 30 hari ke depan menunjukkan pertumbuhan 8.5-12% dengan total Rp 1.34-1.42 Miliar. 12 produk membutuhkan restok, dengan 2 produk dalam kondisi kritis. Akurasi prediksi saat ini: 94.2% (7 hari), 87.5% (30 hari). Ada pertanyaan spesifik tentang forecasting atau perencanaan stok?`;
+                    actions = `<div class="mt-2 flex space-x-2">
+                        <button class="text-xs px-2 py-1 bg-blue-100 text-blue-700 rounded smooth-transition hover:bg-blue-200">Laporan Lengkap</button>
+                        <button class="text-xs px-2 py-1 bg-green-100 text-green-700 rounded smooth-transition hover:bg-green-200">Rekomendasi</button>
+                    </div>`;
+                }
+                
+                const chatContainer = document.getElementById('aiChatContainer');
+                const messageDiv = document.createElement('div');
+                messageDiv.className = 'ai-message assistant';
+                messageDiv.innerHTML = `
+                    <div class="flex items-start space-x-2">
+                        <div class="w-6 h-6 rounded-full bg-blue-100 flex items-center justify-center flex-shrink-0 mt-1">
+                            <i class="fas fa-robot text-blue-600 text-xs"></i>
+                        </div>
+                        <div>
+                            <p class="text-gray-700">${response}</p>
+                            ${actions}
+                        </div>
+                    </div>
+                `;
+                
+                chatContainer.appendChild(messageDiv);
+                chatContainer.scrollTop = chatContainer.scrollHeight;
+            }
+            
+            // Period Filter Buttons
+            const periodFilters = document.querySelectorAll('.shipping-filter');
+            periodFilters.forEach(filter => {
+                filter.addEventListener('click', function() {
+                    periodFilters.forEach(f => {
+                        f.classList.remove('active', 'bg-blue-500', 'text-white');
+                        f.classList.add('bg-gray-100', 'text-gray-700');
+                    });
+                    
+                    this.classList.add('active', 'bg-blue-500', 'text-white');
+                    this.classList.remove('bg-gray-100', 'text-gray-700');
+                    
+                    const period = this.dataset.period;
+                    updateChartPeriod(period);
+                });
+            });
+            
+            function updateChartPeriod(period) {
+                let labels, actualData, forecastData;
+                
+                switch(period) {
+                    case '7':
+                        labels = ['Hari 1', 'Hari 2', 'Hari 3', 'Hari 4', 'Hari 5', 'Hari 6', 'Hari 7'];
+                        actualData = [120, 135, 140, 130, 145, 150, 155];
+                        forecastData = [null, null, null, null, null, null, 160];
+                        break;
+                    case '30':
+                        labels = ['Minggu 1', 'Minggu 2', 'Minggu 3', 'Minggu 4'];
+                        actualData = [320, 450, 510, 480];
+                        forecastData = [null, null, null, 520];
+                        break;
+                    case '90':
+                        labels = ['Minggu 1', 'Minggu 2', 'Minggu 3', 'Minggu 4', 'Minggu 5', 'Minggu 6', 'Minggu 7', 'Minggu 8', 'Minggu 9', 'Minggu 10', 'Minggu 11', 'Minggu 12'];
+                        actualData = [320, 450, 510, 480, 520, 580, 620, 590, 630, 680, 720, 750];
+                        forecastData = [null, null, null, null, null, null, 620, 650, 680, 710, 740, 770];
+                        break;
+                }
+                
+                salesTrendChart.data.labels = labels;
+                salesTrendChart.data.datasets[0].data = actualData;
+                salesTrendChart.data.datasets[1].data = forecastData;
+                salesTrendChart.update();
+                
+                showNotification(`Menampilkan prediksi untuk: ${getPeriodName(period)}`, 'info');
+            }
+            
+            function getPeriodName(period) {
+                switch(period) {
+                    case '7': return '7 Hari';
+                    case '30': return '30 Hari';
+                    case '90': return '90 Hari';
+                    default: return '30 Hari';
+                }
+            }
+            
+            // Refresh Forecast Button
+            const refreshForecastBtn = document.getElementById('refreshForecastBtn');
+            const updateForecastBtn = document.getElementById('updateForecastBtn');
+            
+            function refreshForecastData() {
+                refreshForecastBtn.innerHTML = '<i class="fas fa-spinner fa-spin mr-1"></i> Memperbarui...';
+                refreshForecastBtn.disabled = true;
+                
+                showNotification('Memperbarui prediksi penjualan...', 'info');
+                
+                setTimeout(() => {
+                    refreshForecastBtn.innerHTML = '<i class="fas fa-sync-alt mr-1"></i> Perbarui Prediksi';
+                    refreshForecastBtn.disabled = false;
+                    
+                    showNotification('Prediksi penjualan berhasil diperbarui!', 'success');
+                    
+                    simulateForecastDataChanges();
+                }, 2000);
+            }
+            
+            refreshForecastBtn.addEventListener('click', refreshForecastData);
+            updateForecastBtn.addEventListener('click', refreshForecastData);
+            
+            function simulateForecastDataChanges() {
+                // Update forecast metrics
+                const metrics = document.querySelectorAll('.text-2xl.font-bold.text-gray-800');
+                metrics.forEach(metric => {
+                    if (metric.textContent.includes('Rp') || metric.textContent.includes('%')) {
+                        const isCurrency = metric.textContent.includes('Rp');
+                        const currentValue = isCurrency 
+                            ? parseFloat(metric.textContent.replace('Rp', '').replace('M', '').trim())
+                            : parseFloat(metric.textContent.replace('%', '').trim());
+                        
+                        if (!isNaN(currentValue)) {
+                            const change = isCurrency 
+                                ? (Math.random() * 0.05 - 0.025) * currentValue
+                                : (Math.random() * 0.5 - 0.25);
+                            
+                            const newValue = isCurrency
+                                ? Math.max(0.1, currentValue + change)
+                                : Math.max(0, currentValue + change);
+                            
+                            metric.textContent = isCurrency
+                                ? `Rp ${newValue.toFixed(2)}M`
+                                : `${newValue.toFixed(1)}%`;
+                            
+                            metric.classList.add('animate-pulse-soft');
+                            setTimeout(() => {
+                                metric.classList.remove('animate-pulse-soft');
+                            }, 1000);
+                        }
+                    }
+                });
+                
+                // Update confidence bars
+                document.querySelectorAll('.confidence-fill').forEach(bar => {
+                    const currentWidth = parseFloat(bar.style.width);
+                    const change = (Math.random() * 4 - 2);
+                    const newWidth = Math.max(50, Math.min(95, currentWidth + change));
+                    bar.style.width = `${newWidth}%`;
+                    
+                    bar.classList.add('animate-pulse-soft');
+                    setTimeout(() => {
+                        bar.classList.remove('animate-pulse-soft');
+                    }, 1000);
+                });
+            }
+            
+            // Notification System
+            function showNotification(message, type = 'info') {
+                const notification = document.createElement('div');
+                notification.className = `fixed top-24 right-8 px-4 py-3 rounded-lg shadow-lg z-50 animate-slide-in-right`;
+                
+                let bgColor = 'bg-blue-100 text-blue-800 border border-blue-200';
+                let icon = 'fas fa-info-circle';
+                
+                if (type === 'success') {
+                    bgColor = 'bg-green-100 text-green-800 border border-green-200';
+                    icon = 'fas fa-check-circle';
+                } else if (type === 'warning') {
+                    bgColor = 'bg-yellow-100 text-yellow-800 border border-yellow-200';
+                    icon = 'fas fa-exclamation-triangle';
+                } else if (type === 'error') {
+                    bgColor = 'bg-red-100 text-red-800 border border-red-200';
+                    icon = 'fas fa-times-circle';
+                }
+                
+                notification.className += ` ${bgColor}`;
+                notification.innerHTML = `
+                    <div class="flex items-center space-x-3">
+                        <i class="${icon}"></i>
+                        <span>${message}</span>
+                    </div>
+                `;
+                
+                document.body.appendChild(notification);
+                
+                setTimeout(() => {
+                    if (notification.parentNode) {
+                        notification.style.animation = 'slideInRight 0.3s reverse forwards';
+                        setTimeout(() => {
+                            if (notification.parentNode) {
+                                notification.remove();
+                            }
+                        }, 300);
+                    }
+                }, 3000);
+            }
+            
+            // Interactive notification bell
+            const notificationBell = document.getElementById('notificationBell');
+            if (notificationBell) {
+                notificationBell.addEventListener('click', function() {
+                    const notificationPopup = document.createElement('div');
+                    notificationPopup.className = 'fixed top-20 right-8 w-72 bg-white rounded-xl shadow-lg border border-gray-200 p-4 animate-fade-in-up z-40';
+                    notificationPopup.innerHTML = `
+                        <div class="flex justify-between items-center mb-3">
+                            <h4 class="font-bold text-gray-800">Notifikasi Forecasting</h4>
+                            <button class="text-gray-400 hover:text-gray-600 close-notif">
+                                <i class="fas fa-times"></i>
+                            </button>
+                        </div>
+                        <div class="space-y-3">
+                            <div class="flex items-start space-x-3 p-2 rounded-lg bg-red-50">
+                                <i class="fas fa-exclamation-circle text-red-500 mt-1"></i>
+                                <div>
+                                    <p class="text-sm font-medium">Stok kritis terdeteksi</p>
+                                    <p class="text-xs text-gray-600">2 produk akan habis dalam 5 hari</p>
+                                </div>
+                            </div>
+                            <div class="flex items-start space-x-3 p-2 rounded-lg bg-green-50">
+                                <i class="fas fa-chart-line text-green-500 mt-1"></i>
+                                <div>
+                                    <p class="text-sm font-medium">Prediksi diperbarui</p>
+                                    <p class="text-xs text-gray-600">Akurasi meningkat 2.1%</p>
+                                </div>
+                            </div>
+                            <div class="flex items-start space-x-3 p-2 rounded-lg bg-blue-50">
+                                <i class="fas fa-calendar-alt text-blue-500 mt-1"></i>
+                                <div>
+                                    <p class="text-sm font-medium">Musim liburan mendatang</p>
+                                    <p class="text-xs text-gray-600">Prediksi +23% dalam 2 minggu</p>
+                                </div>
+                            </div>
+                        </div>
+                    `;
+                    
+                    document.body.appendChild(notificationPopup);
+                    
+                    const closeBtn = notificationPopup.querySelector('.close-notif');
+                    closeBtn.addEventListener('click', function() {
+                        notificationPopup.remove();
+                    });
+                    
+                    setTimeout(() => {
+                        if (notificationPopup.parentNode) {
+                            notificationPopup.remove();
+                        }
+                    }, 5000);
+                });
+            }
+            
+            // Initialize with a welcome message from AI
+            setTimeout(() => {
+                if (!document.querySelector('.ai-message.user')) {
+                    addAIMessage("Selamat datang di Sales Forecasting! Saya dapat membantu Anda menganalisis tren penjualan, membuat prediksi akurat, dan merencanakan kebutuhan stok. Apa yang ingin Anda ketahui hari ini?", 'assistant');
+                }
+            }, 1000);
+            
+            // Progress bar animations
+            const progressBars = document.querySelectorAll('.progress-bar-fill');
+            const observer = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        const bar = entry.target;
+                        const width = bar.style.width;
+                        bar.style.width = '0%';
+                        
+                        setTimeout(() => {
+                            bar.style.width = width;
+                        }, 300);
+                        
+                        observer.unobserve(bar);
+                    }
+                });
+            }, { threshold: 0.5 });
+            
+            progressBars.forEach(bar => observer.observe(bar));
+            
+            // Auto-refresh forecast data setiap 120 detik
+            setInterval(simulateForecastDataChanges, 120000);
+            
+            // Tambahkan event listener untuk scroll dan resize
+            window.addEventListener('scroll', function() {
+                animator.observer.disconnect();
+                animator.init();
+            });
+            
+            window.addEventListener('resize', function() {
+                setTimeout(forceRenderAllContent, 100);
+            });
+            
+            // Export button functionality
+            document.querySelector('button:contains("Export Prediksi")').addEventListener('click', function() {
+                showNotification('Laporan prediksi berhasil diexport ke Excel', 'success');
+            });
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,58 @@
+<div class="overflow-x-auto">
+  <table class="min-w-full divide-y divide-gray-200">
+    <thead class="bg-gray-50">
+      <tr>
+        {{#each headers}}
+        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+          {{this}}
+        </th>
+        {{/each}}
+      </tr>
+    </thead>
+    <tbody class="bg-white divide-y divide-gray-200">
+      {{#each rows}}
+      <tr class="hover:bg-gray-50">
+        {{#each this}}
+        <td class="px-6 py-4 whitespace-nowrap">
+          {{{this}}}
+        </td>
+        {{/each}}
+      </tr>
+      {{/each}}
+    </tbody>
+  </table>
+</div>
+
+<script>
+class ErpaaTable extends HTMLElement {
+  constructor() {
+    super()
+    this.template = this.innerHTML
+  }
+  
+  connectedCallback() {
+    const headers = JSON.parse(this.getAttribute('headers') || '[]')
+    const rows = JSON.parse(this.getAttribute('rows') || '[]')
+    
+    let headersHtml = ''
+    headers.forEach(header => {
+      headersHtml += `<th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">${header}</th>`
+    })
+    
+    let rowsHtml = ''
+    rows.forEach(row => {
+      rowsHtml += '<tr class="hover:bg-gray-50">'
+      row.forEach(cell => {
+        rowsHtml += `<td class="px-6 py-4 whitespace-nowrap">${cell}</td>`
+      })
+      rowsHtml += '</tr>'
+    })
+    
+    this.innerHTML = this.template
+      .replace('{{#each headers}}<th>{{this}}</th>{{/each}}', headersHtml)
+      .replace('{{#each rows}}{{#each this}}<td>{{{this}}}</td>{{/each}}{{/each}}', rowsHtml)
+  }
+}
+
+customElements.define('erpaa-table', ErpaaTable)
+</script>

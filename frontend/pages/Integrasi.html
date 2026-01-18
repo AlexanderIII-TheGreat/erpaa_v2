@@ -1,0 +1,1986 @@
+<!DOCTYPE html>
+<html lang="id">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>E-commerce Integration - Flashboard ERP Modern</title>
+    <!-- Tailwind CSS via CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Font Awesome Icons -->
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
+    />
+    <!-- Animate.css for smooth animations -->
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css"
+    />
+
+    <style>
+      :root {
+        --soft-blue: #4a90e2;
+        --soft-blue-light: #e3f2fd;
+        --soft-blue-dark: #2a6ebb;
+        --neutral-gray: #f5f7fa;
+        --neutral-gray-dark: #e1e8f0;
+        --neutral-text: #4a5568;
+        --soft-green: #48bb78;
+        --soft-purple: #9f7aea;
+        --soft-pink: #ed64a6;
+        --soft-cyan: #0bc5ea;
+        --soft-orange: #ed8936;
+        --shopee-orange: #ee4d2d;
+        --tokopedia-green: #42b549;
+        --blibli-blue: #00a2e8;
+        --tiktok-red: #ff0050;
+        --lazada-red: #0f1469;
+      }
+
+      body {
+        font-family: "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI",
+          Roboto, sans-serif;
+        color: var(--neutral-text);
+        overflow-x: hidden;
+        background: linear-gradient(to bottom right, #eff6ff, #f3f4f6, #f9fafb);
+      }
+
+      /* Struktur layout utama */
+      .app-container {
+        display: flex;
+        min-height: 100vh;
+        width: 100%;
+      }
+
+      .main-wrapper {
+        flex: 1;
+        display: flex;
+        flex-direction: column;
+        max-height: 100vh;
+        overflow: hidden;
+      }
+
+      .content-wrapper {
+        flex: 1;
+        overflow-y: auto;
+        overflow-x: hidden;
+        -webkit-overflow-scrolling: touch;
+        padding: 2rem;
+        background: linear-gradient(to bottom, #f8fafc, #f1f5f9);
+      }
+
+      /* Custom animations */
+      @keyframes fadeInUp {
+        from {
+          opacity: 0;
+          transform: translateY(20px);
+        }
+        to {
+          opacity: 1;
+          transform: translateY(0);
+        }
+      }
+
+      @keyframes slideInLeft {
+        from {
+          opacity: 0;
+          transform: translateX(-20px);
+        }
+        to {
+          opacity: 1;
+          transform: translateX(0);
+        }
+      }
+
+      @keyframes slideInRight {
+        from {
+          opacity: 0;
+          transform: translateX(20px);
+        }
+        to {
+          opacity: 1;
+          transform: translateX(0);
+        }
+      }
+
+      @keyframes pulseSoft {
+        0%,
+        100% {
+          opacity: 1;
+          transform: scale(1);
+        }
+        50% {
+          opacity: 0.8;
+          transform: scale(1.02);
+        }
+      }
+
+      @keyframes float {
+        0%,
+        100% {
+          transform: translateY(0);
+        }
+        50% {
+          transform: translateY(-10px);
+        }
+      }
+
+      @keyframes shimmer {
+        0% {
+          background-position: -200% center;
+        }
+        100% {
+          background-position: 200% center;
+        }
+      }
+
+      @keyframes slideInFromLeft {
+        from {
+          opacity: 0;
+          transform: translateX(-30px);
+        }
+        to {
+          opacity: 1;
+          transform: translateX(0);
+        }
+      }
+
+      @keyframes bounceIn {
+        0% {
+          opacity: 0;
+          transform: scale(0.3);
+        }
+        50% {
+          opacity: 1;
+          transform: scale(1.05);
+        }
+        70% {
+          transform: scale(0.9);
+        }
+        100% {
+          transform: scale(1);
+        }
+      }
+
+      @keyframes ripple {
+        0% {
+          transform: scale(0);
+          opacity: 1;
+        }
+        100% {
+          transform: scale(4);
+          opacity: 0;
+        }
+      }
+
+      @keyframes typingDot {
+        0%,
+        60%,
+        100% {
+          transform: translateY(0);
+        }
+        30% {
+          transform: translateY(-8px);
+        }
+      }
+
+      .animate-fade-in-up {
+        animation: fadeInUp 0.6s ease-out forwards;
+      }
+
+      .animate-slide-in-left {
+        animation: slideInLeft 0.5s ease-out forwards;
+      }
+
+      .animate-slide-in-right {
+        animation: slideInRight 0.5s ease-out forwards;
+      }
+
+      .animate-pulse-soft {
+        animation: pulseSoft 2s infinite ease-in-out;
+      }
+
+      .animate-float {
+        animation: float 3s ease-in-out infinite;
+      }
+
+      .animate-shimmer {
+        animation: shimmer 3s infinite linear;
+        background: linear-gradient(
+          90deg,
+          #f5f7fa 0%,
+          #e3f2fd 50%,
+          #f5f7fa 100%
+        );
+        background-size: 200% auto;
+      }
+
+      .animate-slide-in-from-left {
+        animation: slideInFromLeft 0.6s ease-out forwards;
+      }
+
+      .animate-bounce-in {
+        animation: bounceIn 0.6s ease-out forwards;
+      }
+
+      .animate-ripple {
+        animation: ripple 0.6s linear forwards;
+      }
+
+      /* Custom scrollbar */
+      ::-webkit-scrollbar {
+        width: 8px;
+        height: 8px;
+      }
+
+      ::-webkit-scrollbar-track {
+        background: var(--neutral-gray);
+        border-radius: 4px;
+      }
+
+      ::-webkit-scrollbar-thumb {
+        background: linear-gradient(135deg, #4a90e2, #2a6ebb);
+        border-radius: 4px;
+      }
+
+      ::-webkit-scrollbar-thumb:hover {
+        background: linear-gradient(135deg, #2a6ebb, #4a90e2);
+      }
+
+      /* Smooth transitions */
+      .smooth-transition {
+        transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+      }
+
+      /* Glass effect */
+      .glass-effect {
+        backdrop-filter: blur(10px);
+        background: rgba(255, 255, 255, 0.92);
+        border: 1px solid rgba(255, 255, 255, 0.2);
+      }
+
+      /* Card hover effect */
+      .hover-lift {
+        transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+      }
+
+      .hover-lift:hover {
+        transform: translateY(-8px) scale(1.01);
+        box-shadow: 0 15px 30px -10px rgba(74, 144, 226, 0.2);
+      }
+
+      /* Gradient backgrounds */
+      .gradient-blue {
+        background: linear-gradient(135deg, #e3f2fd 0%, #f5f7fa 100%);
+      }
+
+      .gradient-green {
+        background: linear-gradient(135deg, #f0fff4 0%, #f5f7fa 100%);
+      }
+
+      .gradient-purple {
+        background: linear-gradient(135deg, #f5f3ff 0%, #f5f7fa 100%);
+      }
+
+      .gradient-cyan {
+        background: linear-gradient(135deg, #e6fffa 0%, #f5f7fa 100%);
+      }
+
+      .gradient-orange {
+        background: linear-gradient(135deg, #feebc8 0%, #f5f7fa 100%);
+      }
+
+      .gradient-red {
+        background: linear-gradient(135deg, #fed7d7 0%, #f5f7fa 100%);
+      }
+
+      /* Custom Animation System */
+      .animate-on-scroll {
+        opacity: 0;
+        transform: translateY(30px);
+        transition: opacity 0.6s ease, transform 0.6s ease;
+      }
+
+      .animate-on-scroll.visible {
+        opacity: 1;
+        transform: translateY(0);
+      }
+
+      .animate-on-scroll.delay-100 {
+        transition-delay: 0.1s;
+      }
+
+      .animate-on-scroll.delay-200 {
+        transition-delay: 0.2s;
+      }
+
+      .animate-on-scroll.delay-300 {
+        transition-delay: 0.3s;
+      }
+
+      .animate-on-scroll.delay-400 {
+        transition-delay: 0.4s;
+      }
+
+      .animate-on-scroll.delay-500 {
+        transition-delay: 0.5s;
+      }
+
+      /* Force GPU acceleration */
+      .gpu-accelerate {
+        transform: translateZ(0);
+        backface-visibility: hidden;
+        perspective: 1000px;
+      }
+
+      /* Initial animation untuk konten yang terlihat langsung */
+      .initial-animate {
+        animation: fadeInUp 0.8s ease-out forwards;
+      }
+
+      /* Memastikan semua konten ter-render */
+      .force-render {
+        will-change: transform, opacity;
+        contain: layout style paint;
+      }
+
+      /* Untuk memastikan konten yang sudah visible tetap visible */
+      .force-visible {
+        opacity: 1 !important;
+        transform: translateY(0) !important;
+      }
+
+      /* Ripple effect */
+      .ripple-effect {
+        position: relative;
+        overflow: hidden;
+      }
+
+      .ripple-effect::after {
+        content: "";
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        width: 5px;
+        height: 5px;
+        background: rgba(255, 255, 255, 0.5);
+        opacity: 0;
+        border-radius: 100%;
+        transform: scale(1, 1) translate(-50%);
+        transform-origin: 50% 50%;
+      }
+
+      .ripple-effect:focus:not(:active)::after {
+        animation: ripple 0.6s ease-out;
+      }
+
+      /* Page transitions */
+      .page-transition {
+        animation: fadeInUp 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+      }
+
+      /* Integration Card Styles */
+      .integration-card {
+        border-radius: 20px;
+        border: 2px solid transparent;
+        transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+        background: white;
+      }
+
+      .integration-card:hover {
+        box-shadow: 0 20px 40px -15px rgba(0, 0, 0, 0.15);
+      }
+
+      .integration-logo {
+        width: 80px;
+        height: 80px;
+        border-radius: 20px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        margin-bottom: 1.5rem;
+        font-size: 2.5rem;
+        color: white;
+        transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+      }
+
+      .integration-card:hover .integration-logo {
+        transform: scale(1.1);
+      }
+
+      .integration-status {
+        padding: 6px 12px;
+        border-radius: 20px;
+        font-size: 12px;
+        font-weight: 600;
+        display: inline-flex;
+        align-items: center;
+        gap: 5px;
+      }
+
+      .status-connected {
+        background-color: #c6f6d5;
+        color: #22543d;
+      }
+
+      .status-disconnected {
+        background-color: #fed7d7;
+        color: #742a2a;
+      }
+
+      .status-pending {
+        background-color: #fefcbf;
+        color: #744210;
+      }
+
+      /* Platform specific colors */
+      .shopee-bg {
+        background: linear-gradient(135deg, #ee4d2d, #ff6b35);
+      }
+
+      .shopee-border {
+        border-color: #ee4d2d;
+      }
+
+      .shopee-text {
+        color: #ee4d2d;
+      }
+
+      .tokopedia-bg {
+        background: linear-gradient(135deg, #42b549, #5cd663);
+      }
+
+      .tokopedia-border {
+        border-color: #42b549;
+      }
+
+      .tokopedia-text {
+        color: #42b549;
+      }
+
+      .blibli-bg {
+        background: linear-gradient(135deg, #00a2e8, #3bb9ff);
+      }
+
+      .blibli-border {
+        border-color: #00a2e8;
+      }
+
+      .blibli-text {
+        color: #00a2e8;
+      }
+
+      .tiktok-bg {
+        background: linear-gradient(135deg, #000000, #ff0050);
+      }
+
+      .tiktok-border {
+        border-color: #ff0050;
+      }
+
+      .tiktok-text {
+        color: #ff0050;
+      }
+
+      .lazada-bg {
+        background: linear-gradient(135deg, #0f1469, #ff6b00);
+      }
+
+      .lazada-border {
+        border-color: #0f1469;
+      }
+
+      .lazada-text {
+        color: #0f1469;
+      }
+
+      /* Loading animation */
+      .loading-spinner {
+        width: 40px;
+        height: 40px;
+        border: 3px solid #e2e8f0;
+        border-top: 3px solid #4a90e2;
+        border-radius: 50%;
+        animation: spin 1s linear infinite;
+      }
+
+      @keyframes spin {
+        0% {
+          transform: rotate(0deg);
+        }
+        100% {
+          transform: rotate(360deg);
+        }
+      }
+
+      /* Integration modal */
+      .integration-modal {
+        backdrop-filter: blur(10px);
+        background: rgba(0, 0, 0, 0.5);
+        transition: all 0.3s ease;
+      }
+
+      .integration-modal-content {
+        transform: scale(0.9);
+        transition: transform 0.3s ease;
+      }
+
+      .integration-modal.show .integration-modal-content {
+        transform: scale(1);
+      }
+
+      /* New: Platform Selection Styles */
+      .platform-selection-card {
+        border-radius: 16px;
+        transition: all 0.3s ease;
+        border: 2px solid transparent;
+      }
+
+      .platform-selection-card:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.1);
+      }
+
+      .platform-selection-card.connected {
+        border-color: #48bb78;
+        background-color: rgba(72, 187, 120, 0.05);
+      }
+
+      .platform-selection-card.disconnected {
+        border-color: #f6ad55;
+        background-color: rgba(246, 173, 85, 0.05);
+      }
+
+      .platform-logo-img {
+        width: 60px;
+        height: 60px;
+        object-fit: contain;
+      }
+
+      /* AI Assistant specific */
+      .ai-message {
+        max-width: 80%;
+        padding: 12px 16px;
+        border-radius: 18px;
+        margin-bottom: 12px;
+        position: relative;
+      }
+
+      .ai-message.user {
+        background: linear-gradient(135deg, #4a90e2, #2a6ebb);
+        color: white;
+        margin-left: auto;
+        border-bottom-right-radius: 4px;
+      }
+
+      .ai-message.assistant {
+        background: #f7fafc;
+        color: #2d3748;
+        border: 1px solid #e2e8f0;
+        margin-right: auto;
+        border-bottom-left-radius: 4px;
+      }
+
+      .ai-typing-indicator {
+        display: flex;
+        align-items: center;
+        padding: 12px 16px;
+        background: #f7fafc;
+        border-radius: 18px;
+        width: fit-content;
+        margin-bottom: 12px;
+        border: 1px solid #e2e8f0;
+      }
+
+      .ai-typing-dot {
+        width: 8px;
+        height: 8px;
+        background-color: #a0aec0;
+        border-radius: 50%;
+        margin: 0 2px;
+        animation: typingDot 1.5s infinite ease-in-out;
+      }
+
+      .ai-typing-dot:nth-child(1) {
+        animation-delay: 0s;
+      }
+      .ai-typing-dot:nth-child(2) {
+        animation-delay: 0.2s;
+      }
+      .ai-typing-dot:nth-child(3) {
+        animation-delay: 0.4s;
+      }
+
+      /* Container untuk pertanyaan cepat AI */
+      .ai-quick-questions-container {
+        display: flex;
+        overflow-x: auto;
+        gap: 8px;
+        padding: 12px 4px 16px 4px;
+        margin-bottom: 4px;
+        scrollbar-width: thin;
+        scrollbar-color: #4a90e2 #f5f7fa;
+        -webkit-overflow-scrolling: touch;
+      }
+
+      .ai-quick-questions-container::-webkit-scrollbar {
+        height: 6px;
+        display: block;
+      }
+
+      .ai-quick-questions-container::-webkit-scrollbar-track {
+        background: #f5f7fa;
+        border-radius: 4px;
+        margin: 0 4px;
+      }
+
+      .ai-quick-questions-container::-webkit-scrollbar-thumb {
+        background: linear-gradient(135deg, #4a90e2, #2a6ebb);
+        border-radius: 4px;
+        border: 1px solid #e2e8f0;
+      }
+
+      .ai-quick-questions-container::-webkit-scrollbar-thumb:hover {
+        background: linear-gradient(135deg, #2a6ebb, #4a90e2);
+      }
+
+      .ai-quick-question {
+        flex: 0 0 auto;
+        white-space: nowrap;
+        padding: 8px 12px;
+        background: #ebf8ff;
+        border: 1px solid #bee3f8;
+        border-radius: 8px;
+        font-size: 12px;
+        color: #2c5282;
+        cursor: pointer;
+        transition: all 0.3s ease;
+      }
+
+      .ai-quick-question:hover {
+        background: #bee3f8;
+        border-color: #90cdf4;
+        transform: translateY(-2px);
+      }
+
+      /* Logout button di navbar */
+      .nav-logout-btn {
+        padding: 8px 16px;
+        border-radius: 8px;
+        background: #fef2f2;
+        color: #dc2626;
+        border: 1px solid #fecaca;
+        transition: all 0.3s ease;
+      }
+
+      .nav-logout-btn:hover {
+        background: #fee2e2;
+        border-color: #fca5a5;
+        transform: translateY(-2px);
+      }
+    </style>
+  </head>
+  <body class="page-transition">
+    <div class="app-container">
+      <!-- Sidebar -->
+      <aside
+        class="w-64 bg-white/90 border-r border-gray-200/50 flex flex-col shadow-sm glass-effect"
+      >
+        <div class="p-6 border-b border-gray-100/50">
+          <div class="flex items-center space-x-3">
+            <div
+              class="w-10 h-10 rounded-lg bg-gradient-to-br from-blue-400 to-blue-600 flex items-center justify-center animate-float"
+            >
+              <i class="fas fa-chart-line text-white"></i>
+            </div>
+            <h1 class="text-xl font-bold text-gray-800">A2M ERPAA</h1>
+          </div>
+        </div>
+
+        <nav class="flex-1 p-4 space-y-2">
+          <a
+            href="/dashboard/"
+            class="flex items-center space-x-3 p-3 rounded-lg text-gray-700 smooth-transition hover:bg-gray-100 hover-lift ripple-effect"
+          >
+            <i class="fas fa-tachometer-alt w-5 text-center"></i>
+            <span class="font-medium">Dashboard</span>
+          </a>
+          <a
+            href="/product/"
+            class="flex items-center space-x-3 p-3 rounded-lg text-gray-700 smooth-transition hover:bg-gray-100 hover-lift ripple-effect"
+          >
+            <i class="fas fa-boxes w-5 text-center"></i>
+            <span class="font-medium">Product Management</span>
+          </a>
+
+          <a
+            href="/inventory/"
+            class="flex items-center space-x-3 p-3 rounded-lg text-gray-700 smooth-transition hover:bg-gray-100 hover-lift ripple-effect"
+          >
+            <i class="fas fa-warehouse w-5 text-center"></i>
+            <span class="font-medium">Inventory</span>
+          </a>
+          <a
+            href="/shipping/"
+            class="flex items-center space-x-3 p-3 rounded-lg text-gray-700 smooth-transition hover:bg-gray-100 hover-lift ripple-effect"
+          >
+            <i class="fas fa-shipping-fast w-5 text-center"></i>
+            <span class="font-medium">Shipping Tracking</span>
+          </a>
+          <a
+            href="/salesforecasting/"
+            class="flex items-center space-x-3 p-3 rounded-lg text-gray-700 smooth-transition hover:bg-gray-100 hover-lift ripple-effect"
+          >
+            <i class="fas fa-chart-bar w-5 text-center"></i>
+            <span class="font-medium">Sales Forecasting</span>
+          </a>
+                    <a
+            href="/integrasi/"
+            class="flex items-center space-x-3 p-3 rounded-lg bg-blue-50 text-blue-600 smooth-transition hover:bg-blue-100 hover-lift ripple-effect"
+          >
+            <i class="fas fa-store w-5 text-center"></i>
+            <span class="font-medium"> Integration</span>
+          </a>
+        </nav>
+
+        <div class="p-4 border-t border-gray-100/50">
+          <div
+            class="flex items-center space-x-3 p-3 rounded-lg bg-gradient-to-r from-blue-50 to-gray-50 hover-lift smooth-transition"
+          >
+            <div
+              class="w-8 h-8 rounded-full bg-gradient-to-r from-blue-100 to-blue-200 flex items-center justify-center"
+            >
+              <i class="fas fa-user text-blue-600 text-sm"></i>
+            </div>
+            <div>
+              <p class="text-sm font-medium">Admin</p>
+              <p class="text-xs text-gray-500">admin@flashboard.com</p>
+            </div>
+          </div>
+        </div>
+      </aside>
+
+      <!-- Main Content -->
+      <div class="main-wrapper">
+        <!-- Header with AI Assistant in top right -->
+        <header
+          class="sticky top-0 z-20 bg-white/80 glass-effect border-b border-gray-200/50 px-8 py-4 shrink-0"
+        >
+          <div class="flex justify-between items-center">
+            <div>
+              <h2 class="text-2xl font-bold text-gray-800 initial-animate">
+                E-commerce Integration
+              </h2>
+              <p
+                class="text-gray-600 initial-animate"
+                style="animation-delay: 0.1s"
+              >
+                Integrasikan toko online Anda dengan platform e-commerce
+                terpopuler
+              </p>
+            </div>
+            <div class="flex items-center space-x-6">
+              <!-- AI Assistant Button - Enhanced -->
+              <div class="relative">
+                <button
+                  id="aiAssistantBtn"
+                  class="flex items-center space-x-2 px-4 py-2 rounded-lg bg-gradient-to-r from-blue-500 to-blue-600 text-white smooth-transition hover:from-blue-600 hover:to-blue-700 hover-lift shadow-md relative overflow-hidden group"
+                >
+                  <i class="fas fa-robot"></i>
+                  <span class="font-medium">AI Assistant</span>
+                  <div
+                    class="absolute inset-0 bg-gradient-to-r from-cyan-500 to-blue-500 opacity-0 group-hover:opacity-20 smooth-transition"
+                  ></div>
+                </button>
+
+                <!-- Enhanced AI Assistant Panel -->
+                <div
+                  id="aiAssistantPanel"
+                  class="fixed right-8 top-20 w-96 bg-white rounded-xl shadow-2xl border border-gray-200 hidden animate-fade-in-up z-50 overflow-hidden"
+                  style="height: 600px"
+                >
+                  <!-- AI Assistant Header -->
+                  <div
+                    class="bg-gradient-to-r from-blue-500 to-blue-600 p-4 text-white"
+                  >
+                    <div class="flex justify-between items-center">
+                      <div class="flex items-center space-x-3">
+                        <div
+                          class="w-10 h-10 rounded-full bg-white/20 flex items-center justify-center"
+                        >
+                          <i class="fas fa-robot text-xl"></i>
+                        </div>
+                        <div>
+                          <h3 class="font-bold text-lg">AI Assistant</h3>
+                          <p class="text-sm text-blue-100">
+                            Siap membantu integrasi e-commerce Anda
+                          </p>
+                        </div>
+                      </div>
+                      <div class="flex items-center space-x-2">
+                        <button
+                          class="w-8 h-8 rounded-full bg-white/20 flex items-center justify-center hover:bg-white/30 smooth-transition"
+                        >
+                          <i class="fas fa-cog"></i>
+                        </button>
+                        <button
+                          id="closeAIPanel"
+                          class="w-8 h-8 rounded-full bg-white/20 flex items-center justify-center hover:bg-white/30 smooth-transition"
+                        >
+                          <i class="fas fa-times"></i>
+                        </button>
+                      </div>
+                    </div>
+                  </div>
+
+                  <!-- AI Assistant Content -->
+                  <div class="flex flex-col h-full">
+                    <!-- AI Chat Container -->
+                    <div
+                      id="aiChatContainer"
+                      class="flex-1 overflow-y-auto p-4 space-y-3"
+                      style="max-height: 380px"
+                    >
+                      <!-- Initial AI Message -->
+                      <div class="ai-message assistant">
+                        <div class="flex items-start space-x-2">
+                          <div
+                            class="w-6 h-6 rounded-full bg-blue-100 flex items-center justify-center flex-shrink-0 mt-1"
+                          >
+                            <i class="fas fa-robot text-blue-600 text-xs"></i>
+                          </div>
+                          <div>
+                            <p class="font-medium text-gray-800 mb-1">
+                              Halo! Saya AI Assistant khusus integrasi
+                              e-commerce Anda.
+                            </p>
+                            <p class="text-gray-700 text-sm">
+                              Saya dapat membantu Anda mengintegrasikan toko
+                              online dengan berbagai platform e-commerce,
+                              memberikan insight tentang performa penjualan, dan
+                              membantu optimasi integrasi. Apa yang bisa saya
+                              bantu hari ini?
+                            </p>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+
+                    <!-- AI Quick Actions -->
+                    <div class="p-4 border-t border-gray-200">
+                      <p class="text-sm font-medium text-gray-700 mb-2">
+                        Pertanyaan Cepat Integrasi:
+                      </p>
+                      <div class="ai-quick-questions-container">
+                        <button class="ai-quick-question">
+                          Cara integrasi Shopee
+                        </button>
+                        <button class="ai-quick-question">
+                          Sync produk ke semua platform
+                        </button>
+                        <button class="ai-quick-question">
+                          Atur harga otomatis
+                        </button>
+                        <button class="ai-quick-question">
+                          Monitoring order
+                        </button>
+                        <button class="ai-quick-question">
+                          Solusi error integrasi
+                        </button>
+                      </div>
+                    </div>
+
+                    <!-- AI Input -->
+                    <div class="p-4 border-t border-gray-200 bg-gray-50">
+                      <div class="relative">
+                        <input
+                          type="text"
+                          id="aiQuestionInput"
+                          placeholder="Tanyakan apapun tentang integrasi..."
+                          class="w-full p-3 pr-12 rounded-lg bg-white border border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                        />
+                        <button
+                          id="sendAIQuestion"
+                          class="absolute right-3 top-3 text-blue-600 hover:text-blue-800 smooth-transition"
+                        >
+                          <i class="fas fa-paper-plane"></i>
+                        </button>
+                      </div>
+                      <p class="text-xs text-gray-500 mt-2 text-center">
+                        <i class="fas fa-shield-alt mr-1"></i> Data Anda aman
+                        dan dianalisis secara real-time
+                      </p>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <div class="flex items-center space-x-4">
+                <!-- Logout Button di Navbar -->
+                <form action="/logout/" method="post" class="ml-2">
+                  <button
+                    type="submit"
+                    class="nav-logout-btn flex items-center space-x-2 text-sm font-medium ripple-effect"
+                  >
+                    <i class="fas fa-sign-out-alt"></i>
+                    <span>Logout</span>
+                  </button>
+                </form>
+
+                <div class="relative">
+                  <i
+                    class="fas fa-bell text-gray-500 text-xl hover:text-blue-500 smooth-transition cursor-pointer ripple-effect"
+                    id="notificationBell"
+                  ></i>
+                  <span
+                    class="absolute -top-1 -right-1 w-3 h-3 bg-red-500 rounded-full animate-pulse-soft"
+                  ></span>
+                </div>
+                <div class="text-sm text-gray-600">
+                  <span id="currentDate" class="font-medium"
+                    >Selasa, 2 Januari 2026</span
+                  >
+                </div>
+              </div>
+            </div>
+          </div>
+        </header>
+
+        <!-- Content -->
+        <div class="content-wrapper">
+          <!-- Header Integrasi -->
+          <section class="mb-8 force-render">
+            <div
+              class="bg-white rounded-xl shadow-sm border border-gray-200 p-6 gradient-blue"
+            >
+              <div
+                class="flex flex-col md:flex-row md:items-center justify-between"
+              >
+                <div class="mb-4 md:mb-0">
+                  <h3 class="text-xl font-bold text-gray-800 mb-2">
+                    Integrasi Multi-Platform E-commerce
+                  </h3>
+                  <p class="text-gray-600">
+                    Sambungkan toko online Anda dengan platform e-commerce
+                    terpopuler. Kelola semua produk, pesanan, dan stok dari satu
+                    dashboard.
+                  </p>
+                </div>
+                <div class="flex items-center space-x-2">
+                  <span
+                    class="text-xs px-3 py-1 bg-green-100 text-green-700 rounded-full"
+                    >2 Terhubung</span
+                  >
+                  <span
+                    class="text-xs px-3 py-1 bg-blue-100 text-blue-700 rounded-full"
+                    >5 Platform</span
+                  >
+                </div>
+              </div>
+            </div>
+          </section>
+
+          <!-- Recent Activities -->
+          <section class="mt-8 animate-on-scroll">
+            <div class="flex items-center justify-between mb-6">
+              <h3 class="text-lg font-semibold text-gray-800">
+                Aktivitas Integrasi Terbaru
+              </h3>
+              <div class="flex space-x-2">
+                <button
+                  id="integratePlatformBtn"
+                  class="text-sm bg-gradient-to-r from-blue-500 to-blue-600 text-white px-4 py-2 rounded-lg hover:from-blue-600 hover:to-blue-700 smooth-transition"
+                >
+                  <i class="fas fa-plus mr-2"></i> Integrasikan Platform
+                </button>
+                <button
+                  class="text-sm text-blue-600 hover:text-blue-800 smooth-transition"
+                >
+                  <i class="fas fa-history mr-2"></i> Lihat Semua
+                </button>
+              </div>
+            </div>
+
+            <div
+              class="bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden hover-lift"
+            >
+              <div class="overflow-x-auto">
+                <table class="w-full">
+                  <thead class="bg-gray-50">
+                    <tr>
+                      <th
+                        class="py-3 px-4 text-left text-xs font-medium text-gray-700 uppercase tracking-wider"
+                      >
+                        Platform
+                      </th>
+                      <th
+                        class="py-3 px-4 text-left text-xs font-medium text-gray-700 uppercase tracking-wider"
+                      >
+                        Aktivitas
+                      </th>
+                      <th
+                        class="py-3 px-4 text-left text-xs font-medium text-gray-700 uppercase tracking-wider"
+                      >
+                        Status
+                      </th>
+                      <th
+                        class="py-3 px-4 text-left text-xs font-medium text-gray-700 uppercase tracking-wider"
+                      >
+                        Waktu
+                      </th>
+                    </tr>
+                  </thead>
+                  <tbody class="divide-y divide-gray-200">
+                    <tr>
+                      <td class="py-3 px-4">
+                        <div class="flex items-center">
+                          <div
+                            class="w-8 h-8 rounded-lg bg-white flex items-center justify-center mr-3 border"
+                          >
+                            <img
+                              src="https://logodownload.org/wp-content/uploads/2021/03/shopee-logo-0.png"
+                              alt="Shopee"
+                              class="w-6 h-6 object-contain"
+                            />
+                          </div>
+                          <span class="font-medium text-gray-800">Shopee</span>
+                        </div>
+                      </td>
+                      <td class="py-3 px-4">
+                        <div class="text-sm text-gray-900">
+                          Sync produk berhasil
+                        </div>
+                        <div class="text-xs text-gray-500">
+                          142 produk diupdate
+                        </div>
+                      </td>
+                      <td class="py-3 px-4">
+                        <span class="integration-status status-connected">
+                          <i class="fas fa-check-circle"></i> Sukses
+                        </span>
+                      </td>
+                      <td class="py-3 px-4">
+                        <div class="text-sm text-gray-900">10:25 AM</div>
+                        <div class="text-xs text-gray-500">Hari ini</div>
+                      </td>
+                    </tr>
+
+                    <tr>
+                      <td class="py-3 px-4">
+                        <div class="flex items-center">
+                          <div
+                            class="w-8 h-8 rounded-lg bg-white flex items-center justify-center mr-3 border"
+                          >
+                            <img
+                              src="https://static.vecteezy.com/system/resources/previews/054/650/845/large_2x/tokopedia-logo-free-tokopedia-logo-download-free-png.png"
+                              alt="Tokopedia"
+                              class="w-6 h-6 object-contain"
+                            />
+                          </div>
+                          <span class="font-medium text-gray-800"
+                            >Tokopedia</span
+                          >
+                        </div>
+                      </td>
+                      <td class="py-3 px-4">
+                        <div class="text-sm text-gray-900">
+                          Order baru diterima
+                        </div>
+                        <div class="text-xs text-gray-500">
+                          3 pesanan dari Tokopedia
+                        </div>
+                      </td>
+                      <td class="py-3 px-4">
+                        <span class="integration-status status-connected">
+                          <i class="fas fa-check-circle"></i> Sukses
+                        </span>
+                      </td>
+                      <td class="py-3 px-4">
+                        <div class="text-sm text-gray-900">09:15 AM</div>
+                        <div class="text-xs text-gray-500">Hari ini</div>
+                      </td>
+                    </tr>
+
+                    <tr>
+                      <td class="py-3 px-4">
+                        <div class="flex items-center">
+                          <div
+                            class="w-8 h-8 rounded-lg bg-white flex items-center justify-center mr-3 border"
+                          >
+                            <img
+                              src="https://freepnglogo.com/images/all_img/1714299248tiktok-shop-logo-png-transparent.png"
+                              alt="TikTok Shop"
+                              class="w-6 h-6 object-contain"
+                            />
+                          </div>
+                          <span class="font-medium text-gray-800"
+                            >TikTok Shop</span
+                          >
+                        </div>
+                      </td>
+                      <td class="py-3 px-4">
+                        <div class="text-sm text-gray-900">
+                          Proses integrasi
+                        </div>
+                        <div class="text-xs text-gray-500">
+                          Menunggu verifikasi API
+                        </div>
+                      </td>
+                      <td class="py-3 px-4">
+                        <span class="integration-status status-pending">
+                          <i class="fas fa-clock"></i> Pending
+                        </span>
+                      </td>
+                      <td class="py-3 px-4">
+                        <div class="text-sm text-gray-900">Kemarin</div>
+                        <div class="text-xs text-gray-500">2:30 PM</div>
+                      </td>
+                    </tr>
+
+                    <tr>
+                      <td class="py-3 px-4">
+                        <div class="flex items-center">
+                          <div
+                            class="w-8 h-8 rounded-lg bg-white flex items-center justify-center mr-3 border"
+                          >
+                            <img
+                              src="https://brandlogo.org/wp-content/uploads/2024/04/Blibli-Logo.png"
+                              alt="Blibli"
+                              class="w-6 h-6 object-contain"
+                            />
+                          </div>
+                          <span class="font-medium text-gray-800">Blibli</span>
+                        </div>
+                      </td>
+                      <td class="py-3 px-4">
+                        <div class="text-sm text-gray-900">
+                          Integrasi belum dimulai
+                        </div>
+                        <div class="text-xs text-gray-500">
+                          Klik "Hubungkan Sekarang"
+                        </div>
+                      </td>
+                      <td class="py-3 px-4">
+                        <span class="integration-status status-disconnected">
+                          <i class="fas fa-times-circle"></i> Belum
+                        </span>
+                      </td>
+                      <td class="py-3 px-4">
+                        <div class="text-sm text-gray-900">-</div>
+                        <div class="text-xs text-gray-500">-</div>
+                      </td>
+                    </tr>
+
+                    <tr>
+                      <td class="py-3 px-4">
+                        <div class="flex items-center">
+                          <div
+                            class="w-8 h-8 rounded-lg bg-white flex items-center justify-center mr-3 border"
+                          >
+                            <img
+                              src="https://logos-world.net/wp-content/uploads/2022/06/Lazada-Symbol.png"
+                              alt="Lazada"
+                              class="w-6 h-6 object-contain"
+                            />
+                          </div>
+                          <span class="font-medium text-gray-800">Lazada</span>
+                        </div>
+                      </td>
+                      <td class="py-3 px-4">
+                        <div class="text-sm text-gray-900">
+                          Proses integrasi
+                        </div>
+                        <div class="text-xs text-gray-500">
+                          Menunggu verifikasi
+                        </div>
+                      </td>
+                      <td class="py-3 px-4">
+                        <span class="integration-status status-pending">
+                          <i class="fas fa-clock"></i> Pending
+                        </span>
+                      </td>
+                      <td class="py-3 px-4">
+                        <div class="text-sm text-gray-900">Kemarin</div>
+                        <div class="text-xs text-gray-500">1:30 PM</div>
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </section>
+        </div>
+      </div>
+    </div>
+
+    <!-- Integration Modal -->
+    <div
+      id="integrationModal"
+      class="fixed inset-0 integration-modal hidden items-center justify-center z-50 p-4"
+    >
+      <div
+        class="integration-modal-content bg-white rounded-2xl shadow-2xl w-full max-w-md overflow-hidden"
+      >
+        <div class="p-6">
+          <div class="flex justify-between items-center mb-4">
+            <h3 id="modalTitle" class="text-xl font-bold text-gray-800">
+              Hubungkan Platform
+            </h3>
+            <button
+              id="closeModal"
+              class="text-gray-400 hover:text-gray-600 smooth-transition"
+            >
+              <i class="fas fa-times"></i>
+            </button>
+          </div>
+
+          <div id="modalContent">
+            <!-- Content akan diisi oleh JavaScript -->
+          </div>
+
+          <div class="flex space-x-3 mt-6">
+            <button
+              id="cancelIntegration"
+              class="flex-1 px-4 py-3 border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50 smooth-transition"
+            >
+              Batal
+            </button>
+            <button
+              id="confirmIntegration"
+              class="flex-1 px-4 py-3 bg-gradient-to-r from-blue-500 to-blue-600 text-white rounded-lg hover:from-blue-600 hover:to-blue-700 smooth-transition"
+            >
+              Lanjutkan
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Platform Selection Modal -->
+    <div
+      id="platformSelectionModal"
+      class="fixed inset-0 integration-modal hidden items-center justify-center z-50 p-4"
+    >
+      <div
+        class="integration-modal-content bg-white rounded-2xl shadow-2xl w-full max-w-4xl overflow-hidden"
+      >
+        <div class="p-6">
+          <div class="flex justify-between items-center mb-6">
+            <h3 class="text-xl font-bold text-gray-800">
+              Pilih Platform untuk Diintegrasikan
+            </h3>
+            <button
+              id="closePlatformModal"
+              class="text-gray-400 hover:text-gray-600 smooth-transition"
+            >
+              <i class="fas fa-times"></i>
+            </button>
+          </div>
+
+          <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+            <!-- Platform cards will be inserted here by JavaScript -->
+          </div>
+
+          <div class="flex space-x-3 mt-6">
+            <button
+              id="cancelPlatformSelection"
+              class="flex-1 px-4 py-3 border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50 smooth-transition"
+            >
+              Batal
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- JavaScript untuk interaktivitas -->
+    <script>
+      document.addEventListener("DOMContentLoaded", function () {
+        // Inisialisasi Scroll Animator
+        const observer = new IntersectionObserver(
+          (entries) => {
+            entries.forEach((entry) => {
+              if (entry.isIntersecting) {
+                entry.target.classList.add("visible");
+              }
+            });
+          },
+          { threshold: 0.1 }
+        );
+
+        document
+          .querySelectorAll(".animate-on-scroll")
+          .forEach((el) => observer.observe(el));
+
+        // Force render semua konten
+        function forceRenderAllContent() {
+          const elements = document.querySelectorAll(".animate-on-scroll");
+          const viewportHeight = window.innerHeight;
+
+          elements.forEach((el) => {
+            const rect = el.getBoundingClientRect();
+            if (rect.top < viewportHeight - 100) {
+              el.classList.add("visible");
+            }
+          });
+        }
+
+        forceRenderAllContent();
+
+        // Update tanggal
+        function updateDate() {
+          const now = new Date();
+          const days = [
+            "Minggu",
+            "Senin",
+            "Selasa",
+            "Rabu",
+            "Kamis",
+            "Jumat",
+            "Sabtu",
+          ];
+          const months = [
+            "Januari",
+            "Februari",
+            "Maret",
+            "April",
+            "Mei",
+            "Juni",
+            "Juli",
+            "Agustus",
+            "September",
+            "Oktober",
+            "November",
+            "Desember",
+          ];
+
+          const dayName = days[now.getDay()];
+          const date = now.getDate();
+          const monthName = months[now.getMonth()];
+          const year = now.getFullYear();
+
+          const formattedDate = `${dayName}, ${date} ${monthName} ${year}`;
+
+          const dateElement = document.getElementById("currentDate");
+          if (dateElement) {
+            dateElement.textContent = formattedDate;
+          }
+        }
+
+        updateDate();
+
+        // Platform Data
+        const platforms = [
+          {
+            id: "shopee",
+            name: "Shopee",
+            logo: "https://logodownload.org/wp-content/uploads/2021/03/shopee-logo-0.png",
+            connected: true,
+          },
+          {
+            id: "tokopedia",
+            name: "Tokopedia",
+            logo: "https://logodix.com/logo/2205687.png",
+            connected: true,
+          },
+          {
+            id: "blibli",
+            name: "Blibli",
+            logo: "https://brandlogo.org/wp-content/uploads/2024/04/Blibli-Logo.png",
+            connected: false,
+          },
+          {
+            id: "tiktok",
+            name: "TikTok Shop",
+            logo: "https://freepnglogo.com/images/all_img/1714299248tiktok-shop-logo-png-transparent.png",
+            connected: false,
+          },
+          {
+            id: "lazada",
+            name: "Lazada",
+            logo: "https://logos-world.net/wp-content/uploads/2022/06/Lazada-Symbol.png",
+            connected: false,
+          },
+        ];
+
+        // AI Assistant Panel
+        const aiAssistantBtn = document.getElementById("aiAssistantBtn");
+        const aiAssistantPanel = document.getElementById("aiAssistantPanel");
+        const closeAIPanel = document.getElementById("closeAIPanel");
+
+        // Open AI Assistant Panel
+        aiAssistantBtn.addEventListener("click", function (e) {
+          e.stopPropagation();
+          aiAssistantPanel.classList.toggle("hidden");
+          setTimeout(() => {
+            const chatContainer = document.getElementById("aiChatContainer");
+            if (chatContainer)
+              chatContainer.scrollTop = chatContainer.scrollHeight;
+          }, 100);
+        });
+
+        closeAIPanel.addEventListener("click", function () {
+          aiAssistantPanel.classList.add("hidden");
+        });
+
+        // Close AI panel when clicking outside
+        document.addEventListener("click", function (e) {
+          if (
+            !aiAssistantPanel.contains(e.target) &&
+            !aiAssistantBtn.contains(e.target)
+          ) {
+            aiAssistantPanel.classList.add("hidden");
+          }
+        });
+
+        // AI Chat Functions
+        function addAIMessage(text, sender) {
+          const chatContainer = document.getElementById("aiChatContainer");
+          const messageDiv = document.createElement("div");
+          messageDiv.className = `ai-message ${sender}`;
+
+          if (sender === "user") {
+            messageDiv.innerHTML = `
+                        <div class="flex items-center justify-between">
+                            <p>${text}</p>
+                            <i class="fas fa-user ml-2"></i>
+                        </div>
+                    `;
+          } else {
+            messageDiv.innerHTML = `
+                        <div class="flex items-start space-x-2">
+                            <div class="w-6 h-6 rounded-full bg-blue-100 flex items-center justify-center flex-shrink-0 mt-1">
+                                <i class="fas fa-robot text-blue-600 text-xs"></i>
+                            </div>
+                            <div>
+                                <p class="text-gray-700">${text}</p>
+                            </div>
+                        </div>
+                    `;
+          }
+
+          chatContainer.appendChild(messageDiv);
+          chatContainer.scrollTop = chatContainer.scrollHeight;
+        }
+
+        // AI Quick Questions
+        const aiQuickQuestions =
+          document.querySelectorAll(".ai-quick-question");
+        aiQuickQuestions.forEach((button) => {
+          button.addEventListener("click", function () {
+            const question = this.textContent;
+            addAIMessage(question, "user");
+
+            // Show typing indicator
+            showTypingIndicator();
+
+            setTimeout(() => {
+              removeTypingIndicator();
+              generateIntegrationAIResponse(question);
+            }, 1500);
+          });
+        });
+
+        // Send AI Question
+        const aiQuestionInput = document.getElementById("aiQuestionInput");
+        const sendAIQuestion = document.getElementById("sendAIQuestion");
+
+        sendAIQuestion.addEventListener("click", function () {
+          if (aiQuestionInput.value.trim() !== "") {
+            const question = aiQuestionInput.value;
+            addAIMessage(question, "user");
+            aiQuestionInput.value = "";
+
+            showTypingIndicator();
+
+            setTimeout(() => {
+              removeTypingIndicator();
+              generateIntegrationAIResponse(question);
+            }, 2000);
+          }
+        });
+
+        aiQuestionInput.addEventListener("keypress", function (e) {
+          if (e.key === "Enter") {
+            sendAIQuestion.click();
+          }
+        });
+
+        function showTypingIndicator() {
+          const chatContainer = document.getElementById("aiChatContainer");
+          const typingDiv = document.createElement("div");
+          typingDiv.className = "ai-typing-indicator";
+          typingDiv.id = "typingIndicator";
+          typingDiv.innerHTML = `
+                    <div class="w-6 h-6 rounded-full bg-blue-100 flex items-center justify-center flex-shrink-0 mr-2">
+                        <i class="fas fa-robot text-blue-600 text-xs"></i>
+                    </div>
+                    <div class="flex">
+                        <div class="ai-typing-dot"></div>
+                        <div class="ai-typing-dot"></div>
+                        <div class="ai-typing-dot"></div>
+                    </div>
+                `;
+
+          chatContainer.appendChild(typingDiv);
+          chatContainer.scrollTop = chatContainer.scrollHeight;
+        }
+
+        function removeTypingIndicator() {
+          const typingIndicator = document.getElementById("typingIndicator");
+          if (typingIndicator) typingIndicator.remove();
+        }
+
+        function generateIntegrationAIResponse(question) {
+          let response = "";
+          const questionLower = question.toLowerCase();
+
+          if (
+            questionLower.includes("shopee") ||
+            questionLower.includes("cara integrasi")
+          ) {
+            response = `Untuk integrasi dengan Shopee:<br><br>
+                    1. Klik tombol "Hubungkan Sekarang" pada kartu Shopee<br>
+                    2. Anda akan diarahkan ke halaman autentikasi Shopee<br>
+                    3. Login dengan akun Seller Shopee Anda<br>
+                    4. Berikan izin akses ke API Shopee<br>
+                    5. Kembali ke dashboard untuk konfigurasi sync<br><br>
+                    Setelah terhubung, Anda dapat:<br>
+                    • Sync produk secara otomatis<br>
+                    • Import pesanan real-time<br>
+                    • Update stok otomatis<br>
+                    • Kelola harga dari satu dashboard`;
+          } else if (
+            questionLower.includes("sync") ||
+            questionLower.includes("produk")
+          ) {
+            response = `Proses sinkronisasi produk:<br><br>
+                    1. Pilih produk yang ingin disinkronkan<br>
+                    2. Atur harga khusus per platform (jika perlu)<br>
+                    3. Tentukan jadwal sync (real-time atau harian)<br>
+                    4. Sistem akan otomatis upload produk ke platform terpilih<br><br>
+                    <strong>Tips:</strong><br>
+                    • Gunakan fitur bulk sync untuk hemat waktu<br>
+                    • Setel kategori yang sesuai di setiap platform<br>
+                    • Gunakan template deskripsi yang sudah dioptimasi<br>
+                    • Pantau performa produk per platform`;
+          } else if (
+            questionLower.includes("harga") ||
+            questionLower.includes("otomatis")
+          ) {
+            response = `Fitur atur harga otomatis:<br><br>
+                    1. <strong>Price Markup:</strong> Tambahkan persentase ke harga dasar<br>
+                    2. <strong>Platform Specific:</strong> Harga berbeda per platform<br>
+                    3. <strong>Competitor Based:</strong> Sesuaikan dengan harga kompetitor<br>
+                    4. <strong>Dynamic Pricing:</strong> Otomatis naik/turun berdasarkan demand<br><br>
+                    Untuk mengaktifkan:<br>
+                    • Buka Settings > Pricing Rules<br>
+                    • Pilih strategi harga<br>
+                    • Atur parameter dan persentase<br>
+                    • Aktifkan auto-sync`;
+          } else {
+            response = `Saya dapat membantu Anda dengan integrasi e-commerce:<br><br>
+                    • Cara menghubungkan platform (Shopee, Tokopedia, Blibli, dll)<br>
+                    • Proses sinkronisasi produk dan pesanan<br>
+                    • Troubleshooting error integrasi<br>
+                    • Optimasi pengaturan untuk performa terbaik<br><br>
+                    Platform mana yang ingin Anda integrasikan?`;
+          }
+
+          addAIMessage(response, "assistant");
+        }
+
+        // Platform Selection Modal Functions
+        const platformSelectionModal = document.getElementById(
+          "platformSelectionModal"
+        );
+        const closePlatformModal =
+          document.getElementById("closePlatformModal");
+        const cancelPlatformSelection = document.getElementById(
+          "cancelPlatformSelection"
+        );
+        const integratePlatformBtn = document.getElementById(
+          "integratePlatformBtn"
+        );
+
+        // Open Platform Selection Modal
+        integratePlatformBtn.addEventListener("click", function () {
+          showPlatformSelectionModal();
+        });
+
+        // Close Platform Selection Modal
+        closePlatformModal.addEventListener(
+          "click",
+          closePlatformSelectionModal
+        );
+        cancelPlatformSelection.addEventListener(
+          "click",
+          closePlatformSelectionModal
+        );
+
+        function closePlatformSelectionModal() {
+          platformSelectionModal.classList.remove("show");
+          setTimeout(() => {
+            platformSelectionModal.classList.add("hidden");
+          }, 300);
+        }
+
+        function showPlatformSelectionModal() {
+          const container = platformSelectionModal.querySelector(".grid");
+          container.innerHTML = "";
+
+          platforms.forEach((platform) => {
+            const card = document.createElement("div");
+            card.className = `platform-selection-card p-4 cursor-pointer smooth-transition ${
+              platform.connected ? "connected" : "disconnected"
+            }`;
+            card.dataset.platform = platform.id;
+
+            card.innerHTML = `
+                        <div class="flex flex-col items-center text-center">
+                            <div class="w-16 h-16 mb-3 flex items-center justify-center">
+                                <img src="${platform.logo}" alt="${
+              platform.name
+            }" class="platform-logo-img" />
+                            </div>
+                            <h4 class="font-bold text-gray-800 mb-2">${
+                              platform.name
+                            }</h4>
+                            <span class="text-xs px-3 py-1 rounded-full ${
+                              platform.connected
+                                ? "bg-green-100 text-green-700"
+                                : "bg-yellow-100 text-yellow-700"
+                            }">
+                                ${
+                                  platform.connected
+                                    ? "Sudah Terintegrasi"
+                                    : "Belum Terintegrasi"
+                                }
+                            </span>
+                        </div>
+                    `;
+
+            card.addEventListener("click", function () {
+              if (platform.connected) {
+                showNotification(
+                  `${platform.name} sudah terintegrasi!`,
+                  "info"
+                );
+              } else {
+                closePlatformSelectionModal();
+                showIntegrationModal(platform.id);
+              }
+            });
+
+            container.appendChild(card);
+          });
+
+          platformSelectionModal.classList.remove("hidden");
+          platformSelectionModal.classList.add("flex");
+          setTimeout(() => {
+            platformSelectionModal.classList.add("show");
+          }, 10);
+        }
+
+        // Integration Modal Functions
+        const integrationModal = document.getElementById("integrationModal");
+        const closeModal = document.getElementById("closeModal");
+        const cancelIntegration = document.getElementById("cancelIntegration");
+        const confirmIntegration =
+          document.getElementById("confirmIntegration");
+        const modalTitle = document.getElementById("modalTitle");
+        const modalContent = document.getElementById("modalContent");
+
+        let currentPlatform = "";
+
+        // Close modal functions
+        function closeIntegrationModal() {
+          integrationModal.classList.remove("show");
+          setTimeout(() => {
+            integrationModal.classList.add("hidden");
+          }, 300);
+        }
+
+        closeModal.addEventListener("click", closeIntegrationModal);
+        cancelIntegration.addEventListener("click", closeIntegrationModal);
+
+        // Show integration modal
+        function showIntegrationModal(platformId) {
+          const platform = platforms.find((p) => p.id === platformId);
+          if (!platform) return;
+
+          currentPlatform = platformId;
+          const platformName = getPlatformName(currentPlatform);
+
+          modalTitle.textContent = `Hubungkan ${platformName}`;
+
+          modalContent.innerHTML = `
+                    <div class="mb-6">
+                        <div class="flex items-center justify-center mb-4">
+                            <div class="w-16 h-16 rounded-lg flex items-center justify-center">
+                                <img src="${platform.logo}" alt="${platformName}" class="w-full h-full object-contain" />
+                            </div>
+                        </div>
+                        <p class="text-gray-700 mb-4">Anda akan diarahkan ke halaman autentikasi ${platformName} untuk memberikan izin akses API ke sistem kami.</p>
+                        
+                        <div class="bg-blue-50 p-4 rounded-lg mb-4">
+                            <h4 class="font-medium text-blue-800 mb-2">Akses yang akan diberikan:</h4>
+                            <ul class="text-sm text-blue-700 space-y-1">
+                                <li><i class="fas fa-check-circle mr-2"></i> Akses data produk dan katalog</li>
+                                <li><i class="fas fa-check-circle mr-2"></i> Manajemen pesanan dan transaksi</li>
+                                <li><i class="fas fa-check-circle mr-2"></i> Update stok dan harga</li>
+                                <li><i class="fas fa-check-circle mr-2"></i> Akses data pelanggan (anonim)</li>
+                            </ul>
+                        </div>
+                        
+                        <div class="bg-gray-50 p-4 rounded-lg">
+                            <h4 class="font-medium text-gray-800 mb-2">Durasi Integrasi:</h4>
+                            <p class="text-sm text-gray-600">Proses integrasi biasanya memakan waktu 2-5 menit tergantung koneksi internet dan verifikasi akun.</p>
+                        </div>
+                    </div>
+                `;
+
+          integrationModal.classList.remove("hidden");
+          integrationModal.classList.add("flex");
+          setTimeout(() => {
+            integrationModal.classList.add("show");
+          }, 10);
+        }
+
+        // Confirm integration
+        confirmIntegration.addEventListener("click", function () {
+          const platform = platforms.find((p) => p.id === currentPlatform);
+          if (!platform) return;
+
+          showNotification(
+            `Memulai integrasi dengan ${platform.name}...`,
+            "info"
+          );
+
+          // Simulate API call
+          setTimeout(() => {
+            closeIntegrationModal();
+
+            // Update platform status
+            platform.connected = true;
+
+            showNotification(
+              `Integrasi dengan ${platform.name} berhasil!`,
+              "success"
+            );
+
+            // Update UI if needed
+            updatePlatformStatus(platform.id);
+          }, 1500);
+        });
+
+        // Platform utility functions
+        function getPlatformName(platform) {
+          const names = {
+            shopee: "Shopee",
+            tokopedia: "Tokopedia",
+            blibli: "Blibli",
+            tiktok: "TikTok Shop",
+            lazada: "Lazada",
+          };
+          return names[platform] || "Platform";
+        }
+
+        function updatePlatformStatus(platformId) {
+          // Update platform selection modal if open
+          const platformCards = document.querySelectorAll(
+            ".platform-selection-card"
+          );
+          platformCards.forEach((card) => {
+            if (card.dataset.platform === platformId) {
+              card.classList.remove("disconnected");
+              card.classList.add("connected");
+
+              const statusSpan = card.querySelector("span");
+              if (statusSpan) {
+                statusSpan.className =
+                  "text-xs px-3 py-1 rounded-full bg-green-100 text-green-700";
+                statusSpan.textContent = "Sudah Terintegrasi";
+              }
+            }
+          });
+
+          // Update recent activities table
+          updateRecentActivities(platformId);
+        }
+
+        function updateRecentActivities(platformId) {
+          const platform = platforms.find((p) => p.id === platformId);
+          if (!platform) return;
+
+          // Find the corresponding row in the table
+          const rows = document.querySelectorAll("tbody tr");
+          rows.forEach((row) => {
+            const platformName = row.querySelector(
+              "td:first-child span.font-medium"
+            );
+            if (
+              platformName &&
+              platformName.textContent.trim() === platform.name
+            ) {
+              // Update status
+              const statusCell = row.querySelector(".integration-status");
+              if (statusCell) {
+                statusCell.innerHTML =
+                  '<i class="fas fa-check-circle"></i> Sukses';
+                statusCell.className = "integration-status status-connected";
+              }
+
+              // Update activity
+              const activityCell = row.querySelector("td:nth-child(2)");
+              if (activityCell) {
+                activityCell.innerHTML = `
+                                <div class="text-sm text-gray-900">Integrasi berhasil</div>
+                                <div class="text-xs text-gray-500">Platform terhubung dengan sistem</div>
+                            `;
+              }
+
+              // Update time
+              const timeCell = row.querySelector("td:nth-child(4)");
+              if (timeCell) {
+                const now = new Date();
+                const timeString = now.toLocaleTimeString("id-ID", {
+                  hour: "2-digit",
+                  minute: "2-digit",
+                });
+                timeCell.innerHTML = `
+                                <div class="text-sm text-gray-900">${timeString}</div>
+                                <div class="text-xs text-gray-500">Hari ini</div>
+                            `;
+              }
+            }
+          });
+        }
+
+        // Notification System
+        function showNotification(message, type = "info") {
+          const notification = document.createElement("div");
+          notification.className = `fixed top-24 right-8 px-4 py-3 rounded-lg shadow-lg z-50 animate-slide-in-right`;
+
+          let bgColor = "bg-blue-100 text-blue-800 border border-blue-200";
+          let icon = "fas fa-info-circle";
+
+          if (type === "success") {
+            bgColor = "bg-green-100 text-green-800 border border-green-200";
+            icon = "fas fa-check-circle";
+          } else if (type === "warning") {
+            bgColor = "bg-yellow-100 text-yellow-800 border border-yellow-200";
+            icon = "fas fa-exclamation-triangle";
+          } else if (type === "error") {
+            bgColor = "bg-red-100 text-red-800 border border-red-200";
+            icon = "fas fa-times-circle";
+          }
+
+          notification.className += ` ${bgColor}`;
+          notification.innerHTML = `
+                    <div class="flex items-center space-x-3">
+                        <i class="${icon}"></i>
+                        <span>${message}</span>
+                    </div>
+                `;
+
+          document.body.appendChild(notification);
+
+          setTimeout(() => {
+            if (notification.parentNode) {
+              notification.style.animation =
+                "slideInRight 0.3s reverse forwards";
+              setTimeout(() => {
+                if (notification.parentNode) {
+                  notification.remove();
+                }
+              }, 300);
+            }
+          }, 3000);
+        }
+
+        // Initialize with a welcome message from AI
+        setTimeout(() => {
+          addAIMessage(
+            "Selamat datang di Integrasi E-commerce! Saya dapat membantu Anda menghubungkan toko online dengan berbagai platform e-commerce, mengelola sinkronisasi produk, dan memantau performa penjualan. Platform mana yang ingin Anda integrasikan?",
+            "assistant"
+          );
+        }, 1000);
+
+        // Close modals when clicking outside
+        document.addEventListener("click", function (e) {
+          // Platform Selection Modal
+          if (
+            platformSelectionModal.classList.contains("flex") &&
+            !platformSelectionModal.contains(e.target) &&
+            !integratePlatformBtn.contains(e.target)
+          ) {
+            closePlatformSelectionModal();
+          }
+
+          // Integration Modal
+          if (
+            integrationModal.classList.contains("flex") &&
+            !integrationModal.contains(e.target)
+          ) {
+            closeIntegrationModal();
+          }
+        });
+
+        // Notification bell
+        const notificationBell = document.getElementById("notificationBell");
+        if (notificationBell) {
+          notificationBell.addEventListener("click", function () {
+            const notificationPopup = document.createElement("div");
+            notificationPopup.className =
+              "fixed top-20 right-8 w-72 bg-white rounded-xl shadow-lg border border-gray-200 p-4 animate-fade-in-up z-40";
+            notificationPopup.innerHTML = `
+                        <div class="flex justify-between items-center mb-3">
+                            <h4 class="font-bold text-gray-800">Notifikasi Integrasi</h4>
+                            <button class="text-gray-400 hover:text-gray-600 close-notif">
+                                <i class="fas fa-times"></i>
+                            </button>
+                        </div>
+                        <div class="space-y-3">
+                            <div class="flex items-start space-x-3 p-2 rounded-lg bg-green-50">
+                                <i class="fas fa-check-circle text-green-500 mt-1"></i>
+                                <div>
+                                    <p class="text-sm font-medium">Shopee sync berhasil</p>
+                                    <p class="text-xs text-gray-600">142 produk diupdate</p>
+                                </div>
+                            </div>
+                            <div class="flex items-start space-x-3 p-2 rounded-lg bg-blue-50">
+                                <i class="fas fa-info-circle text-blue-500 mt-1"></i>
+                                <div>
+                                    <p class="text-sm font-medium">TikTok Shop pending</p>
+                                    <p class="text-xs text-gray-600">Menunggu verifikasi API</p>
+                                </div>
+                            </div>
+                            <div class="flex items-start space-x-3 p-2 rounded-lg bg-yellow-50">
+                                <i class="fas fa-exclamation-triangle text-yellow-500 mt-1"></i>
+                                <div>
+                                    <p class="text-sm font-medium">3 pesanan baru</p>
+                                    <p class="text-xs text-gray-600">Dari Tokopedia</p>
+                                </div>
+                            </div>
+                        </div>
+                    `;
+
+            document.body.appendChild(notificationPopup);
+
+            const closeBtn = notificationPopup.querySelector(".close-notif");
+            closeBtn.addEventListener("click", function () {
+              notificationPopup.remove();
+            });
+
+            setTimeout(() => {
+              if (notificationPopup.parentNode) {
+                notificationPopup.remove();
+              }
+            }, 5000);
+          });
+        }
+      });
+    </script>
+  </body>
+</html>

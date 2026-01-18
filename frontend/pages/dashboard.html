@@ -1,0 +1,2440 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard - Flashboard ERP Modern</title>
+    <!-- Tailwind CSS via CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Font Awesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Animate.css for smooth animations -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css">
+    
+    <style>
+        :root {
+            --soft-blue: #4A90E2;
+            --soft-blue-light: #E3F2FD;
+            --soft-blue-dark: #2A6EBB;
+            --neutral-gray: #F5F7FA;
+            --neutral-gray-dark: #E1E8F0;
+            --neutral-text: #4A5568;
+            --soft-green: #48BB78;
+            --soft-purple: #9F7AEA;
+            --soft-pink: #ED64A6;
+            --soft-cyan: #0BC5EA;
+        }
+        
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            color: var(--neutral-text);
+            overflow-x: hidden;
+            background: linear-gradient(to bottom right, #eff6ff, #f3f4f6, #f9fafb);
+        }
+        
+        /* Struktur layout utama */
+        .app-container {
+            display: flex;
+            min-height: 100vh;
+            width: 100%;
+        }
+        
+        .main-wrapper {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            max-height: 100vh;
+            overflow: hidden;
+        }
+        
+        .content-wrapper {
+            flex: 1;
+            overflow-y: auto;
+            overflow-x: hidden;
+            -webkit-overflow-scrolling: touch;
+            padding: 2rem;
+            background: linear-gradient(to bottom, #f8fafc, #f1f5f9);
+        }
+        
+        /* Custom animations */
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        
+        @keyframes slideInLeft {
+            from {
+                opacity: 0;
+                transform: translateX(-20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateX(0);
+            }
+        }
+        
+        @keyframes slideInRight {
+            from {
+                opacity: 0;
+                transform: translateX(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateX(0);
+            }
+        }
+        
+        @keyframes pulseSoft {
+            0%, 100% {
+                opacity: 1;
+                transform: scale(1);
+            }
+            50% {
+                opacity: 0.8;
+                transform: scale(1.02);
+            }
+        }
+        
+        @keyframes float {
+            0%, 100% {
+                transform: translateY(0);
+            }
+            50% {
+                transform: translateY(-10px);
+            }
+        }
+        
+        @keyframes shimmer {
+            0% {
+                background-position: -200% center;
+            }
+            100% {
+                background-position: 200% center;
+            }
+        }
+        
+        @keyframes slideInFromLeft {
+            from {
+                opacity: 0;
+                transform: translateX(-30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateX(0);
+            }
+        }
+        
+        @keyframes bounceIn {
+            0% {
+                opacity: 0;
+                transform: scale(0.3);
+            }
+            50% {
+                opacity: 1;
+                transform: scale(1.05);
+            }
+            70% {
+                transform: scale(0.9);
+            }
+            100% {
+                transform: scale(1);
+            }
+        }
+        
+        @keyframes ripple {
+            0% {
+                transform: scale(0);
+                opacity: 1;
+            }
+            100% {
+                transform: scale(4);
+                opacity: 0;
+            }
+        }
+        
+        @keyframes typingDot {
+            0%, 60%, 100% { transform: translateY(0); }
+            30% { transform: translateY(-8px); }
+        }
+        
+        .animate-fade-in-up {
+            animation: fadeInUp 0.6s ease-out forwards;
+        }
+        
+        .animate-slide-in-left {
+            animation: slideInLeft 0.5s ease-out forwards;
+        }
+        
+        .animate-slide-in-right {
+            animation: slideInRight 0.5s ease-out forwards;
+        }
+        
+        .animate-pulse-soft {
+            animation: pulseSoft 2s infinite ease-in-out;
+        }
+        
+        .animate-float {
+            animation: float 3s ease-in-out infinite;
+        }
+        
+        .animate-shimmer {
+            animation: shimmer 3s infinite linear;
+            background: linear-gradient(90deg, #F5F7FA 0%, #E3F2FD 50%, #F5F7FA 100%);
+            background-size: 200% auto;
+        }
+        
+        .animate-slide-in-from-left {
+            animation: slideInFromLeft 0.6s ease-out forwards;
+        }
+        
+        .animate-bounce-in {
+            animation: bounceIn 0.6s ease-out forwards;
+        }
+        
+        .animate-ripple {
+            animation: ripple 0.6s linear forwards;
+        }
+        
+        /* Custom scrollbar */
+        ::-webkit-scrollbar {
+            width: 8px;
+            height: 8px;
+        }
+        
+        ::-webkit-scrollbar-track {
+            background: var(--neutral-gray);
+            border-radius: 4px;
+        }
+        
+        ::-webkit-scrollbar-thumb {
+            background: linear-gradient(135deg, #4A90E2, #2A6EBB);
+            border-radius: 4px;
+        }
+        
+        ::-webkit-scrollbar-thumb:hover {
+            background: linear-gradient(135deg, #2A6EBB, #4A90E2);
+        }
+        
+        /* Smooth transitions */
+        .smooth-transition {
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        
+        /* Glass effect */
+        .glass-effect {
+            backdrop-filter: blur(10px);
+            background: rgba(255, 255, 255, 0.92);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+        
+        /* Card hover effect */
+        .hover-lift {
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        
+        .hover-lift:hover {
+            transform: translateY(-8px) scale(1.01);
+            box-shadow: 0 15px 30px -10px rgba(74, 144, 226, 0.2);
+        }
+        
+        /* Gradient backgrounds */
+        .gradient-blue {
+            background: linear-gradient(135deg, #E3F2FD 0%, #F5F7FA 100%);
+        }
+        
+        .gradient-green {
+            background: linear-gradient(135deg, #F0FFF4 0%, #F5F7FA 100%);
+        }
+        
+        .gradient-purple {
+            background: linear-gradient(135deg, #F5F3FF 0%, #F5F7FA 100%);
+        }
+        
+        .gradient-cyan {
+            background: linear-gradient(135deg, #E6FFFA 0%, #F5F7FA 100%);
+        }
+        
+        .gradient-orange {
+            background: linear-gradient(135deg, #FEEBC8 0%, #F5F7FA 100%);
+        }
+        
+        .gradient-red {
+            background: linear-gradient(135deg, #FED7D7 0%, #F5F7FA 100%);
+        }
+        
+        /* Horizontal scroll container */
+        .horizontal-scroll-container {
+            display: flex;
+            overflow-x: auto;
+            padding: 1rem 0.5rem;
+            gap: 1rem;
+            scrollbar-width: thin;
+            scrollbar-color: #CBD5E0 #F5F7FA;
+            -webkit-overflow-scrolling: touch;
+        }
+        
+        .horizontal-scroll-container::-webkit-scrollbar {
+            height: 6px;
+        }
+        
+        .horizontal-scroll-container::-webkit-scrollbar-track {
+            background: #F5F7FA;
+            border-radius: 3px;
+        }
+        
+        .horizontal-scroll-container::-webkit-scrollbar-thumb {
+            background: linear-gradient(135deg, #4A90E2, #2A6EBB);
+            border-radius: 3px;
+        }
+        
+        .horizontal-card {
+            flex: 0 0 auto;
+            width: 320px;
+            min-height: 180px;
+        }
+        
+        /* Progress bars */
+        .progress-bar {
+            height: 8px;
+            background-color: #E2E8F0;
+            border-radius: 4px;
+            overflow: hidden;
+        }
+        
+        .progress-bar-fill {
+            height: 100%;
+            border-radius: 4px;
+            transition: width 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        
+        /* Status indicators */
+        .status-indicator {
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+            display: inline-block;
+            margin-right: 8px;
+            position: relative;
+        }
+        
+        .status-indicator::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            border-radius: 50%;
+            animation: pulseSoft 2s infinite;
+        }
+        
+        .status-critical {
+            background-color: #F56565;
+        }
+        
+        .status-critical::after {
+            background-color: #F56565;
+        }
+        
+        .status-warning {
+            background-color: #ECC94B;
+        }
+        
+        .status-warning::after {
+            background-color: #ECC94B;
+        }
+        
+        .status-good {
+            background-color: #48BB78;
+        }
+        
+        .status-good::after {
+            background-color: #48BB78;
+        }
+        
+        /* Data visualization */
+        .data-trend-up {
+            color: #48BB78;
+            position: relative;
+        }
+        
+        .data-trend-up::before {
+            content: "↗";
+            margin-right: 4px;
+        }
+        
+        .data-trend-down {
+            color: #F56565;
+            position: relative;
+        }
+        
+        .data-trend-down::before {
+            content: "↘";
+            margin-right: 4px;
+        }
+        
+        /* AI Assistant specific */
+        .ai-message {
+            max-width: 80%;
+            padding: 12px 16px;
+            border-radius: 18px;
+            margin-bottom: 12px;
+            position: relative;
+        }
+        
+        .ai-message.user {
+            background: linear-gradient(135deg, #4A90E2, #2A6EBB);
+            color: white;
+            margin-left: auto;
+            border-bottom-right-radius: 4px;
+        }
+        
+        .ai-message.assistant {
+            background: #F7FAFC;
+            color: #2D3748;
+            border: 1px solid #E2E8F0;
+            margin-right: auto;
+            border-bottom-left-radius: 4px;
+        }
+        
+        .ai-typing-indicator {
+            display: flex;
+            align-items: center;
+            padding: 12px 16px;
+            background: #F7FAFC;
+            border-radius: 18px;
+            width: fit-content;
+            margin-bottom: 12px;
+            border: 1px solid #E2E8F0;
+        }
+        
+        .ai-typing-dot {
+            width: 8px;
+            height: 8px;
+            background-color: #A0AEC0;
+            border-radius: 50%;
+            margin: 0 2px;
+            animation: typingDot 1.5s infinite ease-in-out;
+        }
+        
+        .ai-typing-dot:nth-child(1) { animation-delay: 0s; }
+        .ai-typing-dot:nth-child(2) { animation-delay: 0.2s; }
+        .ai-typing-dot:nth-child(3) { animation-delay: 0.4s; }
+        
+        /* Container untuk pertanyaan cepat AI - DIPERBAIKI */
+        .ai-quick-questions-container {
+            display: flex;
+            overflow-x: auto;
+            gap: 8px;
+            padding: 12px 4px 16px 4px;
+            margin-bottom: 4px;
+            scrollbar-width: thin;
+            scrollbar-color: #4A90E2 #F5F7FA;
+            -webkit-overflow-scrolling: touch;
+        }
+        
+        .ai-quick-questions-container::-webkit-scrollbar {
+            height: 6px;
+            display: block;
+        }
+        
+        .ai-quick-questions-container::-webkit-scrollbar-track {
+            background: #F5F7FA;
+            border-radius: 4px;
+            margin: 0 4px;
+        }
+        
+        .ai-quick-questions-container::-webkit-scrollbar-thumb {
+            background: linear-gradient(135deg, #4A90E2, #2A6EBB);
+            border-radius: 4px;
+            border: 1px solid #E2E8F0;
+        }
+        
+        .ai-quick-questions-container::-webkit-scrollbar-thumb:hover {
+            background: linear-gradient(135deg, #2A6EBB, #4A90E2);
+        }
+        
+        .ai-quick-question {
+            flex: 0 0 auto;
+            white-space: nowrap;
+            padding: 8px 12px;
+            background: #EBF8FF;
+            border: 1px solid #BEE3F8;
+            border-radius: 8px;
+            font-size: 12px;
+            color: #2C5282;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        
+        .ai-quick-question:hover {
+            background: #BEE3F8;
+            border-color: #90CDF4;
+            transform: translateY(-2px);
+        }
+        
+        /* Ripple effect */
+        .ripple-effect {
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .ripple-effect::after {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 5px;
+            height: 5px;
+            background: rgba(255, 255, 255, 0.5);
+            opacity: 0;
+            border-radius: 100%;
+            transform: scale(1, 1) translate(-50%);
+            transform-origin: 50% 50%;
+        }
+        
+        .ripple-effect:focus:not(:active)::after {
+            animation: ripple 0.6s ease-out;
+        }
+        
+        /* Loading animation */
+        .loading-spinner {
+            width: 40px;
+            height: 40px;
+            border: 3px solid #E2E8F0;
+            border-top: 3px solid #4A90E2;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+        }
+        
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+        
+        /* Page transitions */
+        .page-transition {
+            animation: fadeInUp 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        
+        /* Custom Animation System */
+        .animate-on-scroll {
+            opacity: 0;
+            transform: translateY(30px);
+            transition: opacity 0.6s ease, transform 0.6s ease;
+        }
+        
+        .animate-on-scroll.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+        
+        .animate-on-scroll.delay-100 {
+            transition-delay: 0.1s;
+        }
+        
+        .animate-on-scroll.delay-200 {
+            transition-delay: 0.2s;
+        }
+        
+        .animate-on-scroll.delay-300 {
+            transition-delay: 0.3s;
+        }
+        
+        .animate-on-scroll.delay-400 {
+            transition-delay: 0.4s;
+        }
+        
+        .animate-on-scroll.delay-500 {
+            transition-delay: 0.5s;
+        }
+        
+        /* Force GPU acceleration */
+        .gpu-accelerate {
+            transform: translateZ(0);
+            backface-visibility: hidden;
+            perspective: 1000px;
+        }
+        
+        /* Initial animation untuk konten yang terlihat langsung */
+        .initial-animate {
+            animation: fadeInUp 0.8s ease-out forwards;
+        }
+        
+        /* Memastikan semua konten ter-render */
+        .force-render {
+            will-change: transform, opacity;
+            contain: layout style paint;
+        }
+        
+        /* Untuk horizontal card */
+        .horizontal-card-initial {
+            animation: slideInFromLeft 0.6s ease-out forwards;
+        }
+        
+        /* Untuk memastikan konten yang sudah visible tetap visible */
+        .force-visible {
+            opacity: 1 !important;
+            transform: translateY(0) !important;
+        }
+        
+        /* Logout button di navbar */
+        .nav-logout-btn {
+            padding: 8px 16px;
+            border-radius: 8px;
+            background: #FEF2F2;
+            color: #DC2626;
+            border: 1px solid #FECACA;
+            transition: all 0.3s ease;
+        }
+        
+        .nav-logout-btn:hover {
+            background: #FEE2E2;
+            border-color: #FCA5A5;
+            transform: translateY(-2px);
+        }
+        
+        /* ================= PERBAIKAN KONSISTENSI GRID ================= */
+        /* Perbaikan untuk konsistensi ukuran grid - BARU DITAMBAHKAN */
+        .grid-section-card {
+            min-height: 500px;
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+        }
+        
+        .card-content-wrapper {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+        }
+        
+        .card-body-scrollable {
+            flex: 1;
+            overflow-y: auto;
+            max-height: 380px;
+            padding-right: 5px;
+        }
+        
+        /* Perbaikan tinggi untuk card Prioritas Hari Ini */
+        .horizontal-card {
+            width: 320px;
+            min-height: 240px;
+            display: flex;
+            flex-direction: column;
+        }
+        
+        /* Perbaikan grid utama untuk konsistensi */
+        .grid-cols-1.lg\:grid-cols-2 > * {
+            display: flex;
+            flex-direction: column;
+        }
+        
+        .grid-cols-1.lg\:grid-cols-2 .bg-white.rounded-xl {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+        }
+        
+        /* Perbaikan untuk bagian dengan grid di dalamnya */
+        .grid-cols-3.gap-4 {
+            margin-bottom: 1.5rem;
+        }
+        
+        /* Pastikan semua card memiliki tinggi yang konsisten */
+        section.animate-on-scroll > .bg-white {
+            min-height: 500px;
+            height: 100%;
+        }
+        
+        /* Perbaikan untuk bagian tanggal di header - SEDERHANA */
+        #currentDate {
+            font-size: 14px;
+            font-weight: 600;
+            color: #4A5568;
+            white-space: nowrap;
+            text-align: right;
+        }
+        
+        /* Perbaikan tinggi horizontal card */
+        .horizontal-scroll-container .horizontal-card {
+            height: 240px;
+        }
+        
+        /* Perbaikan untuk card dalam grid */
+        .grid-cols-1.lg\:grid-cols-2 .bg-white {
+            min-height: 500px;
+        }
+        
+        /* Spacing konsisten untuk semua card body */
+        .grid-section-card .p-5:not(.border-b) {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+        }
+        
+        /* Konsistensi untuk card header */
+        .grid-section-card .border-b {
+            flex-shrink: 0;
+        }
+        /* ================= AKHIR PERBAIKAN KONSISTENSI GRID ================= */
+    </style>
+</head>
+<body class="page-transition">
+    <div class="app-container">
+        <!-- Sidebar -->
+       <aside class="w-64 bg-white/90 border-r border-gray-200/50 flex flex-col shadow-sm glass-effect">
+    <div class="p-6 border-b border-gray-100/50">
+        <div class="flex items-center space-x-3">
+            <div class="w-10 h-10 rounded-lg bg-gradient-to-br from-blue-400 to-blue-600 flex items-center justify-center animate-float">
+                <i class="fas fa-chart-line text-white"></i>
+            </div>
+            <h1 class="text-xl font-bold text-gray-800">A2M ERPAA</h1>
+        </div>
+    </div>
+    
+    <nav class="flex-1 p-4 space-y-2">
+        <!-- Dashboard dengan Submenu -->
+        <div class="mb-2">
+            <div class="flex items-center justify-between p-3 rounded-lg bg-blue-50 text-blue-600 cursor-pointer smooth-transition hover:bg-blue-100 hover-lift ripple-effect" id="dashboard-menu">
+                <div class="flex items-center space-x-3">
+                    <i class="fas fa-tachometer-alt w-5 text-center"></i>
+                    <span class="font-medium">Business Monitoring</span>
+                </div>
+                <i class="fas fa-chevron-down text-sm" id="dashboard-chevron"></i>
+            </div>
+            <div class="ml-8 mt-1 space-y-1" id="dashboard-submenu">
+                <a href="/dashboard/" class="block p-2 text-sm rounded-lg bg-blue-100 text-blue-600 smooth-transition hover:bg-blue-200 hover-lift ripple-effect">
+                    <i class="fas fa-chart-bar w-4 text-center mr-2"></i>
+                    Dashboard Overview
+                </a>
+                <a href="/dashboard/daily/" class="block p-2 text-sm rounded-lg text-gray-700 smooth-transition hover:bg-gray-100 hover-lift ripple-effect">
+                    <i class="fas fa-briefcase w-4 text-center mr-2"></i>
+                    Daily Business Brief
+                </a>
+            </div>
+        </div>
+                <a href="/product/" class="flex items-center space-x-3 p-3 rounded-lg text-gray-700 smooth-transition hover:bg-gray-100 hover-lift ripple-effect">
+                    <i class="fas fa-boxes w-5 text-center"></i>
+                    <span class="font-medium">Product Management</span>
+                </a>
+                <a href="/inventory/" class="flex items-center space-x-3 p-3 rounded-lg text-gray-700 smooth-transition hover:bg-gray-100 hover-lift ripple-effect">
+                    <i class="fas fa-warehouse w-5 text-center"></i>
+                    <span class="font-medium">Inventory</span>
+                </a>
+                <a href="/shipping/" class="flex items-center space-x-3 p-3 rounded-lg text-gray-700 smooth-transition hover:bg-gray-100 hover-lift ripple-effect">
+                    <i class="fas fa-shipping-fast w-5 text-center"></i>
+                    <span class="font-medium">Shipping Tracking</span>
+                </a>
+                <a href="/salesforecasting/" class="flex items-center space-x-3 p-3 rounded-lg text-gray-700 smooth-transition hover:bg-gray-100 hover-lift ripple-effect">
+                    <i class="fas fa-chart-bar w-5 text-center"></i>
+                    <span class="font-medium">Sales Forecasting</span>
+                </a>
+                <a href="/integrasi/" class="flex items-center space-x-3 p-3 rounded-lg text-gray-700 smooth-transition hover:bg-gray-100 hover-lift ripple-effect">
+                    <i class="fas fa-store w-5 text-center"></i>
+                    <span class="font-medium">Integrasi</span>
+                </a>
+            </nav>
+            
+            <div class="p-4 border-t border-gray-100/50">
+                <div class="flex items-center space-x-3 p-3 rounded-lg bg-gradient-to-r from-blue-50 to-gray-50 hover-lift smooth-transition">
+                    <div class="w-8 h-8 rounded-full bg-gradient-to-r from-blue-100 to-blue-200 flex items-center justify-center">
+                        <i class="fas fa-user text-blue-600 text-sm"></i>
+                    </div>
+                    <div>
+                        <p class="text-sm font-medium">Admin</p>
+                        <p class="text-xs text-gray-500">admin@flashboard.com</p>
+                    </div>
+                </div>
+            </div>
+        </aside>
+        
+        <!-- Main Content -->
+        <div class="main-wrapper">
+            <!-- Header with AI Assistant in top right -->
+            <header class="sticky top-0 z-20 bg-white/80 glass-effect border-b border-gray-200/50 px-8 py-4 shrink-0">
+                <div class="flex justify-between items-center">
+                    <div>
+                        <h2 class="text-2xl font-bold text-gray-800 initial-animate">Dashboard Overview</h2>
+                        <p class="text-gray-600 initial-animate" style="animation-delay: 0.1s">Ringkasan performa bisnis Anda hari ini</p>
+                    </div>
+                    <div class="flex items-center space-x-6">
+                        <!-- AI Assistant Button - Enhanced -->
+                        <div class="relative">
+                            <button id="aiAssistantBtn" class="flex items-center space-x-2 px-4 py-2 rounded-lg bg-gradient-to-r from-blue-500 to-blue-600 text-white smooth-transition hover:from-blue-600 hover:to-blue-700 hover-lift shadow-md relative overflow-hidden group">
+                                <i class="fas fa-robot"></i>
+                                <span class="font-medium">AI Assistant</span>
+                                <div class="absolute inset-0 bg-gradient-to-r from-cyan-500 to-blue-500 opacity-0 group-hover:opacity-20 smooth-transition"></div>
+                            </button>
+                            
+                            <!-- Enhanced AI Assistant Panel -->
+                            <div id="aiAssistantPanel" class="fixed right-8 top-20 w-96 bg-white rounded-xl shadow-2xl border border-gray-200 hidden animate-fade-in-up z-50 overflow-hidden" style="height: 600px;">
+                                <!-- AI Assistant Header -->
+                                <div class="bg-gradient-to-r from-blue-500 to-blue-600 p-4 text-white">
+                                    <div class="flex justify-between items-center">
+                                        <div class="flex items-center space-x-3">
+                                            <div class="w-10 h-10 rounded-full bg-white/20 flex items-center justify-center">
+                                                <i class="fas fa-robot text-xl"></i>
+                                            </div>
+                                            <div>
+                                                <h3 class="font-bold text-lg">AI Assistant</h3>
+                                                <p class="text-sm text-blue-100">Siap membantu analisis bisnis Anda</p>
+                                            </div>
+                                        </div>
+                                        <div class="flex items-center space-x-2">
+                                            <button class="w-8 h-8 rounded-full bg-white/20 flex items-center justify-center hover:bg-white/30 smooth-transition">
+                                                <i class="fas fa-cog"></i>
+                                            </button>
+                                            <button id="closeAIPanel" class="w-8 h-8 rounded-full bg-white/20 flex items-center justify-center hover:bg-white/30 smooth-transition">
+                                                <i class="fas fa-times"></i>
+                                            </button>
+                                        </div>
+                                    </div>
+                                    
+                                    <!-- AI Mode Selector -->
+                                    <div class="flex space-x-2 mt-4">
+                                        <button class="ai-mode-btn active flex-1 py-2 rounded-lg bg-white/20 text-sm font-medium smooth-transition hover:bg-white/30" data-mode="dashboard">
+                                            <i class="fas fa-tachometer-alt mr-1"></i> Dashboard
+                                        </button>
+                                        <button class="ai-mode-btn flex-1 py-2 rounded-lg bg-white/10 text-sm font-medium smooth-transition hover:bg-white/20" data-mode="sales">
+                                            <i class="fas fa-chart-line mr-1"></i> Penjualan
+                                        </button>
+                                        <button class="ai-mode-btn flex-1 py-2 rounded-lg bg-white/10 text-sm font-medium smooth-transition hover:bg-white/20" data-mode="inventory">
+                                            <i class="fas fa-warehouse mr-1"></i> Inventory
+                                        </button>
+                                    </div>
+                                </div>
+                                
+                                <!-- AI Assistant Content -->
+                                <div class="flex flex-col h-full">
+                                    <!-- AI Chat Container -->
+                                    <div id="aiChatContainer" class="flex-1 overflow-y-auto p-4 space-y-3" style="max-height: 380px;">
+                                        <!-- Initial AI Message -->
+                                        <div class="ai-message assistant">
+                                            <div class="flex items-start space-x-2">
+                                                <div class="w-6 h-6 rounded-full bg-blue-100 flex items-center justify-center flex-shrink-0 mt-1">
+                                                    <i class="fas fa-robot text-blue-600 text-xs"></i>
+                                                </div>
+                                                <div>
+                                                    <p class="font-medium text-gray-800 mb-1">Halo! Saya AI Assistant untuk dashboard Anda.</p>
+                                                    <p class="text-gray-700 text-sm">Saya dapat menganalisis performa bisnis, memberikan insight tentang penjualan, inventory, dan membantu pengambilan keputusan. Apa yang bisa saya bantu hari ini?</p>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        
+                                        <!-- Sample conversation -->
+                                        <div class="ai-message user">
+                                            <div class="flex items-center justify-between">
+                                                <p>Produk mana yang paling untung bulan ini?</p>
+                                                <i class="fas fa-user ml-2"></i>
+                                            </div>
+                                        </div>
+                                        
+                                        <div class="ai-message assistant">
+                                            <div class="flex items-start space-x-2">
+                                                <div class="w-6 h-6 rounded-full bg-blue-100 flex items-center justify-center flex-shrink-0 mt-1">
+                                                    <i class="fas fa-robot text-blue-600 text-xs"></i>
+                                                </div>
+                                                <div>
+                                                    <p class="font-medium text-gray-800 mb-1">Analisis Keuntungan Produk</p>
+                                                    <p class="text-gray-700 text-sm">Berdasarkan data 30 hari terakhir, <strong>Produk X</strong> memberikan keuntungan tertinggi dengan margin 42% (Rp 18.5 juta). Diikuti oleh Produk Y (31%) dan Produk Z (28%).</p>
+                                                    <div class="mt-2 flex space-x-2">
+                                                        <button class="text-xs px-2 py-1 bg-blue-100 text-blue-700 rounded smooth-transition hover:bg-blue-200">Lihat Detail</button>
+                                                        <button class="text-xs px-2 py-1 bg-green-100 text-green-700 rounded smooth-transition hover:bg-green-200">Bandingkan</button>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    
+                                    <!-- AI Quick Actions - Container bisa di-scroll dengan scrollbar jelas -->
+                                    <div class="p-4 border-t border-gray-200">
+                                        <p class="text-sm font-medium text-gray-700 mb-2">Pertanyaan Cepat Dashboard:</p>
+                                        <div class="ai-quick-questions-container">
+                                            <button class="ai-quick-question">
+                                                Analisis penjualan hari ini
+                                            </button>
+                                            <button class="ai-quick-question">
+                                                Produk stok kritis
+                                            </button>
+                                            <button class="ai-quick-question">
+                                                Performa marketplace
+                                            </button>
+                                            <button class="ai-quick-question">
+                                                Prediksi penjualan besok
+                                            </button>
+                                            <button class="ai-quick-question">
+                                                Margin terbaik
+                                            </button>
+                                            <button class="ai-quick-question">
+                                                Rekomendasi optimasi
+                                            </button>
+                                            <button class="ai-quick-question">
+                                                Trend penjualan 7 hari
+                                            </button>
+                                            <button class="ai-quick-question">
+                                                Inventory health check
+                                            </button>
+                                        </div>
+                                    </div>
+                                    
+                                    <!-- AI Input -->
+                                    <div class="p-4 border-t border-gray-200 bg-gray-50">
+                                        <div class="relative">
+                                            <input type="text" id="aiQuestionInput" placeholder="Tanyakan apapun tentang dashboard..." class="w-full p-3 pr-12 rounded-lg bg-white border border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent">
+                                            <button id="sendAIQuestion" class="absolute right-3 top-3 text-blue-600 hover:text-blue-800 smooth-transition">
+                                                <i class="fas fa-paper-plane"></i>
+                                            </button>
+                                        </div>
+                                        <p class="text-xs text-gray-500 mt-2 text-center">
+                                            <i class="fas fa-shield-alt mr-1"></i> Data Anda aman dan dianalisis secara real-time
+                                        </p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="flex items-center space-x-4">
+                            <!-- Logout Button di Navbar -->
+                            <form action="/logout/" method="post" class="ml-2">
+                                <button type="submit" class="nav-logout-btn flex items-center space-x-2 text-sm font-medium ripple-effect">
+                                    <i class="fas fa-sign-out-alt"></i>
+                                    <span>Logout</span>
+                                </button>
+                            </form>
+                            
+                            <div class="relative">
+                                <i class="fas fa-bell text-gray-500 text-xl hover:text-blue-500 smooth-transition cursor-pointer ripple-effect" id="notificationBell"></i>
+                                <span class="absolute -top-1 -right-1 w-3 h-3 bg-red-500 rounded-full animate-pulse-soft"></span>
+                            </div>
+                            <!-- TANGGAL SEDERHANA - HANYA TANGGAL -->
+                            <div class="text-sm text-gray-600">
+                                <span id="currentDate" class="font-medium">Selasa, 2 Januari 2026</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </header>
+            
+            <!-- Content -->
+            <div class="content-wrapper">
+                <!-- Bagian "Hari Ini" - Dashboard Overview -->
+                <section class="force-render">
+                    <div class="flex items-center justify-between mb-6">
+                        <h3 class="text-lg font-semibold text-gray-800">Ringkasan Performa Hari Ini</h3>
+                        <div class="flex items-center space-x-4">
+                            <div class="flex space-x-2">
+                                <button class="dashboard-filter active px-4 py-2 rounded-lg text-sm font-medium ripple-effect" data-filter="all">Semua</button>
+                                <button class="dashboard-filter px-4 py-2 rounded-lg text-sm font-medium bg-gray-100 ripple-effect" data-filter="critical">Kritis</button>
+                                <button class="dashboard-filter px-4 py-2 rounded-lg text-sm font-medium bg-gray-100 ripple-effect" data-filter="performance">Performa</button>
+                                <button class="dashboard-filter px-4 py-2 rounded-lg text-sm font-medium bg-gray-100 ripple-effect" data-filter="sales">Penjualan</button>
+                            </div>
+                            <button class="text-blue-600 text-sm font-medium flex items-center space-x-1 smooth-transition hover:text-blue-800 group" id="refreshDashboardBtn">
+                                <i class="fas fa-sync-alt mr-1"></i> <span>Perbarui</span>
+                            </button>
+                        </div>
+                    </div>
+                    
+                    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
+                        <!-- Total Pendapatan -->
+                        <div class="bg-white rounded-xl shadow-sm border border-gray-200 p-5 hover-lift gradient-blue initial-animate" style="animation-delay: 0.1s">
+                            <div class="flex justify-between items-start">
+                                <div>
+                                    <p class="text-sm text-gray-600">Total Pendapatan</p>
+                                    <p class="text-2xl font-bold text-gray-800 mt-1">Rp 42.8Jt</p>
+                                    <div class="flex items-center mt-2">
+                                        <span class="text-xs text-green-600 data-trend-up mr-2">8.5%</span>
+                                        <span class="text-xs text-gray-600">vs minggu lalu</span>
+                                    </div>
+                                </div>
+                                <div class="w-12 h-12 rounded-full bg-gradient-to-r from-blue-100 to-blue-200 flex items-center justify-center">
+                                    <i class="fas fa-money-bill-wave text-blue-600 text-xl"></i>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <!-- Total Pesanan -->
+                        <div class="bg-white rounded-xl shadow-sm border border-gray-200 p-5 hover-lift gradient-green initial-animate" style="animation-delay: 0.2s">
+                            <div class="flex justify-between items-start">
+                                <div>
+                                    <p class="text-sm text-gray-600">Total Pesanan</p>
+                                    <p class="text-2xl font-bold text-gray-800 mt-1">364</p>
+                                    <div class="flex items-center mt-2">
+                                        <span class="text-xs text-green-600 data-trend-up mr-2">12%</span>
+                                        <span class="text-xs text-gray-600">vs kemarin</span>
+                                    </div>
+                                </div>
+                                <div class="w-12 h-12 rounded-full bg-gradient-to-r from-green-100 to-green-200 flex items-center justify-center">
+                                    <i class="fas fa-shopping-cart text-green-600 text-xl"></i>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <!-- Rata-rata Nilai Order -->
+                        <div class="bg-white rounded-xl shadow-sm border border-gray-200 p-5 hover-lift gradient-purple initial-animate" style="animation-delay: 0.3s">
+                            <div class="flex justify-between items-start">
+                                <div>
+                                    <p class="text-sm text-gray-600">Rata-rata Nilai Order</p>
+                                    <p class="text-2xl font-bold text-gray-800 mt-1">Rp 117.600</p>
+                                    <div class="flex items-center mt-2">
+                                        <span class="text-xs text-green-600 data-trend-up mr-2">3.2%</span>
+                                        <span class="text-xs text-gray-600">naik Rp 3.650</span>
+                                    </div>
+                                </div>
+                                <div class="w-12 h-12 rounded-full bg-gradient-to-r from-purple-100 to-purple-200 flex items-center justify-center">
+                                    <i class="fas fa-chart-bar text-purple-600 text-xl"></i>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <!-- Produk Stok Kritis -->
+                        <div class="bg-white rounded-xl shadow-sm border border-gray-200 p-5 hover-lift gradient-red initial-animate" style="animation-delay: 0.4s">
+                            <div class="flex justify-between items-start">
+                                <div>
+                                    <p class="text-sm text-gray-600">Produk Stok Kritis</p>
+                                    <p class="text-2xl font-bold text-gray-800 mt-1">3</p>
+                                    <div class="flex items-center mt-2">
+                                        <span class="text-xs text-red-600 data-trend-down mr-2">+1</span>
+                                        <span class="text-xs text-gray-600">dari kemarin</span>
+                                    </div>
+                                </div>
+                                <div class="w-12 h-12 rounded-full bg-gradient-to-r from-red-100 to-red-200 flex items-center justify-center">
+                                    <i class="fas fa-exclamation-triangle text-red-600 text-xl"></i>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+                
+                <!-- Prioritas Hari Ini - Horizontal Scroll -->
+                <section class="animate-on-scroll delay-100">
+                    <div class="flex items-center justify-between mb-4">
+                        <h3 class="text-lg font-semibold text-gray-800">Prioritas Hari Ini</h3>
+                        <div class="flex items-center space-x-2">
+                            <span class="text-xs px-3 py-1 bg-blue-100 text-blue-700 rounded-full animate-pulse-soft">3 Prioritas</span>
+                            <button class="text-xs text-blue-600 hover:text-blue-800 smooth-transition">
+                                <i class="fas fa-plus mr-1"></i> Tambah
+                            </button>
+                        </div>
+                    </div>
+                    
+                    <div class="horizontal-scroll-container">
+                        <!-- Card 1: Stok Produk A -->
+                        <div class="horizontal-card bg-white rounded-xl shadow-sm border border-red-100 p-5 hover-lift gradient-red initial-animate" style="animation-delay: 0.2s">
+                            <div class="flex justify-between items-start h-full">
+                                <div class="flex-1">
+                                    <div class="flex items-center space-x-2 mb-3">
+                                        <span class="status-indicator status-critical"></span>
+                                        <h4 class="font-semibold text-gray-800">Stok Produk A Tinggal 5 Unit</h4>
+                                    </div>
+                                    <p class="text-gray-600 text-sm mb-4">
+                                        <span class="font-medium">Perlu diisi ulang dalam 2 hari.</span> 
+                                        Berdasarkan data penjualan 7 hari terakhir, produk ini terjual rata-rata 3 unit/hari.
+                                    </p>
+                                    
+                                    <div class="space-y-2 mb-4">
+                                        <div class="flex justify-between text-sm">
+                                            <span class="text-gray-600">Tingkat Stok</span>
+                                            <span class="font-medium text-red-600">12%</span>
+                                        </div>
+                                        <div class="progress-bar">
+                                            <div class="progress-bar-fill bg-gradient-to-r from-red-500 to-red-400" style="width: 12%"></div>
+                                        </div>
+                                    </div>
+                                    
+                                    <div class="flex items-center justify-between mt-auto">
+                                        <div class="flex items-center space-x-2">
+                                            <i class="fas fa-history text-gray-400 text-sm"></i>
+                                            <span class="text-xs text-gray-500">Terakhir restok: 5 hari lalu</span>
+                                        </div>
+                                        <button class="text-blue-600 text-sm font-medium flex items-center space-x-1 smooth-transition hover:text-blue-800 group">
+                                            <span>Atur Restok</span>
+                                            <i class="fas fa-chevron-right text-xs group-hover:translate-x-1 smooth-transition"></i>
+                                        </button>
+                                    </div>
+                                </div>
+                                <div class="w-14 h-14 rounded-full bg-gradient-to-r from-red-100 to-red-200 flex items-center justify-center ml-4 flex-shrink-0 animate-pulse-soft">
+                                    <i class="fas fa-exclamation-triangle text-red-500 text-xl"></i>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <!-- Card 2: Margin Produk C -->
+                        <div class="horizontal-card bg-white rounded-xl shadow-sm border border-yellow-100 p-5 hover-lift gradient-orange initial-animate" style="animation-delay: 0.3s">
+                            <div class="flex justify-between items-start h-full">
+                                <div class="flex-1">
+                                    <div class="flex items-center space-x-2 mb-3">
+                                        <span class="status-indicator status-warning"></span>
+                                        <h4 class="font-semibold text-gray-800">Margin Produk C Turun 13%</h4>
+                                    </div>
+                                    <p class="text-gray-600 text-sm mb-4">
+                                        <span class="font-medium">Karena biaya pengiriman meningkat 18%.</span> 
+                                        Analisis menunjukkan kenaikan terjadi pada pengiriman ke wilayah luar Jawa.
+                                    </p>
+                                    
+                                    <div class="space-y-2 mb-4">
+                                        <div class="flex justify-between text-sm">
+                                            <span class="text-gray-600">Margin Saat Ini</span>
+                                            <span class="font-medium text-yellow-600">24%</span>
+                                        </div>
+                                        <div class="progress-bar">
+                                            <div class="progress-bar-fill bg-gradient-to-r from-yellow-500 to-yellow-400" style="width: 24%"></div>
+                                        </div>
+                                    </div>
+                                    
+                                    <div class="flex items-center justify-between mt-auto">
+                                        <div class="flex items-center space-x-2">
+                                            <i class="fas fa-chart-line text-gray-400 text-sm"></i>
+                                            <span class="text-xs text-gray-500">Turun dari 37% bulan lalu</span>
+                                        </div>
+                                        <button class="text-blue-600 text-sm font-medium flex items-center space-x-1 smooth-transition hover:text-blue-800 group">
+                                            <span>Analisis Biaya</span>
+                                            <i class="fas fa-chevron-right text-xs group-hover:translate-x-1 smooth-transition"></i>
+                                        </button>
+                                    </div>
+                                </div>
+                                <div class="w-14 h-14 rounded-full bg-gradient-to-r from-yellow-100 to-yellow-200 flex items-center justify-center ml-4 flex-shrink-0">
+                                    <i class="fas fa-chart-line text-yellow-500 text-xl"></i>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <!-- Card 3: Performa Tokopedia -->
+                        <div class="horizontal-card bg-white rounded-xl shadow-sm border border-green-100 p-5 hover-lift gradient-green initial-animate" style="animation-delay: 0.4s">
+                            <div class="flex justify-between items-start h-full">
+                                <div class="flex-1">
+                                    <div class="flex items-center space-x-2 mb-3">
+                                        <span class="status-indicator status-good"></span>
+                                        <h4 class="font-semibold text-gray-800">Performa Tokopedia +18%</h4>
+                                    </div>
+                                    <p class="text-gray-600 text-sm mb-4">
+                                        <span class="font-medium">Penjualan meningkat signifikan.</span> 
+                                        Produk X dan Y menyumbang 72% dari pertumbuhan. Konversi naik dari 2.8% ke 3.4%.
+                                    </p>
+                                    
+                                    <div class="space-y-2 mb-4">
+                                        <div class="flex justify-between text-sm">
+                                            <span class="text-gray-600">Pertumbuhan Mingguan</span>
+                                            <span class="font-medium text-green-600 data-trend-up">18%</span>
+                                        </div>
+                                        <div class="progress-bar">
+                                            <div class="progress-bar-fill bg-gradient-to-r from-green-500 to-green-400" style="width: 65%"></div>
+                                        </div>
+                                    </div>
+                                    
+                                    <div class="flex items-center justify-between mt-auto">
+                                        <div class="flex items-center space-x-2">
+                                            <i class="fas fa-chart-bar text-gray-400 text-sm"></i>
+                                            <span class="text-xs text-gray-600">98 pesanan minggu ini</span>
+                                        </div>
+                                        <button class="text-blue-600 text-sm font-medium flex items-center space-x-1 smooth-transition hover:text-blue-800 group">
+                                            <span>Lihat Analisis</span>
+                                            <i class="fas fa-chevron-right text-xs group-hover:translate-x-1 smooth-transition"></i>
+                                        </button>
+                                    </div>
+                                </div>
+                                <div class="w-14 h-14 rounded-full bg-gradient-to-r from-green-100 to-green-200 flex items-center justify-center ml-4 flex-shrink-0">
+                                    <i class="fas fa-store text-green-500 text-xl"></i>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <!-- Card 4: Website Traffic -->
+                        <div class="horizontal-card bg-white rounded-xl shadow-sm border border-blue-100 p-5 hover-lift gradient-blue initial-animate" style="animation-delay: 0.5s">
+                            <div class="flex justify-between items-start h-full">
+                                <div class="flex-1">
+                                    <div class="flex items-center space-x-2 mb-3">
+                                        <span class="status-indicator status-warning"></span>
+                                        <h4 class="font-semibold text-gray-800">Traffic Website Turun 15%</h4>
+                                    </div>
+                                    <p class="text-gray-600 text-sm mb-4">
+                                        <span class="font-medium">Konversi tetap stabil di 2.8%.</span> 
+                                        Penurunan terjadi sejak 5 hari lalu. Perlu evaluasi strategi SEO dan marketing.
+                                    </p>
+                                    
+                                    <div class="space-y-2 mb-4">
+                                        <div class="flex justify-between text-sm">
+                                            <span class="text-gray-600">Penurunan Traffic</span>
+                                            <span class="font-medium text-blue-600 data-trend-down">15%</span>
+                                        </div>
+                                        <div class="progress-bar">
+                                            <div class="progress-bar-fill bg-gradient-to-r from-blue-500 to-blue-400" style="width: 45%"></div>
+                                        </div>
+                                    </div>
+                                    
+                                    <div class="flex items-center justify-between mt-auto">
+                                        <div class="flex items-center space-x-2">
+                                            <i class="fas fa-users text-gray-400 text-sm"></i>
+                                            <span class="text-xs text-gray-600">1,245 pengunjung (7 hari)</span>
+                                        </div>
+                                        <button class="text-blue-600 text-sm font-medium flex items-center space-x-1 smooth-transition hover:text-blue-800 group">
+                                            <span>Analisis SEO</span>
+                                            <i class="fas fa-chevron-right text-xs group-hover:translate-x-1 smooth-transition"></i>
+                                        </button>
+                                    </div>
+                                </div>
+                                <div class="w-14 h-14 rounded-full bg-gradient-to-r from-blue-100 to-blue-200 flex items-center justify-center ml-4 flex-shrink-0">
+                                    <i class="fas fa-globe text-blue-500 text-xl"></i>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+                
+                <!-- Penjualan & Performa Marketplace -->
+                <div class="grid grid-cols-1 lg:grid-cols-2 gap-8 mt-8">
+                    <!-- Analisis Penjualan - DIPERBAIKI -->
+                    <section class="animate-on-scroll delay-200">
+                        <div class="flex items-center justify-between mb-4">
+                            <h3 class="text-lg font-semibold text-gray-800">Analisis Penjualan 7 Hari</h3>
+                            <div class="flex items-center space-x-2">
+                                <span class="text-xs px-2 py-1 bg-blue-100 text-blue-700 rounded-full animate-pulse-soft">Real-time</span>
+                            </div>
+                        </div>
+                        
+                        <div class="bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden hover-lift force-render grid-section-card">
+                            <div class="p-5 border-b border-gray-100 gradient-blue">
+                                <div class="flex items-center justify-between">
+                                    <div class="flex items-center space-x-3">
+                                        <div class="w-10 h-10 rounded-full bg-gradient-to-r from-blue-100 to-blue-200 flex items-center justify-center animate-pulse-soft">
+                                            <i class="fas fa-chart-line text-blue-600"></i>
+                                        </div>
+                                        <div>
+                                            <h4 class="font-bold text-gray-800">Trend Penjualan Harian</h4>
+                                            <p class="text-sm text-gray-600">7 hari terakhir vs periode sebelumnya</p>
+                                        </div>
+                                    </div>
+                                    <div class="text-right">
+                                        <p class="text-2xl font-bold text-gray-800">+8.5%</p>
+                                        <p class="text-xs text-gray-600">Pertumbuhan</p>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="p-5 card-content-wrapper">
+                                <div class="card-body-scrollable">
+                                    <div class="space-y-4 mb-6">
+                                        <div>
+                                            <div class="flex justify-between items-center mb-1">
+                                                <span class="text-sm font-medium text-gray-700">Hari ini</span>
+                                                <span class="text-sm font-medium text-green-600">Rp 6.8 juta</span>
+                                            </div>
+                                            <div class="progress-bar">
+                                                <div class="progress-bar-fill bg-gradient-to-r from-green-500 to-green-400" style="width: 95%"></div>
+                                            </div>
+                                            <p class="text-xs text-gray-600 mt-1">Tinggi 15% dari rata-rata harian</p>
+                                        </div>
+                                        
+                                        <div>
+                                            <div class="flex justify-between items-center mb-1">
+                                                <span class="text-sm font-medium text-gray-700">Kemarin</span>
+                                                <span class="text-sm font-medium text-blue-600">Rp 5.9 juta</span>
+                                            </div>
+                                            <div class="progress-bar">
+                                                <div class="progress-bar-fill bg-gradient-to-r from-blue-500 to-blue-400" style="width: 82%"></div>
+                                            </div>
+                                            <p class="text-xs text-gray-600 mt-1">Standar, sesuai prediksi</p>
+                                        </div>
+                                        
+                                        <div>
+                                            <div class="flex justify-between items-center mb-1">
+                                                <span class="text-sm font-medium text-gray-700">2 hari lalu</span>
+                                                <span class="text-sm font-medium text-red-600">Rp 4.2 juta</span>
+                                            </div>
+                                            <div class="progress-bar">
+                                                <div class="progress-bar-fill bg-gradient-to-r from-red-500 to-red-400" style="width: 58%"></div>
+                                            </div>
+                                            <p class="text-xs text-gray-600 mt-1">Rendah 28% karena gangguan sistem</p>
+                                        </div>
+                                    </div>
+                                    
+                                    <div class="grid grid-cols-3 gap-4 mb-6">
+                                        <div class="bg-blue-50 p-3 rounded-lg hover-lift smooth-transition gpu-accelerate">
+                                            <p class="text-xs font-medium text-gray-700 mb-1">Rata-rata Harian</p>
+                                            <p class="text-lg font-bold text-gray-800">Rp 5.8Jt</p>
+                                            <p class="text-xs text-gray-600">Naik 12%</p>
+                                        </div>
+                                        
+                                        <div class="bg-green-50 p-3 rounded-lg hover-lift smooth-transition gpu-accelerate">
+                                            <p class="text-xs font-medium text-gray-700 mb-1">Pesanan/Hari</p>
+                                            <p class="text-lg font-bold text-gray-800">52</p>
+                                            <p class="text-xs text-gray-600">Naik 8%</p>
+                                        </div>
+                                        
+                                        <div class="bg-purple-50 p-3 rounded-lg hover-lift smooth-transition gpu-accelerate">
+                                            <p class="text-xs font-medium text-gray-700 mb-1">Konversi</p>
+                                            <p class="text-lg font-bold text-gray-800">3.2%</p>
+                                            <p class="text-xs text-gray-600">Stabil</p>
+                                        </div>
+                                    </div>
+                                </div>
+                                
+                                <div class="mt-6 pt-4 border-t border-gray-200">
+                                    <p class="text-sm text-gray-700">
+                                        <i class="fas fa-lightbulb text-blue-500 mr-2"></i>
+                                        <span class="font-medium">Insight:</span> Penjualan menunjukkan tren positif dengan peningkatan 8.5% minggu ini. Hari ini mencapai titik tertinggi dengan Rp 6.8 juta. Rekomendasi: pertahankan momentum dengan promosi targeted.
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+                    </section>
+                    
+                    <!-- Performa Marketplace - DIPERBAIKI -->
+                    <section class="animate-on-scroll delay-300">
+                        <div class="flex items-center justify-between mb-4">
+                            <h3 class="text-lg font-semibold text-gray-800">Performa Marketplace</h3>
+                            <div class="flex items-center space-x-2">
+                                <span class="text-xs px-2 py-1 bg-purple-100 text-purple-700 rounded-full">Mingguan</span>
+                            </div>
+                        </div>
+                        
+                        <div class="bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden hover-lift force-render grid-section-card">
+                            <div class="p-5 border-b border-gray-100 gradient-purple">
+                                <div class="flex items-center justify-between">
+                                    <div class="flex items-center space-x-3">
+                                        <div class="w-10 h-10 rounded-full bg-gradient-to-r from-purple-100 to-purple-200 flex items-center justify-center animate-pulse-soft">
+                                            <i class="fas fa-shopping-cart text-purple-600"></i>
+                                        </div>
+                                        <div>
+                                            <h4 class="font-bold text-gray-800">Distribusi Penjualan per Platform</h4>
+                                            <p class="text-sm text-gray-600">7 hari terakhir vs periode sebelumnya</p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="p-5 card-content-wrapper">
+                                <div class="card-body-scrollable">
+                                    <div class="space-y-4 mb-6">
+                                        <div class="flex items-center justify-between p-3 bg-gray-50 rounded-lg hover-lift smooth-transition gpu-accelerate">
+                                            <div class="flex items-center space-x-3">
+                                                <div class="w-10 h-10 rounded-lg bg-gradient-to-r from-orange-100 to-orange-200 flex items-center justify-center">
+                                                    <i class="fas fa-store text-orange-600"></i>
+                                                </div>
+                                                <div>
+                                                    <p class="font-medium text-gray-800">Shopee</p>
+                                                    <p class="text-xs text-gray-600">154 pesanan (42% dari total)</p>
+                                                </div>
+                                            </div>
+                                            <div class="text-right">
+                                                <p class="text-lg font-bold text-green-600 data-trend-up">12.5%</p>
+                                                <p class="text-xs text-gray-600">Rp 18.2Jt pendapatan</p>
+                                            </div>
+                                        </div>
+                                        
+                                        <div class="flex items-center justify-between p-3 bg-gray-50 rounded-lg hover-lift smooth-transition gpu-accelerate">
+                                            <div class="flex items-center space-x-3">
+                                                <div class="w-10 h-10 rounded-lg bg-gradient-to-r from-green-100 to-green-200 flex items-center justify-center">
+                                                    <i class="fas fa-store text-green-600"></i>
+                                                </div>
+                                                <div>
+                                                    <p class="font-medium text-gray-800">Tokopedia</p>
+                                                    <p class="text-xs text-gray-600">98 pesanan (27% dari total)</p>
+                                                </div>
+                                            </div>
+                                            <div class="text-right">
+                                                <p class="text-lg font-bold text-green-600 data-trend-up">8.2%</p>
+                                                <p class="text-xs text-gray-600">Rp 12.1Jt pendapatan</p>
+                                            </div>
+                                        </div>
+                                        
+                                        <div class="flex items-center justify-between p-3 bg-gray-50 rounded-lg hover-lift smooth-transition gpu-accelerate">
+                                            <div class="flex items-center space-x-3">
+                                                <div class="w-10 h-10 rounded-lg bg-gradient-to-r from-red-100 to-red-200 flex items-center justify-center">
+                                                    <i class="fas fa-store text-red-600"></i>
+                                                </div>
+                                                <div>
+                                                    <p class="font-medium text-gray-800">Lazada</p>
+                                                    <p class="text-xs text-gray-600">67 pesanan (19% dari total)</p>
+                                                </div>
+                                            </div>
+                                            <div class="text-right">
+                                                <p class="text-lg font-bold text-green-600 data-trend-up">5.7%</p>
+                                                <p class="text-xs text-gray-600">Rp 5.7Jt pendapatan</p>
+                                            </div>
+                                        </div>
+                                        
+                                        <div class="flex items-center justify-between p-3 bg-gray-50 rounded-lg hover-lift smooth-transition gpu-accelerate">
+                                            <div class="flex items-center space-x-3">
+                                                <div class="w-10 h-10 rounded-lg bg-gradient-to-r from-pink-100 to-pink-200 flex items-center justify-center">
+                                                    <i class="fas fa-globe text-pink-600"></i>
+                                                </div>
+                                                <div>
+                                                    <p class="font-medium text-gray-800">Website Sendiri</p>
+                                                    <p class="text-xs text-gray-600">45 pesanan (12% dari total)</p>
+                                                </div>
+                                            </div>
+                                            <div class="text-right">
+                                                <p class="text-lg font-bold text-red-600 data-trend-down">3.1%</p>
+                                                <p class="text-xs text-gray-600">Rp 6.8Jt pendapatan</p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    
+                                    <div class="grid grid-cols-2 gap-4 mb-6">
+                                        <div class="bg-blue-50 p-3 rounded-lg hover-lift smooth-transition gpu-accelerate">
+                                            <p class="text-xs font-medium text-gray-700 mb-1">Konversi Tertinggi</p>
+                                            <p class="text-lg font-bold text-gray-800">4.2%</p>
+                                            <p class="text-xs text-gray-600">Tokopedia (naik 0.8%)</p>
+                                        </div>
+                                        
+                                        <div class="bg-green-50 p-3 rounded-lg hover-lift smooth-transition gpu-accelerate">
+                                            <p class="text-xs font-medium text-gray-700 mb-1">Rata-rata Nilai Order</p>
+                                            <p class="text-lg font-bold text-gray-800">Rp 151.200</p>
+                                            <p class="text-xs text-gray-600">Website sendiri (tertinggi)</p>
+                                        </div>
+                                    </div>
+                                </div>
+                                
+                                <div class="pt-4 border-t border-gray-200">
+                                    <p class="text-sm text-gray-700">
+                                        <i class="fas fa-chart-line text-purple-500 mr-2"></i>
+                                        <span class="font-medium">Analisis:</span> Shopee mendominasi volume penjualan (42%), namun Tokopedia memiliki konversi tertinggi. Website sendiri menghasilkan nilai order rata-rata tertinggi namun mengalami penurunan trafik.
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+                    </section>
+                </div>
+                
+                <!-- Analisis Produk & Inventory -->
+                <div class="grid grid-cols-1 lg:grid-cols-2 gap-8 mt-8">
+                    <!-- Analisis Produk - DIPERBAIKI -->
+                    <section class="animate-on-scroll delay-400">
+                        <div class="flex items-center justify-between mb-4">
+                            <h3 class="text-lg font-semibold text-gray-800">Analisis Performa Produk</h3>
+                            <span class="text-xs px-3 py-1 bg-cyan-100 text-cyan-700 rounded-full animate-pulse-soft">Berdasarkan Data</span>
+                        </div>
+                        
+                        <div class="bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden hover-lift force-render grid-section-card">
+                            <div class="p-5 border-b border-gray-100 gradient-cyan">
+                                <div class="flex items-center space-x-3">
+                                    <div class="w-10 h-10 rounded-full bg-gradient-to-r from-cyan-100 to-cyan-200 flex items-center justify-center animate-pulse-soft">
+                                        <i class="fas fa-boxes text-cyan-600"></i>
+                                    </div>
+                                    <div>
+                                        <h4 class="font-bold text-gray-800">Top 5 Produk Terlaris</h4>
+                                        <p class="text-sm text-gray-600">30 hari terakhir berdasarkan pendapatan</p>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="p-5 card-content-wrapper">
+                                <div class="card-body-scrollable">
+                                    <div class="space-y-4 mb-6">
+                                        <div class="flex items-center justify-between p-3 bg-gray-50 rounded-lg hover-lift smooth-transition gpu-accelerate">
+                                            <div class="flex items-center space-x-3">
+                                                <div class="w-10 h-10 rounded-lg bg-gradient-to-r from-blue-100 to-blue-200 flex items-center justify-center">
+                                                    <i class="fas fa-crown text-blue-600"></i>
+                                                </div>
+                                                <div>
+                                                    <p class="font-medium text-gray-800">Produk X</p>
+                                                    <p class="text-xs text-gray-600">152 terjual • Margin 42%</p>
+                                                </div>
+                                            </div>
+                                            <div class="text-right">
+                                                <p class="text-lg font-bold text-green-600">Rp 18.5Jt</p>
+                                                <p class="text-xs text-gray-600">Pendapatan</p>
+                                            </div>
+                                        </div>
+                                        
+                                        <div class="flex items-center justify-between p-3 bg-gray-50 rounded-lg hover-lift smooth-transition gpu-accelerate">
+                                            <div class="flex items-center space-x-3">
+                                                <div class="w-10 h-10 rounded-lg bg-gradient-to-r from-green-100 to-green-200 flex items-center justify-center">
+                                                    <i class="fas fa-medal text-green-600"></i>
+                                                </div>
+                                                <div>
+                                                    <p class="font-medium text-gray-800">Produk Y</p>
+                                                    <p class="text-xs text-gray-600">98 terjual • Margin 31%</p>
+                                                </div>
+                                            </div>
+                                            <div class="text-right">
+                                                <p class="text-lg font-bold text-green-600">Rp 11.2Jt</p>
+                                                <p class="text-xs text-gray-600">Pendapatan</p>
+                                            </div>
+                                        </div>
+                                        
+                                        <div class="flex items-center justify-between p-3 bg-gray-50 rounded-lg hover-lift smooth-transition gpu-accelerate">
+                                            <div class="flex items-center space-x-3">
+                                                <div class="w-10 h-10 rounded-lg bg-gradient-to-r from-purple-100 to-purple-200 flex items-center justify-center">
+                                                    <i class="fas fa-award text-purple-600"></i>
+                                                </div>
+                                                <div>
+                                                    <p class="font-medium text-gray-800">Produk Z</p>
+                                                    <p class="text-xs text-gray-600">87 terjual • Margin 28%</p>
+                                                </div>
+                                            </div>
+                                            <div class="text-right">
+                                                <p class="text-lg font-bold text-green-600">Rp 9.8Jt</p>
+                                                <p class="text-xs text-gray-600">Pendapatan</p>
+                                            </div>
+                                        </div>
+                                        
+                                        <div class="flex items-center justify-between p-3 bg-gray-50 rounded-lg hover-lift smooth-transition gpu-accelerate">
+                                            <div class="flex items-center space-x-3">
+                                                <div class="w-10 h-10 rounded-lg bg-gradient-to-r from-yellow-100 to-yellow-200 flex items-center justify-center">
+                                                    <i class="fas fa-star text-yellow-600"></i>
+                                                </div>
+                                                <div>
+                                                    <p class="font-medium text-gray-800">Produk A</p>
+                                                    <p class="text-xs text-gray-600">76 terjual • Margin 35%</p>
+                                                </div>
+                                            </div>
+                                            <div class="text-right">
+                                                <p class="text-lg font-bold text-green-600">Rp 8.4Jt</p>
+                                                <p class="text-xs text-gray-600">Pendapatan</p>
+                                            </div>
+                                        </div>
+                                        
+                                        <div class="flex items-center justify-between p-3 bg-gray-50 rounded-lg hover-lift smooth-transition gpu-accelerate">
+                                            <div class="flex items-center space-x-3">
+                                                <div class="w-10 h-10 rounded-lg bg-gradient-to-r from-red-100 to-red-200 flex items-center justify-center">
+                                                    <i class="fas fa-fire text-red-600"></i>
+                                                </div>
+                                                <div>
+                                                    <p class="font-medium text-gray-800">Produk B</p>
+                                                    <p class="text-xs text-gray-600">65 terjual • Margin 29%</p>
+                                                </div>
+                                            </div>
+                                            <div class="text-right">
+                                                <p class="text-lg font-bold text-green-600">Rp 7.1Jt</p>
+                                                <p class="text-xs text-gray-600">Pendapatan</p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                
+                                <div class="mt-6 pt-4 border-t border-gray-200">
+                                    <div class="flex items-start space-x-2">
+                                        <i class="fas fa-chart-pie text-cyan-500 mt-1 animate-pulse-soft"></i>
+                                        <div>
+                                            <p class="text-sm text-gray-700 font-medium mb-1">Distribusi Pendapatan:</p>
+                                            <p class="text-xs text-gray-600">
+                                                Top 5 produk menyumbang 78% dari total pendapatan bulan ini. Produk X saja berkontribusi 32%. Rekomendasi: fokus pada promosi produk dengan margin tinggi (X, Y, A) dan evaluasi performa produk di luar top 5.
+                                            </p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </section>
+                    
+                    <!-- Kesehatan Inventory - DIPERBAIKI -->
+                    <section class="animate-on-scroll delay-500">
+                        <div class="flex items-center justify-between mb-4">
+                            <h3 class="text-lg font-semibold text-gray-800">Kesehatan Inventory</h3>
+                            <span class="text-xs px-3 py-1 bg-green-100 text-green-700 rounded-full animate-pulse-soft">Monitoring Real-time</span>
+                        </div>
+                        
+                        <div class="bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden hover-lift force-render grid-section-card">
+                            <div class="p-5 border-b border-gray-100 gradient-green">
+                                <div class="flex items-center justify-between">
+                                    <div class="flex items-center space-x-3">
+                                        <div class="w-10 h-10 rounded-full bg-gradient-to-r from-green-100 to-green-200 flex items-center justify-center animate-pulse-soft">
+                                            <i class="fas fa-warehouse text-green-600"></i>
+                                        </div>
+                                        <div>
+                                            <h4 class="font-bold text-gray-800">Analisis Tingkat Stok</h4>
+                                            <p class="text-sm text-gray-600">Berdasarkan prediksi permintaan 14 hari ke depan</p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="p-5 card-content-wrapper">
+                                <div class="card-body-scrollable">
+                                    <div class="grid grid-cols-3 gap-4 mb-6">
+                                        <div class="text-center hover-lift smooth-transition gpu-accelerate">
+                                            <div class="text-2xl font-bold text-red-600 animate-pulse-soft">3</div>
+                                            <p class="text-xs text-gray-600 mt-1">Stok Kritis</p>
+                                        </div>
+                                        <div class="text-center hover-lift smooth-transition gpu-accelerate">
+                                            <div class="text-2xl font-bold text-yellow-600">5</div>
+                                            <p class="text-xs text-gray-600 mt-1">Stok Menipis</p>
+                                        </div>
+                                        <div class="text-center hover-lift smooth-transition gpu-accelerate">
+                                            <div class="text-2xl font-bold text-green-600">12</div>
+                                            <p class="text-xs text-gray-600 mt-1">Stok Aman</p>
+                                        </div>
+                                    </div>
+                                    
+                                    <div class="space-y-4">
+                                        <div>
+                                            <div class="flex justify-between items-center mb-1">
+                                                <span class="text-sm font-medium text-gray-700">Produk A</span>
+                                                <span class="text-xs font-medium text-red-600">Habis dalam 2 hari</span>
+                                            </div>
+                                            <div class="progress-bar">
+                                                <div class="progress-bar-fill bg-gradient-to-r from-red-500 to-red-400" style="width: 12%"></div>
+                                            </div>
+                                            <div class="flex justify-between mt-1">
+                                                <span class="text-xs text-gray-600">5 unit tersisa</span>
+                                                <span class="text-xs text-gray-600">Rata-rata 3 unit/hari</span>
+                                            </div>
+                                        </div>
+                                        
+                                        <div>
+                                            <div class="flex justify-between items-center mb-1">
+                                                <span class="text-sm font-medium text-gray-700">Produk D</span>
+                                                <span class="text-xs font-medium text-yellow-600">Habis dalam 5 hari</span>
+                                            </div>
+                                            <div class="progress-bar">
+                                                <div class="progress-bar-fill bg-gradient-to-r from-yellow-500 to-yellow-400" style="width: 28%"></div>
+                                            </div>
+                                            <div class="flex justify-between mt-1">
+                                                <span class="text-xs text-gray-600">8 unit tersisa</span>
+                                                <span class="text-xs text-gray-600">Rata-rata 1.6 unit/hari</span>
+                                            </div>
+                                        </div>
+                                        
+                                        <div>
+                                            <div class="flex justify-between items-center mb-1">
+                                                <span class="text-sm font-medium text-gray-700">Produk F</span>
+                                                <span class="text-xs font-medium text-green-600">Habis dalam 14 hari</span>
+                                            </div>
+                                            <div class="progress-bar">
+                                                <div class="progress-bar-fill bg-gradient-to-r from-green-500 to-green-400" style="width: 65%"></div>
+                                            </div>
+                                            <div class="flex justify-between mt-1">
+                                                <span class="text-xs text-gray-600">12 unit tersisa</span>
+                                                <span class="text-xs text-gray-600">Rata-rata 0.9 unit/hari</span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                
+                                <div class="mt-6 pt-4 border-t border-gray-200">
+                                    <div class="flex items-start space-x-2">
+                                        <i class="fas fa-calculator text-blue-500 mt-1 animate-pulse-soft"></i>
+                                        <div>
+                                            <p class="text-sm text-gray-700 font-medium mb-1">Estimasi Kebutuhan Restok</p>
+                                            <p class="text-xs text-gray-600">
+                                                Berdasarkan data historis, direkomendasikan restok 45 unit Produk A, 25 unit Produk D, dan 20 unit Produk F untuk memenuhi permintaan 30 hari ke depan. Total estimasi biaya: Rp 8.5 juta.
+                                            </p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </section>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- JavaScript untuk interaktivitas -->
+    <script>
+        // ================= FUNGSI UTAMA =================
+        
+        // Fungsi untuk update tanggal sederhana
+        function updateDate() {
+            const now = new Date();
+            
+            // Format hari dalam Bahasa Indonesia
+            const days = ['Minggu', 'Senin', 'Selasa', 'Rabu', 'Kamis', 'Jumat', 'Sabtu'];
+            const months = ['Januari', 'Februari', 'Maret', 'April', 'Mei', 'Juni', 
+                           'Juli', 'Agustus', 'September', 'Oktober', 'November', 'Desember'];
+            
+            const dayName = days[now.getDay()];
+            const date = now.getDate();
+            const monthName = months[now.getMonth()];
+            const year = now.getFullYear();
+            
+            // Format untuk tanggal: "Selasa, 2 Januari 2026"
+            const formattedDate = `${dayName}, ${date} ${monthName} ${year}`;
+            
+            // Update elemen
+            const dateElement = document.getElementById('currentDate');
+            if (dateElement) {
+                dateElement.textContent = formattedDate;
+            }
+        }
+        
+        // Fungsi untuk mengatur tinggi grid yang konsisten
+        function equalizeGridHeights() {
+            // Dapatkan semua section dalam grid utama
+            const gridSections = document.querySelectorAll('.grid-cols-1.lg\\:grid-cols-2 > section');
+            
+            if (gridSections.length >= 2) {
+                // Reset tinggi
+                gridSections.forEach(section => {
+                    section.style.minHeight = 'auto';
+                });
+                
+                // Hitung tinggi maksimum
+                let maxHeight = 0;
+                gridSections.forEach(section => {
+                    const height = section.offsetHeight;
+                    if (height > maxHeight) {
+                        maxHeight = height;
+                    }
+                });
+                
+                // Terapkan tinggi yang sama
+                if (maxHeight > 0) {
+                    gridSections.forEach(section => {
+                        section.style.minHeight = maxHeight + 'px';
+                    });
+                }
+            }
+        }
+        
+        // Scroll Animator untuk animasi saat scroll
+        class ScrollAnimator {
+            constructor() {
+                this.observer = null;
+                this.init();
+            }
+            
+            init() {
+                const options = {
+                    root: null,
+                    rootMargin: '0px 0px -50px 0px',
+                    threshold: 0.1
+                };
+                
+                this.observer = new IntersectionObserver((entries) => {
+                    entries.forEach(entry => {
+                        if (entry.isIntersecting) {
+                            entry.target.classList.add('visible');
+                        }
+                    });
+                }, options);
+                
+                document.querySelectorAll('.animate-on-scroll').forEach(el => {
+                    this.observer.observe(el);
+                });
+            }
+        }
+        
+        // Force render semua konten saat halaman dimuat
+        function forceRenderAllContent() {
+            const elements = document.querySelectorAll('.animate-on-scroll');
+            const viewportHeight = window.innerHeight;
+            
+            elements.forEach(el => {
+                const rect = el.getBoundingClientRect();
+                if (rect.top < viewportHeight - 100) {
+                    el.classList.add('visible');
+                }
+            });
+            
+            document.body.classList.add('force-render');
+            setTimeout(() => {
+                document.body.style.opacity = '1';
+            }, 50);
+        }
+        
+        // ================= EVENT LISTENERS =================
+        
+        document.addEventListener('DOMContentLoaded', function() {
+            // 1. Inisialisasi tanggal
+            updateDate();
+            
+            // 2. Inisialisasi Scroll Animator
+            const animator = new ScrollAnimator();
+            
+            // 3. Force render semua konten
+            forceRenderAllContent();
+            
+            // 4. Render tambahan setelah semua aset dimuat
+            window.addEventListener('load', function() {
+                setTimeout(forceRenderAllContent, 100);
+                // Pastikan grid memiliki tinggi yang sama
+                setTimeout(equalizeGridHeights, 300);
+            });
+            
+            // 5. AI Assistant Panel
+            const aiAssistantBtn = document.getElementById('aiAssistantBtn');
+            const aiAssistantPanel = document.getElementById('aiAssistantPanel');
+            const closeAIPanel = document.getElementById('closeAIPanel');
+            
+            // Open AI Assistant Panel
+            aiAssistantBtn.addEventListener('click', function(e) {
+                e.stopPropagation();
+                aiAssistantPanel.classList.toggle('hidden');
+                setTimeout(() => {
+                    const chatContainer = document.getElementById('aiChatContainer');
+                    chatContainer.scrollTop = chatContainer.scrollHeight;
+                }, 100);
+            });
+            
+            closeAIPanel.addEventListener('click', function() {
+                aiAssistantPanel.classList.add('hidden');
+            });
+            
+            // Close AI panel when clicking outside
+            document.addEventListener('click', function(e) {
+                if (!aiAssistantPanel.contains(e.target) && !aiAssistantBtn.contains(e.target)) {
+                    aiAssistantPanel.classList.add('hidden');
+                }
+            });
+            
+            // 6. AI Mode Selector
+            const aiModeButtons = document.querySelectorAll('.ai-mode-btn');
+            aiModeButtons.forEach(button => {
+                button.addEventListener('click', function() {
+                    aiModeButtons.forEach(btn => {
+                        btn.classList.remove('active', 'bg-white/20');
+                        btn.classList.add('bg-white/10');
+                    });
+                    this.classList.add('active', 'bg-white/20');
+                    this.classList.remove('bg-white/10');
+                    
+                    const mode = this.dataset.mode;
+                    changeAIMode(mode);
+                });
+            });
+            
+            function changeAIMode(mode) {
+                const aiHeader = document.querySelector('.bg-gradient-to-r.from-blue-500.to-blue-600 h3');
+                const aiSubtitle = document.querySelector('.bg-gradient-to-r.from-blue-500.to-blue-600 p');
+                
+                switch(mode) {
+                    case 'dashboard':
+                        aiHeader.textContent = 'AI Dashboard Assistant';
+                        aiSubtitle.textContent = 'Menganalisis data dan tren dashboard';
+                        break;
+                    case 'sales':
+                        aiHeader.textContent = 'AI Sales Assistant';
+                        aiSubtitle.textContent = 'Membantu analisis penjualan dan performa';
+                        break;
+                    case 'inventory':
+                        aiHeader.textContent = 'AI Inventory Assistant';
+                        aiSubtitle.textContent = 'Analisis stok dan manajemen inventory';
+                        break;
+                }
+                
+                addAIMessage(`Mode AI telah diubah ke: ${mode.charAt(0).toUpperCase() + mode.slice(1)}. Bagaimana saya bisa membantu Anda?`, 'assistant');
+            }
+            
+            // 7. AI Quick Questions - khusus dashboard
+            const aiQuickQuestions = document.querySelectorAll('.ai-quick-question');
+            
+            aiQuickQuestions.forEach(button => {
+                button.addEventListener('click', function() {
+                    const question = this.textContent;
+                    addAIMessage(question, 'user');
+                    
+                    showTypingIndicator();
+                    
+                    setTimeout(() => {
+                        removeTypingIndicator();
+                        generateDashboardAIResponse(question);
+                    }, 1500);
+                });
+            });
+            
+            // 8. Send AI Question
+            const aiQuestionInput = document.getElementById('aiQuestionInput');
+            const sendAIQuestion = document.getElementById('sendAIQuestion');
+            
+            sendAIQuestion.addEventListener('click', function() {
+                if (aiQuestionInput.value.trim() !== '') {
+                    const question = aiQuestionInput.value;
+                    addAIMessage(question, 'user');
+                    aiQuestionInput.value = '';
+                    
+                    showTypingIndicator();
+                    
+                    setTimeout(() => {
+                        removeTypingIndicator();
+                        generateDashboardAIResponse(question);
+                    }, 2000);
+                }
+            });
+            
+            // Enter key to send question
+            aiQuestionInput.addEventListener('keypress', function(e) {
+                if (e.key === 'Enter') {
+                    sendAIQuestion.click();
+                }
+            });
+            
+            // 9. Dashboard Filter Buttons
+            const dashboardFilters = document.querySelectorAll('.dashboard-filter');
+            dashboardFilters.forEach(filter => {
+                filter.addEventListener('click', function() {
+                    dashboardFilters.forEach(f => {
+                        f.classList.remove('active', 'bg-blue-500', 'text-white');
+                        f.classList.add('bg-gray-100', 'text-gray-700');
+                    });
+                    
+                    this.classList.add('active', 'bg-blue-500', 'text-white');
+                    this.classList.remove('bg-gray-100', 'text-gray-700');
+                    
+                    const filterType = this.dataset.filter;
+                    filterDashboardCards(filterType);
+                });
+            });
+            
+            function filterDashboardCards(filterType) {
+                const cards = document.querySelectorAll('.horizontal-card');
+                cards.forEach(card => {
+                    const cardType = getCardType(card);
+                    
+                    if (filterType === 'all') {
+                        card.style.display = 'block';
+                    } else if (filterType === 'critical' && cardType === 'critical') {
+                        card.style.display = 'block';
+                    } else if (filterType === 'performance' && cardType === 'performance') {
+                        card.style.display = 'block';
+                    } else if (filterType === 'sales' && cardType === 'sales') {
+                        card.style.display = 'block';
+                    } else if (filterType !== 'all') {
+                        card.style.display = 'none';
+                    }
+                });
+                
+                showNotification(`Menampilkan: ${getFilterName(filterType)}`, 'info');
+            }
+            
+            function getCardType(card) {
+                if (card.classList.contains('gradient-red')) return 'critical';
+                if (card.classList.contains('gradient-green') || card.classList.contains('gradient-blue')) return 'performance';
+                return 'sales';
+            }
+            
+            function getFilterName(filterType) {
+                switch(filterType) {
+                    case 'all': return 'Semua Prioritas';
+                    case 'critical': return 'Prioritas Kritis';
+                    case 'performance': return 'Performa';
+                    case 'sales': return 'Penjualan';
+                    default: return 'Semua Prioritas';
+                }
+            }
+            
+            // 10. Refresh Dashboard Button
+            const refreshDashboardBtn = document.getElementById('refreshDashboardBtn');
+            
+            function refreshDashboardData() {
+                refreshDashboardBtn.innerHTML = '<i class="fas fa-spinner fa-spin mr-1"></i> Memperbarui...';
+                refreshDashboardBtn.disabled = true;
+                
+                showNotification('Memperbarui data dashboard...', 'info');
+                
+                setTimeout(() => {
+                    refreshDashboardBtn.innerHTML = '<i class="fas fa-sync-alt mr-1"></i> Perbarui';
+                    refreshDashboardBtn.disabled = false;
+                    
+                    showNotification('Data dashboard berhasil diperbarui!', 'success');
+                    
+                    simulateDashboardDataChanges();
+                }, 2000);
+            }
+            
+            refreshDashboardBtn.addEventListener('click', refreshDashboardData);
+            
+            function simulateDashboardDataChanges() {
+                // Update metrics with slight random changes
+                const metrics = document.querySelectorAll('.text-2xl.font-bold.text-gray-800');
+                metrics.forEach(metric => {
+                    const currentText = metric.textContent;
+                    
+                    if (currentText.includes('Rp')) {
+                        const currentValue = parseFloat(currentText.replace('Rp ', '').replace('Jt', '')) * 1000000;
+                        if (!isNaN(currentValue)) {
+                            const change = currentValue * (Math.random() * 0.1 - 0.05); // -5% to +5%
+                            const newValue = Math.max(0, currentValue + change);
+                            const formattedValue = new Intl.NumberFormat('id-ID', { 
+                                style: 'currency', 
+                                currency: 'IDR',
+                                minimumFractionDigits: 0,
+                                maximumFractionDigits: 0
+                            }).format(newValue).replace('Rp', 'Rp ');
+                            
+                            metric.textContent = formattedValue;
+                            
+                            metric.classList.add('animate-pulse-soft');
+                            setTimeout(() => {
+                                metric.classList.remove('animate-pulse-soft');
+                            }, 1000);
+                        }
+                    } else if (currentText.match(/^\d+$/)) {
+                        const currentValue = parseInt(currentText);
+                        if (!isNaN(currentValue)) {
+                            const change = Math.floor(Math.random() * 5) - 2;
+                            const newValue = Math.max(0, currentValue + change);
+                            metric.textContent = newValue;
+                            
+                            metric.classList.add('animate-pulse-soft');
+                            setTimeout(() => {
+                                metric.classList.remove('animate-pulse-soft');
+                            }, 1000);
+                        }
+                    }
+                });
+                
+                // Update trend indicators
+                const trendIndicators = document.querySelectorAll('.data-trend-up, .data-trend-down');
+                trendIndicators.forEach(indicator => {
+                    if (Math.random() > 0.7) {
+                        if (indicator.classList.contains('data-trend-up')) {
+                            indicator.classList.remove('data-trend-up');
+                            indicator.classList.add('data-trend-down');
+                            indicator.textContent = (parseFloat(indicator.textContent.replace('%', '')) * -1).toFixed(1) + '%';
+                        } else {
+                            indicator.classList.remove('data-trend-down');
+                            indicator.classList.add('data-trend-up');
+                            indicator.textContent = (Math.abs(parseFloat(indicator.textContent.replace('%', '')))).toFixed(1) + '%';
+                        }
+                    }
+                });
+            }
+
+            // Toggle submenu dashboard
+const dashboardMenu = document.getElementById('dashboard-menu');
+const dashboardSubmenu = document.getElementById('dashboard-submenu');
+const dashboardChevron = document.getElementById('dashboard-chevron');
+
+if (dashboardMenu && dashboardSubmenu) {
+    // Buka submenu dashboard secara default
+    dashboardSubmenu.classList.remove('hidden');
+    dashboardChevron.classList.remove('fa-chevron-down');
+    dashboardChevron.classList.add('fa-chevron-up');
+    
+    dashboardMenu.addEventListener('click', function(e) {
+        e.preventDefault();
+        e.stopPropagation();
+        
+        dashboardSubmenu.classList.toggle('hidden');
+        
+        if (dashboardSubmenu.classList.contains('hidden')) {
+            dashboardChevron.classList.remove('fa-chevron-up');
+            dashboardChevron.classList.add('fa-chevron-down');
+        } else {
+            dashboardChevron.classList.remove('fa-chevron-down');
+            dashboardChevron.classList.add('fa-chevron-up');
+        }
+    });
+}
+
+// Toggle submenu inventory
+const inventoryMenu = document.getElementById('inventory-menu');
+const inventorySubmenu = document.getElementById('inventory-submenu');
+const inventoryChevron = document.getElementById('inventory-chevron');
+
+if (inventoryMenu && inventorySubmenu) {
+    inventoryMenu.addEventListener('click', function(e) {
+        e.preventDefault();
+        e.stopPropagation();
+        
+        inventorySubmenu.classList.toggle('hidden');
+        
+        if (inventorySubmenu.classList.contains('hidden')) {
+            inventoryChevron.classList.remove('fa-chevron-up');
+            inventoryChevron.classList.add('fa-chevron-down');
+        } else {
+            inventoryChevron.classList.remove('fa-chevron-down');
+            inventoryChevron.classList.add('fa-chevron-up');
+        }
+    });
+}
+
+// Highlight active menu based on current URL
+function highlightActiveMenu() {
+    const currentPath = window.location.pathname;
+    
+    // Dashboard submenu items
+    const dashboardLinks = document.querySelectorAll('#dashboard-submenu a');
+    dashboardLinks.forEach(link => {
+        if (link.getAttribute('href') === currentPath) {
+            link.classList.add('bg-blue-100', 'text-blue-600');
+            link.classList.remove('text-gray-700');
+        } else {
+            link.classList.remove('bg-blue-100', 'text-blue-600');
+            link.classList.add('text-gray-700');
+        }
+    });
+    
+    // Inventory submenu items
+    const inventoryLinks = document.querySelectorAll('#inventory-submenu a');
+    inventoryLinks.forEach(link => {
+        if (link.getAttribute('href') === currentPath) {
+            link.classList.add('bg-blue-100', 'text-blue-600', 'font-medium');
+            link.classList.remove('text-gray-700');
+        } else {
+            link.classList.remove('bg-blue-100', 'text-blue-600', 'font-medium');
+            link.classList.add('text-gray-700');
+        }
+    });
+    
+    // Main menu items
+    const mainLinks = document.querySelectorAll('aside nav > a:not(.submenu-item)');
+    mainLinks.forEach(link => {
+        if (link.getAttribute('href') === currentPath) {
+            link.classList.add('bg-blue-50', 'text-blue-600');
+            link.classList.remove('text-gray-700');
+        } else {
+            link.classList.remove('bg-blue-50', 'text-blue-600');
+            link.classList.add('text-gray-700');
+        }
+    });
+}
+
+// Call on page load
+document.addEventListener('DOMContentLoaded', highlightActiveMenu);
+            
+            // 11. Interactive notification bell
+            const notificationBell = document.getElementById('notificationBell');
+            if (notificationBell) {
+                notificationBell.addEventListener('click', function() {
+                    const notificationPopup = document.createElement('div');
+                    notificationPopup.className = 'fixed top-20 right-8 w-72 bg-white rounded-xl shadow-lg border border-gray-200 p-4 animate-fade-in-up z-40';
+                    notificationPopup.innerHTML = `
+                        <div class="flex justify-between items-center mb-3">
+                            <h4 class="font-bold text-gray-800">Notifikasi Dashboard</h4>
+                            <button class="text-gray-400 hover:text-gray-600 close-notif">
+                                <i class="fas fa-times"></i>
+                            </button>
+                        </div>
+                        <div class="space-y-3">
+                            <div class="flex items-start space-x-3 p-2 rounded-lg bg-red-50">
+                                <i class="fas fa-exclamation-circle text-red-500 mt-1"></i>
+                                <div>
+                                    <p class="text-sm font-medium">Stok Produk A hampir habis</p>
+                                    <p class="text-xs text-gray-600">Hanya tersisa 5 unit</p>
+                                </div>
+                            </div>
+                            <div class="flex items-start space-x-3 p-2 rounded-lg bg-green-50">
+                                <i class="fas fa-check-circle text-green-500 mt-1"></i>
+                                <div>
+                                    <p class="text-sm font-medium">Penjualan hari ini +15%</p>
+                                    <p class="text-xs text-gray-600">Rp 6.8 juta tercapai</p>
+                                </div>
+                            </div>
+                            <div class="flex items-start space-x-3 p-2 rounded-lg bg-blue-50">
+                                <i class="fas fa-info-circle text-blue-500 mt-1"></i>
+                                <div>
+                                    <p class="text-sm font-medium">AI telah menganalisis data baru</p>
+                                    <p class="text-xs text-gray-600">3 rekomendasi tersedia</p>
+                                </div>
+                            </div>
+                        </div>
+                    `;
+                    
+                    document.body.appendChild(notificationPopup);
+                    
+                    const closeBtn = notificationPopup.querySelector('.close-notif');
+                    closeBtn.addEventListener('click', function() {
+                        notificationPopup.remove();
+                    });
+                    
+                    setTimeout(() => {
+                        if (notificationPopup.parentNode) {
+                            notificationPopup.remove();
+                        }
+                    }, 5000);
+                });
+            }
+            
+            // 12. Initialize with a welcome message from AI
+            setTimeout(() => {
+                if (!document.querySelector('.ai-message.user')) {
+                    addAIMessage("Selamat datang di Dashboard Flashboard! Saya dapat membantu Anda menganalisis performa bisnis, mengidentifikasi peluang, dan memberikan rekomendasi optimasi. Apa yang ingin Anda ketahui hari ini?", 'assistant');
+                }
+            }, 1000);
+            
+            // 13. Progress bar animations
+            const progressBars = document.querySelectorAll('.progress-bar-fill');
+            const observer = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        const bar = entry.target;
+                        const width = bar.style.width;
+                        bar.style.width = '0%';
+                        
+                        setTimeout(() => {
+                            bar.style.width = width;
+                        }, 300);
+                        
+                        observer.unobserve(bar);
+                    }
+                });
+            }, { threshold: 0.5 });
+            
+            progressBars.forEach(bar => observer.observe(bar));
+            
+            // 14. Auto-refresh dashboard data setiap 60 detik
+            setInterval(simulateDashboardDataChanges, 60000);
+            
+            // 15. Tambahkan event listener untuk scroll dan resize
+            window.addEventListener('scroll', function() {
+                animator.observer.disconnect();
+                animator.init();
+            });
+            
+            window.addEventListener('resize', function() {
+                setTimeout(forceRenderAllContent, 100);
+                setTimeout(equalizeGridHeights, 200);
+            });
+            
+            // 16. Set tinggi grid saat pertama kali dimuat
+            setTimeout(equalizeGridHeights, 500);
+        });
+        
+        // ================= FUNGSI BANTUAN =================
+        
+        // AI Chat Functions
+        function addAIMessage(text, sender) {
+            const chatContainer = document.getElementById('aiChatContainer');
+            const messageDiv = document.createElement('div');
+            messageDiv.className = `ai-message ${sender}`;
+            
+            if (sender === 'user') {
+                messageDiv.innerHTML = `
+                    <div class="flex items-center justify-between">
+                        <p>${text}</p>
+                        <i class="fas fa-user ml-2"></i>
+                    </div>
+                `;
+            } else {
+                messageDiv.innerHTML = `
+                    <div class="flex items-start space-x-2">
+                        <div class="w-6 h-6 rounded-full bg-blue-100 flex items-center justify-center flex-shrink-0 mt-1">
+                            <i class="fas fa-robot text-blue-600 text-xs"></i>
+                        </div>
+                        <div>
+                            <p class="text-gray-700">${text}</p>
+                        </div>
+                    </div>
+                `;
+            }
+            
+            chatContainer.appendChild(messageDiv);
+            chatContainer.scrollTop = chatContainer.scrollHeight;
+        }
+        
+        function showTypingIndicator() {
+            const chatContainer = document.getElementById('aiChatContainer');
+            const typingDiv = document.createElement('div');
+            typingDiv.className = 'ai-typing-indicator';
+            typingDiv.id = 'typingIndicator';
+            typingDiv.innerHTML = `
+                <div class="w-6 h-6 rounded-full bg-blue-100 flex items-center justify-center flex-shrink-0 mr-2">
+                    <i class="fas fa-robot text-blue-600 text-xs"></i>
+                </div>
+                <div class="flex">
+                    <div class="ai-typing-dot"></div>
+                    <div class="ai-typing-dot"></div>
+                    <div class="ai-typing-dot"></div>
+                </div>
+            `;
+            
+            chatContainer.appendChild(typingDiv);
+            chatContainer.scrollTop = chatContainer.scrollHeight;
+        }
+        
+        function removeTypingIndicator() {
+            const typingIndicator = document.getElementById('typingIndicator');
+            if (typingIndicator) {
+                typingIndicator.remove();
+            }
+        }
+        
+        // Respons AI khusus untuk dashboard
+        function generateDashboardAIResponse(question) {
+            let response = '';
+            let actions = '';
+            
+            const questionLower = question.toLowerCase();
+            
+            if (questionLower.includes('penjualan') || questionLower.includes('jual')) {
+                
+                response = `Berdasarkan analisis data 7 hari terakhir, penjualan Anda menunjukkan tren positif:<br><br>
+                1. <strong>Pertumbuhan 8.5%</strong> dari minggu sebelumnya<br>
+                2. <strong>Rata-rata harian Rp 5.8 juta</strong> (naik 12%)<br>
+                3. <strong>Hari ini mencapai Rp 6.8 juta</strong> (tertinggi minggu ini)<br>
+                4. <strong>Produk X menyumbang 32%</strong> dari total pendapatan<br><br>
+                Platform terbaik: Shopee (42% volume), Tokopedia (konversi 4.2%). Rekomendasi: pertahankan momentum dengan promosi produk X di Shopee dan optimasi konversi di Tokopedia.`;
+                
+                actions = `<div class="mt-2 flex space-x-2">
+                    <button class="text-xs px-2 py-1 bg-blue-100 text-blue-700 rounded smooth-transition hover:bg-blue-200">Lihat Grafik</button>
+                    <button class="text-xs px-2 py-1 bg-green-100 text-green-700 rounded smooth-transition hover:bg-green-200">Rekomendasi Detail</button>
+                </div>`;
+                
+            } else if (questionLower.includes('stok') || questionLower.includes('inventori') || questionLower.includes('kritis')) {
+                
+                response = `Analisis kesehatan inventory saat ini:<br><br>
+                <strong>Status Stok:</strong><br>
+                1. <strong>3 produk stok kritis</strong> (habis dalam ≤5 hari)<br>
+                2. <strong>5 produk stok menipis</strong> (habis dalam 6-10 hari)<br>
+                3. <strong>12 produk stok aman</strong> (cukup >10 hari)<br><br>
+                <strong>Produk Prioritas Restok:</strong><br>
+                • Produk A: 5 unit tersisa (habis dalam 2 hari)<br>
+                • Produk D: 8 unit tersisa (habis dalam 5 hari)<br>
+                • Produk F: 12 unit tersisa (habis dalam 14 hari)<br><br>
+                Rekomendasi: segera restok 45 unit Produk A, 25 unit Produk D, dan 20 unit Produk F.`;
+                
+                actions = `<div class="mt-2 flex space-x-2">
+                    <button class="text-xs px-2 py-1 bg-blue-100 text-blue-700 rounded smooth-transition hover:bg-blue-200">Rencana Restok</button>
+                    <button class="text-xs px-2 py-1 bg-red-100 text-red-700 rounded smooth-transition hover:bg-red-200">Pesan Sekarang</button>
+                </div>`;
+                
+            } else if (questionLower.includes('marketplace') || questionLower.includes('platform')) {
+                
+                response = `Analisis performa marketplace 7 hari terakhir:<br><br>
+                <strong>1. Shopee (Rating: ★★★★★)</strong><br>
+                • Volume: 42% (154 pesanan)<br>
+                • Pendapatan: Rp 18.2 juta<br>
+                • Pertumbuhan: +12.5%<br>
+                • Rekomendasi: Pertahankan, fokus pada promosi flash sale<br><br>
+                <strong>2. Tokopedia (Rating: ★★★★☆)</strong><br>
+                • Volume: 27% (98 pesanan)<br>
+                • Pendapatan: Rp 12.1 juta<br>
+                • Konversi: 4.2% (tertinggi)<br>
+                • Rekomendasi: Optimasi SEO dan review produk<br><br>
+                <strong>3. Lazada (Rating: ★★★☆☆)</strong><br>
+                • Volume: 19% (67 pesanan)<br>
+                • Pendapatan: Rp 5.7 juta<br>
+                • Pertumbuhan: +5.7%<br>
+                • Rekomendasi: Evaluasi ROI iklan<br><br>
+                <strong>4. Website Sendiri (Rating: ★★☆☆☆)</strong><br>
+                • Volume: 12% (45 pesanan)<br>
+                • Pendapatan: Rp 6.8 juta<br>
+                • Nilai order: Rp 151.200 (tertinggi)<br>
+                • Rekomendasi: Tingkatkan traffic dengan SEO dan content marketing`;
+                
+                actions = `<div class="mt-2 flex space-x-2">
+                    <button class="text-xs px-2 py-1 bg-blue-100 text-blue-700 rounded smooth-transition hover:bg-blue-200">Bandingkan Platform</button>
+                    <button class="text-xs px-2 py-1 bg-purple-100 text-purple-700 rounded smooth-transition hover:bg-purple-200">Strategi Marketing</button>
+                </div>`;
+                
+            } else if (questionLower.includes('margin') || questionLower.includes('untung') || questionLower.includes('profit')) {
+                
+                response = `Analisis margin keuntungan produk:<br><br>
+                <strong>Produk dengan Margin Tertinggi:</strong><br>
+                1. <strong>Produk X: 42% margin</strong> (Rp 18.5 juta pendapatan)<br>
+                2. <strong>Produk A: 35% margin</strong> (Rp 8.4 juta pendapatan)<br>
+                3. <strong>Produk Y: 31% margin</strong> (Rp 11.2 juta pendapatan)<br><br>
+                <strong>Produk dengan Margin Turun:</strong><br>
+                • Produk C: turun 13% (sekarang 24%) karena biaya pengiriman naik 18%<br>
+                • Produk Z: turun 9% (sekarang 28%) karena kompetisi harga<br><br>
+                <strong>Rekomendasi:</strong> Fokus pada produk dengan margin tinggi (X, A, Y) dan evaluasi strategi harga untuk produk C dan Z.`;
+                
+                actions = `<div class="mt-2 flex space-x-2">
+                    <button class="text-xs px-2 py-1 bg-blue-100 text-blue-700 rounded smooth-transition hover:bg-blue-200">Analisis Biaya</button>
+                    <button class="text-xs px-2 py-1 bg-green-100 text-green-700 rounded smooth-transition hover:bg-green-200">Optimasi Harga</button>
+                </div>`;
+                
+            } else if (questionLower.includes('prediksi') || questionLower.includes('besok') || questionLower.includes('ramalan')) {
+                
+                response = `Prediksi performa untuk besok:<br><br>
+                <strong>Penjualan:</strong> Rp 5.9-6.3 juta (stabil dengan sedikit penurunan dari hari ini)<br>
+                <strong>Pesanan:</strong> 48-52 pesanan<br>
+                <strong>Faktor Pendukung:</strong><br>
+                1. Momentum penjualan hari ini berlanjut<br>
+                2. Stok produk utama masih cukup<br>
+                3. Tidak ada gangguan sistem<br><br>
+                <strong>Faktor Penghambat:</strong><br>
+                1. Produk A mungkin habis (tinggal 5 unit)<br>
+                2. Traffic website terus menurun (-15%)<br>
+                3. Kompetitor launching produk serupa<br><br>
+                <strong>Rekomendasi:</strong> Siapkan notifikasi out-of-stock untuk Produk A, dan persiapkan campaign marketing untuk website.`;
+                
+                actions = `<div class="mt-2 flex space-x-2">
+                    <button class="text-xs px-2 py-1 bg-blue-100 text-blue-700 rounded smooth-transition hover:bg-blue-200">Lihat Prediksi Detail</button>
+                    <button class="text-xs px-2 py-1 bg-yellow-100 text-yellow-700 rounded smooth-transition hover:bg-yellow-200">Siapkan Mitigasi</button>
+                </div>`;
+                
+            } else if (questionLower.includes('rekomendasi') || questionLower.includes('optimasi')) {
+                
+                response = `Berdasarkan analisis data dashboard, berikut rekomendasi optimasi:<br><br>
+                <strong>1. Prioritas Stok (Mendesak)</strong><br>
+                • Restok Produk A (45 unit) dalam 24 jam<br>
+                • Review pemasok untuk efisiensi biaya<br><br>
+                <strong>2. Optimasi Penjualan</strong><br>
+                • Fokus promosi pada Produk X (margin 42%)<br>
+                • Tingkatkan konversi Tokopedia dari 4.2% ke 5%<br>
+                • Bundling produk dengan margin rendah<br><br>
+                <strong>3. Perbaikan Website</strong><br>
+                • Investasi SEO untuk recovery traffic (-15%)<br>
+                • Optimasi UX untuk tingkatkan konversi<br>
+                • Content marketing untuk brand awareness<br><br>
+                <strong>4. Analisis Biaya</strong><br>
+                • Evaluasi biaya pengiriman (naik 18%)<br>
+                • Negosiasi dengan kurir untuk volume discount<br>
+                • Optimasi kemasan untuk efisiensi`;
+                
+                actions = `<div class="mt-2 flex space-x-2">
+                    <button class="text-xs px-2 py-1 bg-blue-100 text-blue-700 rounded smooth-transition hover:bg-blue-200">Rencana Aksi</button>
+                    <button class="text-xs px-2 py-1 bg-green-100 text-green-700 rounded smooth-transition hover:bg-green-200">Jadwalkan</button>
+                </div>`;
+                
+            } else {
+                response = `Saya telah menganalisis data dashboard Anda. Berdasarkan informasi terkini, performa bisnis Anda cukup baik dengan penjualan meningkat 8.5%, namun ada beberapa area yang perlu perhatian khususnya stok produk dan traffic website. Apakah ada aspek spesifik dari dashboard yang ingin Anda dalami lebih lanjut?`;
+                actions = `<div class="mt-2 flex space-x-2">
+                    <button class="text-xs px-2 py-1 bg-blue-100 text-blue-700 rounded smooth-transition hover:bg-blue-200">Analisis Lengkap</button>
+                    <button class="text-xs px-2 py-1 bg-green-100 text-green-700 rounded smooth-transition hover:bg-green-200">Rekomendasi</button>
+                </div>`;
+            }
+            
+            const chatContainer = document.getElementById('aiChatContainer');
+            const messageDiv = document.createElement('div');
+            messageDiv.className = 'ai-message assistant';
+            messageDiv.innerHTML = `
+                <div class="flex items-start space-x-2">
+                    <div class="w-6 h-6 rounded-full bg-blue-100 flex items-center justify-center flex-shrink-0 mt-1">
+                        <i class="fas fa-robot text-blue-600 text-xs"></i>
+                    </div>
+                    <div>
+                        <p class="text-gray-700">${response}</p>
+                        ${actions}
+                    </div>
+                </div>
+            `;
+            
+            chatContainer.appendChild(messageDiv);
+            chatContainer.scrollTop = chatContainer.scrollHeight;
+        }
+        
+        // Notification System
+        function showNotification(message, type = 'info') {
+            const notification = document.createElement('div');
+            notification.className = `fixed top-24 right-8 px-4 py-3 rounded-lg shadow-lg z-50 animate-slide-in-right`;
+            
+            let bgColor = 'bg-blue-100 text-blue-800 border border-blue-200';
+            let icon = 'fas fa-info-circle';
+            
+            if (type === 'success') {
+                bgColor = 'bg-green-100 text-green-800 border border-green-200';
+                icon = 'fas fa-check-circle';
+            } else if (type === 'warning') {
+                bgColor = 'bg-yellow-100 text-yellow-800 border border-yellow-200';
+                icon = 'fas fa-exclamation-triangle';
+            } else if (type === 'error') {
+                bgColor = 'bg-red-100 text-red-800 border border-red-200';
+                icon = 'fas fa-times-circle';
+            }
+            
+            notification.className += ` ${bgColor}`;
+            notification.innerHTML = `
+                <div class="flex items-center space-x-3">
+                    <i class="${icon}"></i>
+                    <span>${message}</span>
+                </div>
+            `;
+            
+            document.body.appendChild(notification);
+            
+            setTimeout(() => {
+                if (notification.parentNode) {
+                    notification.style.animation = 'slideInRight 0.3s reverse forwards';
+                    setTimeout(() => {
+                        if (notification.parentNode) {
+                            notification.remove();
+                        }
+                    }, 300);
+                }
+            }, 3000);
+        }
+    </script>
+</body>
+</html>

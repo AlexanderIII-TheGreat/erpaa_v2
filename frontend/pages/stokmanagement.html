@@ -1,0 +1,3149 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Management Stok - Flashboard ERP Modern</title>
+    <!-- Tailwind CSS via CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Font Awesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Animate.css for smooth animations -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css">
+    
+    <style>
+        :root {
+            --soft-blue: #4A90E2;
+            --soft-blue-light: #E3F2FD;
+            --soft-blue-dark: #2A6EBB;
+            --neutral-gray: #F5F7FA;
+            --neutral-gray-dark: #E1E8F0;
+            --neutral-text: #4A5568;
+            --soft-green: #48BB78;
+            --soft-purple: #9F7AEA;
+            --soft-pink: #ED64A6;
+            --soft-cyan: #0BC5EA;
+        }
+        
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            color: var(--neutral-text);
+            overflow-x: hidden;
+            background: linear-gradient(to bottom right, #eff6ff, #f3f4f6, #f9fafb);
+        }
+        
+        /* PERBAIKAN: Struktur layout utama */
+        .app-container {
+            display: flex;
+            min-height: 100vh;
+            width: 100%;
+        }
+        
+        .main-wrapper {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            max-height: 100vh;
+            overflow: hidden;
+        }
+        
+        .content-wrapper {
+            flex: 1;
+            overflow-y: auto;
+            overflow-x: hidden;
+            -webkit-overflow-scrolling: touch;
+            padding: 2rem;
+            background: linear-gradient(to bottom, #f8fafc, #f1f5f9);
+        }
+        
+        /* Custom animations */
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        
+        @keyframes slideInLeft {
+            from {
+                opacity: 0;
+                transform: translateX(-20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateX(0);
+            }
+        }
+        
+        @keyframes slideInRight {
+            from {
+                opacity: 0;
+                transform: translateX(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateX(0);
+            }
+        }
+        
+        @keyframes pulseSoft {
+            0%, 100% {
+                opacity: 1;
+                transform: scale(1);
+            }
+            50% {
+                opacity: 0.8;
+                transform: scale(1.02);
+            }
+        }
+        
+        @keyframes float {
+            0%, 100% {
+                transform: translateY(0);
+            }
+            50% {
+                transform: translateY(-10px);
+            }
+        }
+        
+        @keyframes shimmer {
+            0% {
+                background-position: -200% center;
+            }
+            100% {
+                background-position: 200% center;
+            }
+        }
+        
+        @keyframes typing {
+            from { width: 0; }
+            to { width: 100%; }
+        }
+        
+        @keyframes blink {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.5; }
+        }
+        
+        @keyframes slideInFromLeft {
+            from {
+                opacity: 0;
+                transform: translateX(-30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateX(0);
+            }
+        }
+        
+        @keyframes bounceIn {
+            0% {
+                opacity: 0;
+                transform: scale(0.3);
+            }
+            50% {
+                opacity: 1;
+                transform: scale(1.05);
+            }
+            70% {
+                transform: scale(0.9);
+            }
+            100% {
+                transform: scale(1);
+            }
+        }
+        
+        @keyframes ripple {
+            0% {
+                transform: scale(0);
+                opacity: 1;
+            }
+            100% {
+                transform: scale(4);
+                opacity: 0;
+            }
+        }
+        
+        .animate-fade-in-up {
+            animation: fadeInUp 0.6s ease-out forwards;
+        }
+        
+        .animate-slide-in-left {
+            animation: slideInLeft 0.5s ease-out forwards;
+        }
+        
+        .animate-slide-in-right {
+            animation: slideInRight 0.5s ease-out forwards;
+        }
+        
+        .animate-pulse-soft {
+            animation: pulseSoft 2s infinite ease-in-out;
+        }
+        
+        .animate-float {
+            animation: float 3s ease-in-out infinite;
+        }
+        
+        .animate-shimmer {
+            animation: shimmer 3s infinite linear;
+            background: linear-gradient(90deg, #F5F7FA 0%, #E3F2FD 50%, #F5F7FA 100%);
+            background-size: 200% auto;
+        }
+        
+        .animate-slide-in-from-left {
+            animation: slideInFromLeft 0.6s ease-out forwards;
+        }
+        
+        .animate-bounce-in {
+            animation: bounceIn 0.6s ease-out forwards;
+        }
+        
+        .animate-ripple {
+            animation: ripple 0.6s linear forwards;
+        }
+        
+        /* Custom scrollbar */
+        ::-webkit-scrollbar {
+            width: 8px;
+            height: 8px;
+        }
+        
+        ::-webkit-scrollbar-track {
+            background: var(--neutral-gray);
+            border-radius: 4px;
+        }
+        
+        ::-webkit-scrollbar-thumb {
+            background: linear-gradient(135deg, #4A90E2, #2A6EBB);
+            border-radius: 4px;
+        }
+        
+        ::-webkit-scrollbar-thumb:hover {
+            background: linear-gradient(135deg, #2A6EBB, #4A90E2);
+        }
+        
+        /* Smooth transitions */
+        .smooth-transition {
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        
+        /* Glass effect */
+        .glass-effect {
+            backdrop-filter: blur(10px);
+            background: rgba(255, 255, 255, 0.92);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+        
+        /* Card hover effect */
+        .hover-lift {
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        
+        .hover-lift:hover {
+            transform: translateY(-8px) scale(1.01);
+            box-shadow: 0 15px 30px -10px rgba(74, 144, 226, 0.2);
+        }
+        
+        /* Gradient backgrounds */
+        .gradient-blue {
+            background: linear-gradient(135deg, #E3F2FD 0%, #F5F7FA 100%);
+        }
+        
+        .gradient-green {
+            background: linear-gradient(135deg, #F0FFF4 0%, #F5F7FA 100%);
+        }
+        
+        .gradient-purple {
+            background: linear-gradient(135deg, #F5F3FF 0%, #F5F7FA 100%);
+        }
+        
+        .gradient-cyan {
+            background: linear-gradient(135deg, #E6FFFA 0%, #F5F7FA 100%);
+        }
+        
+        .gradient-orange {
+            background: linear-gradient(135deg, #FEEBC8 0%, #F5F7FA 100%);
+        }
+        
+        .gradient-red {
+            background: linear-gradient(135deg, #FED7D7 0%, #F5F7FA 100%);
+        }
+        
+        /* Horizontal scroll container */
+        .horizontal-scroll-container {
+            display: flex;
+            overflow-x: auto;
+            padding: 1rem 0.5rem;
+            gap: 1rem;
+            scrollbar-width: thin;
+            scrollbar-color: #CBD5E0 #F5F7FA;
+            -webkit-overflow-scrolling: touch;
+        }
+        
+        .horizontal-scroll-container::-webkit-scrollbar {
+            height: 6px;
+        }
+        
+        .horizontal-scroll-container::-webkit-scrollbar-track {
+            background: #F5F7FA;
+            border-radius: 3px;
+        }
+        
+        .horizontal-scroll-container::-webkit-scrollbar-thumb {
+            background: linear-gradient(135deg, #4A90E2, #2A6EBB);
+            border-radius: 3px;
+        }
+        
+        /* Progress bars */
+        .progress-bar {
+            height: 8px;
+            background-color: #E2E8F0;
+            border-radius: 4px;
+            overflow: hidden;
+        }
+        
+        .progress-bar-fill {
+            height: 100%;
+            border-radius: 4px;
+            transition: width 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        
+        /* Status indicators */
+        .status-indicator {
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+            display: inline-block;
+            margin-right: 8px;
+            position: relative;
+        }
+        
+        .status-indicator::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            border-radius: 50%;
+            animation: pulseSoft 2s infinite;
+        }
+        
+        .status-critical {
+            background-color: #F56565;
+        }
+        
+        .status-critical::after {
+            background-color: #F56565;
+        }
+        
+        .status-warning {
+            background-color: #ECC94B;
+        }
+        
+        .status-warning::after {
+            background-color: #ECC94B;
+        }
+        
+        .status-good {
+            background-color: #48BB78;
+        }
+        
+        .status-good::after {
+            background-color: #48BB78;
+        }
+        
+        /* Data visualization */
+        .data-trend-up {
+            color: #48BB78;
+            position: relative;
+        }
+        
+        .data-trend-up::before {
+            content: "↗";
+            margin-right: 4px;
+        }
+        
+        .data-trend-down {
+            color: #F56565;
+            position: relative;
+        }
+        
+        .data-trend-down::before {
+            content: "↘";
+            margin-right: 4px;
+        }
+        
+        /* Inventory specific */
+        .inventory-status {
+            padding: 6px 12px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: 600;
+            display: inline-flex;
+            align-items: center;
+            gap: 5px;
+        }
+        
+        .status-safe {
+            background-color: #C6F6D5;
+            color: #22543D;
+        }
+        
+        .status-critical {
+            background-color: #FED7D7;
+            color: #742A2A;
+        }
+        
+        .status-excess {
+            background-color: #FEFCBF;
+            color: #744210;
+        }
+        
+        .status-warning {
+            background-color: #FEEBC8;
+            color: #B45309;
+        }
+        
+        /* Movement badges */
+        .movement-badge {
+            padding: 4px 10px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: 500;
+        }
+        
+        .movement-in {
+            background-color: #C6F6D5;
+            color: #22543D;
+        }
+        
+        .movement-out {
+            background-color: #FED7D7;
+            color: #742A2A;
+        }
+        
+        .movement-adjustment {
+            background-color: #FEFCBF;
+            color: #744210;
+        }
+        
+        .movement-damage {
+            background-color: #E9D8FD;
+            color: #44337A;
+        }
+        
+        /* Stock gauge */
+        .stock-gauge {
+            height: 8px;
+            border-radius: 4px;
+            background: linear-gradient(to right, #48BB78, #ECC94B, #F56565);
+            position: relative;
+        }
+        
+        .stock-gauge-indicator {
+            position: absolute;
+            top: -4px;
+            width: 16px;
+            height: 16px;
+            background: white;
+            border: 2px solid #4A90E2;
+            border-radius: 50%;
+            transform: translateX(-50%);
+        }
+        
+        /* AI Assistant specific */
+        .ai-message {
+            max-width: 80%;
+            padding: 12px 16px;
+            border-radius: 18px;
+            margin-bottom: 12px;
+            position: relative;
+        }
+        
+        .ai-message.user {
+            background: linear-gradient(135deg, #4A90E2, #2A6EBB);
+            color: white;
+            margin-left: auto;
+            border-bottom-right-radius: 4px;
+        }
+        
+        .ai-message.assistant {
+            background: #F7FAFC;
+            color: #2D3748;
+            border: 1px solid #E2E8F0;
+            margin-right: auto;
+            border-bottom-left-radius: 4px;
+        }
+        
+        .ai-typing-indicator {
+            display: flex;
+            align-items: center;
+            padding: 12px 16px;
+            background: #F7FAFC;
+            border-radius: 18px;
+            width: fit-content;
+            margin-bottom: 12px;
+            border: 1px solid #E2E8F0;
+        }
+        
+        .ai-typing-dot {
+            width: 8px;
+            height: 8px;
+            background-color: #A0AEC0;
+            border-radius: 50%;
+            margin: 0 2px;
+            animation: typingDot 1.5s infinite ease-in-out;
+        }
+        
+        .ai-typing-dot:nth-child(1) { animation-delay: 0s; }
+        .ai-typing-dot:nth-child(2) { animation-delay: 0.2s; }
+        .ai-typing-dot:nth-child(3) { animation-delay: 0.4s; }
+        
+        @keyframes typingDot {
+            0%, 60%, 100% { transform: translateY(0); }
+            30% { transform: translateY(-8px); }
+        }
+        
+        /* Container untuk pertanyaan cepat AI */
+        .ai-quick-questions-container {
+            display: flex;
+            overflow-x: auto;
+            gap: 8px;
+            padding: 12px 4px 16px 4px;
+            margin-bottom: 4px;
+            scrollbar-width: thin;
+            scrollbar-color: #4A90E2 #F5F7FA;
+            -webkit-overflow-scrolling: touch;
+        }
+        
+        .ai-quick-questions-container::-webkit-scrollbar {
+            height: 6px;
+            display: block;
+        }
+        
+        .ai-quick-questions-container::-webkit-scrollbar-track {
+            background: #F5F7FA;
+            border-radius: 4px;
+            margin: 0 4px;
+        }
+        
+        .ai-quick-questions-container::-webkit-scrollbar-thumb {
+            background: linear-gradient(135deg, #4A90E2, #2A6EBB);
+            border-radius: 4px;
+            border: 1px solid #E2E8F0;
+        }
+        
+        .ai-quick-questions-container::-webkit-scrollbar-thumb:hover {
+            background: linear-gradient(135deg, #2A6EBB, #4A90E2);
+        }
+        
+        .ai-quick-question {
+            flex: 0 0 auto;
+            white-space: nowrap;
+            padding: 8px 12px;
+            background: #EBF8FF;
+            border: 1px solid #BEE3F8;
+            border-radius: 8px;
+            font-size: 12px;
+            color: #2C5282;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        
+        .ai-quick-question:hover {
+            background: #BEE3F8;
+            border-color: #90CDF4;
+            transform: translateY(-2px);
+        }
+        
+        /* Ripple effect */
+        .ripple-effect {
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .ripple-effect::after {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 5px;
+            height: 5px;
+            background: rgba(255, 255, 255, 0.5);
+            opacity: 0;
+            border-radius: 100%;
+            transform: scale(1, 1) translate(-50%);
+            transform-origin: 50% 50%;
+        }
+        
+        .ripple-effect:focus:not(:active)::after {
+            animation: ripple 0.6s ease-out;
+        }
+        
+        /* Loading animation */
+        .loading-spinner {
+            width: 40px;
+            height: 40px;
+            border: 3px solid #E2E8F0;
+            border-top: 3px solid #4A90E2;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+        }
+        
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+        
+        /* Page transitions */
+        .page-transition {
+            animation: fadeInUp 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        
+        /* PERBAIKAN: Custom Animation System */
+        .animate-on-scroll {
+            opacity: 0;
+            transform: translateY(30px);
+            transition: opacity 0.6s ease, transform 0.6s ease;
+        }
+        
+        .animate-on-scroll.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+        
+        .animate-on-scroll.delay-100 {
+            transition-delay: 0.1s;
+        }
+        
+        .animate-on-scroll.delay-200 {
+            transition-delay: 0.2s;
+        }
+        
+        .animate-on-scroll.delay-300 {
+            transition-delay: 0.3s;
+        }
+        
+        .animate-on-scroll.delay-400 {
+            transition-delay: 0.4s;
+        }
+        
+        .animate-on-scroll.delay-500 {
+            transition-delay: 0.5s;
+        }
+        
+        /* PERBAIKAN: Force GPU acceleration */
+        .gpu-accelerate {
+            transform: translateZ(0);
+            backface-visibility: hidden;
+            perspective: 1000px;
+        }
+        
+        /* PERBAIKAN: Initial animation untuk konten yang terlihat langsung */
+        .initial-animate {
+            animation: fadeInUp 0.8s ease-out forwards;
+        }
+        
+        /* PERBAIKAN: Memastikan semua konten ter-render */
+        .force-render {
+            will-change: transform, opacity;
+            contain: layout style paint;
+        }
+        
+        /* Untuk horizontal card */
+        .horizontal-card-initial {
+            animation: slideInFromLeft 0.6s ease-out forwards;
+        }
+        
+        /* Inventory-specific styles */
+        .inventory-filter {
+            transition: all 0.3s ease;
+        }
+        
+        .inventory-filter.active {
+            background-color: #4A90E2;
+            color: white;
+            box-shadow: 0 4px 12px rgba(74, 144, 226, 0.3);
+        }
+        
+        .inventory-table tr {
+            transition: background-color 0.2s ease;
+        }
+        
+        .inventory-table tr:hover {
+            background-color: #F7FAFC;
+        }
+        
+        /* AI Signal Styles */
+        .ai-signal {
+            border-left: 4px solid;
+            padding-left: 12px;
+            margin: 8px 0;
+        }
+        
+        .ai-signal.warning {
+            border-left-color: #ECC94B;
+            background-color: rgba(254, 252, 191, 0.3);
+        }
+        
+        .ai-signal.critical {
+            border-left-color: #F56565;
+            background-color: rgba(254, 215, 215, 0.3);
+        }
+        
+        .ai-signal.info {
+            border-left-color: #4A90E2;
+            background-color: rgba(227, 242, 253, 0.3);
+        }
+        
+        .ai-signal.success {
+            border-left-color: #48BB78;
+            background-color: rgba(198, 246, 213, 0.3);
+        }
+        
+        /* Search Input */
+        .search-input {
+            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 24 24' stroke='%239CA3AF'%3E%3Cpath stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z'%3E%3C/path%3E%3C/svg%3E");
+            background-position: 12px center;
+            background-repeat: no-repeat;
+            background-size: 20px;
+            padding-left: 40px;
+        }
+        
+        /* Logout button di navbar */
+        .nav-logout-btn {
+            padding: 8px 16px;
+            border-radius: 8px;
+            background: #FEF2F2;
+            color: #DC2626;
+            border: 1px solid #FECACA;
+            transition: all 0.3s ease;
+        }
+        
+        .nav-logout-btn:hover {
+            background: #FEE2E2;
+            border-color: #FCA5A5;
+            transform: translateY(-2px);
+        }
+        
+        /* Management Stok Specific Styles */
+        .status-badge {
+            padding: 4px 8px;
+            border-radius: 6px;
+            font-size: 11px;
+            font-weight: 600;
+        }
+        
+        .status-active {
+            background-color: #C6F6D5;
+            color: #22543D;
+        }
+        
+        .status-inactive {
+            background-color: #E2E8F0;
+            color: #4A5568;
+        }
+        
+        .stock-level-low {
+            color: #F56565;
+            font-weight: 700;
+        }
+        
+        .stock-level-medium {
+            color: #ECC94B;
+            font-weight: 700;
+        }
+        
+        .stock-level-high {
+            color: #48BB78;
+            font-weight: 700;
+        }
+        
+        /* Modal styles */
+        .modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-color: rgba(0, 0, 0, 0.5);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 1000;
+        }
+        
+        .modal-container {
+            background-color: white;
+            border-radius: 12px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.2);
+            width: 90%;
+            max-width: 600px;
+            max-height: 90vh;
+            overflow-y: auto;
+            animation: fadeInUp 0.3s ease-out;
+        }
+        
+        /* E-commerce platform integration badges */
+        .platform-badge {
+            display: inline-flex;
+            align-items: center;
+            padding: 4px 8px;
+            border-radius: 6px;
+            font-size: 11px;
+            font-weight: 600;
+            margin-right: 4px;
+            margin-bottom: 4px;
+        }
+        
+        .platform-tokopedia {
+            background-color: #42B549;
+            color: white;
+        }
+        
+        .platform-shopee {
+            background-color: #EE4D2D;
+            color: white;
+        }
+        
+        .platform-bukalapak {
+            background-color: #E31F51;
+            color: white;
+        }
+        
+        .platform-lazada {
+            background-color: #0F146D;
+            color: white;
+        }
+        
+        .platform-blibli {
+            background-color: #FF6B00;
+            color: white;
+        }
+        
+        /* Integration progress bar */
+        .integration-progress {
+            height: 6px;
+            border-radius: 3px;
+            background-color: #E2E8F0;
+            overflow: hidden;
+        }
+        
+        .integration-progress-fill {
+            height: 100%;
+            border-radius: 3px;
+            transition: width 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        
+        /* Action buttons */
+        .action-btn {
+            padding: 6px 12px;
+            border-radius: 6px;
+            font-size: 13px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            display: inline-flex;
+            align-items: center;
+            gap: 4px;
+        }
+        
+        .action-btn-primary {
+            background-color: #4A90E2;
+            color: white;
+            border: none;
+        }
+        
+        .action-btn-primary:hover {
+            background-color: #2A6EBB;
+            transform: translateY(-2px);
+        }
+        
+        .action-btn-secondary {
+            background-color: #EDF2F7;
+            color: #4A5568;
+            border: 1px solid #CBD5E0;
+        }
+        
+        .action-btn-secondary:hover {
+            background-color: #E2E8F0;
+            transform: translateY(-2px);
+        }
+        
+        .action-btn-danger {
+            background-color: #FED7D7;
+            color: #742A2A;
+            border: 1px solid #FC8181;
+        }
+        
+        .action-btn-danger:hover {
+            background-color: #FEB2B2;
+            transform: translateY(-2px);
+        }
+        
+        /* Form styles */
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+        
+        .form-label {
+            display: block;
+            margin-bottom: 0.5rem;
+            font-weight: 500;
+            color: #4A5568;
+        }
+        
+        .form-input {
+            width: 100%;
+            padding: 0.75rem 1rem;
+            border: 1px solid #CBD5E0;
+            border-radius: 6px;
+            font-size: 14px;
+            transition: all 0.2s ease;
+        }
+        
+        .form-input:focus {
+            outline: none;
+            border-color: #4A90E2;
+            box-shadow: 0 0 0 3px rgba(74, 144, 226, 0.1);
+        }
+        
+        .form-select {
+            width: 100%;
+            padding: 0.75rem 1rem;
+            border: 1px solid #CBD5E0;
+            border-radius: 6px;
+            font-size: 14px;
+            background-color: white;
+            transition: all 0.2s ease;
+        }
+        
+        .form-select:focus {
+            outline: none;
+            border-color: #4A90E2;
+            box-shadow: 0 0 0 3px rgba(74, 144, 226, 0.1);
+        }
+        
+        /* Table actions */
+        .table-actions {
+            display: flex;
+            gap: 6px;
+        }
+        
+        .table-action-btn {
+            padding: 4px 8px;
+            border-radius: 4px;
+            font-size: 12px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            display: inline-flex;
+            align-items: center;
+            gap: 4px;
+        }
+        
+        .table-action-btn-edit {
+            background-color: #EBF8FF;
+            color: #2C5282;
+            border: 1px solid #BEE3F8;
+        }
+        
+        .table-action-btn-edit:hover {
+            background-color: #BEE3F8;
+        }
+        
+        .table-action-btn-delete {
+            background-color: #FED7D7;
+            color: #742A2A;
+            border: 1px solid #FC8181;
+        }
+        
+        .table-action-btn-delete:hover {
+            background-color: #FEB2B2;
+        }
+        
+        .table-action-btn-view {
+            background-color: #F0FFF4;
+            color: #22543D;
+            border: 1px solid #C6F6D5;
+        }
+        
+        .table-action-btn-view:hover {
+            background-color: #C6F6D5;
+        }
+        
+        /* Alert notifications */
+        .alert {
+            padding: 1rem;
+            border-radius: 8px;
+            margin-bottom: 1.5rem;
+            display: flex;
+            align-items: flex-start;
+            gap: 0.75rem;
+        }
+        
+        .alert-info {
+            background-color: #EBF8FF;
+            border: 1px solid #BEE3F8;
+            color: #2C5282;
+        }
+        
+        .alert-success {
+            background-color: #F0FFF4;
+            border: 1px solid #C6F6D5;
+            color: #22543D;
+        }
+        
+        .alert-warning {
+            background-color: #FEFCBF;
+            border: 1px solid #FAF089;
+            color: #744210;
+        }
+        
+        .alert-danger {
+            background-color: #FED7D7;
+            border: 1px solid #FC8181;
+            color: #742A2A;
+        }
+        
+        /* Card styles for Management Stok */
+        .management-card {
+            background-color: white;
+            border-radius: 12px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+            border: 1px solid #E2E8F0;
+            padding: 1.5rem;
+            transition: all 0.3s ease;
+        }
+        
+        .management-card:hover {
+            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.1);
+        }
+        
+        /* Submenu styling */
+        #inventory-submenu a {
+            transition: all 0.3s ease;
+            position: relative;
+        }
+        
+        #inventory-submenu a:hover {
+            transform: translateX(5px);
+        }
+        
+        #inventory-submenu a.active {
+            background-color: #4A90E2;
+            color: white;
+        }
+        
+        /* Chevron animation */
+        .fa-chevron-down, .fa-chevron-up {
+            transition: transform 0.3s ease;
+        }
+        
+        .fa-chevron-up {
+            transform: rotate(180deg);
+        }
+        
+        /* Integration progress animation */
+        .integration-progress-fill.success {
+            background: linear-gradient(to right, #48BB78, #38A169);
+        }
+        
+        .integration-progress-fill.processing {
+            background: linear-gradient(to right, #ECC94B, #D69E2E);
+            animation: shimmer 2s infinite linear;
+        }
+        
+        .integration-progress-fill.error {
+            background: linear-gradient(to right, #F56565, #E53E3E);
+        }
+    </style>
+</head>
+<body class="page-transition">
+    <div class="app-container">
+        <!-- Sidebar -->
+        <aside class="w-64 bg-white/90 border-r border-gray-200/50 flex flex-col shadow-sm glass-effect">
+            <div class="p-6 border-b border-gray-100/50">
+                <div class="flex items-center space-x-3">
+                    <div class="w-10 h-10 rounded-lg bg-gradient-to-br from-blue-400 to-blue-600 flex items-center justify-center animate-float">
+                        <i class="fas fa-chart-line text-white"></i>
+                    </div>
+                    <h1 class="text-xl font-bold text-gray-800">A2M ERPAA</h1>
+                </div>
+            </div>
+            
+            <nav class="flex-1 p-4 space-y-2">
+                <a href="/dashboard/" class="flex items-center space-x-3 p-3 rounded-lg text-gray-700 smooth-transition hover:bg-gray-100 hover-lift ripple-effect">
+                    <i class="fas fa-tachometer-alt w-5 text-center"></i>
+                    <span class="font-medium">Dashboard</span>
+                </a>
+                <a href="/product/" class="flex items-center space-x-3 p-3 rounded-lg text-gray-700 smooth-transition hover:bg-gray-100 hover-lift ripple-effect">
+                    <i class="fas fa-boxes w-5 text-center"></i>
+                    <span class="font-medium">Product Management</span>
+                </a>
+                
+                <!-- Inventory dengan Submenu -->
+                <div class="mb-2">
+                    <div class="flex items-center justify-between p-3 rounded-lg bg-blue-50 text-blue-600 cursor-pointer smooth-transition hover:bg-blue-100 hover-lift ripple-effect" id="inventory-menu">
+                        <div class="flex items-center space-x-3">
+                            <i class="fas fa-warehouse w-5 text-center"></i>
+                            <span class="font-medium">Inventory</span>
+                        </div>
+                        <i class="fas fa-chevron-down text-sm" id="inventory-chevron"></i>
+                    </div>
+                    <div class="ml-8 mt-1 space-y-1 hidden" id="inventory-submenu">
+                        <a href="/inventory/" class="block p-2 text-sm rounded-lg text-gray-700 smooth-transition hover:bg-gray-100 hover-lift ripple-effect">
+                            <i class="fas fa-chart-bar w-4 text-center mr-2"></i>
+                            Ringkasan Inventori
+                        </a>
+                        <a href="/managementstok/" class="block p-2 text-sm rounded-lg text-blue-600 font-medium smooth-transition hover:bg-blue-100 hover-lift ripple-effect" style="background-color: rgba(74, 144, 226, 0.1);">
+                            <i class="fas fa-boxes-stacked w-4 text-center mr-2"></i>
+                            Stok Management
+                        </a>
+                    </div>
+                </div>
+                
+                <a href="/shipping/" class="flex items-center space-x-3 p-3 rounded-lg text-gray-700 smooth-transition hover:bg-gray-100 hover-lift ripple-effect">
+                    <i class="fas fa-shipping-fast w-5 text-center"></i>
+                    <span class="font-medium">Shipping Tracking</span>
+                </a>
+                <a href="/salesforecasting/" class="flex items-center space-x-3 p-3 rounded-lg text-gray-700 smooth-transition hover:bg-gray-100 hover-lift ripple-effect">
+                    <i class="fas fa-chart-bar w-5 text-center"></i>
+                    <span class="font-medium">Sales Forecasting</span>
+                </a>
+                <a href="/integrasi/" class="flex items-center space-x-3 p-3 rounded-lg text-gray-700 smooth-transition hover:bg-gray-100 hover-lift ripple-effect">
+                    <i class="fas fa-store w-5 text-center"></i>
+                    <span class="font-medium">Integrasi</span>
+                </a>
+            </nav>
+            
+            <div class="p-4 border-t border-gray-100/50">
+                <div class="flex items-center space-x-3 p-3 rounded-lg bg-gradient-to-r from-blue-50 to-gray-50 hover-lift smooth-transition">
+                    <div class="w-8 h-8 rounded-full bg-gradient-to-r from-blue-100 to-blue-200 flex items-center justify-center">
+                        <i class="fas fa-user text-blue-600 text-sm"></i>
+                    </div>
+                    <div>
+                        <p class="text-sm font-medium">Admin</p>
+                        <p class="text-xs text-gray-500">admin@flashboard.com</p>
+                    </div>
+                </div>
+            </div>
+        </aside>
+        
+        <!-- Main Content -->
+        <div class="main-wrapper">
+            <!-- Header with AI Assistant in top right -->
+            <header class="sticky top-0 z-20 bg-white/80 glass-effect border-b border-gray-200/50 px-8 py-4 shrink-0">
+                <div class="flex justify-between items-center">
+                    <div>
+                        <h2 class="text-2xl font-bold text-gray-800 initial-animate">Management Stok</h2>
+                        <p class="text-gray-600 initial-animate" style="animation-delay: 0.1s">Kelola stok produk dan sinkronisasi ke platform e-commerce</p>
+                    </div>
+                    <div class="flex items-center space-x-6">
+                        <!-- AI Assistant Button - Enhanced -->
+                        <div class="relative">
+                            <button id="aiAssistantBtn" class="flex items-center space-x-2 px-4 py-2 rounded-lg bg-gradient-to-r from-blue-500 to-blue-600 text-white smooth-transition hover:from-blue-600 hover:to-blue-700 hover-lift shadow-md relative overflow-hidden group">
+                                <i class="fas fa-robot"></i>
+                                <span class="font-medium">AI Assistant</span>
+                                <div class="absolute inset-0 bg-gradient-to-r from-cyan-500 to-blue-500 opacity-0 group-hover:opacity-20 smooth-transition"></div>
+                            </button>
+                            
+                            <!-- Enhanced AI Assistant Panel -->
+                            <div id="aiAssistantPanel" class="fixed right-8 top-20 w-96 bg-white rounded-xl shadow-2xl border border-gray-200 hidden animate-fade-in-up z-50 overflow-hidden" style="height: 600px;">
+                                <!-- AI Assistant Header -->
+                                <div class="bg-gradient-to-r from-blue-500 to-blue-600 p-4 text-white">
+                                    <div class="flex justify-between items-center">
+                                        <div class="flex items-center space-x-3">
+                                            <div class="w-10 h-10 rounded-full bg-white/20 flex items-center justify-center">
+                                                <i class="fas fa-robot text-xl"></i>
+                                            </div>
+                                            <div>
+                                                <h3 class="font-bold text-lg">AI Assistant</h3>
+                                                <p class="text-sm text-blue-100">Siap membantu manajemen stok</p>
+                                            </div>
+                                        </div>
+                                        <div class="flex items-center space-x-2">
+                                            <button class="w-8 h-8 rounded-full bg-white/20 flex items-center justify-center hover:bg-white/30 smooth-transition">
+                                                <i class="fas fa-cog"></i>
+                                            </button>
+                                            <button id="closeAIPanel" class="w-8 h-8 rounded-full bg-white/20 flex items-center justify-center hover:bg-white/30 smooth-transition">
+                                                <i class="fas fa-times"></i>
+                                            </button>
+                                        </div>
+                                    </div>
+                                    
+                                    <!-- AI Mode Selector -->
+                                    <div class="flex space-x-2 mt-4">
+                                        <button class="ai-mode-btn active flex-1 py-2 rounded-lg bg-white/20 text-sm font-medium smooth-transition hover:bg-white/30" data-mode="stock">
+                                            <i class="fas fa-boxes-stacked mr-1"></i> Manajemen Stok
+                                        </button>
+                                        <button class="ai-mode-btn flex-1 py-2 rounded-lg bg-white/10 text-sm font-medium smooth-transition hover:bg-white/20" data-mode="ecommerce">
+                                            <i class="fas fa-store mr-1"></i> E-commerce
+                                        </button>
+                                        <button class="ai-mode-btn flex-1 py-2 rounded-lg bg-white/10 text-sm font-medium smooth-transition hover:bg-white/20" data-mode="optimization">
+                                            <i class="fas fa-cogs mr-1"></i> Optimasi
+                                        </button>
+                                    </div>
+                                </div>
+                                
+                                <!-- AI Assistant Content -->
+                                <div class="flex flex-col h-full">
+                                    <!-- AI Chat Container -->
+                                    <div id="aiChatContainer" class="flex-1 overflow-y-auto p-4 space-y-3" style="max-height: 380px;">
+                                        <!-- Initial AI Message -->
+                                        <div class="ai-message assistant">
+                                            <div class="flex items-start space-x-2">
+                                                <div class="w-6 h-6 rounded-full bg-blue-100 flex items-center justify-center flex-shrink-0 mt-1">
+                                                    <i class="fas fa-robot text-blue-600 text-xs"></i>
+                                                </div>
+                                                <div>
+                                                    <p class="font-medium text-gray-800 mb-1">Halo! Saya AI Assistant untuk Manajemen Stok Anda.</p>
+                                                    <p class="text-gray-700 text-sm">Saya dapat membantu Anda mengelola stok produk, memberikan rekomendasi restok, dan memastikan sinkronisasi ke platform e-commerce berjalan lancar. Apa yang bisa saya bantu hari ini?</p>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        
+                                        <!-- Sample conversation -->
+                                        <div class="ai-message user">
+                                            <div class="flex items-center justify-between">
+                                                <p>Bagaimana cara menambah produk baru?</p>
+                                                <i class="fas fa-user ml-2"></i>
+                                            </div>
+                                        </div>
+                                        
+                                        <div class="ai-message assistant">
+                                            <div class="flex items-start space-x-2">
+                                                <div class="w-6 h-6 rounded-full bg-blue-100 flex items-center justify-center flex-shrink-0 mt-1">
+                                                    <i class="fas fa-robot text-blue-600 text-xs"></i>
+                                                </div>
+                                                <div>
+                                                    <p class="font-medium text-gray-800 mb-1">Menambahkan Produk Baru</p>
+                                                    <p class="text-gray-700 text-sm">Klik tombol <strong>"Tambah Produk"</strong> di halaman ini. Isi formulir dengan detail produk, termasuk nama, kategori, harga, dan stok awal. Produk akan otomatis disinkronkan ke 5 platform e-commerce: Tokopedia, Shopee, Bukalapak, Lazada, dan Blibli.</p>
+                                                    <div class="mt-2 flex space-x-2">
+                                                        <button class="text-xs px-2 py-1 bg-blue-100 text-blue-700 rounded smooth-transition hover:bg-blue-200" onclick="openAddProductModal()">Buka Form Tambah Produk</button>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    
+                                    <!-- AI Quick Actions - Container bisa di-scroll dengan scrollbar jelas -->
+                                    <div class="p-4 border-t border-gray-200">
+                                        <p class="text-sm font-medium text-gray-700 mb-2">Pertanyaan Cepat Manajemen Stok:</p>
+                                        <div class="ai-quick-questions-container">
+                                            <button class="ai-quick-question">
+                                                Cara tambah produk
+                                            </button>
+                                            <button class="ai-quick-question">
+                                                Update stok manual
+                                            </button>
+                                            <button class="ai-quick-question">
+                                                Sinkronisasi ke e-commerce
+                                            </button>
+                                            <button class="ai-quick-question">
+                                                Atur notifikasi stok
+                                            </button>
+                                            <button class="ai-quick-question">
+                                                Ekspor data stok
+                                            </button>
+                                            <button class="ai-quick-question">
+                                                Rekomendasi restok
+                                            </button>
+                                        </div>
+                                    </div>
+                                    
+                                    <!-- AI Input -->
+                                    <div class="p-4 border-t border-gray-200 bg-gray-50">
+                                        <div class="relative">
+                                            <input type="text" id="aiQuestionInput" placeholder="Tanyakan apapun tentang manajemen stok..." class="w-full p-3 pr-12 rounded-lg bg-white border border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent">
+                                            <button id="sendAIQuestion" class="absolute right-3 top-3 text-blue-600 hover:text-blue-800 smooth-transition">
+                                                <i class="fas fa-paper-plane"></i>
+                                            </button>
+                                        </div>
+                                        <p class="text-xs text-gray-500 mt-2 text-center">
+                                            <i class="fas fa-shield-alt mr-1"></i> Data Anda aman dan dianalisis secara real-time
+                                        </p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="flex items-center space-x-4">
+                            <!-- Logout Button di Navbar -->
+                            <form action="/logout/" method="post" class="ml-2">
+                                <button type="submit" class="nav-logout-btn flex items-center space-x-2 text-sm font-medium ripple-effect">
+                                    <i class="fas fa-sign-out-alt"></i>
+                                    <span>Logout</span>
+                                </button>
+                            </form>
+                            
+                            <div class="relative">
+                                <i class="fas fa-bell text-gray-500 text-xl hover:text-blue-500 smooth-transition cursor-pointer ripple-effect" id="notificationBell"></i>
+                                <span class="absolute -top-1 -right-1 w-3 h-3 bg-red-500 rounded-full animate-pulse-soft"></span>
+                            </div>
+                            <!-- TANGGAL REAL-TIME -->
+                            <div class="text-sm text-gray-600">
+                                <span id="currentDate" class="font-medium">Rabu, 3 Januari 2026</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </header>
+            
+            <!-- Content -->
+            <div class="content-wrapper">
+                <!-- Alert Integrasi E-commerce -->
+                <div class="alert alert-info initial-animate" style="animation-delay: 0.1s">
+                    <i class="fas fa-info-circle text-blue-500 text-lg mt-0.5"></i>
+                    <div class="flex-1">
+                        <p class="font-medium">Integrasi E-commerce Aktif</p>
+                        <p class="text-sm mt-1">Semua produk yang ditambahkan akan otomatis disinkronkan ke 5 platform: Tokopedia, Shopee, Bukalapak, Lazada, dan Blibli.</p>
+                    </div>
+                </div>
+                
+                <!-- Header dengan tombol aksi -->
+                <div class="flex flex-col md:flex-row justify-between items-start md:items-center mb-6 gap-4">
+                    <div>
+                        <h3 class="text-lg font-semibold text-gray-800">Daftar Produk & Stok</h3>
+                        <p class="text-gray-600 text-sm">Kelola semua produk dan stok Anda di satu tempat</p>
+                    </div>
+                    <div class="flex flex-wrap gap-2">
+                        <button class="action-btn action-btn-secondary" onclick="exportStockData()">
+                            <i class="fas fa-download"></i> Ekspor Data
+                        </button>
+                        <button class="action-btn action-btn-secondary" onclick="showImportModal()">
+                            <i class="fas fa-upload"></i> Impor Produk
+                        </button>
+                        <button class="action-btn action-btn-primary" onclick="openAddProductModal()">
+                            <i class="fas fa-plus"></i> Tambah Produk
+                        </button>
+                    </div>
+                </div>
+                
+                <!-- Statistik Cepat -->
+                <div class="grid grid-cols-1 md:grid-cols-4 gap-6 mb-8">
+                    <div class="management-card initial-animate" style="animation-delay: 0.2s">
+                        <div class="flex items-center justify-between">
+                            <div>
+                                <p class="text-sm text-gray-600">Total Produk</p>
+                                <p class="text-2xl font-bold text-gray-800 mt-1" id="totalProducts">42</p>
+                            </div>
+                            <div class="w-12 h-12 rounded-full bg-gradient-to-r from-blue-100 to-blue-200 flex items-center justify-center">
+                                <i class="fas fa-box text-blue-600 text-xl"></i>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="management-card initial-animate" style="animation-delay: 0.3s">
+                        <div class="flex items-center justify-between">
+                            <div>
+                                <p class="text-sm text-gray-600">Stok Aktif</p>
+                                <p class="text-2xl font-bold text-gray-800 mt-1" id="activeStock">1,847</p>
+                            </div>
+                            <div class="w-12 h-12 rounded-full bg-gradient-to-r from-green-100 to-green-200 flex items-center justify-center">
+                                <i class="fas fa-check-circle text-green-600 text-xl"></i>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="management-card initial-animate" style="animation-delay: 0.4s">
+                        <div class="flex items-center justify-between">
+                            <div>
+                                <p class="text-sm text-gray-600">Stok Kritis</p>
+                                <p class="text-2xl font-bold text-red-600 mt-1" id="criticalStock">8</p>
+                            </div>
+                            <div class="w-12 h-12 rounded-full bg-gradient-to-r from-red-100 to-red-200 flex items-center justify-center">
+                                <i class="fas fa-exclamation-triangle text-red-600 text-xl"></i>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="management-card initial-animate" style="animation-delay: 0.5s">
+                        <div class="flex items-center justify-between">
+                            <div>
+                                <p class="text-sm text-gray-600">Tersinkronisasi</p>
+                                <p class="text-2xl font-bold text-gray-800 mt-1" id="syncedProducts">38</p>
+                            </div>
+                            <div class="w-12 h-12 rounded-full bg-gradient-to-r from-purple-100 to-purple-200 flex items-center justify-center">
+                                <i class="fas fa-sync-alt text-purple-600 text-xl"></i>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Filter dan Pencarian -->
+                <div class="management-card mb-6 animate-on-scroll">
+                    <div class="flex flex-col md:flex-row gap-4">
+                        <div class="flex-1">
+                            <div class="relative">
+                                <input type="text" id="searchProduct" placeholder="Cari produk berdasarkan nama, SKU, atau kategori..." class="w-full p-3 pl-10 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent search-input">
+                            </div>
+                        </div>
+                        <div class="flex flex-wrap gap-2">
+                            <select id="categoryFilter" class="form-select w-full md:w-auto">
+                                <option value="">Semua Kategori</option>
+                                <option value="elektronik">Elektronik</option>
+                                <option value="fashion">Fashion</option>
+                                <option value="rumah-tangga">Rumah Tangga</option>
+                                <option value="kecantikan">Kecantikan</option>
+                                <option value="olahraga">Olahraga</option>
+                            </select>
+                            <select id="stockFilter" class="form-select w-full md:w-auto">
+                                <option value="">Semua Stok</option>
+                                <option value="low">Stok Rendah</option>
+                                <option value="medium">Stok Sedang</option>
+                                <option value="high">Stok Tinggi</option>
+                                <option value="critical">Stok Kritis</option>
+                            </select>
+                            <select id="statusFilter" class="form-select w-full md:w-auto">
+                                <option value="">Semua Status</option>
+                                <option value="active">Aktif</option>
+                                <option value="inactive">Tidak Aktif</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Tabel Produk -->
+                <div class="management-card animate-on-scroll delay-100">
+                    <div class="overflow-x-auto">
+                        <table class="w-full" id="productsTable">
+                            <thead class="bg-gray-50">
+                                <tr>
+                                    <th class="py-3 px-4 text-left text-xs font-medium text-gray-700 uppercase tracking-wider">Produk</th>
+                                    <th class="py-3 px-4 text-left text-xs font-medium text-gray-700 uppercase tracking-wider">SKU</th>
+                                    <th class="py-3 px-4 text-left text-xs font-medium text-gray-700 uppercase tracking-wider">Kategori</th>
+                                    <th class="py-3 px-4 text-left text-xs font-medium text-gray-700 uppercase tracking-wider">Stok</th>
+                                    <th class="py-3 px-4 text-left text-xs font-medium text-gray-700 uppercase tracking-wider">Harga</th>
+                                    <th class="py-3 px-4 text-left text-xs font-medium text-gray-700 uppercase tracking-wider">Status</th>
+                                    <th class="py-3 px-4 text-left text-xs font-medium text-gray-700 uppercase tracking-wider">Integrasi</th>
+                                    <th class="py-3 px-4 text-left text-xs font-medium text-gray-700 uppercase tracking-wider">Aksi</th>
+                                </tr>
+                            </thead>
+                            <tbody class="divide-y divide-gray-200" id="productsTableBody">
+                                <!-- Data akan diisi oleh JavaScript -->
+                            </tbody>
+                        </table>
+                    </div>
+                    
+                    <!-- Pagination -->
+                    <div class="flex flex-col md:flex-row justify-between items-center mt-6 pt-6 border-t border-gray-200">
+                        <div class="text-sm text-gray-700 mb-4 md:mb-0">
+                            Menampilkan <span id="showingFrom">1</span>-<span id="showingTo">10</span> dari <span id="totalItems">42</span> produk
+                        </div>
+                        <div class="flex items-center space-x-2">
+                            <button class="px-3 py-1 rounded border border-gray-300 bg-white text-sm hover:bg-gray-50" id="prevPage">
+                                <i class="fas fa-chevron-left"></i>
+                            </button>
+                            <div class="flex space-x-1" id="pageNumbers">
+                                <!-- Halaman akan diisi oleh JavaScript -->
+                            </div>
+                            <button class="px-3 py-1 rounded border border-gray-300 bg-white text-sm hover:bg-gray-50" id="nextPage">
+                                <i class="fas fa-chevron-right"></i>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Panduan Integrasi -->
+                <div class="mt-8 animate-on-scroll delay-200">
+                    <div class="flex items-center justify-between mb-4">
+                        <h3 class="text-lg font-semibold text-gray-800">Panduan Integrasi E-commerce</h3>
+                    </div>
+                    
+                    <div class="grid grid-cols-1 md:grid-cols-5 gap-4">
+                        <div class="management-card text-center">
+                            <div class="w-12 h-12 rounded-full bg-gradient-to-r from-green-100 to-green-200 flex items-center justify-center mx-auto mb-3">
+                                <i class="fas fa-shopping-bag text-green-600 text-xl"></i>
+                            </div>
+                            <h4 class="font-bold text-gray-800">Tokopedia</h4>
+                            <p class="text-sm text-gray-600 mt-1">Produk akan otomatis muncul di toko Tokopedia Anda dalam 1-2 menit</p>
+                        </div>
+                        
+                        <div class="management-card text-center">
+                            <div class="w-12 h-12 rounded-full bg-gradient-to-r from-orange-100 to-orange-200 flex items-center justify-center mx-auto mb-3">
+                                <i class="fas fa-store text-orange-600 text-xl"></i>
+                            </div>
+                            <h4 class="font-bold text-gray-800">Shopee</h4>
+                            <p class="text-sm text-gray-600 mt-1">Sinkronisasi real-time dengan Shopee Seller Center</p>
+                        </div>
+                        
+                        <div class="management-card text-center">
+                            <div class="w-12 h-12 rounded-full bg-gradient-to-r from-pink-100 to-pink-200 flex items-center justify-center mx-auto mb-3">
+                                <i class="fas fa-gem text-pink-600 text-xl"></i>
+                            </div>
+                            <h4 class="font-bold text-gray-800">Bukalapak</h4>
+                            <p class="text-sm text-gray-600 mt-1">Upload otomatis dengan gambar dan deskripsi lengkap</p>
+                        </div>
+                        
+                        <div class="management-card text-center">
+                            <div class="w-12 h-12 rounded-full bg-gradient-to-r from-blue-100 to-blue-200 flex items-center justify-center mx-auto mb-3">
+                                <i class="fas fa-globe text-blue-600 text-xl"></i>
+                            </div>
+                            <h4 class="font-bold text-gray-800">Lazada</h4>
+                            <p class="text-sm text-gray-600 mt-1">Integrasi langsung dengan Lazada Seller Center</p>
+                        </div>
+                        
+                        <div class="management-card text-center">
+                            <div class="w-12 h-12 rounded-full bg-gradient-to-r from-yellow-100 to-yellow-200 flex items-center justify-center mx-auto mb-3">
+                                <i class="fas fa-bolt text-yellow-600 text-xl"></i>
+                            </div>
+                            <h4 class="font-bold text-gray-800">Blibli</h4>
+                            <p class="text-sm text-gray-600 mt-1">Sinkronisasi stok dan harga secara otomatis</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal Tambah/Edit Produk -->
+    <div id="productModal" class="modal-overlay hidden">
+        <div class="modal-container">
+            <div class="p-6 border-b border-gray-200">
+                <h3 class="text-xl font-bold text-gray-800" id="modalTitle">Tambah Produk Baru</h3>
+                <p class="text-gray-600 text-sm mt-1">Produk akan otomatis disinkronkan ke 5 platform e-commerce</p>
+            </div>
+            
+            <div class="p-6">
+                <form id="productForm">
+                    <input type="hidden" id="productId">
+                    
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                        <div class="form-group">
+                            <label for="productName" class="form-label">Nama Produk *</label>
+                            <input type="text" id="productName" class="form-input" placeholder="Contoh: Kaos Premium Cotton" required>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="productSKU" class="form-label">SKU (Kode Produk) *</label>
+                            <div class="flex">
+                                <input type="text" id="productSKU" class="form-input rounded-r-none" placeholder="Contoh: PRD-001" required>
+                                <button type="button" class="bg-gray-100 border border-gray-300 border-l-0 px-3 rounded-r-md text-sm text-gray-600 hover:bg-gray-200" onclick="generateSKU()">Generate</button>
+                            </div>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="productCategory" class="form-label">Kategori *</label>
+                            <select id="productCategory" class="form-select" required>
+                                <option value="">Pilih Kategori</option>
+                                <option value="elektronik">Elektronik</option>
+                                <option value="fashion">Fashion</option>
+                                <option value="rumah-tangga">Rumah Tangga</option>
+                                <option value="kecantikan">Kecantikan</option>
+                                <option value="olahraga">Olahraga</option>
+                                <option value="makanan-minuman">Makanan & Minuman</option>
+                                <option value="buku-alat-tulis">Buku & Alat Tulis</option>
+                                <option value="mainan-hobi">Mainan & Hobi</option>
+                            </select>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="productBrand" class="form-label">Merek</label>
+                            <input type="text" id="productBrand" class="form-input" placeholder="Contoh: Nike, Apple, dll">
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="productStock" class="form-label">Stok Awal *</label>
+                            <input type="number" id="productStock" class="form-input" placeholder="0" min="0" required>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="productPrice" class="form-label">Harga (Rp) *</label>
+                            <input type="number" id="productPrice" class="form-input" placeholder="100000" min="0" required>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="productWeight" class="form-label">Berat (gram) *</label>
+                            <input type="number" id="productWeight" class="form-input" placeholder="500" min="1" required>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="productStatus" class="form-label">Status *</label>
+                            <select id="productStatus" class="form-select" required>
+                                <option value="active">Aktif</option>
+                                <option value="inactive">Tidak Aktif</option>
+                            </select>
+                        </div>
+                    </div>
+                    
+                    <div class="form-group mt-6">
+                        <label for="productDescription" class="form-label">Deskripsi Produk</label>
+                        <textarea id="productDescription" class="form-input" rows="4" placeholder="Deskripsi lengkap produk..."></textarea>
+                    </div>
+                    
+                    <!-- Platform Integrasi -->
+                    <div class="mt-6">
+                        <p class="form-label">Integrasi ke Platform E-commerce</p>
+                        <div class="grid grid-cols-2 md:grid-cols-5 gap-3 mt-2">
+                            <label class="flex items-center space-x-2 p-3 border border-gray-300 rounded-lg cursor-pointer hover:bg-gray-50">
+                                <input type="checkbox" class="form-checkbox text-blue-600" name="platforms" value="tokopedia" checked>
+                                <span class="text-sm font-medium">Tokopedia</span>
+                            </label>
+                            <label class="flex items-center space-x-2 p-3 border border-gray-300 rounded-lg cursor-pointer hover:bg-gray-50">
+                                <input type="checkbox" class="form-checkbox text-blue-600" name="platforms" value="shopee" checked>
+                                <span class="text-sm font-medium">Shopee</span>
+                            </label>
+                            <label class="flex items-center space-x-2 p-3 border border-gray-300 rounded-lg cursor-pointer hover:bg-gray-50">
+                                <input type="checkbox" class="form-checkbox text-blue-600" name="platforms" value="bukalapak" checked>
+                                <span class="text-sm font-medium">Bukalapak</span>
+                            </label>
+                            <label class="flex items-center space-x-2 p-3 border border-gray-300 rounded-lg cursor-pointer hover:bg-gray-50">
+                                <input type="checkbox" class="form-checkbox text-blue-600" name="platforms" value="lazada" checked>
+                                <span class="text-sm font-medium">Lazada</span>
+                            </label>
+                            <label class="flex items-center space-x-2 p-3 border border-gray-300 rounded-lg cursor-pointer hover:bg-gray-50">
+                                <input type="checkbox" class="form-checkbox text-blue-600" name="platforms" value="blibli" checked>
+                                <span class="text-sm font-medium">Blibli</span>
+                            </label>
+                        </div>
+                    </div>
+                    
+                    <!-- Notifikasi Integrasi -->
+                    <div id="integrationNotification" class="hidden mt-4">
+                        <div class="flex items-start space-x-3 p-4 bg-blue-50 rounded-lg">
+                            <i class="fas fa-sync-alt text-blue-500 mt-0.5"></i>
+                            <div class="flex-1">
+                                <p class="font-medium text-blue-800">Proses Integrasi</p>
+                                <p class="text-sm text-blue-700 mt-1">Produk sedang disinkronkan ke platform e-commerce. Proses ini membutuhkan waktu sekitar 1-2 menit.</p>
+                                <div class="integration-progress mt-2">
+                                    <div class="integration-progress-fill processing" id="integrationProgress" style="width: 0%"></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </form>
+            </div>
+            
+            <div class="p-6 border-t border-gray-200 flex justify-end space-x-3">
+                <button type="button" class="action-btn action-btn-secondary" onclick="closeProductModal()">Batal</button>
+                <button type="button" class="action-btn action-btn-primary" onclick="saveProduct()" id="saveProductBtn">Simpan Produk</button>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Modal Update Stok -->
+    <div id="updateStockModal" class="modal-overlay hidden">
+        <div class="modal-container" style="max-width: 500px;">
+            <div class="p-6 border-b border-gray-200">
+                <h3 class="text-xl font-bold text-gray-800" id="updateStockTitle">Update Stok Produk</h3>
+                <p class="text-gray-600 text-sm mt-1" id="updateStockProduct">-</p>
+            </div>
+            
+            <div class="p-6">
+                <div class="mb-6">
+                    <p class="text-sm font-medium text-gray-700 mb-2">Stok Saat Ini: <span id="currentStockValue" class="font-bold text-xl">0</span> unit</p>
+                </div>
+                
+                <div class="space-y-4">
+                    <div class="form-group">
+                        <label class="form-label">Tipe Update</label>
+                        <div class="flex space-x-4">
+                            <label class="flex items-center space-x-2">
+                                <input type="radio" name="updateType" value="add" checked class="form-radio text-blue-600">
+                                <span>Tambah Stok</span>
+                            </label>
+                            <label class="flex items-center space-x-2">
+                                <input type="radio" name="updateType" value="subtract" class="form-radio text-blue-600">
+                                <span>Kurangi Stok</span>
+                            </label>
+                            <label class="flex items-center space-x-2">
+                                <input type="radio" name="updateType" value="set" class="form-radio text-blue-600">
+                                <span>Set Stok</span>
+                            </label>
+                        </div>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="updateQuantity" class="form-label">Jumlah</label>
+                        <input type="number" id="updateQuantity" class="form-input" placeholder="0" min="0" value="0">
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="updateReason" class="form-label">Alasan</label>
+                        <select id="updateReason" class="form-select">
+                            <option value="restock">Restok dari Supplier</option>
+                            <option value="sale">Penjualan</option>
+                            <option value="return">Retur Pelanggan</option>
+                            <option value="adjustment">Penyesuaian Stok</option>
+                            <option value="damage">Barang Rusak</option>
+                            <option value="other">Lainnya</option>
+                        </select>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="updateNotes" class="form-label">Catatan (Opsional)</label>
+                        <textarea id="updateNotes" class="form-input" rows="3" placeholder="Tambahkan catatan jika perlu..."></textarea>
+                    </div>
+                </div>
+                
+                <div class="mt-6 p-4 bg-gray-50 rounded-lg">
+                    <p class="text-sm font-medium text-gray-700">Stok Setelah Update: <span id="updatedStockValue" class="font-bold text-xl text-blue-600">0</span> unit</p>
+                </div>
+            </div>
+            
+            <div class="p-6 border-t border-gray-200 flex justify-end space-x-3">
+                <button type="button" class="action-btn action-btn-secondary" onclick="closeUpdateStockModal()">Batal</button>
+                <button type="button" class="action-btn action-btn-primary" onclick="confirmStockUpdate()" id="updateStockBtn">Update Stok</button>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Modal Impor Produk -->
+    <div id="importModal" class="modal-overlay hidden">
+        <div class="modal-container" style="max-width: 500px;">
+            <div class="p-6 border-b border-gray-200">
+                <h3 class="text-xl font-bold text-gray-800">Impor Produk</h3>
+                <p class="text-gray-600 text-sm mt-1">Unggah file CSV atau Excel untuk menambahkan produk secara massal</p>
+            </div>
+            
+            <div class="p-6">
+                <div class="border-2 border-dashed border-gray-300 rounded-lg p-8 text-center hover:border-blue-500 smooth-transition cursor-pointer" id="dropZone">
+                    <i class="fas fa-file-upload text-gray-400 text-4xl mb-4"></i>
+                    <p class="font-medium text-gray-700">Klik atau seret file ke sini</p>
+                    <p class="text-sm text-gray-500 mt-2">Format yang didukung: .csv, .xlsx, .xls</p>
+                    <input type="file" id="fileInput" class="hidden" accept=".csv,.xlsx,.xls">
+                </div>
+                
+                <div class="mt-4 text-sm text-gray-600">
+                    <p class="font-medium mb-2">Template file CSV:</p>
+                    <div class="bg-gray-50 p-3 rounded-lg overflow-x-auto">
+                        <code class="text-xs">
+                            SKU,Nama,Kategori,Merek,Stok,Harga,Berat(gram),Deskripsi<br>
+                            PRD-001,Kaos Premium Cotton,Fashion,Nike,50,150000,250,"Kaos cotton premium..."<br>
+                            PRD-002,Smartphone X,Elektronik,Apple,30,12000000,180,"Smartphone flagship..."<br>
+                            ...dst
+                        </code>
+                    </div>
+                </div>
+                
+                <div class="mt-6">
+                    <div class="flex items-center space-x-2">
+                        <input type="checkbox" id="autoSyncImport" class="form-checkbox text-blue-600" checked>
+                        <label for="autoSyncImport" class="text-sm text-gray-700">Sinkronkan otomatis ke platform e-commerce</label>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="p-6 border-t border-gray-200 flex justify-end space-x-3">
+                <button type="button" class="action-btn action-btn-secondary" onclick="closeImportModal()">Batal</button>
+                <button type="button" class="action-btn action-btn-primary" onclick="uploadFile()" id="uploadBtn" disabled>Unggah File</button>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Modal Konfirmasi Hapus -->
+    <div id="deleteConfirmModal" class="modal-overlay hidden">
+        <div class="modal-container" style="max-width: 400px;">
+            <div class="p-6 border-b border-gray-200">
+                <h3 class="text-xl font-bold text-gray-800">Konfirmasi Hapus</h3>
+            </div>
+            
+            <div class="p-6">
+                <div class="flex items-center space-x-3 mb-4">
+                    <div class="w-10 h-10 rounded-full bg-red-100 flex items-center justify-center flex-shrink-0">
+                        <i class="fas fa-exclamation-triangle text-red-600"></i>
+                    </div>
+                    <div>
+                        <p class="font-medium text-gray-800">Apakah Anda yakin ingin menghapus produk ini?</p>
+                        <p class="text-sm text-gray-600 mt-1" id="deleteProductName">-</p>
+                    </div>
+                </div>
+                
+                <p class="text-sm text-gray-700 mt-4">
+                    <i class="fas fa-info-circle text-blue-500 mr-1"></i>
+                    Produk juga akan dihapus dari semua platform e-commerce yang terintegrasi.
+                </p>
+            </div>
+            
+            <div class="p-6 border-t border-gray-200 flex justify-end space-x-3">
+                <button type="button" class="action-btn action-btn-secondary" onclick="closeDeleteModal()">Batal</button>
+                <button type="button" class="action-btn action-btn-danger" onclick="confirmDelete()" id="confirmDeleteBtn">Hapus Produk</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- JavaScript untuk interaktivitas - DIPERBAIKI -->
+    <script>
+        // ================= DATA & STATE MANAGEMENT =================
+        
+        // Data produk (simulasi database)
+        let products = [
+            {
+                id: 1,
+                name: "Smartphone X Pro",
+                sku: "PRD-001",
+                category: "elektronik",
+                brand: "Apple",
+                stock: 92,
+                price: 15000000,
+                weight: 180,
+                description: "Smartphone flagship dengan kamera 48MP dan baterai tahan lama",
+                status: "active",
+                platforms: ["tokopedia", "shopee", "bukalapak", "lazada", "blibli"],
+                createdAt: "2025-12-15"
+            },
+            {
+                id: 2,
+                name: "Kaos Premium Cotton",
+                sku: "PRD-002",
+                category: "fashion",
+                brand: "Nike",
+                stock: 5,
+                price: 150000,
+                weight: 250,
+                description: "Kaos cotton premium dengan bahan nyaman dan desain modern",
+                status: "active",
+                platforms: ["tokopedia", "shopee", "bukalapak"],
+                createdAt: "2025-12-20"
+            },
+            {
+                id: 3,
+                name: "Lampu LED Smart Home",
+                sku: "PRD-003",
+                category: "rumah-tangga",
+                brand: "Philips",
+                stock: 28,
+                price: 800000,
+                weight: 350,
+                description: "Lampu LED dengan konektivitas smart home dan kontrol warna",
+                status: "active",
+                platforms: ["tokopedia", "shopee", "lazada", "blibli"],
+                createdAt: "2025-11-30"
+            },
+            {
+                id: 4,
+                name: "Essential Oil Set",
+                sku: "PRD-004",
+                category: "kecantikan",
+                brand: "Young Living",
+                stock: 70,
+                price: 600000,
+                weight: 150,
+                description: "Set minyak esensial untuk aromaterapi dan relaksasi",
+                status: "active",
+                platforms: ["tokopedia", "shopee"],
+                createdAt: "2025-12-05"
+            },
+            {
+                id: 5,
+                name: "Wireless Headphone Pro",
+                sku: "PRD-005",
+                category: "elektronik",
+                brand: "Sony",
+                stock: 8,
+                price: 1500000,
+                weight: 280,
+                description: "Headphone nirkabel dengan noise cancellation dan baterai 30 jam",
+                status: "active",
+                platforms: ["tokopedia", "shopee", "bukalapak", "lazada"],
+                createdAt: "2025-12-10"
+            },
+            {
+                id: 6,
+                name: "Sepatu Lari Premium",
+                sku: "PRD-006",
+                category: "olahraga",
+                brand: "Adidas",
+                stock: 25,
+                price: 1200000,
+                weight: 320,
+                description: "Sepatu lari dengan teknologi cushioning terbaik",
+                status: "active",
+                platforms: ["tokopedia", "shopee", "bukalapak"],
+                createdAt: "2025-12-12"
+            },
+            {
+                id: 7,
+                name: "Blender Multifungsi",
+                sku: "PRD-007",
+                category: "rumah-tangga",
+                brand: "Philips",
+                stock: 42,
+                price: 750000,
+                weight: 1200,
+                description: "Blender dengan 10 kecepatan dan teknologi penghancur es",
+                status: "active",
+                platforms: ["tokopedia", "shopee", "lazada", "blibli"],
+                createdAt: "2025-12-18"
+            },
+            {
+                id: 8,
+                name: "Serum Vitamin C",
+                sku: "PRD-008",
+                category: "kecantikan",
+                brand: "The Ordinary",
+                stock: 18,
+                price: 250000,
+                weight: 30,
+                description: "Serum vitamin C untuk mencerahkan kulit dan mengurangi kerutan",
+                status: "active",
+                platforms: ["tokopedia", "shopee", "bukalapak"],
+                createdAt: "2025-12-22"
+            },
+            {
+                id: 9,
+                name: "Smart Watch Series 5",
+                sku: "PRD-009",
+                category: "elektronik",
+                brand: "Samsung",
+                stock: 15,
+                price: 3500000,
+                weight: 50,
+                description: "Smartwatch dengan fitur kesehatan dan notifikasi lengkap",
+                status: "inactive",
+                platforms: ["tokopedia", "shopee"],
+                createdAt: "2025-11-25"
+            },
+            {
+                id: 10,
+                name: "Kemeja Linen Premium",
+                sku: "PRD-010",
+                category: "fashion",
+                brand: "Uniqlo",
+                stock: 32,
+                price: 450000,
+                weight: 280,
+                description: "Kemeja linen premium dengan desain minimalis dan nyaman",
+                status: "active",
+                platforms: ["tokopedia", "shopee", "bukalapak", "lazada", "blibli"],
+                createdAt: "2025-12-28"
+            }
+        ];
+        
+        // State untuk pagination dan filter
+        let currentPage = 1;
+        let itemsPerPage = 10;
+        let currentFilter = {
+            search: "",
+            category: "",
+            stock: "",
+            status: ""
+        };
+        
+        // State untuk operasi sedang berjalan
+        let currentProductId = null;
+        let currentProductForUpdate = null;
+        let currentProductForDelete = null;
+        
+        // ================= FUNGSI UTAMA =================
+        
+        // Fungsi untuk update tanggal sederhana
+        function updateDate() {
+            const now = new Date();
+            
+            // Format hari dalam Bahasa Indonesia
+            const days = ['Minggu', 'Senin', 'Selasa', 'Rabu', 'Kamis', 'Jumat', 'Sabtu'];
+            const months = ['Januari', 'Februari', 'Maret', 'April', 'Mei', 'Juni', 
+                           'Juli', 'Agustus', 'September', 'Oktober', 'November', 'Desember'];
+            
+            const dayName = days[now.getDay()];
+            const date = now.getDate();
+            const monthName = months[now.getMonth()];
+            const year = now.getFullYear();
+            
+            // Format untuk tanggal: "Selasa, 2 Januari 2026"
+            const formattedDate = `${dayName}, ${date} ${monthName} ${year}`;
+            
+            // Update elemen
+            const dateElement = document.getElementById('currentDate');
+            if (dateElement) {
+                dateElement.textContent = formattedDate;
+            }
+        }
+        
+        // Fungsi untuk memuat data produk ke tabel
+        function loadProducts() {
+            // Filter produk berdasarkan kriteria
+            let filteredProducts = products.filter(product => {
+                // Filter pencarian
+                if (currentFilter.search) {
+                    const searchTerm = currentFilter.search.toLowerCase();
+                    const searchIn = `${product.name} ${product.sku} ${product.category} ${product.brand}`.toLowerCase();
+                    if (!searchIn.includes(searchTerm)) return false;
+                }
+                
+                // Filter kategori
+                if (currentFilter.category && product.category !== currentFilter.category) {
+                    return false;
+                }
+                
+                // Filter status
+                if (currentFilter.status && product.status !== currentFilter.status) {
+                    return false;
+                }
+                
+                // Filter stok
+                if (currentFilter.stock) {
+                    if (currentFilter.stock === 'low' && product.stock >= 20) return false;
+                    if (currentFilter.stock === 'medium' && (product.stock < 20 || product.stock >= 50)) return false;
+                    if (currentFilter.stock === 'high' && product.stock < 50) return false;
+                    if (currentFilter.stock === 'critical' && product.stock >= 10) return false;
+                }
+                
+                return true;
+            });
+            
+            // Hitung total halaman
+            const totalPages = Math.ceil(filteredProducts.length / itemsPerPage);
+            
+            // Pastikan currentPage valid
+            if (currentPage > totalPages) currentPage = totalPages;
+            if (currentPage < 1) currentPage = 1;
+            
+            // Dapatkan produk untuk halaman saat ini
+            const startIndex = (currentPage - 1) * itemsPerPage;
+            const endIndex = startIndex + itemsPerPage;
+            const pageProducts = filteredProducts.slice(startIndex, endIndex);
+            
+            // Render tabel
+            const tableBody = document.getElementById('productsTableBody');
+            tableBody.innerHTML = '';
+            
+            if (pageProducts.length === 0) {
+                tableBody.innerHTML = `
+                    <tr>
+                        <td colspan="8" class="py-8 text-center text-gray-500">
+                            <i class="fas fa-box-open text-3xl text-gray-300 mb-3"></i>
+                            <p class="font-medium">Tidak ada produk ditemukan</p>
+                            <p class="text-sm mt-1">Coba ubah filter pencarian atau tambahkan produk baru</p>
+                        </td>
+                    </tr>
+                `;
+            } else {
+                pageProducts.forEach(product => {
+                    const row = document.createElement('tr');
+                    row.className = 'hover:bg-gray-50';
+                    
+                    // Tentukan level stok
+                    let stockLevel = 'high';
+                    let stockLevelClass = 'stock-level-high';
+                    if (product.stock < 10) {
+                        stockLevel = 'critical';
+                        stockLevelClass = 'stock-level-low';
+                    } else if (product.stock < 20) {
+                        stockLevel = 'low';
+                        stockLevelClass = 'stock-level-low';
+                    } else if (product.stock < 50) {
+                        stockLevel = 'medium';
+                        stockLevelClass = 'stock-level-medium';
+                    }
+                    
+                    // Format harga
+                    const formattedPrice = new Intl.NumberFormat('id-ID', {
+                        style: 'currency',
+                        currency: 'IDR',
+                        minimumFractionDigits: 0
+                    }).format(product.price);
+                    
+                    // Platform badges
+                    const platformBadges = product.platforms.map(platform => {
+                        const platformClass = `platform-${platform}`;
+                        const platformName = platform.charAt(0).toUpperCase() + platform.slice(1);
+                        return `<span class="platform-badge ${platformClass}">${platformName}</span>`;
+                    }).join('');
+                    
+                    row.innerHTML = `
+                        <td class="py-4 px-4">
+                            <div class="flex items-center">
+                                <div class="w-10 h-10 rounded-lg bg-gradient-to-r from-blue-100 to-blue-200 flex items-center justify-center mr-3">
+                                    <i class="fas fa-box text-blue-600 text-sm"></i>
+                                </div>
+                                <div>
+                                    <div class="text-sm font-medium text-gray-900">${product.name}</div>
+                                    <div class="text-xs text-gray-500">${product.brand || '-'}</div>
+                                </div>
+                            </div>
+                        </td>
+                        <td class="py-4 px-4">
+                            <div class="text-sm font-medium text-gray-900">${product.sku}</div>
+                        </td>
+                        <td class="py-4 px-4">
+                            <div class="text-sm text-gray-900">${getCategoryName(product.category)}</div>
+                        </td>
+                        <td class="py-4 px-4">
+                            <div class="text-sm font-bold ${stockLevelClass}">${product.stock}</div>
+                            <div class="text-xs text-gray-500">${getStockLevelText(stockLevel)}</div>
+                        </td>
+                        <td class="py-4 px-4">
+                            <div class="text-sm font-medium text-gray-900">${formattedPrice}</div>
+                        </td>
+                        <td class="py-4 px-4">
+                            <span class="status-badge ${product.status === 'active' ? 'status-active' : 'status-inactive'}">
+                                ${product.status === 'active' ? 'Aktif' : 'Tidak Aktif'}
+                            </span>
+                        </td>
+                        <td class="py-4 px-4">
+                            <div class="flex flex-wrap gap-1">
+                                ${platformBadges}
+                            </div>
+                        </td>
+                        <td class="py-4 px-4">
+                            <div class="table-actions">
+                                <button class="table-action-btn table-action-btn-view" onclick="viewProduct(${product.id})" title="Lihat Detail">
+                                    <i class="fas fa-eye"></i>
+                                </button>
+                                <button class="table-action-btn table-action-btn-edit" onclick="editProduct(${product.id})" title="Edit">
+                                    <i class="fas fa-edit"></i>
+                                </button>
+                                <button class="table-action-btn table-action-btn-edit" onclick="openUpdateStockModal(${product.id})" title="Update Stok">
+                                    <i class="fas fa-exchange-alt"></i>
+                                </button>
+                                <button class="table-action-btn table-action-btn-delete" onclick="openDeleteModal(${product.id})" title="Hapus">
+                                    <i class="fas fa-trash"></i>
+                                </button>
+                            </div>
+                        </td>
+                    `;
+                    
+                    tableBody.appendChild(row);
+                });
+            }
+            
+            // Update pagination
+            updatePagination(filteredProducts.length);
+            
+            // Update statistik
+            updateStatistics();
+        }
+        
+        // Fungsi untuk mendapatkan nama kategori
+        function getCategoryName(category) {
+            const categories = {
+                'elektronik': 'Elektronik',
+                'fashion': 'Fashion',
+                'rumah-tangga': 'Rumah Tangga',
+                'kecantikan': 'Kecantikan',
+                'olahraga': 'Olahraga',
+                'makanan-minuman': 'Makanan & Minuman',
+                'buku-alat-tulis': 'Buku & Alat Tulis',
+                'mainan-hobi': 'Mainan & Hobi'
+            };
+            return categories[category] || category;
+        }
+        
+        // Fungsi untuk mendapatkan teks level stok
+        function getStockLevelText(level) {
+            const texts = {
+                'critical': 'Kritis',
+                'low': 'Rendah',
+                'medium': 'Sedang',
+                'high': 'Tinggi'
+            };
+            return texts[level] || level;
+        }
+        
+        // Fungsi untuk update pagination
+        function updatePagination(totalItems) {
+            const totalPages = Math.ceil(totalItems / itemsPerPage);
+            
+            // Update info halaman
+            const showingFrom = Math.min((currentPage - 1) * itemsPerPage + 1, totalItems);
+            const showingTo = Math.min(currentPage * itemsPerPage, totalItems);
+            
+            document.getElementById('showingFrom').textContent = showingFrom;
+            document.getElementById('showingTo').textContent = showingTo;
+            document.getElementById('totalItems').textContent = totalItems;
+            
+            // Update tombol halaman
+            const pageNumbers = document.getElementById('pageNumbers');
+            pageNumbers.innerHTML = '';
+            
+            // Tampilkan maksimal 5 nomor halaman
+            let startPage = Math.max(1, currentPage - 2);
+            let endPage = Math.min(totalPages, startPage + 4);
+            
+            if (endPage - startPage < 4) {
+                startPage = Math.max(1, endPage - 4);
+            }
+            
+            for (let i = startPage; i <= endPage; i++) {
+                const pageBtn = document.createElement('button');
+                pageBtn.className = `px-3 py-1 rounded text-sm ${i === currentPage ? 'bg-blue-600 text-white' : 'border border-gray-300 bg-white text-gray-700 hover:bg-gray-50'}`;
+                pageBtn.textContent = i;
+                pageBtn.addEventListener('click', () => {
+                    currentPage = i;
+                    loadProducts();
+                });
+                pageNumbers.appendChild(pageBtn);
+            }
+            
+            // Update tombol prev/next
+            document.getElementById('prevPage').disabled = currentPage === 1;
+            document.getElementById('nextPage').disabled = currentPage === totalPages || totalPages === 0;
+        }
+        
+        // Fungsi untuk update statistik
+        function updateStatistics() {
+            // Hitung total produk
+            document.getElementById('totalProducts').textContent = products.length;
+            
+            // Hitung stok aktif
+            const activeStock = products.reduce((sum, product) => sum + product.stock, 0);
+            document.getElementById('activeStock').textContent = activeStock.toLocaleString('id-ID');
+            
+            // Hitung stok kritis (stok < 10)
+            const criticalStock = products.filter(product => product.stock < 10).length;
+            document.getElementById('criticalStock').textContent = criticalStock;
+            
+            // Hitung produk yang tersinkronisasi ke semua platform
+            const syncedProducts = products.filter(product => product.platforms.length === 5).length;
+            document.getElementById('syncedProducts').textContent = syncedProducts;
+        }
+        
+        // ================= MODAL FUNCTIONS =================
+        
+        // Buka modal tambah produk
+        function openAddProductModal() {
+            // Reset form
+            document.getElementById('productForm').reset();
+            document.getElementById('productId').value = '';
+            document.getElementById('modalTitle').textContent = 'Tambah Produk Baru';
+            document.getElementById('integrationNotification').classList.add('hidden');
+            document.getElementById('integrationProgress').style.width = '0%';
+            document.getElementById('integrationProgress').className = 'integration-progress-fill processing';
+            
+            // Generate SKU
+            generateSKU();
+            
+            // Tampilkan modal
+            document.getElementById('productModal').classList.remove('hidden');
+        }
+        
+        // Buka modal edit produk
+        function editProduct(id) {
+            const product = products.find(p => p.id === id);
+            if (!product) return;
+            
+            // Isi form dengan data produk
+            document.getElementById('productId').value = product.id;
+            document.getElementById('productName').value = product.name;
+            document.getElementById('productSKU').value = product.sku;
+            document.getElementById('productCategory').value = product.category;
+            document.getElementById('productBrand').value = product.brand || '';
+            document.getElementById('productStock').value = product.stock;
+            document.getElementById('productPrice').value = product.price;
+            document.getElementById('productWeight').value = product.weight;
+            document.getElementById('productStatus').value = product.status;
+            document.getElementById('productDescription').value = product.description || '';
+            
+            // Update checkbox platform
+            const platformCheckboxes = document.querySelectorAll('input[name="platforms"]');
+            platformCheckboxes.forEach(checkbox => {
+                checkbox.checked = product.platforms.includes(checkbox.value);
+            });
+            
+            // Update judul modal
+            document.getElementById('modalTitle').textContent = 'Edit Produk';
+            document.getElementById('integrationNotification').classList.add('hidden');
+            
+            // Tampilkan modal
+            document.getElementById('productModal').classList.remove('hidden');
+        }
+        
+        // Lihat detail produk
+        function viewProduct(id) {
+            const product = products.find(p => p.id === id);
+            if (!product) return;
+            
+            // Tampilkan notifikasi dengan detail produk
+            showNotification(`Detail Produk: ${product.name} (${product.sku}). Stok: ${product.stock} unit. Harga: Rp ${product.price.toLocaleString('id-ID')}.`, 'info');
+        }
+        
+        // Tutup modal produk
+        function closeProductModal() {
+            document.getElementById('productModal').classList.add('hidden');
+        }
+        
+        // Simpan produk (tambah/edit)
+        function saveProduct() {
+            // Validasi form
+            const productId = document.getElementById('productId').value;
+            const productName = document.getElementById('productName').value.trim();
+            const productSKU = document.getElementById('productSKU').value.trim();
+            const productCategory = document.getElementById('productCategory').value;
+            const productStock = parseInt(document.getElementById('productStock').value);
+            const productPrice = parseInt(document.getElementById('productPrice').value);
+            
+            if (!productName || !productSKU || !productCategory || isNaN(productStock) || isNaN(productPrice)) {
+                showNotification('Harap isi semua field yang wajib diisi!', 'warning');
+                return;
+            }
+            
+            // Cek apakah SKU sudah digunakan (kecuali untuk edit produk yang sama)
+            const isDuplicateSKU = products.some(p => p.sku === productSKU && p.id !== parseInt(productId));
+            if (isDuplicateSKU) {
+                showNotification('SKU sudah digunakan oleh produk lain!', 'error');
+                return;
+            }
+            
+            // Dapatkan platform yang dipilih
+            const platformCheckboxes = document.querySelectorAll('input[name="platforms"]:checked');
+            const selectedPlatforms = Array.from(platformCheckboxes).map(cb => cb.value);
+            
+            // Data produk
+            const productData = {
+                name: productName,
+                sku: productSKU,
+                category: productCategory,
+                brand: document.getElementById('productBrand').value.trim() || null,
+                stock: productStock,
+                price: productPrice,
+                weight: parseInt(document.getElementById('productWeight').value) || 100,
+                description: document.getElementById('productDescription').value.trim() || '',
+                status: document.getElementById('productStatus').value,
+                platforms: selectedPlatforms,
+                createdAt: new Date().toISOString().split('T')[0]
+            };
+            
+            // Simpan produk
+            if (productId) {
+                // Edit produk yang ada
+                const index = products.findIndex(p => p.id === parseInt(productId));
+                if (index !== -1) {
+                    productData.id = parseInt(productId);
+                    products[index] = productData;
+                    showNotification('Produk berhasil diperbarui!', 'success');
+                }
+            } else {
+                // Tambah produk baru
+                const newId = products.length > 0 ? Math.max(...products.map(p => p.id)) + 1 : 1;
+                productData.id = newId;
+                products.push(productData);
+                
+                // Tampilkan notifikasi integrasi
+                document.getElementById('integrationNotification').classList.remove('hidden');
+                
+                // Simulasi progress integrasi
+                simulateIntegrationProgress(productData);
+                
+                showNotification('Produk baru berhasil ditambahkan! Sedang disinkronkan ke platform e-commerce...', 'success');
+            }
+            
+            // Tutup modal setelah 3 detik (kecuali untuk produk baru dengan integrasi)
+            if (productId) {
+                setTimeout(() => {
+                    closeProductModal();
+                    loadProducts();
+                }, 1000);
+            }
+        }
+        
+        // Simulasi progress integrasi ke platform e-commerce
+        function simulateIntegrationProgress(productData) {
+            const progressBar = document.getElementById('integrationProgress');
+            const saveBtn = document.getElementById('saveProductBtn');
+            
+            // Nonaktifkan tombol simpan
+            saveBtn.disabled = true;
+            saveBtn.textContent = 'Menyimpan...';
+            
+            // Simulasi progress
+            let progress = 0;
+            const interval = setInterval(() => {
+                progress += 10;
+                progressBar.style.width = `${progress}%`;
+                
+                if (progress >= 100) {
+                    clearInterval(interval);
+                    progressBar.className = 'integration-progress-fill success';
+                    saveBtn.textContent = 'Selesai!';
+                    
+                    // Tampilkan notifikasi sukses
+                    const platformNames = productData.platforms.map(p => p.charAt(0).toUpperCase() + p.slice(1)).join(', ');
+                    showNotification(`Produk berhasil disinkronkan ke: ${platformNames}`, 'success');
+                    
+                    // Tutup modal dan refresh data setelah 2 detik
+                    setTimeout(() => {
+                        closeProductModal();
+                        loadProducts();
+                    }, 2000);
+                }
+            }, 200);
+        }
+        
+        // Generate SKU otomatis
+        function generateSKU() {
+            const prefix = 'PRD-';
+            const existingSKUs = products.map(p => p.sku);
+            let newSKU;
+            let counter = 1;
+            
+            do {
+                newSKU = `${prefix}${String(counter).padStart(3, '0')}`;
+                counter++;
+            } while (existingSKUs.includes(newSKU));
+            
+            document.getElementById('productSKU').value = newSKU;
+        }
+        
+        // ================= UPDATE STOK FUNCTIONS =================
+        
+        // Buka modal update stok
+        function openUpdateStockModal(id) {
+            const product = products.find(p => p.id === id);
+            if (!product) return;
+            
+            currentProductForUpdate = product;
+            
+            // Isi data produk
+            document.getElementById('updateStockTitle').textContent = `Update Stok: ${product.name}`;
+            document.getElementById('updateStockProduct').textContent = `SKU: ${product.sku}`;
+            document.getElementById('currentStockValue').textContent = product.stock;
+            document.getElementById('updatedStockValue').textContent = product.stock;
+            
+            // Reset form
+            document.getElementById('updateQuantity').value = 0;
+            document.getElementById('updateReason').value = 'restock';
+            document.getElementById('updateNotes').value = '';
+            
+            // Tampilkan modal
+            document.getElementById('updateStockModal').classList.remove('hidden');
+        }
+        
+        // Update nilai stok setelah perubahan
+        function updateStockCalculation() {
+            const currentStock = currentProductForUpdate ? currentProductForUpdate.stock : 0;
+            const quantity = parseInt(document.getElementById('updateQuantity').value) || 0;
+            const updateType = document.querySelector('input[name="updateType"]:checked').value;
+            
+            let newStock = currentStock;
+            
+            if (updateType === 'add') {
+                newStock = currentStock + quantity;
+            } else if (updateType === 'subtract') {
+                newStock = Math.max(0, currentStock - quantity);
+            } else if (updateType === 'set') {
+                newStock = quantity;
+            }
+            
+            document.getElementById('updatedStockValue').textContent = newStock;
+        }
+        
+        // Tutup modal update stok
+        function closeUpdateStockModal() {
+            document.getElementById('updateStockModal').classList.add('hidden');
+            currentProductForUpdate = null;
+        }
+        
+        // Konfirmasi update stok
+        function confirmStockUpdate() {
+            if (!currentProductForUpdate) return;
+            
+            const quantity = parseInt(document.getElementById('updateQuantity').value) || 0;
+            const updateType = document.querySelector('input[name="updateType"]:checked').value;
+            const reason = document.getElementById('updateReason').value;
+            const notes = document.getElementById('updateNotes').value.trim();
+            
+            if (quantity <= 0) {
+                showNotification('Jumlah harus lebih dari 0!', 'warning');
+                return;
+            }
+            
+            // Update stok produk
+            const productIndex = products.findIndex(p => p.id === currentProductForUpdate.id);
+            if (productIndex === -1) return;
+            
+            let newStock = currentProductForUpdate.stock;
+            let actionText = '';
+            
+            if (updateType === 'add') {
+                newStock = currentProductForUpdate.stock + quantity;
+                actionText = `Ditambahkan ${quantity} unit`;
+            } else if (updateType === 'subtract') {
+                if (quantity > currentProductForUpdate.stock) {
+                    showNotification('Jumlah pengurangan melebihi stok yang tersedia!', 'error');
+                    return;
+                }
+                newStock = currentProductForUpdate.stock - quantity;
+                actionText = `Dikurangi ${quantity} unit`;
+            } else if (updateType === 'set') {
+                newStock = quantity;
+                actionText = `Diatur menjadi ${quantity} unit`;
+            }
+            
+            // Update produk
+            products[productIndex].stock = newStock;
+            
+            // Tampilkan notifikasi
+            showNotification(`Stok ${currentProductForUpdate.name} ${actionText}. Stok sekarang: ${newStock} unit.`, 'success');
+            
+            // Tutup modal
+            closeUpdateStockModal();
+            
+            // Refresh data
+            loadProducts();
+        }
+        
+        // ================= DELETE FUNCTIONS =================
+        
+        // Buka modal konfirmasi hapus
+        function openDeleteModal(id) {
+            const product = products.find(p => p.id === id);
+            if (!product) return;
+            
+            currentProductForDelete = product;
+            document.getElementById('deleteProductName').textContent = product.name;
+            document.getElementById('deleteConfirmModal').classList.remove('hidden');
+        }
+        
+        // Tutup modal hapus
+        function closeDeleteModal() {
+            document.getElementById('deleteConfirmModal').classList.add('hidden');
+            currentProductForDelete = null;
+        }
+        
+        // Konfirmasi hapus produk
+        function confirmDelete() {
+            if (!currentProductForDelete) return;
+            
+            // Hapus produk dari array
+            const index = products.findIndex(p => p.id === currentProductForDelete.id);
+            if (index !== -1) {
+                const productName = products[index].name;
+                products.splice(index, 1);
+                
+                // Tampilkan notifikasi
+                showNotification(`Produk "${productName}" berhasil dihapus!`, 'success');
+                
+                // Refresh data
+                loadProducts();
+            }
+            
+            // Tutup modal
+            closeDeleteModal();
+        }
+        
+        // ================= IMPORT FUNCTIONS =================
+        
+        // Tampilkan modal impor
+        function showImportModal() {
+            document.getElementById('importModal').classList.remove('hidden');
+        }
+        
+        // Tutup modal impor
+        function closeImportModal() {
+            document.getElementById('importModal').classList.add('hidden');
+        }
+        
+        // Upload file
+        function uploadFile() {
+            const fileInput = document.getElementById('fileInput');
+            const file = fileInput.files[0];
+            
+            if (!file) {
+                showNotification('Pilih file terlebih dahulu!', 'warning');
+                return;
+            }
+            
+            const uploadBtn = document.getElementById('uploadBtn');
+            uploadBtn.disabled = true;
+            uploadBtn.textContent = 'Mengunggah...';
+            
+            // Simulasi upload file
+            setTimeout(() => {
+                // Simulasi menambahkan produk dari file
+                const newProductsCount = 3; // Simulasi 3 produk baru dari file
+                
+                // Tambahkan produk dummy
+                for (let i = 0; i < newProductsCount; i++) {
+                    const newId = products.length > 0 ? Math.max(...products.map(p => p.id)) + 1 : 1;
+                    const newProduct = {
+                        id: newId,
+                        name: `Produk Impor ${i + 1}`,
+                        sku: `IMP-${String(newId).padStart(3, '0')}`,
+                        category: ['elektronik', 'fashion', 'rumah-tangga'][i % 3],
+                        brand: 'Brand Impor',
+                        stock: Math.floor(Math.random() * 100) + 10,
+                        price: Math.floor(Math.random() * 1000000) + 100000,
+                        weight: Math.floor(Math.random() * 500) + 100,
+                        description: 'Produk diimpor dari file',
+                        status: 'active',
+                        platforms: ['tokopedia', 'shopee', 'bukalapak'],
+                        createdAt: new Date().toISOString().split('T')[0]
+                    };
+                    
+                    products.push(newProduct);
+                }
+                
+                showNotification(`${newProductsCount} produk berhasil diimpor dari file!`, 'success');
+                
+                // Tutup modal
+                closeImportModal();
+                
+                // Refresh data
+                loadProducts();
+            }, 2000);
+        }
+        
+        // ================= EKSPOR FUNCTIONS =================
+        
+        // Ekspor data stok
+        function exportStockData() {
+            // Simulasi ekspor data
+            showNotification('Sedang mengekspor data stok ke file CSV...', 'info');
+            
+            setTimeout(() => {
+                // Buat konten CSV
+                let csvContent = "SKU,Nama,Kategori,Stok,Harga,Status\n";
+                
+                products.forEach(product => {
+                    const row = [
+                        product.sku,
+                        `"${product.name}"`,
+                        getCategoryName(product.category),
+                        product.stock,
+                        product.price,
+                        product.status === 'active' ? 'Aktif' : 'Tidak Aktif'
+                    ].join(',');
+                    
+                    csvContent += row + "\n";
+                });
+                
+                // Buat file dan unduh
+                const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
+                const url = URL.createObjectURL(blob);
+                const link = document.createElement('a');
+                link.href = url;
+                link.setAttribute('download', `data-stok-${new Date().toISOString().split('T')[0]}.csv`);
+                document.body.appendChild(link);
+                link.click();
+                document.body.removeChild(link);
+                
+                showNotification('Data stok berhasil diekspor!', 'success');
+            }, 1000);
+        }
+        
+        // ================= NOTIFICATION FUNCTIONS =================
+        
+        // Tampilkan notifikasi
+        function showNotification(message, type = 'info') {
+            const notification = document.createElement('div');
+            notification.className = `fixed top-24 right-8 px-4 py-3 rounded-lg shadow-lg z-50 animate-slide-in-right`;
+            
+            let bgColor = 'bg-blue-100 text-blue-800 border border-blue-200';
+            let icon = 'fas fa-info-circle';
+            
+            if (type === 'success') {
+                bgColor = 'bg-green-100 text-green-800 border border-green-200';
+                icon = 'fas fa-check-circle';
+            } else if (type === 'warning') {
+                bgColor = 'bg-yellow-100 text-yellow-800 border border-yellow-200';
+                icon = 'fas fa-exclamation-triangle';
+            } else if (type === 'error') {
+                bgColor = 'bg-red-100 text-red-800 border border-red-200';
+                icon = 'fas fa-times-circle';
+            }
+            
+            notification.className += ` ${bgColor}`;
+            notification.innerHTML = `
+                <div class="flex items-center space-x-3">
+                    <i class="${icon}"></i>
+                    <span>${message}</span>
+                </div>
+            `;
+            
+            document.body.appendChild(notification);
+            
+            setTimeout(() => {
+                if (notification.parentNode) {
+                    notification.style.animation = 'slideInRight 0.3s reverse forwards';
+                    setTimeout(() => {
+                        if (notification.parentNode) {
+                            notification.remove();
+                        }
+                    }, 300);
+                }
+            }, 3000);
+        }
+        
+        // ================= AI ASSISTANT FUNCTIONS =================
+        
+        // AI Assistant Panel
+        const aiAssistantBtn = document.getElementById('aiAssistantBtn');
+        const aiAssistantPanel = document.getElementById('aiAssistantPanel');
+        const closeAIPanel = document.getElementById('closeAIPanel');
+        
+        // Open AI Assistant Panel
+        aiAssistantBtn.addEventListener('click', function(e) {
+            e.stopPropagation();
+            aiAssistantPanel.classList.toggle('hidden');
+            setTimeout(() => {
+                const chatContainer = document.getElementById('aiChatContainer');
+                chatContainer.scrollTop = chatContainer.scrollHeight;
+            }, 100);
+        });
+        
+        closeAIPanel.addEventListener('click', function() {
+            aiAssistantPanel.classList.add('hidden');
+        });
+        
+        // Close AI panel when clicking outside
+        document.addEventListener('click', function(e) {
+            if (!aiAssistantPanel.contains(e.target) && !aiAssistantBtn.contains(e.target)) {
+                aiAssistantPanel.classList.add('hidden');
+            }
+        });
+        
+        // AI Mode Selector
+        const aiModeButtons = document.querySelectorAll('.ai-mode-btn');
+        aiModeButtons.forEach(button => {
+            button.addEventListener('click', function() {
+                aiModeButtons.forEach(btn => {
+                    btn.classList.remove('active', 'bg-white/20');
+                    btn.classList.add('bg-white/10');
+                });
+                this.classList.add('active', 'bg-white/20');
+                this.classList.remove('bg-white/10');
+                
+                const mode = this.dataset.mode;
+                changeAIMode(mode);
+            });
+        });
+        
+        function changeAIMode(mode) {
+            const aiHeader = document.querySelector('.bg-gradient-to-r.from-blue-500.to-blue-600 h3');
+            const aiSubtitle = document.querySelector('.bg-gradient-to-r.from-blue-500.to-blue-600 p');
+            
+            switch(mode) {
+                case 'stock':
+                    aiHeader.textContent = 'AI Stock Management Assistant';
+                    aiSubtitle.textContent = 'Membantu manajemen stok dan restok';
+                    break;
+                case 'ecommerce':
+                    aiHeader.textContent = 'AI E-commerce Integration Assistant';
+                    aiSubtitle.textContent = 'Membantu sinkronisasi ke platform e-commerce';
+                    break;
+                case 'optimization':
+                    aiHeader.textContent = 'AI Optimization Assistant';
+                    aiSubtitle.textContent = 'Optimasi level stok dan prediksi kebutuhan';
+                    break;
+            }
+            
+            addAIMessage(`Mode AI telah diubah ke: ${mode.charAt(0).toUpperCase() + mode.slice(1)}. Bagaimana saya bisa membantu Anda?`, 'assistant');
+        }
+        
+        // AI Quick Questions
+        const aiQuickQuestions = document.querySelectorAll('.ai-quick-question');
+        
+        aiQuickQuestions.forEach(button => {
+            button.addEventListener('click', function() {
+                const question = this.textContent;
+                addAIMessage(question, 'user');
+                
+                showTypingIndicator();
+                
+                setTimeout(() => {
+                    removeTypingIndicator();
+                    generateStockAIResponse(question);
+                }, 1500);
+            });
+        });
+        
+        // Send AI Question
+        const aiQuestionInput = document.getElementById('aiQuestionInput');
+        const sendAIQuestion = document.getElementById('sendAIQuestion');
+        
+        sendAIQuestion.addEventListener('click', function() {
+            if (aiQuestionInput.value.trim() !== '') {
+                const question = aiQuestionInput.value;
+                addAIMessage(question, 'user');
+                aiQuestionInput.value = '';
+                
+                showTypingIndicator();
+                
+                setTimeout(() => {
+                    removeTypingIndicator();
+                    generateStockAIResponse(question);
+                }, 2000);
+            }
+        });
+        
+        // Enter key to send question
+        aiQuestionInput.addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') {
+                sendAIQuestion.click();
+            }
+        });
+        
+        // AI Chat Functions
+        function addAIMessage(text, sender) {
+            const chatContainer = document.getElementById('aiChatContainer');
+            const messageDiv = document.createElement('div');
+            messageDiv.className = `ai-message ${sender}`;
+            
+            if (sender === 'user') {
+                messageDiv.innerHTML = `
+                    <div class="flex items-center justify-between">
+                        <p>${text}</p>
+                        <i class="fas fa-user ml-2"></i>
+                    </div>
+                `;
+            } else {
+                messageDiv.innerHTML = `
+                    <div class="flex items-start space-x-2">
+                        <div class="w-6 h-6 rounded-full bg-blue-100 flex items-center justify-center flex-shrink-0 mt-1">
+                            <i class="fas fa-robot text-blue-600 text-xs"></i>
+                        </div>
+                        <div>
+                            <p class="text-gray-700">${text}</p>
+                        </div>
+                    </div>
+                `;
+            }
+            
+            chatContainer.appendChild(messageDiv);
+            chatContainer.scrollTop = chatContainer.scrollHeight;
+        }
+        
+        function showTypingIndicator() {
+            const chatContainer = document.getElementById('aiChatContainer');
+            const typingDiv = document.createElement('div');
+            typingDiv.className = 'ai-typing-indicator';
+            typingDiv.id = 'typingIndicator';
+            typingDiv.innerHTML = `
+                <div class="w-6 h-6 rounded-full bg-blue-100 flex items-center justify-center flex-shrink-0 mr-2">
+                    <i class="fas fa-robot text-blue-600 text-xs"></i>
+                </div>
+                <div class="flex">
+                    <div class="ai-typing-dot"></div>
+                    <div class="ai-typing-dot"></div>
+                    <div class="ai-typing-dot"></div>
+                </div>
+            `;
+            
+            chatContainer.appendChild(typingDiv);
+            chatContainer.scrollTop = chatContainer.scrollHeight;
+        }
+        
+        function removeTypingIndicator() {
+            const typingIndicator = document.getElementById('typingIndicator');
+            if (typingIndicator) {
+                typingIndicator.remove();
+            }
+        }
+        
+        // Respons AI khusus untuk manajemen stok
+        function generateStockAIResponse(question) {
+            let response = '';
+            let actions = '';
+            
+            const questionLower = question.toLowerCase();
+            
+            if (questionLower.includes('tambah') || questionLower.includes('produk baru')) {
+                
+                response = `Untuk menambahkan produk baru:<br><br>
+                1. Klik tombol <strong>"Tambah Produk"</strong> di halaman ini<br>
+                2. Isi formulir dengan detail produk (nama, SKU, kategori, stok, harga)<br>
+                3. Pilih platform e-commerce untuk sinkronisasi<br>
+                4. Klik <strong>"Simpan Produk"</strong><br><br>
+                Produk akan otomatis disinkronkan ke platform yang dipilih (Tokopedia, Shopee, Bukalapak, Lazada, Blibli) dalam 1-2 menit.`;
+                
+                actions = `<div class="mt-2 flex space-x-2">
+                    <button class="text-xs px-2 py-1 bg-blue-100 text-blue-700 rounded smooth-transition hover:bg-blue-200" onclick="openAddProductModal()">Buka Form Tambah Produk</button>
+                </div>`;
+                
+            } else if (questionLower.includes('update stok') || questionLower.includes('ubah stok')) {
+                
+                response = `Untuk update stok produk:<br><br>
+                1. Temukan produk di tabel<br>
+                2. Klik ikon <i class="fas fa-exchange-alt"></i> di kolom "Aksi"<br>
+                3. Pilih tipe update: Tambah, Kurangi, atau Set stok<br>
+                4. Masukkan jumlah dan alasan<br>
+                5. Klik <strong>"Update Stok"</strong><br><br>
+                Stok akan diperbarui secara real-time dan otomatis disinkronkan ke semua platform e-commerce.`;
+                
+                actions = `<div class="mt-2 flex space-x-2">
+                    <button class="text-xs px-2 py-1 bg-blue-100 text-blue-700 rounded smooth-transition hover:bg-blue-200" onclick="openUpdateStockModal(1)">Coba Update Stok</button>
+                </div>`;
+                
+            } else if (questionLower.includes('sinkronisasi') || questionLower.includes('e-commerce')) {
+                
+                response = `Sistem integrasi e-commerce:<br><br>
+                <strong>Platform yang didukung:</strong><br>
+                1. Tokopedia - Sinkronisasi real-time<br>
+                2. Shopee - Update otomatis setiap 5 menit<br>
+                3. Bukalapak - Upload produk dengan gambar<br>
+                4. Lazada - Integrasi API langsung<br>
+                5. Blibli - Sinkronisasi stok dan harga<br><br>
+                <strong>Fitur integrasi:</strong><br>
+                • Upload produk otomatis<br>
+                • Update stok real-time<br>
+                • Sinkronisasi harga<br>
+                • Monitoring status integrasi<br><br>
+                Semua produk yang ditambahkan akan otomatis disinkronkan ke platform yang dipilih.`;
+                
+            } else if (questionLower.includes('rekomendasi') && questionLower.includes('restok')) {
+                
+                const criticalProducts = products.filter(p => p.stock < 10);
+                
+                response = `Rekomendasi restok berdasarkan analisis AI:<br><br>`;
+                
+                if (criticalProducts.length > 0) {
+                    response += `<strong>Produk dengan stok kritis (prioritas tinggi):</strong><br>`;
+                    criticalProducts.forEach((p, i) => {
+                        response += `${i+1}. ${p.name} - Stok: ${p.stock} unit (Rekomendasi: +${50-p.stock} unit)<br>`;
+                    });
+                    response += `<br>`;
+                }
+                
+                const lowProducts = products.filter(p => p.stock >= 10 && p.stock < 20);
+                if (lowProducts.length > 0) {
+                    response += `<strong>Produk dengan stok rendah:</strong><br>`;
+                    lowProducts.forEach((p, i) => {
+                        response += `${i+1}. ${p.name} - Stok: ${p.stock} unit<br>`;
+                    });
+                }
+                
+                actions = `<div class="mt-2 flex space-x-2">
+                    <button class="text-xs px-2 py-1 bg-blue-100 text-blue-700 rounded smooth-transition hover:bg-blue-200">Buat Purchase Order</button>
+                    <button class="text-xs px-2 py-1 bg-green-100 text-green-700 rounded smooth-transition hover:bg-green-200">Analisis Prediksi</button>
+                </div>`;
+                
+            } else {
+                response = `Saya adalah AI Assistant untuk Manajemen Stok. Saya dapat membantu Anda:<br><br>
+                1. Menambahkan produk baru dengan integrasi e-commerce otomatis<br>
+                2. Mengupdate stok produk secara manual<br>
+                3. Memberikan rekomendasi restok berdasarkan analisis data<br>
+                4. Mengekspor/impor data produk<br>
+                5. Memantau integrasi dengan platform e-commerce<br><br>
+                Apa yang ingin Anda lakukan hari ini?`;
+                actions = `<div class="mt-2 flex space-x-2">
+                    <button class="text-xs px-2 py-1 bg-blue-100 text-blue-700 rounded smooth-transition hover:bg-blue-200" onclick="openAddProductModal()">Tambah Produk</button>
+                    <button class="text-xs px-2 py-1 bg-green-100 text-green-700 rounded smooth-transition hover:bg-green-200">Analisis Stok</button>
+                </div>`;
+            }
+            
+            const chatContainer = document.getElementById('aiChatContainer');
+            const messageDiv = document.createElement('div');
+            messageDiv.className = 'ai-message assistant';
+            messageDiv.innerHTML = `
+                <div class="flex items-start space-x-2">
+                    <div class="w-6 h-6 rounded-full bg-blue-100 flex items-center justify-center flex-shrink-0 mt-1">
+                        <i class="fas fa-robot text-blue-600 text-xs"></i>
+                    </div>
+                    <div>
+                        <p class="text-gray-700">${response}</p>
+                        ${actions}
+                    </div>
+                </div>
+            `;
+            
+            chatContainer.appendChild(messageDiv);
+            chatContainer.scrollTop = chatContainer.scrollHeight;
+        }
+        
+        // ================= EVENT LISTENERS =================
+        
+        document.addEventListener('DOMContentLoaded', function() {
+            // 1. Inisialisasi tanggal
+            updateDate();
+            
+            // 2. Load data produk
+            loadProducts();
+            
+            // 3. Event listener untuk filter
+            document.getElementById('searchProduct').addEventListener('input', function() {
+                currentFilter.search = this.value.toLowerCase();
+                currentPage = 1;
+                loadProducts();
+            });
+            
+            document.getElementById('categoryFilter').addEventListener('change', function() {
+                currentFilter.category = this.value;
+                currentPage = 1;
+                loadProducts();
+            });
+            
+            document.getElementById('stockFilter').addEventListener('change', function() {
+                currentFilter.stock = this.value;
+                currentPage = 1;
+                loadProducts();
+            });
+            
+            document.getElementById('statusFilter').addEventListener('change', function() {
+                currentFilter.status = this.value;
+                currentPage = 1;
+                loadProducts();
+            });
+            
+            // 4. Event listener untuk pagination
+            document.getElementById('prevPage').addEventListener('click', function() {
+                if (currentPage > 1) {
+                    currentPage--;
+                    loadProducts();
+                }
+            });
+            
+            document.getElementById('nextPage').addEventListener('click', function() {
+                const totalItems = parseInt(document.getElementById('totalItems').textContent);
+                const totalPages = Math.ceil(totalItems / itemsPerPage);
+                
+                if (currentPage < totalPages) {
+                    currentPage++;
+                    loadProducts();
+                }
+            });
+            
+            // 5. Event listener untuk update stok calculation
+            const updateTypeRadios = document.querySelectorAll('input[name="updateType"]');
+            updateTypeRadios.forEach(radio => {
+                radio.addEventListener('change', updateStockCalculation);
+            });
+            
+            document.getElementById('updateQuantity').addEventListener('input', updateStockCalculation);
+            
+            // 6. Event listener untuk file upload
+            const dropZone = document.getElementById('dropZone');
+            const fileInput = document.getElementById('fileInput');
+            
+            dropZone.addEventListener('click', () => fileInput.click());
+            
+            dropZone.addEventListener('dragover', (e) => {
+                e.preventDefault();
+                dropZone.classList.add('border-blue-500', 'bg-blue-50');
+            });
+            
+            dropZone.addEventListener('dragleave', () => {
+                dropZone.classList.remove('border-blue-500', 'bg-blue-50');
+            });
+            
+            dropZone.addEventListener('drop', (e) => {
+                e.preventDefault();
+                dropZone.classList.remove('border-blue-500', 'bg-blue-50');
+                
+                if (e.dataTransfer.files.length) {
+                    fileInput.files = e.dataTransfer.files;
+                    document.getElementById('uploadBtn').disabled = false;
+                }
+            });
+            
+            fileInput.addEventListener('change', () => {
+                if (fileInput.files.length) {
+                    document.getElementById('uploadBtn').disabled = false;
+                }
+            });
+            
+            // 7. Toggle Inventory Submenu
+            const inventoryMenu = document.getElementById('inventory-menu');
+            const inventorySubmenu = document.getElementById('inventory-submenu');
+            const inventoryChevron = document.getElementById('inventory-chevron');
+            
+            if (inventoryMenu && inventorySubmenu) {
+                // Buka submenu secara default karena kita di halaman management stok
+                inventorySubmenu.classList.remove('hidden');
+                inventoryChevron.classList.remove('fa-chevron-down');
+                inventoryChevron.classList.add('fa-chevron-up');
+                
+                inventoryMenu.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    e.stopPropagation();
+                    
+                    // Toggle submenu visibility
+                    inventorySubmenu.classList.toggle('hidden');
+                    
+                    // Rotate chevron icon
+                    if (inventorySubmenu.classList.contains('hidden')) {
+                        inventoryChevron.classList.remove('fa-chevron-up');
+                        inventoryChevron.classList.add('fa-chevron-down');
+                    } else {
+                        inventoryChevron.classList.remove('fa-chevron-down');
+                        inventoryChevron.classList.add('fa-chevron-up');
+                    }
+                });
+            }
+            
+            // 8. Notification bell
+            const notificationBell = document.getElementById('notificationBell');
+            if (notificationBell) {
+                notificationBell.addEventListener('click', function() {
+                    const notificationPopup = document.createElement('div');
+                    notificationPopup.className = 'fixed top-20 right-8 w-72 bg-white rounded-xl shadow-lg border border-gray-200 p-4 animate-fade-in-up z-40';
+                    notificationPopup.innerHTML = `
+                        <div class="flex justify-between items-center mb-3">
+                            <h4 class="font-bold text-gray-800">Notifikasi Stok</h4>
+                            <button class="text-gray-400 hover:text-gray-600 close-notif">
+                                <i class="fas fa-times"></i>
+                            </button>
+                        </div>
+                        <div class="space-y-3">
+                            <div class="flex items-start space-x-3 p-2 rounded-lg bg-red-50">
+                                <i class="fas fa-exclamation-circle text-red-500 mt-1"></i>
+                                <div>
+                                    <p class="text-sm font-medium">2 produk stok kritis!</p>
+                                    <p class="text-xs text-gray-600">Segera lakukan restok</p>
+                                </div>
+                            </div>
+                            <div class="flex items-start space-x-3 p-2 rounded-lg bg-green-50">
+                                <i class="fas fa-check-circle text-green-500 mt-1"></i>
+                                <div>
+                                    <p class="text-sm font-medium">Integrasi berhasil</p>
+                                    <p class="text-xs text-gray-600">5 produk baru tersinkronisasi</p>
+                                </div>
+                            </div>
+                            <div class="flex items-start space-x-3 p-2 rounded-lg bg-blue-50">
+                                <i class="fas fa-info-circle text-blue-500 mt-1"></i>
+                                <div>
+                                    <p class="text-sm font-medium">Pengingat restok</p>
+                                    <p class="text-xs text-gray-600">3 produk perlu restok minggu depan</p>
+                                </div>
+                            </div>
+                        </div>
+                    `;
+                    
+                    document.body.appendChild(notificationPopup);
+                    
+                    const closeBtn = notificationPopup.querySelector('.close-notif');
+                    closeBtn.addEventListener('click', function() {
+                        notificationPopup.remove();
+                    });
+                    
+                    setTimeout(() => {
+                        if (notificationPopup.parentNode) {
+                            notificationPopup.remove();
+                        }
+                    }, 5000);
+                });
+            }
+            
+            // 9. Animasi untuk elemen yang masuk viewport
+            const observer = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        entry.target.classList.add('visible');
+                    }
+                });
+            }, { threshold: 0.1 });
+            
+            document.querySelectorAll('.animate-on-scroll').forEach(el => observer.observe(el));
+            
+            // 10. Auto-refresh stok setiap 30 detik
+            setInterval(() => {
+                // Simulasi perubahan stok kecil (untuk demo)
+                const randomProductIndex = Math.floor(Math.random() * products.length);
+                if (products[randomProductIndex]) {
+                    const change = Math.random() > 0.5 ? 1 : -1;
+                    products[randomProductIndex].stock = Math.max(0, products[randomProductIndex].stock + change);
+                    
+                    // Update tabel jika produk yang berubah sedang ditampilkan
+                    const currentFiltered = document.querySelectorAll('#productsTableBody tr');
+                    if (currentFiltered.length > 0) {
+                        loadProducts();
+                    }
+                }
+            }, 30000);
+            
+            // 11. Initialize with a welcome message from AI
+            setTimeout(() => {
+                if (!document.querySelector('.ai-message.user')) {
+                    addAIMessage("Selamat datang di halaman Management Stok! Saya dapat membantu Anda mengelola stok produk, menambahkan produk baru dengan integrasi e-commerce otomatis, dan memberikan rekomendasi untuk optimasi inventori. Apa yang ingin Anda lakukan hari ini?", 'assistant');
+                }
+            }, 1000);
+        });
+    </script>
+</body>
+</html>

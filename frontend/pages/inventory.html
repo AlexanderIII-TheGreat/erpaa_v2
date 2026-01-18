@@ -1,0 +1,2586 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Inventory Management - Flashboard ERP Modern</title>
+    <!-- Tailwind CSS via CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Font Awesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Animate.css for smooth animations -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css">
+    
+    <style>
+        :root {
+            --soft-blue: #4A90E2;
+            --soft-blue-light: #E3F2FD;
+            --soft-blue-dark: #2A6EBB;
+            --neutral-gray: #F5F7FA;
+            --neutral-gray-dark: #E1E8F0;
+            --neutral-text: #4A5568;
+            --soft-green: #48BB78;
+            --soft-purple: #9F7AEA;
+            --soft-pink: #ED64A6;
+            --soft-cyan: #0BC5EA;
+        }
+        
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            color: var(--neutral-text);
+            overflow-x: hidden;
+            background: linear-gradient(to bottom right, #eff6ff, #f3f4f6, #f9fafb);
+        }
+        
+        /* PERBAIKAN: Struktur layout utama */
+        .app-container {
+            display: flex;
+            min-height: 100vh;
+            width: 100%;
+        }
+        
+        .main-wrapper {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            max-height: 100vh;
+            overflow: hidden;
+        }
+        
+        .content-wrapper {
+            flex: 1;
+            overflow-y: auto;
+            overflow-x: hidden;
+            -webkit-overflow-scrolling: touch;
+            padding: 2rem;
+            background: linear-gradient(to bottom, #f8fafc, #f1f5f9);
+        }
+        
+        /* Custom animations */
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        
+        @keyframes slideInLeft {
+            from {
+                opacity: 0;
+                transform: translateX(-20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateX(0);
+            }
+        }
+        
+        @keyframes slideInRight {
+            from {
+                opacity: 0;
+                transform: translateX(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateX(0);
+            }
+        }
+        
+        @keyframes pulseSoft {
+            0%, 100% {
+                opacity: 1;
+                transform: scale(1);
+            }
+            50% {
+                opacity: 0.8;
+                transform: scale(1.02);
+            }
+        }
+        
+        @keyframes float {
+            0%, 100% {
+                transform: translateY(0);
+            }
+            50% {
+                transform: translateY(-10px);
+            }
+        }
+        
+        @keyframes shimmer {
+            0% {
+                background-position: -200% center;
+            }
+            100% {
+                background-position: 200% center;
+            }
+        }
+        
+        @keyframes typing {
+            from { width: 0; }
+            to { width: 100%; }
+        }
+        
+        @keyframes blink {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.5; }
+        }
+        
+        @keyframes slideInFromLeft {
+            from {
+                opacity: 0;
+                transform: translateX(-30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateX(0);
+            }
+        }
+        
+        @keyframes bounceIn {
+            0% {
+                opacity: 0;
+                transform: scale(0.3);
+            }
+            50% {
+                opacity: 1;
+                transform: scale(1.05);
+            }
+            70% {
+                transform: scale(0.9);
+            }
+            100% {
+                transform: scale(1);
+            }
+        }
+        
+        @keyframes ripple {
+            0% {
+                transform: scale(0);
+                opacity: 1;
+            }
+            100% {
+                transform: scale(4);
+                opacity: 0;
+            }
+        }
+        
+        .animate-fade-in-up {
+            animation: fadeInUp 0.6s ease-out forwards;
+        }
+        
+        .animate-slide-in-left {
+            animation: slideInLeft 0.5s ease-out forwards;
+        }
+        
+        .animate-slide-in-right {
+            animation: slideInRight 0.5s ease-out forwards;
+        }
+        
+        .animate-pulse-soft {
+            animation: pulseSoft 2s infinite ease-in-out;
+        }
+        
+        .animate-float {
+            animation: float 3s ease-in-out infinite;
+        }
+        
+        .animate-shimmer {
+            animation: shimmer 3s infinite linear;
+            background: linear-gradient(90deg, #F5F7FA 0%, #E3F2FD 50%, #F5F7FA 100%);
+            background-size: 200% auto;
+        }
+        
+        .animate-slide-in-from-left {
+            animation: slideInFromLeft 0.6s ease-out forwards;
+        }
+        
+        .animate-bounce-in {
+            animation: bounceIn 0.6s ease-out forwards;
+        }
+        
+        .animate-ripple {
+            animation: ripple 0.6s linear forwards;
+        }
+        
+        /* Custom scrollbar */
+        ::-webkit-scrollbar {
+            width: 8px;
+            height: 8px;
+        }
+        
+        ::-webkit-scrollbar-track {
+            background: var(--neutral-gray);
+            border-radius: 4px;
+        }
+        
+        ::-webkit-scrollbar-thumb {
+            background: linear-gradient(135deg, #4A90E2, #2A6EBB);
+            border-radius: 4px;
+        }
+        
+        ::-webkit-scrollbar-thumb:hover {
+            background: linear-gradient(135deg, #2A6EBB, #4A90E2);
+        }
+        
+        /* Smooth transitions */
+        .smooth-transition {
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        
+        /* Glass effect */
+        .glass-effect {
+            backdrop-filter: blur(10px);
+            background: rgba(255, 255, 255, 0.92);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+        
+        /* Card hover effect */
+        .hover-lift {
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        
+        .hover-lift:hover {
+            transform: translateY(-8px) scale(1.01);
+            box-shadow: 0 15px 30px -10px rgba(74, 144, 226, 0.2);
+        }
+        
+        /* Gradient backgrounds */
+        .gradient-blue {
+            background: linear-gradient(135deg, #E3F2FD 0%, #F5F7FA 100%);
+        }
+        
+        .gradient-green {
+            background: linear-gradient(135deg, #F0FFF4 0%, #F5F7FA 100%);
+        }
+        
+        .gradient-purple {
+            background: linear-gradient(135deg, #F5F3FF 0%, #F5F7FA 100%);
+        }
+        
+        .gradient-cyan {
+            background: linear-gradient(135deg, #E6FFFA 0%, #F5F7FA 100%);
+        }
+        
+        .gradient-orange {
+            background: linear-gradient(135deg, #FEEBC8 0%, #F5F7FA 100%);
+        }
+        
+        .gradient-red {
+            background: linear-gradient(135deg, #FED7D7 0%, #F5F7FA 100%);
+        }
+        
+        /* Horizontal scroll container */
+        .horizontal-scroll-container {
+            display: flex;
+            overflow-x: auto;
+            padding: 1rem 0.5rem;
+            gap: 1rem;
+            scrollbar-width: thin;
+            scrollbar-color: #CBD5E0 #F5F7FA;
+            -webkit-overflow-scrolling: touch;
+        }
+        
+        .horizontal-scroll-container::-webkit-scrollbar {
+            height: 6px;
+        }
+        
+        .horizontal-scroll-container::-webkit-scrollbar-track {
+            background: #F5F7FA;
+            border-radius: 3px;
+        }
+        
+        .horizontal-scroll-container::-webkit-scrollbar-thumb {
+            background: linear-gradient(135deg, #4A90E2, #2A6EBB);
+            border-radius: 3px;
+        }
+        
+        .horizontal-card {
+            flex: 0 0 auto;
+            width: 320px;
+            min-height: 180px;
+        }
+        
+        /* Progress bars */
+        .progress-bar {
+            height: 8px;
+            background-color: #E2E8F0;
+            border-radius: 4px;
+            overflow: hidden;
+        }
+        
+        .progress-bar-fill {
+            height: 100%;
+            border-radius: 4px;
+            transition: width 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        
+        /* Status indicators */
+        .status-indicator {
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+            display: inline-block;
+            margin-right: 8px;
+            position: relative;
+        }
+        
+        .status-indicator::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            border-radius: 50%;
+            animation: pulseSoft 2s infinite;
+        }
+        
+        .status-critical {
+            background-color: #F56565;
+        }
+        
+        .status-critical::after {
+            background-color: #F56565;
+        }
+        
+        .status-warning {
+            background-color: #ECC94B;
+        }
+        
+        .status-warning::after {
+            background-color: #ECC94B;
+        }
+        
+        .status-good {
+            background-color: #48BB78;
+        }
+        
+        .status-good::after {
+            background-color: #48BB78;
+        }
+        
+        /* Data visualization */
+        .data-trend-up {
+            color: #48BB78;
+            position: relative;
+        }
+        
+        .data-trend-up::before {
+            content: "↗";
+            margin-right: 4px;
+        }
+        
+        .data-trend-down {
+            color: #F56565;
+            position: relative;
+        }
+        
+        .data-trend-down::before {
+            content: "↘";
+            margin-right: 4px;
+        }
+        
+        /* Inventory specific */
+        .inventory-status {
+            padding: 6px 12px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: 600;
+            display: inline-flex;
+            align-items: center;
+            gap: 5px;
+        }
+        
+        .status-safe {
+            background-color: #C6F6D5;
+            color: #22543D;
+        }
+        
+        .status-critical {
+            background-color: #FED7D7;
+            color: #742A2A;
+        }
+        
+        .status-excess {
+            background-color: #FEFCBF;
+            color: #744210;
+        }
+        
+        .status-warning {
+            background-color: #FEEBC8;
+            color: #B45309;
+        }
+        
+        /* Movement badges */
+        .movement-badge {
+            padding: 4px 10px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: 500;
+        }
+        
+        .movement-in {
+            background-color: #C6F6D5;
+            color: #22543D;
+        }
+        
+        .movement-out {
+            background-color: #FED7D7;
+            color: #742A2A;
+        }
+        
+        .movement-adjustment {
+            background-color: #FEFCBF;
+            color: #744210;
+        }
+        
+        .movement-damage {
+            background-color: #E9D8FD;
+            color: #44337A;
+        }
+        
+        /* Stock gauge */
+        .stock-gauge {
+            height: 8px;
+            border-radius: 4px;
+            background: linear-gradient(to right, #48BB78, #ECC94B, #F56565);
+            position: relative;
+        }
+        
+        .stock-gauge-indicator {
+            position: absolute;
+            top: -4px;
+            width: 16px;
+            height: 16px;
+            background: white;
+            border: 2px solid #4A90E2;
+            border-radius: 50%;
+            transform: translateX(-50%);
+        }
+        
+        /* AI Assistant specific */
+        .ai-message {
+            max-width: 80%;
+            padding: 12px 16px;
+            border-radius: 18px;
+            margin-bottom: 12px;
+            position: relative;
+        }
+        
+        .ai-message.user {
+            background: linear-gradient(135deg, #4A90E2, #2A6EBB);
+            color: white;
+            margin-left: auto;
+            border-bottom-right-radius: 4px;
+        }
+        
+        .ai-message.assistant {
+            background: #F7FAFC;
+            color: #2D3748;
+            border: 1px solid #E2E8F0;
+            margin-right: auto;
+            border-bottom-left-radius: 4px;
+        }
+        
+        .ai-typing-indicator {
+            display: flex;
+            align-items: center;
+            padding: 12px 16px;
+            background: #F7FAFC;
+            border-radius: 18px;
+            width: fit-content;
+            margin-bottom: 12px;
+            border: 1px solid #E2E8F0;
+        }
+        
+        .ai-typing-dot {
+            width: 8px;
+            height: 8px;
+            background-color: #A0AEC0;
+            border-radius: 50%;
+            margin: 0 2px;
+            animation: typingDot 1.5s infinite ease-in-out;
+        }
+        
+        .ai-typing-dot:nth-child(1) { animation-delay: 0s; }
+        .ai-typing-dot:nth-child(2) { animation-delay: 0.2s; }
+        .ai-typing-dot:nth-child(3) { animation-delay: 0.4s; }
+        
+        @keyframes typingDot {
+            0%, 60%, 100% { transform: translateY(0); }
+            30% { transform: translateY(-8px); }
+        }
+        
+        /* Container untuk pertanyaan cepat AI */
+        .ai-quick-questions-container {
+            display: flex;
+            overflow-x: auto;
+            gap: 8px;
+            padding: 12px 4px 16px 4px;
+            margin-bottom: 4px;
+            scrollbar-width: thin;
+            scrollbar-color: #4A90E2 #F5F7FA;
+            -webkit-overflow-scrolling: touch;
+        }
+        
+        .ai-quick-questions-container::-webkit-scrollbar {
+            height: 6px;
+            display: block;
+        }
+        
+        .ai-quick-questions-container::-webkit-scrollbar-track {
+            background: #F5F7FA;
+            border-radius: 4px;
+            margin: 0 4px;
+        }
+        
+        .ai-quick-questions-container::-webkit-scrollbar-thumb {
+            background: linear-gradient(135deg, #4A90E2, #2A6EBB);
+            border-radius: 4px;
+            border: 1px solid #E2E8F0;
+        }
+        
+        .ai-quick-questions-container::-webkit-scrollbar-thumb:hover {
+            background: linear-gradient(135deg, #2A6EBB, #4A90E2);
+        }
+        
+        .ai-quick-question {
+            flex: 0 0 auto;
+            white-space: nowrap;
+            padding: 8px 12px;
+            background: #EBF8FF;
+            border: 1px solid #BEE3F8;
+            border-radius: 8px;
+            font-size: 12px;
+            color: #2C5282;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        
+        .ai-quick-question:hover {
+            background: #BEE3F8;
+            border-color: #90CDF4;
+            transform: translateY(-2px);
+        }
+        
+        /* Ripple effect */
+        .ripple-effect {
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .ripple-effect::after {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 5px;
+            height: 5px;
+            background: rgba(255, 255, 255, 0.5);
+            opacity: 0;
+            border-radius: 100%;
+            transform: scale(1, 1) translate(-50%);
+            transform-origin: 50% 50%;
+        }
+
+        /* Tambahkan di bagian CSS */
+
+/* Submenu styling */
+#inventory-submenu a {
+    transition: all 0.3s ease;
+    position: relative;
+}
+
+#inventory-submenu a:hover {
+    transform: translateX(5px);
+}
+
+#inventory-submenu a.active {
+    background-color: #4A90E2;
+    color: white;
+}
+
+/* Chevron animation */
+.fa-chevron-down, .fa-chevron-up {
+    transition: transform 0.3s ease;
+}
+
+.fa-chevron-up {
+    transform: rotate(180deg);
+}
+        
+        .ripple-effect:focus:not(:active)::after {
+            animation: ripple 0.6s ease-out;
+        }
+        
+        /* Loading animation */
+        .loading-spinner {
+            width: 40px;
+            height: 40px;
+            border: 3px solid #E2E8F0;
+            border-top: 3px solid #4A90E2;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+        }
+        
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+        
+        /* Page transitions */
+        .page-transition {
+            animation: fadeInUp 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        
+        /* PERBAIKAN: Custom Animation System */
+        .animate-on-scroll {
+            opacity: 0;
+            transform: translateY(30px);
+            transition: opacity 0.6s ease, transform 0.6s ease;
+        }
+        
+        .animate-on-scroll.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+        
+        .animate-on-scroll.delay-100 {
+            transition-delay: 0.1s;
+        }
+        
+        .animate-on-scroll.delay-200 {
+            transition-delay: 0.2s;
+        }
+        
+        .animate-on-scroll.delay-300 {
+            transition-delay: 0.3s;
+        }
+        
+        .animate-on-scroll.delay-400 {
+            transition-delay: 0.4s;
+        }
+        
+        .animate-on-scroll.delay-500 {
+            transition-delay: 0.5s;
+        }
+        
+        /* PERBAIKAN: Force GPU acceleration */
+        .gpu-accelerate {
+            transform: translateZ(0);
+            backface-visibility: hidden;
+            perspective: 1000px;
+        }
+        
+        /* PERBAIKAN: Initial animation untuk konten yang terlihat langsung */
+        .initial-animate {
+            animation: fadeInUp 0.8s ease-out forwards;
+        }
+        
+        /* PERBAIKAN: Memastikan semua konten ter-render */
+        .force-render {
+            will-change: transform, opacity;
+            contain: layout style paint;
+        }
+        
+        /* Untuk horizontal card */
+        .horizontal-card-initial {
+            animation: slideInFromLeft 0.6s ease-out forwards;
+        }
+        
+        /* Inventory-specific styles */
+        .inventory-filter {
+            transition: all 0.3s ease;
+        }
+        
+        .inventory-filter.active {
+            background-color: #4A90E2;
+            color: white;
+            box-shadow: 0 4px 12px rgba(74, 144, 226, 0.3);
+        }
+        
+        .inventory-table tr {
+            transition: background-color 0.2s ease;
+        }
+        
+        .inventory-table tr:hover {
+            background-color: #F7FAFC;
+        }
+        
+        /* AI Signal Styles */
+        .ai-signal {
+            border-left: 4px solid;
+            padding-left: 12px;
+            margin: 8px 0;
+        }
+        
+        .ai-signal.warning {
+            border-left-color: #ECC94B;
+            background-color: rgba(254, 252, 191, 0.3);
+        }
+        
+        .ai-signal.critical {
+            border-left-color: #F56565;
+            background-color: rgba(254, 215, 215, 0.3);
+        }
+        
+        .ai-signal.info {
+            border-left-color: #4A90E2;
+            background-color: rgba(227, 242, 253, 0.3);
+        }
+        
+        .ai-signal.success {
+            border-left-color: #48BB78;
+            background-color: rgba(198, 246, 213, 0.3);
+        }
+        
+        /* Search Input */
+        .search-input {
+            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 24 24' stroke='%239CA3AF'%3E%3Cpath stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z'%3E%3C/path%3E%3C/svg%3E");
+            background-position: 12px center;
+            background-repeat: no-repeat;
+            background-size: 20px;
+            padding-left: 40px;
+        }
+        
+        /* Logout button di navbar */
+        .nav-logout-btn {
+            padding: 8px 16px;
+            border-radius: 8px;
+            background: #FEF2F2;
+            color: #DC2626;
+            border: 1px solid #FECACA;
+            transition: all 0.3s ease;
+        }
+        
+        .nav-logout-btn:hover {
+            background: #FEE2E2;
+            border-color: #FCA5A5;
+            transform: translateY(-2px);
+        }
+        
+        /* ================= PERBAIKAN KONSISTENSI GRID ================= */
+        /* Perbaikan untuk konsistensi ukuran grid - SAMA DENGAN DASHBOARD */
+        .grid-section-card {
+            min-height: 500px;
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+        }
+        
+        .card-content-wrapper {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+        }
+        
+        .card-body-scrollable {
+            flex: 1;
+            overflow-y: auto;
+            max-height: 380px;
+            padding-right: 5px;
+        }
+        
+        /* Perbaikan tinggi untuk horizontal card */
+        .horizontal-card {
+            width: 320px;
+            min-height: 240px;
+            display: flex;
+            flex-direction: column;
+        }
+        
+        /* Perbaikan grid utama untuk konsistensi */
+        .grid-cols-1.lg\:grid-cols-2 > * {
+            display: flex;
+            flex-direction: column;
+        }
+        
+        .grid-cols-1.lg\:grid-cols-2 .bg-white.rounded-xl {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+        }
+        
+        /* Perbaikan untuk bagian dengan grid di dalamnya */
+        .grid-cols-3.gap-4 {
+            margin-bottom: 1.5rem;
+        }
+        
+        /* Pastikan semua card memiliki tinggi yang konsisten */
+        section.animate-on-scroll > .bg-white {
+            min-height: 500px;
+            height: 100%;
+        }
+        
+        /* Perbaikan untuk bagian tanggal di header - SEDERHANA */
+        #currentDate {
+            font-size: 14px;
+            font-weight: 600;
+            color: #4A5568;
+            white-space: nowrap;
+            text-align: right;
+        }
+        
+        /* Perbaikan tinggi horizontal card */
+        .horizontal-scroll-container .horizontal-card {
+            height: 240px;
+        }
+        
+        /* Perbaikan untuk card dalam grid */
+        .grid-cols-1.lg\:grid-cols-2 .bg-white {
+            min-height: 500px;
+        }
+        
+        /* Spacing konsisten untuk semua card body */
+        .grid-section-card .p-5:not(.border-b) {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+        }
+        
+        /* Konsistensi untuk card header */
+        .grid-section-card .border-b {
+            flex-shrink: 0;
+        }
+        /* ================= AKHIR PERBAIKAN KONSISTENSI GRID ================= */
+    </style>
+</head>
+<body class="page-transition">
+    <div class="app-container">
+<!-- Sidebar -->
+<aside class="w-64 bg-white/90 border-r border-gray-200/50 flex flex-col shadow-sm glass-effect">
+    <div class="p-6 border-b border-gray-100/50">
+        <div class="flex items-center space-x-3">
+            <div class="w-10 h-10 rounded-lg bg-gradient-to-br from-blue-400 to-blue-600 flex items-center justify-center animate-float">
+                <i class="fas fa-chart-line text-white"></i>
+            </div>
+            <h1 class="text-xl font-bold text-gray-800">A2M ERPAA</h1>
+        </div>
+    </div>
+    
+    <nav class="flex-1 p-4 space-y-2">
+        <a href="/dashboard/" class="flex items-center space-x-3 p-3 rounded-lg text-gray-700 smooth-transition hover:bg-gray-100 hover-lift ripple-effect">
+            <i class="fas fa-tachometer-alt w-5 text-center"></i>
+            <span class="font-medium">Dashboard</span>
+        </a>
+        <a href="/product/" class="flex items-center space-x-3 p-3 rounded-lg text-gray-700 smooth-transition hover:bg-gray-100 hover-lift ripple-effect">
+            <i class="fas fa-boxes w-5 text-center"></i>
+            <span class="font-medium">Product Management</span>
+        </a>
+        
+        <!-- Inventory dengan Submenu -->
+        <div class="mb-2">
+            <div class="flex items-center justify-between p-3 rounded-lg bg-blue-50 text-blue-600 cursor-pointer smooth-transition hover:bg-blue-100 hover-lift ripple-effect" id="inventory-menu">
+                <div class="flex items-center space-x-3">
+                    <i class="fas fa-warehouse w-5 text-center"></i>
+                    <span class="font-medium">Inventory</span>
+                </div>
+                <i class="fas fa-chevron-down text-sm" id="inventory-chevron"></i>
+            </div>
+            <div class="ml-8 mt-1 space-y-1 hidden" id="inventory-submenu">
+                <a href="/inventory/" class="block p-2 text-sm rounded-lg text-gray-700 smooth-transition hover:bg-gray-100 hover-lift ripple-effect">
+                    <i class="fas fa-chart-bar w-4 text-center mr-2"></i>
+                    Ringkasan Inventori
+                </a>
+                <a href="/inventory/stok/" class="block p-2 text-sm rounded-lg text-gray-700 smooth-transition hover:bg-gray-100 hover-lift ripple-effect">
+                    <i class="fas fa-boxes-stacked w-4 text-center mr-2"></i>
+                    Stok Management
+                </a>
+            </div>
+        </div>
+        
+        <a href="/shipping/" class="flex items-center space-x-3 p-3 rounded-lg text-gray-700 smooth-transition hover:bg-gray-100 hover-lift ripple-effect">
+            <i class="fas fa-shipping-fast w-5 text-center"></i>
+            <span class="font-medium">Shipping Tracking</span>
+        </a>
+        <a href="/salesforecasting/" class="flex items-center space-x-3 p-3 rounded-lg text-gray-700 smooth-transition hover:bg-gray-100 hover-lift ripple-effect">
+            <i class="fas fa-chart-bar w-5 text-center"></i>
+            <span class="font-medium">Sales Forecasting</span>
+        </a>
+        <a href="/integrasi/" class="flex items-center space-x-3 p-3 rounded-lg text-gray-700 smooth-transition hover:bg-gray-100 hover-lift ripple-effect">
+            <i class="fas fa-store w-5 text-center"></i>
+            <span class="font-medium">Integrasi</span>
+        </a>
+    </nav>
+    
+    <div class="p-4 border-t border-gray-100/50">
+        <div class="flex items-center space-x-3 p-3 rounded-lg bg-gradient-to-r from-blue-50 to-gray-50 hover-lift smooth-transition">
+            <div class="w-8 h-8 rounded-full bg-gradient-to-r from-blue-100 to-blue-200 flex items-center justify-center">
+                <i class="fas fa-user text-blue-600 text-sm"></i>
+            </div>
+            <div>
+                <p class="text-sm font-medium">Admin</p>
+                <p class="text-xs text-gray-500">admin@flashboard.com</p>
+            </div>
+        </div>
+    </div>
+</aside>
+        
+        <!-- Main Content -->
+        <div class="main-wrapper">
+            <!-- Header with AI Assistant in top right -->
+            <header class="sticky top-0 z-20 bg-white/80 glass-effect border-b border-gray-200/50 px-8 py-4 shrink-0">
+                <div class="flex justify-between items-center">
+                    <div>
+                        <h2 class="text-2xl font-bold text-gray-800 initial-animate">Inventory Management</h2>
+                        <p class="text-gray-600 initial-animate" style="animation-delay: 0.1s">Monitor dan kelola semua stok inventori Anda</p>
+                    </div>
+                    <div class="flex items-center space-x-6">
+                        <!-- AI Assistant Button - Enhanced -->
+                        <div class="relative">
+                            <button id="aiAssistantBtn" class="flex items-center space-x-2 px-4 py-2 rounded-lg bg-gradient-to-r from-blue-500 to-blue-600 text-white smooth-transition hover:from-blue-600 hover:to-blue-700 hover-lift shadow-md relative overflow-hidden group">
+                                <i class="fas fa-robot"></i>
+                                <span class="font-medium">AI Assistant</span>
+                                <div class="absolute inset-0 bg-gradient-to-r from-cyan-500 to-blue-500 opacity-0 group-hover:opacity-20 smooth-transition"></div>
+                            </button>
+                            
+                            <!-- Enhanced AI Assistant Panel -->
+                            <div id="aiAssistantPanel" class="fixed right-8 top-20 w-96 bg-white rounded-xl shadow-2xl border border-gray-200 hidden animate-fade-in-up z-50 overflow-hidden" style="height: 600px;">
+                                <!-- AI Assistant Header -->
+                                <div class="bg-gradient-to-r from-blue-500 to-blue-600 p-4 text-white">
+                                    <div class="flex justify-between items-center">
+                                        <div class="flex items-center space-x-3">
+                                            <div class="w-10 h-10 rounded-full bg-white/20 flex items-center justify-center">
+                                                <i class="fas fa-robot text-xl"></i>
+                                            </div>
+                                            <div>
+                                                <h3 class="font-bold text-lg">AI Assistant</h3>
+                                                <p class="text-sm text-blue-100">Siap membantu analisis inventori</p>
+                                            </div>
+                                        </div>
+                                        <div class="flex items-center space-x-2">
+                                            <button class="w-8 h-8 rounded-full bg-white/20 flex items-center justify-center hover:bg-white/30 smooth-transition">
+                                                <i class="fas fa-cog"></i>
+                                            </button>
+                                            <button id="closeAIPanel" class="w-8 h-8 rounded-full bg-white/20 flex items-center justify-center hover:bg-white/30 smooth-transition">
+                                                <i class="fas fa-times"></i>
+                                            </button>
+                                        </div>
+                                    </div>
+                                    
+                                    <!-- AI Mode Selector -->
+                                    <div class="flex space-x-2 mt-4">
+                                        <button class="ai-mode-btn active flex-1 py-2 rounded-lg bg-white/20 text-sm font-medium smooth-transition hover:bg-white/30" data-mode="inventory">
+                                            <i class="fas fa-warehouse mr-1"></i> Inventori
+                                        </button>
+                                        <button class="ai-mode-btn flex-1 py-2 rounded-lg bg-white/10 text-sm font-medium smooth-transition hover:bg-white/20" data-mode="optimization">
+                                            <i class="fas fa-cogs mr-1"></i> Optimasi
+                                        </button>
+                                        <button class="ai-mode-btn flex-1 py-2 rounded-lg bg-white/10 text-sm font-medium smooth-transition hover:bg-white/20" data-mode="prediction">
+                                            <i class="fas fa-chart-line mr-1"></i> Prediksi
+                                        </button>
+                                    </div>
+                                </div>
+                                
+                                <!-- AI Assistant Content -->
+                                <div class="flex flex-col h-full">
+                                    <!-- AI Chat Container -->
+                                    <div id="aiChatContainer" class="flex-1 overflow-y-auto p-4 space-y-3" style="max-height: 380px;">
+                                        <!-- Initial AI Message -->
+                                        <div class="ai-message assistant">
+                                            <div class="flex items-start space-x-2">
+                                                <div class="w-6 h-6 rounded-full bg-blue-100 flex items-center justify-center flex-shrink-0 mt-1">
+                                                    <i class="fas fa-robot text-blue-600 text-xs"></i>
+                                                </div>
+                                                <div>
+                                                    <p class="font-medium text-gray-800 mb-1">Halo! Saya AI Assistant khusus inventori Anda.</p>
+                                                    <p class="text-gray-700 text-sm">Saya dapat menganalisis tingkat stok, memprediksi kebutuhan restok, mengidentifikasi risiko kehabisan stok, dan membantu mengoptimasi inventori. Apa yang bisa saya bantu hari ini?</p>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        
+                                        <!-- Sample conversation -->
+                                        <div class="ai-message user">
+                                            <div class="flex items-center justify-between">
+                                                <p>Produk mana yang berisiko kehabisan stok?</p>
+                                                <i class="fas fa-user ml-2"></i>
+                                            </div>
+                                        </div>
+                                        
+                                        <div class="ai-message assistant">
+                                            <div class="flex items-start space-x-2">
+                                                <div class="w-6 h-6 rounded-full bg-blue-100 flex items-center justify-center flex-shrink-0 mt-1">
+                                                    <i class="fas fa-robot text-blue-600 text-xs"></i>
+                                                </div>
+                                                <div>
+                                                    <p class="font-medium text-gray-800 mb-1">Analisis Risiko Stok</p>
+                                                    <p class="text-gray-700 text-sm">Berdasarkan data 30 hari terakhir, 3 produk berisiko kehabisan stok: <br>1. <strong>Kaos Premium Cotton (ID: P002)</strong> - akan habis dalam 2-3 hari<br>2. <strong>Wireless Headphone Pro (ID: P005)</strong> - akan habis dalam 5 hari<br>3. <strong>Lampu LED Smart Home (ID: P003)</strong> - akan habis dalam 7 hari</p>
+                                                    <div class="mt-2 flex space-x-2">
+                                                        <button class="text-xs px-2 py-1 bg-blue-100 text-blue-700 rounded smooth-transition hover:bg-blue-200">Lihat Detail</button>
+                                                        <button class="text-xs px-2 py-1 bg-green-100 text-green-700 rounded smooth-transition hover:bg-green-200">Buat PO</button>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    
+                                    <!-- AI Quick Actions - Container bisa di-scroll dengan scrollbar jelas -->
+                                    <div class="p-4 border-t border-gray-200">
+                                        <p class="text-sm font-medium text-gray-700 mb-2">Pertanyaan Cepat Inventori:</p>
+                                        <div class="ai-quick-questions-container">
+                                            <button class="ai-quick-question">
+                                                Risiko kehabisan stok
+                                            </button>
+                                            <button class="ai-quick-question">
+                                                Stok menganggur/berlebih
+                                            </button>
+                                            <button class="ai-quick-question">
+                                                Prediksi kebutuhan stok
+                                            </button>
+                                            <button class="ai-quick-question">
+                                                Optimasi level stok
+                                            </button>
+                                            <button class="ai-quick-question">
+                                                Analisis turnover stok
+                                            </button>
+                                            <button class="ai-quick-question">
+                                                Rekomendasi restok
+                                            </button>
+                                            <button class="ai-quick-question">
+                                                Produk slow-moving
+                                            </button>
+                                            <button class="ai-quick-question">
+                                                Analisis safety stock
+                                            </button>
+                                        </div>
+                                    </div>
+                                    
+                                    <!-- AI Input -->
+                                    <div class="p-4 border-t border-gray-200 bg-gray-50">
+                                        <div class="relative">
+                                            <input type="text" id="aiQuestionInput" placeholder="Tanyakan apapun tentang inventori..." class="w-full p-3 pr-12 rounded-lg bg-white border border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent">
+                                            <button id="sendAIQuestion" class="absolute right-3 top-3 text-blue-600 hover:text-blue-800 smooth-transition">
+                                                <i class="fas fa-paper-plane"></i>
+                                            </button>
+                                        </div>
+                                        <p class="text-xs text-gray-500 mt-2 text-center">
+                                            <i class="fas fa-shield-alt mr-1"></i> Data Anda aman dan dianalisis secara real-time
+                                        </p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="flex items-center space-x-4">
+                            <!-- Logout Button di Navbar -->
+                            <form action="/logout/" method="post" class="ml-2">
+                                <button type="submit" class="nav-logout-btn flex items-center space-x-2 text-sm font-medium ripple-effect">
+                                    <i class="fas fa-sign-out-alt"></i>
+                                    <span>Logout</span>
+                                </button>
+                            </form>
+                            
+                            <div class="relative">
+                                <i class="fas fa-bell text-gray-500 text-xl hover:text-blue-500 smooth-transition cursor-pointer ripple-effect" id="notificationBell"></i>
+                                <span class="absolute -top-1 -right-1 w-3 h-3 bg-red-500 rounded-full animate-pulse-soft"></span>
+                            </div>
+                            <!-- PERBAIKAN: TANGGAL REAL-TIME SEDERHANA - SAMA DENGAN DASHBOARD -->
+                            <div class="text-sm text-gray-600">
+                                <span id="currentDate" class="font-medium">Rabu, 3 Januari 2026</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </header>
+            
+            <!-- Content -->
+            <div class="content-wrapper">
+                <!-- Bagian "Ringkasan Inventori" -->
+                <section class="force-render">
+                    <div class="flex items-center justify-between mb-6">
+                        <h3 class="text-lg font-semibold text-gray-800">Ringkasan Inventori</h3>
+                        <div class="flex items-center space-x-4">
+                            <div class="flex space-x-2">
+                                <button class="inventory-filter active px-4 py-2 rounded-lg text-sm font-medium ripple-effect" data-filter="all">Semua</button>
+                                <button class="inventory-filter px-4 py-2 rounded-lg text-sm font-medium bg-gray-100 ripple-effect" data-filter="critical">Kritis</button>
+                                <button class="inventory-filter px-4 py-2 rounded-lg text-sm font-medium bg-gray-100 ripple-effect" data-filter="warning">Peringatan</button>
+                                <button class="inventory-filter px-4 py-2 rounded-lg text-sm font-medium bg-gray-100 ripple-effect" data-filter="safe">Aman</button>
+                            </div>
+                            <button class="text-blue-600 text-sm font-medium flex items-center space-x-1 smooth-transition hover:text-blue-800 group" id="refreshInventoryBtn">
+                                <i class="fas fa-sync-alt mr-1"></i> <span>Perbarui</span>
+                            </button>
+                        </div>
+                    </div>
+                    
+                    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
+                        <!-- Total Nilai Stok -->
+                        <div class="bg-white rounded-xl shadow-sm border border-gray-200 p-5 hover-lift gradient-blue initial-animate" style="animation-delay: 0.1s">
+                            <div class="flex justify-between items-start">
+                                <div>
+                                    <p class="text-sm text-gray-600">Total Nilai Stok</p>
+                                    <p class="text-2xl font-bold text-gray-800 mt-1">Rp 2.48M</p>
+                                    <div class="flex items-center mt-2">
+                                        <span class="text-xs text-green-600 data-trend-up mr-2">5.2%</span>
+                                        <span class="text-xs text-gray-600">dari bulan lalu</span>
+                                    </div>
+                                </div>
+                                <div class="w-12 h-12 rounded-full bg-gradient-to-r from-blue-100 to-blue-200 flex items-center justify-center">
+                                    <i class="fas fa-money-bill-wave text-blue-600 text-xl"></i>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <!-- Stok Kritis -->
+                        <div class="bg-white rounded-xl shadow-sm border border-gray-200 p-5 hover-lift gradient-red initial-animate" style="animation-delay: 0.2s">
+                            <div class="flex justify-between items-start">
+                                <div>
+                                    <p class="text-sm text-gray-600">Stok Kritis</p>
+                                    <p class="text-2xl font-bold text-gray-800 mt-1">8</p>
+                                    <div class="flex items-center mt-2">
+                                        <span class="text-xs text-red-600 data-trend-down mr-2">2 produk</span>
+                                        <span class="text-xs text-gray-600">naik dari kemarin</span>
+                                    </div>
+                                </div>
+                                <div class="w-12 h-12 rounded-full bg-gradient-to-r from-red-100 to-red-200 flex items-center justify-center">
+                                    <i class="fas fa-exclamation-triangle text-red-600 text-xl"></i>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <!-- Stok Berlebih -->
+                        <div class="bg-white rounded-xl shadow-sm border border-gray-200 p-5 hover-lift gradient-orange initial-animate" style="animation-delay: 0.3s">
+                            <div class="flex justify-between items-start">
+                                <div>
+                                    <p class="text-sm text-gray-600">Stok Berlebih</p>
+                                    <p class="text-2xl font-bold text-gray-800 mt-1">12</p>
+                                    <div class="flex items-center mt-2">
+                                        <span class="text-xs text-yellow-600 data-trend-down mr-2">3%</span>
+                                        <span class="text-xs text-gray-600">dari total produk</span>
+                                    </div>
+                                </div>
+                                <div class="w-12 h-12 rounded-full bg-gradient-to-r from-yellow-100 to-yellow-200 flex items-center justify-center">
+                                    <i class="fas fa-boxes-stacked text-yellow-600 text-xl"></i>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <!-- Stock Turnover -->
+                        <div class="bg-white rounded-xl shadow-sm border border-gray-200 p-5 hover-lift gradient-green initial-animate" style="animation-delay: 0.4s">
+                            <div class="flex justify-between items-start">
+                                <div>
+                                    <p class="text-sm text-gray-600">Stock Turnover</p>
+                                    <p class="text-2xl font-bold text-gray-800 mt-1">4.2x</p>
+                                    <div class="flex items-center mt-2">
+                                        <span class="text-xs text-green-600 data-trend-up mr-2">0.3x</span>
+                                        <span class="text-xs text-gray-600">lebih baik</span>
+                                    </div>
+                                </div>
+                                <div class="w-12 h-12 rounded-full bg-gradient-to-r from-green-100 to-green-200 flex items-center justify-center">
+                                    <i class="fas fa-retweet text-green-600 text-xl"></i>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+                
+                <!-- AI Inventory Signals & Pergerakan Stok -->
+                <div class="grid grid-cols-1 lg:grid-cols-2 gap-8 mt-8">
+                    <!-- AI Inventory Signals - DIPERBAIKI -->
+                    <section class="animate-on-scroll delay-100">
+                        <div class="flex items-center justify-between mb-4">
+                            <h3 class="text-lg font-semibold text-gray-800">AI Inventory Signals</h3>
+                            <div class="flex items-center space-x-2">
+                                <span class="text-xs px-2 py-1 bg-blue-100 text-blue-700 rounded-full animate-pulse-soft">Real-time</span>
+                                <button class="text-xs text-blue-600 hover:text-blue-800 smooth-transition">
+                                    <i class="fas fa-plus mr-1"></i> Lihat Semua
+                                </button>
+                            </div>
+                        </div>
+                        
+                        <div class="bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden hover-lift force-render grid-section-card">
+                            <div class="p-5 border-b border-gray-100 gradient-blue">
+                                <div class="flex items-center justify-between">
+                                    <div class="flex items-center space-x-3">
+                                        <div class="w-10 h-10 rounded-full bg-gradient-to-r from-blue-100 to-blue-200 flex items-center justify-center animate-pulse-soft">
+                                            <i class="fas fa-brain text-blue-600"></i>
+                                        </div>
+                                        <div>
+                                            <h4 class="font-bold text-gray-800">Signal AI Inventori</h4>
+                                            <p class="text-sm text-gray-600">3 signal memerlukan perhatian</p>
+                                        </div>
+                                    </div>
+                                    <div class="text-right">
+                                        <p class="text-2xl font-bold text-gray-800">3</p>
+                                        <p class="text-xs text-gray-600">Signal Aktif</p>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="p-5 card-content-wrapper">
+                                <div class="card-body-scrollable">
+                                    <div class="space-y-4">
+                                        <!-- Signal 1 -->
+                                        <div class="ai-signal critical p-4 rounded-lg">
+                                            <div class="flex items-start">
+                                                <i class="fas fa-exclamation-circle text-red-500 mt-1 mr-3"></i>
+                                                <div class="flex-1">
+                                                    <div class="flex justify-between items-start mb-1">
+                                                        <p class="font-medium text-gray-800">Stok Kritis - Kaos Premium Cotton</p>
+                                                        <span class="text-xs px-2 py-1 bg-red-100 text-red-700 rounded-full">Kritis</span>
+                                                    </div>
+                                                    <p class="text-sm text-gray-700 mb-2">Akan habis dalam 2-3 hari berdasarkan tren penjualan 7 hari terakhir.</p>
+                                                    <div class="flex items-center justify-between">
+                                                        <p class="text-xs text-gray-600">Stok saat ini: 5 unit • Permintaan: 4 unit/hari</p>
+                                                        <button class="text-xs text-blue-600 hover:text-blue-800 smooth-transition">
+                                                            <i class="fas fa-clipboard-list mr-1"></i> Buat PO
+                                                        </button>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        
+                                        <!-- Signal 2 -->
+                                        <div class="ai-signal warning p-4 rounded-lg">
+                                            <div class="flex items-start">
+                                                <i class="fas fa-clock text-yellow-500 mt-1 mr-3"></i>
+                                                <div class="flex-1">
+                                                    <div class="flex justify-between items-start mb-1">
+                                                        <p class="font-medium text-gray-800">Stok Menganggur - Essential Oil Set</p>
+                                                        <span class="text-xs px-2 py-1 bg-yellow-100 text-yellow-700 rounded-full">Peringatan</span>
+                                                    </div>
+                                                    <p class="text-sm text-gray-700 mb-2">Tidak bergerak dalam 15 hari terakhir. Stok berlebih 70 unit.</p>
+                                                    <div class="flex items-center justify-between">
+                                                        <p class="text-xs text-gray-600">Stok: 70 unit • Hari tanpa penjualan: 15 hari</p>
+                                                        <button class="text-xs text-blue-600 hover:text-blue-800 smooth-transition">
+                                                            <i class="fas fa-tags mr-1"></i> Buat Promo
+                                                        </button>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        
+                                        <!-- Signal 3 -->
+                                        <div class="ai-signal info p-4 rounded-lg">
+                                            <div class="flex items-start">
+                                                <i class="fas fa-chart-line text-blue-500 mt-1 mr-3"></i>
+                                                <div class="flex-1">
+                                                    <div class="flex justify-between items-start mb-1">
+                                                        <p class="font-medium text-gray-800">Tren Positif - Smartphone X Pro</p>
+                                                        <span class="text-xs px-2 py-1 bg-blue-100 text-blue-700 rounded-full">Info</span>
+                                                    </div>
+                                                    <p class="text-sm text-gray-700 mb-2">Mengalami peningkatan permintaan 25% minggu ini.</p>
+                                                    <div class="flex items-center justify-between">
+                                                        <p class="text-xs text-gray-600">Stok: 92 unit • Permintaan: +25% minggu ini</p>
+                                                        <button class="text-xs text-blue-600 hover:text-blue-800 smooth-transition">
+                                                            <i class="fas fa-chart-bar mr-1"></i> Analisis
+                                                        </button>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                
+                                <div class="mt-6 pt-4 border-t border-gray-200">
+                                    <div class="flex justify-between items-center">
+                                        <p class="text-sm text-gray-600">Menampilkan 3 dari 8 signal AI</p>
+                                        <button class="text-blue-600 text-sm font-medium flex items-center space-x-1 smooth-transition hover:text-blue-800 group">
+                                            <span>Lihat Semua Signal</span>
+                                            <i class="fas fa-chevron-right text-xs group-hover:translate-x-1 smooth-transition"></i>
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </section>
+                    
+                    <!-- Pergerakan Stok Terbaru - DIPERBAIKI -->
+                    <section class="animate-on-scroll delay-200">
+                        <div class="flex items-center justify-between mb-4">
+                            <h3 class="text-lg font-semibold text-gray-800">Pergerakan Stok Terbaru</h3>
+                            <div class="flex items-center space-x-2">
+                                <span class="text-xs px-2 py-1 bg-green-100 text-green-700 rounded-full">Hari Ini</span>
+                            </div>
+                        </div>
+                        
+                        <div class="bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden hover-lift force-render grid-section-card">
+                            <div class="p-5 border-b border-gray-100 gradient-green">
+                                <div class="flex items-center justify-between">
+                                    <div class="flex items-center space-x-3">
+                                        <div class="w-10 h-10 rounded-full bg-gradient-to-r from-green-100 to-green-200 flex items-center justify-center animate-pulse-soft">
+                                            <i class="fas fa-exchange-alt text-green-600"></i>
+                                        </div>
+                                        <div>
+                                            <h4 class="font-bold text-gray-800">Log Pergerakan Stok</h4>
+                                            <p class="text-sm text-gray-600">5 transaksi terakhir</p>
+                                        </div>
+                                    </div>
+                                    <div class="text-right">
+                                        <p class="text-lg font-bold text-blue-600">+42 unit</p>
+                                        <p class="text-xs text-gray-600">Net change hari ini</p>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="p-5 card-content-wrapper">
+                                <div class="card-body-scrollable">
+                                    <div class="overflow-x-auto">
+                                        <table class="w-full inventory-table">
+                                            <thead class="bg-gray-50">
+                                                <tr>
+                                                    <th class="py-3 px-4 text-left text-xs font-medium text-gray-700 uppercase tracking-wider">Waktu</th>
+                                                    <th class="py-3 px-4 text-left text-xs font-medium text-gray-700 uppercase tracking-wider">Produk</th>
+                                                    <th class="py-3 px-4 text-left text-xs font-medium text-gray-700 uppercase tracking-wider">Tipe</th>
+                                                    <th class="py-3 px-4 text-left text-xs font-medium text-gray-700 uppercase tracking-wider">Qty</th>
+                                                    <th class="py-3 px-4 text-left text-xs font-medium text-gray-700 uppercase tracking-wider">Stok Akhir</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody class="divide-y divide-gray-200">
+                                                <tr class="hover:bg-blue-50/50">
+                                                    <td class="py-3 px-4">
+                                                        <div class="text-sm font-medium text-gray-900">09:30</div>
+                                                        <div class="text-xs text-gray-500">3 Jan</div>
+                                                    </td>
+                                                    <td class="py-3 px-4">
+                                                        <div class="flex items-center">
+                                                            <div class="w-8 h-8 rounded-lg bg-gradient-to-r from-blue-100 to-blue-200 flex items-center justify-center mr-3">
+                                                                <i class="fas fa-box text-blue-600 text-sm"></i>
+                                                            </div>
+                                                            <div>
+                                                                <div class="text-sm font-medium text-gray-900">Smartphone X Pro</div>
+                                                                <div class="text-xs text-gray-500">ID: #P001</div>
+                                                            </div>
+                                                        </div>
+                                                    </td>
+                                                    <td class="py-3 px-4">
+                                                        <span class="movement-badge movement-in">
+                                                            <i class="fas fa-arrow-down mr-1"></i> Masuk
+                                                        </span>
+                                                    </td>
+                                                    <td class="py-3 px-4">
+                                                        <div class="text-sm font-medium text-green-600">+50</div>
+                                                    </td>
+                                                    <td class="py-3 px-4">
+                                                        <div class="text-sm font-medium text-gray-900">92 unit</div>
+                                                        <div class="progress-bar mt-1">
+                                                            <div class="progress-bar-fill bg-gradient-to-r from-green-500 to-green-400" style="width: 85%"></div>
+                                                        </div>
+                                                    </td>
+                                                </tr>
+                                                <tr class="hover:bg-red-50/50">
+                                                    <td class="py-3 px-4">
+                                                        <div class="text-sm font-medium text-gray-900">11:15</div>
+                                                        <div class="text-xs text-gray-500">3 Jan</div>
+                                                    </td>
+                                                    <td class="py-3 px-4">
+                                                        <div class="flex items-center">
+                                                            <div class="w-8 h-8 rounded-lg bg-gradient-to-r from-pink-100 to-pink-200 flex items-center justify-center mr-3">
+                                                                <i class="fas fa-tshirt text-pink-600 text-sm"></i>
+                                                            </div>
+                                                            <div>
+                                                                <div class="text-sm font-medium text-gray-900">Kaos Premium Cotton</div>
+                                                                <div class="text-xs text-gray-500">ID: #P002</div>
+                                                            </div>
+                                                        </div>
+                                                    </td>
+                                                    <td class="py-3 px-4">
+                                                        <span class="movement-badge movement-out">
+                                                            <i class="fas fa-arrow-up mr-1"></i> Keluar
+                                                        </span>
+                                                    </td>
+                                                    <td class="py-3 px-4">
+                                                        <div class="text-sm font-medium text-red-600">-12</div>
+                                                    </td>
+                                                    <td class="py-3 px-4">
+                                                        <div class="text-sm font-medium text-gray-900">5 unit</div>
+                                                        <div class="progress-bar mt-1">
+                                                            <div class="progress-bar-fill bg-gradient-to-r from-red-500 to-red-400" style="width: 12%"></div>
+                                                        </div>
+                                                    </td>
+                                                </tr>
+                                                <tr class="hover:bg-yellow-50/50">
+                                                    <td class="py-3 px-4">
+                                                        <div class="text-sm font-medium text-gray-900">14:45</div>
+                                                        <div class="text-xs text-gray-500">2 Jan</div>
+                                                    </td>
+                                                    <td class="py-3 px-4">
+                                                        <div class="flex items-center">
+                                                            <div class="w-8 h-8 rounded-lg bg-gradient-to-r from-purple-100 to-purple-200 flex items-center justify-center mr-3">
+                                                                <i class="fas fa-spa text-purple-600 text-sm"></i>
+                                                            </div>
+                                                            <div>
+                                                                <div class="text-sm font-medium text-gray-900">Essential Oil Set</div>
+                                                                <div class="text-xs text-gray-500">ID: #P004</div>
+                                                            </div>
+                                                        </div>
+                                                    </td>
+                                                    <td class="py-3 px-4">
+                                                        <span class="movement-badge movement-adjustment">
+                                                            <i class="fas fa-adjust mr-1"></i> Penyesuaian
+                                                        </span>
+                                                    </td>
+                                                    <td class="py-3 px-4">
+                                                        <div class="text-sm font-medium text-yellow-600">+5</div>
+                                                    </td>
+                                                    <td class="py-3 px-4">
+                                                        <div class="text-sm font-medium text-gray-900">70 unit</div>
+                                                        <div class="progress-bar mt-1">
+                                                            <div class="progress-bar-fill bg-gradient-to-r from-green-500 to-green-400" style="width: 95%"></div>
+                                                        </div>
+                                                    </td>
+                                                </tr>
+                                                <tr class="hover:bg-purple-50/50">
+                                                    <td class="py-3 px-4">
+                                                        <div class="text-sm font-medium text-gray-900">10:20</div>
+                                                        <div class="text-xs text-gray-500">2 Jan</div>
+                                                    </td>
+                                                    <td class="py-3 px-4">
+                                                        <div class="flex items-center">
+                                                            <div class="w-8 h-8 rounded-lg bg-gradient-to-r from-blue-100 to-blue-200 flex items-center justify-center mr-3">
+                                                                <i class="fas fa-headphones text-blue-600 text-sm"></i>
+                                                            </div>
+                                                            <div>
+                                                                <div class="text-sm font-medium text-gray-900">Wireless Headphone Pro</div>
+                                                                <div class="text-xs text-gray-500">ID: #P005</div>
+                                                            </div>
+                                                        </div>
+                                                    </td>
+                                                    <td class="py-3 px-4">
+                                                        <span class="movement-badge movement-damage">
+                                                            <i class="fas fa-times mr-1"></i> Rusak
+                                                        </span>
+                                                    </td>
+                                                    <td class="py-3 px-4">
+                                                        <div class="text-sm font-medium text-purple-600">-2</div>
+                                                    </td>
+                                                    <td class="py-3 px-4">
+                                                        <div class="text-sm font-medium text-gray-900">8 unit</div>
+                                                        <div class="progress-bar mt-1">
+                                                            <div class="progress-bar-fill bg-gradient-to-r from-red-500 to-red-400" style="width: 16%"></div>
+                                                        </div>
+                                                    </td>
+                                                </tr>
+                                                <tr class="hover:bg-green-50/50">
+                                                    <td class="py-3 px-4">
+                                                        <div class="text-sm font-medium text-gray-900">16:30</div>
+                                                        <div class="text-xs text-gray-500">1 Jan</div>
+                                                    </td>
+                                                    <td class="py-3 px-4">
+                                                        <div class="flex items-center">
+                                                            <div class="w-8 h-8 rounded-lg bg-gradient-to-r from-yellow-100 to-yellow-200 flex items-center justify-center mr-3">
+                                                                <i class="fas fa-home text-yellow-600 text-sm"></i>
+                                                            </div>
+                                                            <div>
+                                                                <div class="text-sm font-medium text-gray-900">Lampu LED Smart Home</div>
+                                                                <div class="text-xs text-gray-500">ID: #P003</div>
+                                                            </div>
+                                                        </div>
+                                                    </td>
+                                                    <td class="py-3 px-4">
+                                                        <span class="movement-badge movement-out">
+                                                            <i class="fas fa-arrow-up mr-1"></i> Keluar
+                                                        </span>
+                                                    </td>
+                                                    <td class="py-3 px-4">
+                                                        <div class="text-sm font-medium text-red-600">-8</div>
+                                                    </td>
+                                                    <td class="py-3 px-4">
+                                                        <div class="text-sm font-medium text-gray-900">28 unit</div>
+                                                        <div class="progress-bar mt-1">
+                                                            <div class="progress-bar-fill bg-gradient-to-r from-yellow-500 to-yellow-400" style="width: 56%"></div>
+                                                        </div>
+                                                    </td>
+                                                </tr>
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                                
+                                <div class="mt-6 pt-4 border-t border-gray-200">
+                                    <div class="flex justify-between items-center">
+                                        <p class="text-sm text-gray-600">Menampilkan 5 dari 128 transaksi</p>
+                                        <button class="text-blue-600 text-sm font-medium flex items-center space-x-1 smooth-transition hover:text-blue-800 group">
+                                            <i class="fas fa-history mr-1"></i>
+                                            <span>Lihat Riwayat Lengkap</span>
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </section>
+                </div>
+                
+                <!-- Analisis Stok Kritis & Performa Kategori -->
+                <div class="grid grid-cols-1 lg:grid-cols-2 gap-8 mt-8">
+                    <!-- Analisis Stok Kritis - DIPERBAIKI -->
+                    <section class="animate-on-scroll delay-300">
+                        <div class="flex items-center justify-between mb-4">
+                            <h3 class="text-lg font-semibold text-gray-800">Analisis Stok Kritis</h3>
+                            <span class="text-xs px-3 py-1 bg-red-100 text-red-700 rounded-full animate-pulse-soft">Perlu Perhatian</span>
+                        </div>
+                        
+                        <div class="bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden hover-lift force-render grid-section-card">
+                            <div class="p-5 border-b border-gray-100 gradient-red">
+                                <div class="flex items-center space-x-3">
+                                    <div class="w-10 h-10 rounded-full bg-gradient-to-r from-red-100 to-red-200 flex items-center justify-center animate-pulse-soft">
+                                        <i class="fas fa-exclamation-triangle text-red-600"></i>
+                                    </div>
+                                    <div>
+                                        <h4 class="font-bold text-gray-800">Produk Berisiko Kehabisan Stok</h4>
+                                        <p class="text-sm text-gray-600">Berdasarkan tren penjualan 7 hari terakhir</p>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="p-5 card-content-wrapper">
+                                <div class="card-body-scrollable">
+                                    <div class="space-y-4 mb-6">
+                                        <div>
+                                            <div class="flex justify-between items-center mb-1">
+                                                <span class="text-sm font-medium text-gray-700">Kaos Premium Cotton</span>
+                                                <span class="text-sm font-medium text-red-600">Habis dalam 2-3 hari</span>
+                                            </div>
+                                            <div class="progress-bar">
+                                                <div class="progress-bar-fill bg-gradient-to-r from-red-500 to-red-400" style="width: 15%"></div>
+                                            </div>
+                                            <p class="text-xs text-gray-600 mt-1">Stok: 5 unit • Permintaan: 4 unit/hari • Rekomendasi restok: 50 unit</p>
+                                        </div>
+                                        
+                                        <div>
+                                            <div class="flex justify-between items-center mb-1">
+                                                <span class="text-sm font-medium text-gray-700">Wireless Headphone Pro</span>
+                                                <span class="text-sm font-medium text-yellow-600">Habis dalam 5 hari</span>
+                                            </div>
+                                            <div class="progress-bar">
+                                                <div class="progress-bar-fill bg-gradient-to-r from-yellow-500 to-yellow-400" style="width: 25%"></div>
+                                            </div>
+                                            <p class="text-xs text-gray-600 mt-1">Stok: 8 unit • Permintaan: 1.6 unit/hari • Rekomendasi restok: 30 unit</p>
+                                        </div>
+                                        
+                                        <div>
+                                            <div class="flex justify-between items-center mb-1">
+                                                <span class="text-sm font-medium text-gray-700">Lampu LED Smart Home</span>
+                                                <span class="text-sm font-medium text-blue-600">Habis dalam 7 hari</span>
+                                            </div>
+                                            <div class="progress-bar">
+                                                <div class="progress-bar-fill bg-gradient-to-r from-blue-500 to-blue-400" style="width: 35%"></div>
+                                            </div>
+                                            <p class="text-xs text-gray-600 mt-1">Stok: 28 unit • Permintaan: 4 unit/hari • Rekomendasi restok: 40 unit</p>
+                                        </div>
+                                    </div>
+                                </div>
+                                
+                                <div class="mt-6 pt-4 border-t border-gray-200">
+                                    <div class="flex items-start space-x-2">
+                                        <i class="fas fa-lightbulb text-blue-500 mt-1 animate-pulse-soft"></i>
+                                        <div>
+                                            <p class="text-sm text-gray-700 font-medium mb-1">Rekomendasi AI untuk Stok Kritis:</p>
+                                            <p class="text-xs text-gray-600">
+                                                1. Buat purchase order segera untuk 50 unit Kaos Premium Cotton<br>
+                                                2. Prioritas restok untuk Wireless Headphone Pro (30 unit)<br>
+                                                3. Monitor Lampu LED Smart Home secara ketat<br>
+                                                4. Atur safety stock minimum 20% dari permintaan harian
+                                            </p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </section>
+                    
+                    <!-- Performa Kategori - DIPERBAIKI -->
+                    <section class="animate-on-scroll delay-400">
+                        <div class="flex items-center justify-between mb-4">
+                            <h3 class="text-lg font-semibold text-gray-800">Performa Stok per Kategori</h3>
+                            <span class="text-xs px-3 py-1 bg-purple-100 text-purple-700 rounded-full">Q1 2026</span>
+                        </div>
+                        
+                        <div class="bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden hover-lift force-render grid-section-card">
+                            <div class="p-5 border-b border-gray-100 gradient-purple">
+                                <div class="flex items-center justify-between">
+                                    <div class="flex items-center space-x-3">
+                                        <div class="w-10 h-10 rounded-full bg-gradient-to-r from-purple-100 to-purple-200 flex items-center justify-center animate-pulse-soft">
+                                            <i class="fas fa-chart-pie text-purple-600"></i>
+                                        </div>
+                                        <div>
+                                            <h4 class="font-bold text-gray-800">Analisis Kategori</h4>
+                                            <p class="text-sm text-gray-600">Berdasarkan kesehatan stok dan turnover</p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="p-5 card-content-wrapper">
+                                <div class="card-body-scrollable">
+                                    <div class="space-y-4 mb-6">
+                                        <div class="flex items-center justify-between p-3 bg-gray-50 rounded-lg hover-lift smooth-transition gpu-accelerate">
+                                            <div class="flex items-center space-x-3">
+                                                <div class="w-10 h-10 rounded-lg bg-gradient-to-r from-blue-100 to-blue-200 flex items-center justify-center">
+                                                    <i class="fas fa-mobile-alt text-blue-600"></i>
+                                                </div>
+                                                <div>
+                                                    <p class="font-medium text-gray-800">Elektronik</p>
+                                                    <p class="text-xs text-gray-600">42 produk • 78% sehat</p>
+                                                </div>
+                                            </div>
+                                            <div class="text-right">
+                                                <p class="text-sm font-bold text-green-600">4.8x</p>
+                                                <p class="text-xs text-gray-600">Turnover</p>
+                                            </div>
+                                        </div>
+                                        
+                                        <div class="flex items-center justify-between p-3 bg-gray-50 rounded-lg hover-lift smooth-transition gpu-accelerate">
+                                            <div class="flex items-center space-x-3">
+                                                <div class="w-10 h-10 rounded-lg bg-gradient-to-r from-pink-100 to-pink-200 flex items-center justify-center">
+                                                    <i class="fas fa-tshirt text-pink-600"></i>
+                                                </div>
+                                                <div>
+                                                    <p class="font-medium text-gray-800">Fashion</p>
+                                                    <p class="text-xs text-gray-600">28 produk • 65% sehat</p>
+                                                </div>
+                                            </div>
+                                            <div class="text-right">
+                                                <p class="text-sm font-bold text-yellow-600">3.2x</p>
+                                                <p class="text-xs text-gray-600">Turnover</p>
+                                            </div>
+                                        </div>
+                                        
+                                        <div class="flex items-center justify-between p-3 bg-gray-50 rounded-lg hover-lift smooth-transition gpu-accelerate">
+                                            <div class="flex items-center space-x-3">
+                                                <div class="w-10 h-10 rounded-lg bg-gradient-to-r from-green-100 to-green-200 flex items-center justify-center">
+                                                    <i class="fas fa-home text-green-600"></i>
+                                                </div>
+                                                <div>
+                                                    <p class="font-medium text-gray-800">Rumah Tangga</p>
+                                                    <p class="text-xs text-gray-600">35 produk • 85% sehat</p>
+                                                </div>
+                                            </div>
+                                            <div class="text-right">
+                                                <p class="text-sm font-bold text-green-600">5.1x</p>
+                                                <p class="text-xs text-gray-600">Turnover</p>
+                                            </div>
+                                        </div>
+                                        
+                                        <div class="flex items-center justify-between p-3 bg-gray-50 rounded-lg hover-lift smooth-transition gpu-accelerate">
+                                            <div class="flex items-center space-x-3">
+                                                <div class="w-10 h-10 rounded-lg bg-gradient-to-r from-purple-100 to-purple-200 flex items-center justify-center">
+                                                    <i class="fas fa-spa text-purple-600"></i>
+                                                </div>
+                                                <div>
+                                                    <p class="font-medium text-gray-800">Kecantikan</p>
+                                                    <p class="text-xs text-gray-600">22 produk • 92% sehat</p>
+                                                </div>
+                                            </div>
+                                            <div class="text-right">
+                                                <p class="text-sm font-bold text-green-600">6.2x</p>
+                                                <p class="text-xs text-gray-600">Turnover</p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    
+                                    <div class="grid grid-cols-2 gap-4 mb-6">
+                                        <div class="bg-green-50 p-3 rounded-lg hover-lift smooth-transition gpu-accelerate">
+                                            <p class="text-xs font-medium text-gray-700 mb-1">Kategori Terbaik</p>
+                                            <p class="text-lg font-bold text-gray-800">Kecantikan</p>
+                                            <p class="text-xs text-gray-600">92% sehat, 6.2x turnover</p>
+                                        </div>
+                                        
+                                        <div class="bg-red-50 p-3 rounded-lg hover-lift smooth-transition gpu-accelerate">
+                                            <p class="text-xs font-medium text-gray-700 mb-1">Perlu Perhatian</p>
+                                            <p class="text-lg font-bold text-gray-800">Fashion</p>
+                                            <p class="text-xs text-gray-600">65% sehat, 3 produk kritis</p>
+                                        </div>
+                                    </div>
+                                </div>
+                                
+                                <div class="mt-6 pt-4 border-t border-gray-200">
+                                    <p class="text-sm text-gray-700">
+                                        <i class="fas fa-chart-line text-purple-500 mr-2"></i>
+                                        <span class="font-medium">Insight:</span> Kategori Kecantikan memiliki performa terbaik dengan kesehatan stok 92% dan turnover tinggi. Kategori Fashion memerlukan perhatian khusus dengan 3 produk stok kritis. Rekomendasi: fokus pada restok produk Fashion dan pertimbangkan promosi untuk meningkatkan turnover.
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+                    </section>
+                </div>
+                
+                <!-- Dampak Stok Kritis terhadap Bisnis - DIPERBAIKI -->
+                <section class="animate-on-scroll delay-500 mt-8">
+                    <div class="flex items-center justify-between mb-4">
+                        <h3 class="text-lg font-semibold text-gray-800">Dampak Stok Kritis terhadap Bisnis</h3>
+                        <span class="text-xs px-3 py-1 bg-orange-100 text-orange-700 rounded-full">Analisis AI</span>
+                    </div>
+                    
+                    <div class="bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden hover-lift force-render grid-section-card">
+                        <div class="p-5 border-b border-gray-100 gradient-orange">
+                            <div class="flex items-center space-x-3">
+                                <div class="w-10 h-10 rounded-full bg-gradient-to-r from-orange-100 to-orange-200 flex items-center justify-center animate-pulse-soft">
+                                    <i class="fas fa-chart-line text-orange-600"></i>
+                                </div>
+                                <div>
+                                    <h4 class="font-bold text-gray-800">Korelasi Stok Kritis & Penjualan</h4>
+                                    <p class="text-sm text-gray-600">Analisis dampak kehabisan stok terhadap penjualan dan kepuasan pelanggan</p>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="p-5 card-content-wrapper">
+                            <div class="card-body-scrollable">
+                                <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-6">
+                                    <div class="bg-red-50 p-4 rounded-lg hover-lift smooth-transition gpu-accelerate">
+                                        <div class="flex items-center space-x-3 mb-3">
+                                            <div class="w-10 h-10 rounded-full bg-red-100 flex items-center justify-center">
+                                                <i class="fas fa-shopping-cart text-red-600"></i>
+                                            </div>
+                                            <div>
+                                                <p class="text-sm font-medium text-gray-800">Penjualan Hilang</p>
+                                                <p class="text-xs text-gray-600">Akibat kehabisan stok</p>
+                                            </div>
+                                        </div>
+                                        <p class="text-2xl font-bold text-red-600">Rp 48.2Jt</p>
+                                        <p class="text-xs text-gray-600 mt-1">Dalam 30 hari terakhir</p>
+                                    </div>
+                                    
+                                    <div class="bg-yellow-50 p-4 rounded-lg hover-lift smooth-transition gpu-accelerate">
+                                        <div class="flex items-center space-x-3 mb-3">
+                                            <div class="w-10 h-10 rounded-full bg-yellow-100 flex items-center justify-center">
+                                                <i class="fas fa-user-times text-yellow-600"></i>
+                                            </div>
+                                            <div>
+                                                <p class="text-sm font-medium text-gray-800">Pelanggan Beralih</p>
+                                                <p class="text-xs text-gray-600">Ke kompetitor</p>
+                                            </div>
+                                        </div>
+                                        <p class="text-2xl font-bold text-yellow-600">18%</p>
+                                        <p class="text-xs text-gray-600 mt-1">Dari kasus kehabisan stok</p>
+                                    </div>
+                                    
+                                    <div class="bg-blue-50 p-4 rounded-lg hover-lift smooth-transition gpu-accelerate">
+                                        <div class="flex items-center space-x-3 mb-3">
+                                            <div class="w-10 h-10 rounded-full bg-blue-100 flex items-center justify-center">
+                                                <i class="fas fa-star text-blue-600"></i>
+                                            </div>
+                                            <div>
+                                                <p class="text-sm font-medium text-gray-800">Rating Produk</p>
+                                                <p class="text-xs text-gray-600">Saat stok tidak tersedia</p>
+                                            </div>
+                                        </div>
+                                        <p class="text-2xl font-bold text-blue-600">3.1/5</p>
+                                        <p class="text-xs text-gray-600 mt-1">Turun dari 4.7/5</p>
+                                    </div>
+                                </div>
+                                
+                                <div class="space-y-4">
+                                    <div>
+                                        <p class="font-medium text-gray-800 mb-2">Produk Paling Terdampak:</p>
+                                        <div class="flex items-center justify-between p-3 bg-gray-50 rounded-lg">
+                                            <div class="flex items-center space-x-3">
+                                                <div class="w-10 h-10 rounded-lg bg-gradient-to-r from-blue-100 to-blue-200 flex items-center justify-center">
+                                                    <i class="fas fa-tshirt text-blue-600"></i>
+                                                </div>
+                                                <div>
+                                                    <p class="font-medium text-gray-800">Kaos Premium Cotton</p>
+                                                    <p class="text-xs text-gray-600">3x kehabisan stok dalam 30 hari</p>
+                                                </div>
+                                            </div>
+                                            <div class="text-right">
+                                                <p class="text-sm font-bold text-red-600">-Rp 12.5Jt</p>
+                                                <p class="text-xs text-gray-600">Penjualan hilang</p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    
+                                    <div>
+                                        <p class="font-medium text-gray-800 mb-2">Kategori Paling Terdampak:</p>
+                                        <div class="flex items-center justify-between p-3 bg-gray-50 rounded-lg">
+                                            <div class="flex items-center space-x-3">
+                                                <div class="w-10 h-10 rounded-lg bg-gradient-to-r from-green-100 to-green-200 flex items-center justify-center">
+                                                    <i class="fas fa-tshirt text-green-600"></i>
+                                                </div>
+                                                <div>
+                                                    <p class="font-medium text-gray-800">Fashion</p>
+                                                    <p class="text-xs text-gray-600">45% kejadian kehabisan stok</p>
+                                                </div>
+                                            </div>
+                                            <div class="text-right">
+                                                <p class="text-sm font-bold text-red-600">-Rp 21.8Jt</p>
+                                                <p class="text-xs text-gray-600">Penjualan hilang</p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="mt-6 pt-4 border-t border-gray-200">
+                                <div class="flex items-start space-x-2">
+                                    <i class="fas fa-brain text-orange-500 mt-1"></i>
+                                    <div>
+                                        <p class="text-sm text-gray-700 font-medium mb-1">Kesimpulan AI:</p>
+                                        <p class="text-xs text-gray-600">
+                                            Kehabisan stok berdampak langsung pada penjualan dan kepuasan pelanggan. Setiap kejadian kehabisan stok mengurangi penjualan rata-rata Rp 4.2 juta dan menyebabkan 18% pelanggan beralih ke kompetitor. Produk Fashion paling terdampak dengan kerugian Rp 21.8 juta dalam 30 hari. Rekomendasi utama: tingkatkan safety stock untuk produk Fashion, implementasi sistem peringatan dini, dan optimasi lead time restok.
+                                        </p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+            </div>
+        </div>
+    </div>
+
+    <!-- JavaScript untuk interaktivitas - DIPERBAIKI -->
+    <script>
+        // ================= FUNGSI UTAMA =================
+        
+        // Fungsi untuk update tanggal sederhana - SAMA DENGAN DASHBOARD
+        function updateDate() {
+            const now = new Date();
+            
+            // Format hari dalam Bahasa Indonesia
+            const days = ['Minggu', 'Senin', 'Selasa', 'Rabu', 'Kamis', 'Jumat', 'Sabtu'];
+            const months = ['Januari', 'Februari', 'Maret', 'April', 'Mei', 'Juni', 
+                           'Juli', 'Agustus', 'September', 'Oktober', 'November', 'Desember'];
+            
+            const dayName = days[now.getDay()];
+            const date = now.getDate();
+            const monthName = months[now.getMonth()];
+            const year = now.getFullYear();
+            
+            // Format untuk tanggal: "Selasa, 2 Januari 2026"
+            const formattedDate = `${dayName}, ${date} ${monthName} ${year}`;
+            
+            // Update elemen
+            const dateElement = document.getElementById('currentDate');
+            if (dateElement) {
+                dateElement.textContent = formattedDate;
+            }
+        }
+        
+        // Fungsi untuk mengatur tinggi grid yang konsisten
+        function equalizeGridHeights() {
+            // Dapatkan semua section dalam grid utama
+            const gridSections = document.querySelectorAll('.grid-cols-1.lg\\:grid-cols-2 > section');
+            
+            if (gridSections.length >= 2) {
+                // Reset tinggi
+                gridSections.forEach(section => {
+                    section.style.minHeight = 'auto';
+                });
+                
+                // Hitung tinggi maksimum
+                let maxHeight = 0;
+                gridSections.forEach(section => {
+                    const height = section.offsetHeight;
+                    if (height > maxHeight) {
+                        maxHeight = height;
+                    }
+                });
+                
+                // Terapkan tinggi yang sama
+                if (maxHeight > 0) {
+                    gridSections.forEach(section => {
+                        section.style.minHeight = maxHeight + 'px';
+                    });
+                }
+            }
+        }
+        
+        // Scroll Animator untuk animasi saat scroll
+        class ScrollAnimator {
+            constructor() {
+                this.observer = null;
+                this.init();
+            }
+            
+            init() {
+                const options = {
+                    root: null,
+                    rootMargin: '0px 0px -50px 0px',
+                    threshold: 0.1
+                };
+                
+                this.observer = new IntersectionObserver((entries) => {
+                    entries.forEach(entry => {
+                        if (entry.isIntersecting) {
+                            entry.target.classList.add('visible');
+                        }
+                    });
+                }, options);
+                
+                document.querySelectorAll('.animate-on-scroll').forEach(el => {
+                    this.observer.observe(el);
+                });
+            }
+        }
+        
+        // Force render semua konten saat halaman dimuat
+        function forceRenderAllContent() {
+            const elements = document.querySelectorAll('.animate-on-scroll');
+            const viewportHeight = window.innerHeight;
+            
+            elements.forEach(el => {
+                const rect = el.getBoundingClientRect();
+                if (rect.top < viewportHeight - 100) {
+                    el.classList.add('visible');
+                }
+            });
+            
+            document.body.classList.add('force-render');
+            setTimeout(() => {
+                document.body.style.opacity = '1';
+            }, 50);
+        }
+        
+        // ================= EVENT LISTENERS =================
+        
+        document.addEventListener('DOMContentLoaded', function() {
+            // 1. Inisialisasi tanggal
+            updateDate();
+            
+            // 2. Inisialisasi Scroll Animator
+            const animator = new ScrollAnimator();
+            
+            // 3. Force render semua konten
+            forceRenderAllContent();
+            
+            // 4. Render tambahan setelah semua aset dimuat
+            window.addEventListener('load', function() {
+                setTimeout(forceRenderAllContent, 100);
+                // Pastikan grid memiliki tinggi yang sama
+                setTimeout(equalizeGridHeights, 300);
+            });
+            
+            // 5. AI Assistant Panel
+            const aiAssistantBtn = document.getElementById('aiAssistantBtn');
+            const aiAssistantPanel = document.getElementById('aiAssistantPanel');
+            const closeAIPanel = document.getElementById('closeAIPanel');
+            
+            // Open AI Assistant Panel
+            aiAssistantBtn.addEventListener('click', function(e) {
+                e.stopPropagation();
+                aiAssistantPanel.classList.toggle('hidden');
+                setTimeout(() => {
+                    const chatContainer = document.getElementById('aiChatContainer');
+                    chatContainer.scrollTop = chatContainer.scrollHeight;
+                }, 100);
+            });
+            
+            closeAIPanel.addEventListener('click', function() {
+                aiAssistantPanel.classList.add('hidden');
+            });
+            
+            // Close AI panel when clicking outside
+            document.addEventListener('click', function(e) {
+                if (!aiAssistantPanel.contains(e.target) && !aiAssistantBtn.contains(e.target)) {
+                    aiAssistantPanel.classList.add('hidden');
+                }
+            });
+            
+            // 6. AI Mode Selector
+            const aiModeButtons = document.querySelectorAll('.ai-mode-btn');
+            aiModeButtons.forEach(button => {
+                button.addEventListener('click', function() {
+                    aiModeButtons.forEach(btn => {
+                        btn.classList.remove('active', 'bg-white/20');
+                        btn.classList.add('bg-white/10');
+                    });
+                    this.classList.add('active', 'bg-white/20');
+                    this.classList.remove('bg-white/10');
+                    
+                    const mode = this.dataset.mode;
+                    changeAIMode(mode);
+                });
+            });
+            
+            function changeAIMode(mode) {
+                const aiHeader = document.querySelector('.bg-gradient-to-r.from-blue-500.to-blue-600 h3');
+                const aiSubtitle = document.querySelector('.bg-gradient-to-r.from-blue-500.to-blue-600 p');
+                
+                switch(mode) {
+                    case 'inventory':
+                        aiHeader.textContent = 'AI Inventory Assistant';
+                        aiSubtitle.textContent = 'Menganalisis data dan tren inventori';
+                        break;
+                    case 'optimization':
+                        aiHeader.textContent = 'AI Optimization Assistant';
+                        aiSubtitle.textContent = 'Membantu optimasi level stok dan biaya';
+                        break;
+                    case 'prediction':
+                        aiHeader.textContent = 'AI Prediction Assistant';
+                        aiSubtitle.textContent = 'Prediksi kebutuhan stok dan risiko';
+                        break;
+                }
+                
+                addAIMessage(`Mode AI telah diubah ke: ${mode.charAt(0).toUpperCase() + mode.slice(1)}. Bagaimana saya bisa membantu Anda?`, 'assistant');
+            }
+            
+            // 7. AI Quick Questions - khusus inventory
+            const aiQuickQuestions = document.querySelectorAll('.ai-quick-question');
+            
+            aiQuickQuestions.forEach(button => {
+                button.addEventListener('click', function() {
+                    const question = this.textContent;
+                    addAIMessage(question, 'user');
+                    
+                    showTypingIndicator();
+                    
+                    setTimeout(() => {
+                        removeTypingIndicator();
+                        generateInventoryAIResponse(question);
+                    }, 1500);
+                });
+            });
+            
+            // 8. Send AI Question
+            const aiQuestionInput = document.getElementById('aiQuestionInput');
+            const sendAIQuestion = document.getElementById('sendAIQuestion');
+            
+            sendAIQuestion.addEventListener('click', function() {
+                if (aiQuestionInput.value.trim() !== '') {
+                    const question = aiQuestionInput.value;
+                    addAIMessage(question, 'user');
+                    aiQuestionInput.value = '';
+                    
+                    showTypingIndicator();
+                    
+                    setTimeout(() => {
+                        removeTypingIndicator();
+                        generateInventoryAIResponse(question);
+                    }, 2000);
+                }
+            });
+            
+            // Enter key to send question
+            aiQuestionInput.addEventListener('keypress', function(e) {
+                if (e.key === 'Enter') {
+                    sendAIQuestion.click();
+                }
+            });
+            
+            // 9. Inventory Filter Buttons
+            const inventoryFilters = document.querySelectorAll('.inventory-filter');
+            inventoryFilters.forEach(filter => {
+                filter.addEventListener('click', function() {
+                    inventoryFilters.forEach(f => {
+                        f.classList.remove('active', 'bg-blue-500', 'text-white');
+                        f.classList.add('bg-gray-100', 'text-gray-700');
+                    });
+                    
+                    this.classList.add('active', 'bg-blue-500', 'text-white');
+                    this.classList.remove('bg-gray-100', 'text-gray-700');
+                    
+                    const filterType = this.dataset.filter;
+                    filterInventoryCards(filterType);
+                });
+            });
+            
+            function filterInventoryCards(filterType) {
+                // Ini adalah contoh fungsi filter, sesuaikan dengan kebutuhan
+                showNotification(`Menampilkan inventori: ${getFilterName(filterType)}`, 'info');
+            }
+            
+            function getFilterName(filterType) {
+                switch(filterType) {
+                    case 'all': return 'Semua Produk';
+                    case 'critical': return 'Stok Kritis';
+                    case 'warning': return 'Stok Peringatan';
+                    case 'safe': return 'Stok Aman';
+                    default: return 'Semua Produk';
+                }
+            }
+            
+            // 10. Refresh Inventory Button
+            const refreshInventoryBtn = document.getElementById('refreshInventoryBtn');
+            
+            function refreshInventoryData() {
+                refreshInventoryBtn.innerHTML = '<i class="fas fa-spinner fa-spin mr-1"></i> Memperbarui...';
+                refreshInventoryBtn.disabled = true;
+                
+                showNotification('Memperbarui data inventori...', 'info');
+                
+                setTimeout(() => {
+                    refreshInventoryBtn.innerHTML = '<i class="fas fa-sync-alt mr-1"></i> Perbarui';
+                    refreshInventoryBtn.disabled = false;
+                    
+                    showNotification('Data inventori berhasil diperbarui!', 'success');
+                    
+                    simulateInventoryDataChanges();
+                }, 2000);
+            }
+            
+            refreshInventoryBtn.addEventListener('click', refreshInventoryData);
+            
+            function simulateInventoryDataChanges() {
+                // Update metrics with slight random changes
+                const metrics = document.querySelectorAll('.text-2xl.font-bold.text-gray-800, .text-lg.font-bold');
+                metrics.forEach(metric => {
+                    const currentText = metric.textContent;
+                    
+                    if (currentText.includes('Rp')) {
+                        const currentValue = parseFloat(currentText.replace('Rp ', '').replace('M', '')) * 1000000;
+                        if (!isNaN(currentValue)) {
+                            const change = currentValue * (Math.random() * 0.1 - 0.05); // -5% to +5%
+                            const newValue = Math.max(0, currentValue + change);
+                            const formattedValue = new Intl.NumberFormat('id-ID', { 
+                                style: 'currency', 
+                                currency: 'IDR',
+                                minimumFractionDigits: 0,
+                                maximumFractionDigits: 0
+                            }).format(newValue).replace('Rp', 'Rp ');
+                            
+                            metric.textContent = formattedValue;
+                            
+                            metric.classList.add('animate-pulse-soft');
+                            setTimeout(() => {
+                                metric.classList.remove('animate-pulse-soft');
+                            }, 1000);
+                        }
+                    } else if (currentText.match(/^\d+/)) {
+                        const currentValue = parseInt(currentText.replace(/[^\d]/g, ''));
+                        if (!isNaN(currentValue)) {
+                            const change = Math.floor(Math.random() * 5) - 2;
+                            const newValue = Math.max(0, currentValue + change);
+                            metric.textContent = newValue;
+                            
+                            metric.classList.add('animate-pulse-soft');
+                            setTimeout(() => {
+                                metric.classList.remove('animate-pulse-soft');
+                            }, 1000);
+                        }
+                    } else if (currentText.includes('x')) {
+                        const currentValue = parseFloat(currentText.replace('x', ''));
+                        if (!isNaN(currentValue)) {
+                            const change = currentValue * (Math.random() * 0.1 - 0.05);
+                            const newValue = Math.max(0.1, currentValue + change);
+                            metric.textContent = newValue.toFixed(1) + 'x';
+                            
+                            metric.classList.add('animate-pulse-soft');
+                            setTimeout(() => {
+                                metric.classList.remove('animate-pulse-soft');
+                            }, 1000);
+                        }
+                    }
+                });
+            }
+            
+            // 11. Interactive notification bell
+            const notificationBell = document.getElementById('notificationBell');
+            if (notificationBell) {
+                notificationBell.addEventListener('click', function() {
+                    const notificationPopup = document.createElement('div');
+                    notificationPopup.className = 'fixed top-20 right-8 w-72 bg-white rounded-xl shadow-lg border border-gray-200 p-4 animate-fade-in-up z-40';
+                    notificationPopup.innerHTML = `
+                        <div class="flex justify-between items-center mb-3">
+                            <h4 class="font-bold text-gray-800">Notifikasi Inventori</h4>
+                            <button class="text-gray-400 hover:text-gray-600 close-notif">
+                                <i class="fas fa-times"></i>
+                            </button>
+                        </div>
+                        <div class="space-y-3">
+                            <div class="flex items-start space-x-3 p-2 rounded-lg bg-red-50">
+                                <i class="fas fa-exclamation-circle text-red-500 mt-1"></i>
+                                <div>
+                                    <p class="text-sm font-medium">Kaos Premium Cotton stok kritis!</p>
+                                    <p class="text-xs text-gray-600">Hanya tersisa 5 unit</p>
+                                </div>
+                            </div>
+                            <div class="flex items-start space-x-3 p-2 rounded-lg bg-green-50">
+                                <i class="fas fa-check-circle text-green-500 mt-1"></i>
+                                <div>
+                                    <p class="text-sm font-medium">Stok masuk berhasil dicatat</p>
+                                    <p class="text-xs text-gray-600">Smartphone X Pro (+50 unit)</p>
+                                </div>
+                            </div>
+                            <div class="flex items-start space-x-3 p-2 rounded-lg bg-blue-50">
+                                <i class="fas fa-info-circle text-blue-500 mt-1"></i>
+                                <div>
+                                    <p class="text-sm font-medium">AI telah menganalisis pola stok</p>
+                                    <p class="text-xs text-gray-600">3 rekomendasi tersedia</p>
+                                </div>
+                            </div>
+                        </div>
+                    `;
+                    
+                    document.body.appendChild(notificationPopup);
+                    
+                    const closeBtn = notificationPopup.querySelector('.close-notif');
+                    closeBtn.addEventListener('click', function() {
+                        notificationPopup.remove();
+                    });
+                    
+                    setTimeout(() => {
+                        if (notificationPopup.parentNode) {
+                            notificationPopup.remove();
+                        }
+                    }, 5000);
+                });
+            }
+            
+            // 12. Initialize with a welcome message from AI
+            setTimeout(() => {
+                if (!document.querySelector('.ai-message.user')) {
+                    addAIMessage("Selamat datang di halaman Inventory Management! Saya dapat membantu Anda menganalisis tingkat stok, memprediksi kebutuhan restok, mengidentifikasi risiko kehabisan stok, dan memberikan rekomendasi optimasi. Apa yang ingin Anda ketahui hari ini?", 'assistant');
+                }
+            }, 1000);
+            
+            // 13. Progress bar animations
+            const progressBars = document.querySelectorAll('.progress-bar-fill');
+            const observer = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        const bar = entry.target;
+                        const width = bar.style.width;
+                        bar.style.width = '0%';
+                        
+                        setTimeout(() => {
+                            bar.style.width = width;
+                        }, 300);
+                        
+                        observer.unobserve(bar);
+                    }
+                });
+            }, { threshold: 0.5 });
+            
+            progressBars.forEach(bar => observer.observe(bar));
+            
+            // 14. Auto-refresh inventory data setiap 60 detik
+            setInterval(simulateInventoryDataChanges, 60000);
+            
+            // 15. Tambahkan event listener untuk scroll dan resize
+            window.addEventListener('scroll', function() {
+                animator.observer.disconnect();
+                animator.init();
+            });
+            
+            window.addEventListener('resize', function() {
+                setTimeout(forceRenderAllContent, 100);
+                setTimeout(equalizeGridHeights, 200);
+            });
+            
+            // 16. Set tinggi grid saat pertama kali dimuat
+            setTimeout(equalizeGridHeights, 500);
+        });
+
+        // Tambahkan di bagian JavaScript yang sudah ada, di dalam DOMContentLoaded event listener:
+
+// 17. Toggle Inventory Submenu
+const inventoryMenu = document.getElementById('inventory-menu');
+const inventorySubmenu = document.getElementById('inventory-submenu');
+const inventoryChevron = document.getElementById('inventory-chevron');
+
+if (inventoryMenu && inventorySubmenu) {
+    inventoryMenu.addEventListener('click', function(e) {
+        e.preventDefault();
+        e.stopPropagation();
+        
+        // Toggle submenu visibility
+        inventorySubmenu.classList.toggle('hidden');
+        
+        // Rotate chevron icon
+        if (inventorySubmenu.classList.contains('hidden')) {
+            inventoryChevron.classList.remove('fa-chevron-up');
+            inventoryChevron.classList.add('fa-chevron-down');
+        } else {
+            inventoryChevron.classList.remove('fa-chevron-down');
+            inventoryChevron.classList.add('fa-chevron-up');
+        }
+    });
+    
+    // Open submenu by default if current page is inventory related
+    const currentPath = window.location.pathname;
+    if (currentPath.includes('/inventory') || currentPath.includes('/managementstok')) {
+        inventorySubmenu.classList.remove('hidden');
+        inventoryChevron.classList.remove('fa-chevron-down');
+        inventoryChevron.classList.add('fa-chevron-up');
+    }
+}
+
+// Highlight active menu item based on current URL
+function highlightActiveMenu() {
+    const currentPath = window.location.pathname;
+    const menuItems = document.querySelectorAll('aside nav a');
+    
+    menuItems.forEach(item => {
+        const href = item.getAttribute('href');
+        if (href === currentPath) {
+            item.classList.add('bg-blue-50', 'text-blue-600');
+            item.classList.remove('text-gray-700');
+        } else {
+            item.classList.remove('bg-blue-50', 'text-blue-600');
+            item.classList.add('text-gray-700');
+        }
+    });
+    
+    // Highlight submenu items too
+    const submenuItems = document.querySelectorAll('#inventory-submenu a');
+    submenuItems.forEach(item => {
+        const href = item.getAttribute('href');
+        if (href === currentPath) {
+            item.classList.add('bg-blue-100', 'text-blue-600', 'font-medium');
+            item.classList.remove('text-gray-700');
+        } else {
+            item.classList.remove('bg-blue-100', 'text-blue-600', 'font-medium');
+            item.classList.add('text-gray-700');
+        }
+    });
+}
+
+// Call this function on page load
+document.addEventListener('DOMContentLoaded', highlightActiveMenu);
+        
+        // ================= FUNGSI BANTUAN =================
+        
+        // AI Chat Functions
+        function addAIMessage(text, sender) {
+            const chatContainer = document.getElementById('aiChatContainer');
+            const messageDiv = document.createElement('div');
+            messageDiv.className = `ai-message ${sender}`;
+            
+            if (sender === 'user') {
+                messageDiv.innerHTML = `
+                    <div class="flex items-center justify-between">
+                        <p>${text}</p>
+                        <i class="fas fa-user ml-2"></i>
+                    </div>
+                `;
+            } else {
+                messageDiv.innerHTML = `
+                    <div class="flex items-start space-x-2">
+                        <div class="w-6 h-6 rounded-full bg-blue-100 flex items-center justify-center flex-shrink-0 mt-1">
+                            <i class="fas fa-robot text-blue-600 text-xs"></i>
+                        </div>
+                        <div>
+                            <p class="text-gray-700">${text}</p>
+                        </div>
+                    </div>
+                `;
+            }
+            
+            chatContainer.appendChild(messageDiv);
+            chatContainer.scrollTop = chatContainer.scrollHeight;
+        }
+        
+        function showTypingIndicator() {
+            const chatContainer = document.getElementById('aiChatContainer');
+            const typingDiv = document.createElement('div');
+            typingDiv.className = 'ai-typing-indicator';
+            typingDiv.id = 'typingIndicator';
+            typingDiv.innerHTML = `
+                <div class="w-6 h-6 rounded-full bg-blue-100 flex items-center justify-center flex-shrink-0 mr-2">
+                    <i class="fas fa-robot text-blue-600 text-xs"></i>
+                </div>
+                <div class="flex">
+                    <div class="ai-typing-dot"></div>
+                    <div class="ai-typing-dot"></div>
+                    <div class="ai-typing-dot"></div>
+                </div>
+            `;
+            
+            chatContainer.appendChild(typingDiv);
+            chatContainer.scrollTop = chatContainer.scrollHeight;
+        }
+        
+        function removeTypingIndicator() {
+            const typingIndicator = document.getElementById('typingIndicator');
+            if (typingIndicator) {
+                typingIndicator.remove();
+            }
+        }
+        
+        // Respons AI khusus untuk inventory
+        function generateInventoryAIResponse(question) {
+            let response = '';
+            let actions = '';
+            
+            const questionLower = question.toLowerCase();
+            
+            if (questionLower.includes('risiko') && questionLower.includes('kehabisan') || 
+                questionLower.includes('stok kritis') || questionLower.includes('habis')) {
+                
+                response = `Berdasarkan analisis data 7 hari terakhir, produk yang berisiko kehabisan stok adalah:<br><br>
+                1. <strong>Kaos Premium Cotton (ID: P002)</strong> - Akan habis dalam 2-3 hari<br>
+                • Stok saat ini: 5 unit<br>
+                • Permintaan rata-rata: 4 unit/hari<br>
+                • Rekomendasi restok: 50 unit<br><br>
+                2. <strong>Wireless Headphone Pro (ID: P005)</strong> - Akan habis dalam 5 hari<br>
+                • Stok saat ini: 8 unit<br>
+                • Permintaan rata-rata: 1.6 unit/hari<br>
+                • Rekomendasi restok: 30 unit<br><br>
+                3. <strong>Lampu LED Smart Home (ID: P003)</strong> - Akan habis dalam 7 hari<br>
+                • Stok saat ini: 28 unit<br>
+                • Permintaan rata-rata: 4 unit/hari<br>
+                • Rekomendasi restok: 40 unit<br><br>
+                Total nilai restok yang diperlukan: Rp 187.5 juta.`;
+                
+                actions = `<div class="mt-2 flex space-x-2">
+                    <button class="text-xs px-2 py-1 bg-blue-100 text-blue-700 rounded smooth-transition hover:bg-blue-200">Buat Purchase Order</button>
+                    <button class="text-xs px-2 py-1 bg-green-100 text-green-700 rounded smooth-transition hover:bg-green-200">Hubungi Supplier</button>
+                </div>`;
+                
+            } else if (questionLower.includes('menganggur') || questionLower.includes('berlebih')) {
+                
+                response = `Analisis stok menganggur/berlebih berdasarkan data 30 hari terakhir:<br><br>
+                <strong>1. Essential Oil Set (ID: P004) - 70 unit (stok 30+ hari)</strong><br>
+                • Tidak ada penjualan dalam 15 hari terakhir<br>
+                • Nilai stok: Rp 42 juta<br>
+                • Rekomendasi: Diskon 15-20% atau bundling dengan produk lain<br><br>
+                <strong>2. Smartphone X Pro (ID: P001) - 92 unit (stok optimal)</strong><br>
+                • Turnover baik: 4.8x<br>
+                • Rekomendasi: Pertahankan level stok saat ini<br><br>
+                <strong>3. Kategori Fashion - 28 produk</strong><br>
+                • 3 produk stok berlebih<br>
+                • Rekomendasi: Promosi musiman atau bundling<br><br>
+                Total nilai stok berlebih: Rp 68.4 juta.`;
+                
+                actions = `<div class="mt-2 flex space-x-2">
+                    <button class="text-xs px-2 py-1 bg-blue-100 text-blue-700 rounded smooth-transition hover:bg-blue-200">Buat Promosi</button>
+                    <button class="text-xs px-2 py-1 bg-yellow-100 text-yellow-700 rounded smooth-transition hover:bg-yellow-200">Analisis Bundling</button>
+                </div>`;
+                
+            } else if (questionLower.includes('prediksi') || questionLower.includes('kebutuhan')) {
+                
+                response = `Prediksi kebutuhan stok 14 hari ke depan berdasarkan tren penjualan dan seasonality:<br><br>
+                <strong>1. Kaos Premium Cotton</strong><br>
+                • Prediksi kebutuhan: 56 unit (4 unit/hari × 14 hari)<br>
+                • Safety stock (20%): 11 unit<br>
+                • Total kebutuhan: 67 unit<br><br>
+                <strong>2. Wireless Headphone Pro</strong><br>
+                • Prediksi kebutuhan: 22 unit (1.6 unit/hari × 14 hari)<br>
+                • Safety stock (20%): 4 unit<br>
+                • Total kebutuhan: 26 unit<br><br>
+                <strong>3. Smartphone X Pro</strong><br>
+                • Prediksi kebutuhan: 42 unit (3 unit/hari × 14 hari)<br>
+                • Safety stock (20%): 8 unit<br>
+                • Total kebutuhan: 50 unit<br><br>
+                Total nilai prediksi restok: Rp 214.3 juta.`;
+                
+                actions = `<div class="mt-2 flex space-x-2">
+                    <button class="text-xs px-2 py-1 bg-blue-100 text-blue-700 rounded smooth-transition hover:bg-blue-200">Generate PO Otomatis</button>
+                    <button class="text-xs px-2 py-1 bg-green-100 text-green-700 rounded smooth-transition hover:bg-green-200">Lihat Detail Prediksi</button>
+                </div>`;
+                
+            } else if (questionLower.includes('optimasi') || questionLower.includes('level stok')) {
+                
+                response = `Analisis optimasi level stok berdasarkan data historis:<br><br>
+                <strong>Current Performance:</strong><br>
+                • Stock Turnover: 4.2x (baik, target: 4x)<br>
+                • Service Level: 92% (baik, target: 95%)<br>
+                • Stockout Frequency: 8% (perlu perbaikan)<br><br>
+                <strong>Optimization Opportunities:</strong><br>
+                1. <strong>Kaos Premium Cotton</strong>: Tingkatkan safety stock dari 10% menjadi 20%<br>
+                2. <strong>Wireless Headphone Pro</strong>: Kurangi lead time restok dari 7 ke 5 hari<br>
+                3. <strong>Essential Oil Set</strong>: Kurangi level stok dari 70 ke 40 unit<br>
+                4. <strong>Kategori Fashion</strong>: Implementasi sistem reorder point otomatis<br><br>
+                Potensi penghematan: Rp 24.8 juta/bulan.`;
+                
+                actions = `<div class="mt-2 flex space-x-2">
+                    <button class="text-xs px-2 py-1 bg-blue-100 text-blue-700 rounded smooth-transition hover:bg-blue-200">Analisis ABC</button>
+                    <button class="text-xs px-2 py-1 bg-purple-100 text-purple-700 rounded smooth-transition hover:bg-purple-200">Optimasi Otomatis</button>
+                </div>`;
+                
+            } else if (questionLower.includes('turnover') || questionLower.includes('perputaran')) {
+                
+                response = `Analisis stock turnover berdasarkan kategori:<br><br>
+                <strong>1. Kecantikan - Turnover: 6.2x (Excellent)</strong><br>
+                • 22 produk, 92% sehat<br>
+                • Rekomendasi: Pertahankan strategi saat ini<br><br>
+                <strong>2. Elektronik - Turnover: 4.8x (Good)</strong><br>
+                • 42 produk, 78% sehat<br>
+                • Rekomendasi: Optimasi 3 produk slow-moving<br><br>
+                <strong>3. Rumah Tangga - Turnover: 5.1x (Good)</strong><br>
+                • 35 produk, 85% sehat<br>
+                • Rekomendasi: Pertahankan<br><br>
+                <strong>4. Fashion - Turnover: 3.2x (Need Improvement)</strong><br>
+                • 28 produk, 65% sehat<br>
+                • Rekomendasi: Fokus pada promosi dan bundling<br><br>
+                Rata-rata turnover: 4.2x (melebihi target 4x).`;
+                
+                actions = `<div class="mt-2 flex space-x-2">
+                    <button class="text-xs px-2 py-1 bg-blue-100 text-blue-700 rounded smooth-transition hover:bg-blue-200">Analisis Kategori</button>
+                    <button class="text-xs px-2 py-1 bg-red-100 text-red-700 rounded smooth-transition hover:bg-red-200">Rencana Perbaikan</button>
+                </div>`;
+                
+            } else if (questionLower.includes('rekomendasi') && questionLower.includes('restok')) {
+                
+                response = `Rekomendasi restok prioritas berdasarkan analisis AI:<br><br>
+                <strong>PRIORITAS TINGGI (Restok segera):</strong><br>
+                1. Kaos Premium Cotton - 50 unit (Rp 12.5 juta)<br>
+                2. Wireless Headphone Pro - 30 unit (Rp 45 juta)<br>
+                3. Lampu LED Smart Home - 40 unit (Rp 32 juta)<br><br>
+                <strong>PRIORITAS MENENGAH (Restok minggu depan):</strong><br>
+                4. Smartphone X Pro - 20 unit (Rp 80 juta)<br>
+                5. Essential Oil Set - 10 unit (Rp 6 juta)<br><br>
+                <strong>PRIORITAS RENDAH (Monitor saja):</strong><br>
+                6. Produk lainnya - Stok cukup untuk 15+ hari<br><br>
+                Total investasi restok: Rp 175.5 juta.`;
+                
+                actions = `<div class="mt-2 flex space-x-2">
+                    <button class="text-xs px-2 py-1 bg-blue-100 text-blue-700 rounded smooth-transition hover:bg-blue-200">Buat PO Batch</button>
+                    <button class="text-xs px-2 py-1 bg-green-100 text-green-700 rounded smooth-transition hover:bg-green-200">Negosiasi Supplier</button>
+                </div>`;
+                
+            } else {
+                response = `Saya telah menganalisis data inventori Anda. Saat ini ada 8 produk dengan stok kritis yang memerlukan perhatian segera, terutama Kaos Premium Cotton yang akan habis dalam 2-3 hari. Total nilai stok: Rp 2.48 miliar dengan turnover 4.2x (baik). Apa aspek spesifik inventori yang ingin Anda dalami lebih lanjut?`;
+                actions = `<div class="mt-2 flex space-x-2">
+                    <button class="text-xs px-2 py-1 bg-blue-100 text-blue-700 rounded smooth-transition hover:bg-blue-200">Analisis Lengkap</button>
+                    <button class="text-xs px-2 py-1 bg-green-100 text-green-700 rounded smooth-transition hover:bg-green-200">Rekomendasi Restok</button>
+                </div>`;
+            }
+            
+            const chatContainer = document.getElementById('aiChatContainer');
+            const messageDiv = document.createElement('div');
+            messageDiv.className = 'ai-message assistant';
+            messageDiv.innerHTML = `
+                <div class="flex items-start space-x-2">
+                    <div class="w-6 h-6 rounded-full bg-blue-100 flex items-center justify-center flex-shrink-0 mt-1">
+                        <i class="fas fa-robot text-blue-600 text-xs"></i>
+                    </div>
+                    <div>
+                        <p class="text-gray-700">${response}</p>
+                        ${actions}
+                    </div>
+                </div>
+            `;
+            
+            chatContainer.appendChild(messageDiv);
+            chatContainer.scrollTop = chatContainer.scrollHeight;
+        }
+        
+        // Notification System
+        function showNotification(message, type = 'info') {
+            const notification = document.createElement('div');
+            notification.className = `fixed top-24 right-8 px-4 py-3 rounded-lg shadow-lg z-50 animate-slide-in-right`;
+            
+            let bgColor = 'bg-blue-100 text-blue-800 border border-blue-200';
+            let icon = 'fas fa-info-circle';
+            
+            if (type === 'success') {
+                bgColor = 'bg-green-100 text-green-800 border border-green-200';
+                icon = 'fas fa-check-circle';
+            } else if (type === 'warning') {
+                bgColor = 'bg-yellow-100 text-yellow-800 border border-yellow-200';
+                icon = 'fas fa-exclamation-triangle';
+            } else if (type === 'error') {
+                bgColor = 'bg-red-100 text-red-800 border border-red-200';
+                icon = 'fas fa-times-circle';
+            }
+            
+            notification.className += ` ${bgColor}`;
+            notification.innerHTML = `
+                <div class="flex items-center space-x-3">
+                    <i class="${icon}"></i>
+                    <span>${message}</span>
+                </div>
+            `;
+            
+            document.body.appendChild(notification);
+            
+            setTimeout(() => {
+                if (notification.parentNode) {
+                    notification.style.animation = 'slideInRight 0.3s reverse forwards';
+                    setTimeout(() => {
+                        if (notification.parentNode) {
+                            notification.remove();
+                        }
+                    }, 300);
+                }
+            }, 3000);
+        }
+    </script>
+</body>
+</html>

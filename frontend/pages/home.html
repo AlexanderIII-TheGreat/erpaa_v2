@@ -1,0 +1,753 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>A2M Jaya Teknologi - Solusi Teknologi Terdepan</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        primary: '#1a365d',
+                        secondary: '#2d3748',
+                        accent: '#4299e1',
+                        'accent-dark': '#3182ce',
+                    },
+                    fontFamily: {
+                        'sans': ['Inter', 'system-ui', 'sans-serif'],
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        .hero-gradient {
+            background: linear-gradient(135deg, rgba(26, 54, 93, 0.95) 0%, rgba(45, 55, 72, 0.9) 100%);
+        }
+        
+        .card-hover {
+            transition: all 0.3s ease;
+        }
+        
+        .card-hover:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
+        }
+        
+        .dropdown-content {
+            display: none;
+            position: absolute;
+            z-index: 1000;
+        }
+        
+        .dropdown:hover .dropdown-content {
+            display: block;
+        }
+        
+        .cart-badge {
+            position: absolute;
+            top: -8px;
+            right: -8px;
+            background-color: #4299e1;
+            color: white;
+            border-radius: 50%;
+            width: 20px;
+            height: 20px;
+            font-size: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+    </style>
+</head>
+<body class="bg-gray-900 text-gray-100 font-sans">
+    <!-- Navbar -->
+    <nav class="sticky top-0 z-50 bg-gray-900 border-b border-gray-800">
+        <div class="container mx-auto px-4">
+            <div class="flex justify-between items-center py-4">
+                <!-- Logo -->
+                <div class="flex items-center">
+                    <div class="bg-accent p-2 rounded-lg mr-3">
+                        <i class="fas fa-microchip text-white text-xl"></i>
+                    </div>
+                    <a href="#" class="text-2xl font-bold text-white">
+                        A2M <span class="text-accent">Jaya</span> Teknologi
+                    </a>
+                </div>
+
+                <!-- Menu Desktop -->
+                <div class="hidden md:flex items-center space-x-8">
+                    <a href="#home" class="hover:text-accent transition-colors">Home</a>
+                    <a href="#produk" class="hover:text-accent transition-colors">Produk</a>
+                    <a href="#news" class="hover:text-accent transition-colors">News</a>
+                    <a href="#contact" class="hover:text-accent transition-colors">Contact</a>
+                    
+                    <!-- Account Dropdown -->
+                    <div class="relative dropdown">
+                        <button class="flex items-center hover:text-accent transition-colors">
+                            <i class="fas fa-user-circle mr-2 text-xl"></i>
+                            <span>Account</span>
+                            <i class="fas fa-chevron-down ml-1 text-xs"></i>
+                        </button>
+                        <div class="dropdown-content right-0 mt-2 w-56 bg-secondary rounded-lg shadow-lg overflow-hidden">
+                            <div class="p-4 border-b border-gray-700">
+                                <p class="font-semibold">Selamat datang!</p>
+                                <p class="text-sm text-gray-400">Login untuk akses penuh</p>
+                            </div>
+                            <a href="#" class="block px-4 py-3 hover:bg-gray-800 transition-colors">
+                                <i class="fas fa-user mr-2"></i> Profil Saya
+                            </a>
+                            <a href="#" class="block px-4 py-3 hover:bg-gray-800 transition-colors">
+                                <i class="fas fa-box mr-2"></i> Pesanan Saya
+                            </a>
+                            <a href="#" class="block px-4 py-3 hover:bg-gray-800 transition-colors">
+                                <i class="fas fa-heart mr-2"></i> Favorit
+                            </a>
+                            <div class="border-t border-gray-700">
+                                <a href="#" class="block px-4 py-3 hover:bg-gray-800 transition-colors">
+                                    <i class="fas fa-sign-in-alt mr-2"></i> Login
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Cart Dropdown -->
+                    <div class="relative dropdown">
+                        <button class="relative hover:text-accent transition-colors">
+                            <i class="fas fa-shopping-cart text-xl"></i>
+                            <!-- Cart Badge -->
+                            <span class="cart-badge" id="cart-count">3</span>
+                        </button>
+                        <div class="dropdown-content right-0 mt-2 w-80 bg-secondary rounded-lg shadow-lg overflow-hidden">
+                            <div class="p-4 border-b border-gray-700">
+                                <p class="font-semibold">Keranjang Belanja</p>
+                                <p class="text-sm text-gray-400" id="cart-summary">3 items ($3,299)</p>
+                            </div>
+                            <div class="max-h-80 overflow-y-auto">
+                                <!-- Cart Items - Akan di-loop dari database di Golang -->
+                                <!-- Contoh item 1 -->
+                                <div class="flex items-center p-4 border-b border-gray-800 hover:bg-gray-800">
+                                    <div class="w-16 h-16 bg-gray-700 rounded-lg flex items-center justify-center">
+                                        <i class="fas fa-laptop text-accent"></i>
+                                    </div>
+                                    <div class="ml-4 flex-1">
+                                        <p class="font-medium">Laptop Gaming Pro</p>
+                                        <p class="text-sm text-gray-400">Rp 15.999.000</p>
+                                    </div>
+                                    <button class="text-gray-400 hover:text-red-500">
+                                        <i class="fas fa-times"></i>
+                                    </button>
+                                </div>
+                                <!-- Contoh item 2 -->
+                                <div class="flex items-center p-4 border-b border-gray-800 hover:bg-gray-800">
+                                    <div class="w-16 h-16 bg-gray-700 rounded-lg flex items-center justify-center">
+                                        <i class="fas fa-wifi text-accent"></i>
+                                    </div>
+                                    <div class="ml-4 flex-1">
+                                        <p class="font-medium">Router Wi-Fi 6</p>
+                                        <p class="text-sm text-gray-400">Rp 1.850.000</p>
+                                    </div>
+                                    <button class="text-gray-400 hover:text-red-500">
+                                        <i class="fas fa-times"></i>
+                                    </button>
+                                </div>
+                                <!-- Contoh item 3 -->
+                                <div class="flex items-center p-4 hover:bg-gray-800">
+                                    <div class="w-16 h-16 bg-gray-700 rounded-lg flex items-center justify-center">
+                                        <i class="fas fa-desktop text-accent"></i>
+                                    </div>
+                                    <div class="ml-4 flex-1">
+                                        <p class="font-medium">PC Workstation</p>
+                                        <p class="text-sm text-gray-400">Rp 12.500.000</p>
+                                    </div>
+                                    <button class="text-gray-400 hover:text-red-500">
+                                        <i class="fas fa-times"></i>
+                                    </button>
+                                </div>
+                            </div>
+                            <div class="p-4 border-t border-gray-700">
+                                <div class="flex justify-between mb-4">
+                                    <span>Total:</span>
+                                    <span class="font-semibold">Rp 30.349.000</span>
+                                </div>
+                                <a href="#" class="block w-full bg-accent hover:bg-accent-dark text-center py-2 rounded-lg font-medium transition-colors">
+                                    Checkout
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Mobile Menu Button -->
+                <button id="mobile-menu-button" class="md:hidden text-white">
+                    <i class="fas fa-bars text-xl"></i>
+                </button>
+            </div>
+
+            <!-- Mobile Menu -->
+            <div id="mobile-menu" class="hidden md:hidden py-4 border-t border-gray-800">
+                <div class="flex flex-col space-y-4">
+                    <a href="#home" class="hover:text-accent transition-colors py-2">Home</a>
+                    <a href="#produk" class="hover:text-accent transition-colors py-2">Produk</a>
+                    <a href="#news" class="hover:text-accent transition-colors py-2">News</a>
+                    <a href="#contact" class="hover:text-accent transition-colors py-2">Contact</a>
+                    
+                    <!-- Mobile Account & Cart -->
+                    <div class="pt-4 border-t border-gray-800">
+                        <a href="#" class="flex items-center py-2 hover:text-accent transition-colors">
+                            <i class="fas fa-user-circle mr-3 text-xl"></i>
+                            <span>Account</span>
+                        </a>
+                        <a href="#" class="flex items-center py-2 hover:text-accent transition-colors">
+                            <i class="fas fa-shopping-cart mr-3 text-xl"></i>
+                            <span>Keranjang</span>
+                            <span class="ml-auto bg-accent rounded-full w-6 h-6 flex items-center justify-center text-xs">3</span>
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section id="home" class="relative py-16 md:py-24 overflow-hidden">
+        <div class="absolute inset-0 bg-gray-800">
+            <div class="absolute inset-0 hero-gradient"></div>
+            <!-- Background pattern -->
+            <div class="absolute inset-0 opacity-10"
+     style="background-image: url('data:image/svg+xml,%3Csvg width=&quot;60&quot; height=&quot;60&quot; viewBox=&quot;0 0 60 60&quot; xmlns=&quot;http://www.w3.org/2000/svg&quot;%3E%3Cg fill=&quot;none&quot; fill-rule=&quot;evenodd&quot;%3E%3Cg fill=&quot;%239C92AC&quot; fill-opacity=&quot;0.4&quot;%3E%3Cpath d=&quot;M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z&quot;/%3E%3C/g%3E%3C/g%3E%3C/svg%3E');">
+</div>
+        </div>
+        
+        <div class="container mx-auto px-4 relative z-10">
+            <div class="flex flex-col md:flex-row items-center">
+                <div class="md:w-1/2 mb-12 md:mb-0">
+                    <h1 class="text-4xl md:text-5xl font-bold mb-6 leading-tight">
+                        Solusi Teknologi <span class="text-accent">Terpadu</span> untuk Bisnis Masa Depan
+                    </h1>
+                    <p class="text-lg text-gray-300 mb-8">
+                        A2M Jaya Teknologi menghadirkan solusi teknologi terdepan untuk mendukung transformasi digital perusahaan Anda. Dari hardware hingga jaringan, kami menyediakan produk berkualitas tinggi dengan dukungan teknis terbaik.
+                    </p>
+                    <div class="flex flex-col sm:flex-row space-y-4 sm:space-y-0 sm:space-x-4">
+                        <a href="#produk" class="bg-accent hover:bg-accent-dark px-6 py-3 rounded-lg font-medium text-center transition-colors">
+                            Lihat Produk Kami
+                        </a>
+                        <a href="#contact" class="bg-secondary hover:bg-gray-800 px-6 py-3 rounded-lg font-medium text-center border border-gray-700 transition-colors">
+                            Hubungi Kami
+                        </a>
+                    </div>
+                </div>
+                <div class="md:w-1/2 flex justify-center">
+                    <div class="relative">
+                        <div class="w-64 h-64 md:w-80 md:h-80 bg-accent rounded-full opacity-20 absolute -top-4 -right-4"></div>
+                        <div class="relative bg-secondary rounded-xl p-6 shadow-2xl card-hover">
+                            <div class="grid grid-cols-2 gap-4">
+                                <div class="bg-gray-800 rounded-lg p-4 flex flex-col items-center justify-center">
+                                    <i class="fas fa-laptop text-3xl text-accent mb-2"></i>
+                                    <p class="font-medium">PC & Laptop</p>
+                                </div>
+                                <div class="bg-gray-800 rounded-lg p-4 flex flex-col items-center justify-center">
+                                    <i class="fas fa-server text-3xl text-accent mb-2"></i>
+                                    <p class="font-medium">Server</p>
+                                </div>
+                                <div class="bg-gray-800 rounded-lg p-4 flex flex-col items-center justify-center">
+                                    <i class="fas fa-wifi text-3xl text-accent mb-2"></i>
+                                    <p class="font-medium">Jaringan</p>
+                                </div>
+                                <div class="bg-gray-800 rounded-lg p-4 flex flex-col items-center justify-center">
+                                    <i class="fas fa-microchip text-3xl text-accent mb-2"></i>
+                                    <p class="font-medium">Komponen</p>
+                                </div>
+                            </div>
+                            <div class="mt-6 pt-6 border-t border-gray-700">
+                                <p class="text-center text-gray-400">Produk teknologi terbaru dengan garansi resmi</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Produk Section -->
+    <section id="produk" class="py-16 bg-gray-900">
+        <div class="container mx-auto px-4">
+            <div class="text-center mb-12">
+                <h2 class="text-3xl md:text-4xl font-bold mb-4">Produk Unggulan Kami</h2>
+                <p class="text-gray-400 max-w-2xl mx-auto">
+                    Temukan produk teknologi terbaik untuk kebutuhan bisnis dan personal Anda. Semua produk kami hadir dengan dukungan teknis dan garansi resmi.
+                </p>
+            </div>
+
+            <!-- Kategori Produk -->
+            <div class="flex justify-center mb-10">
+                <div class="flex flex-wrap justify-center gap-2">
+                    <button class="category-btn bg-accent text-white px-5 py-2 rounded-lg font-medium">Semua</button>
+                    <button class="category-btn bg-secondary hover:bg-gray-800 px-5 py-2 rounded-lg font-medium transition-colors">PC & Laptop</button>
+                    <button class="category-btn bg-secondary hover:bg-gray-800 px-5 py-2 rounded-lg font-medium transition-colors">Jaringan</button>
+                    <button class="category-btn bg-secondary hover:bg-gray-800 px-5 py-2 rounded-lg font-medium transition-colors">Komponen</button>
+                    <button class="category-btn bg-secondary hover:bg-gray-800 px-5 py-2 rounded-lg font-medium transition-colors">Aksesoris</button>
+                </div>
+            </div>
+
+            <!-- Daftar Produk - Akan di-loop dari database di Golang -->
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+            {{ range .products }}
+
+                <!-- Produk 1 -->
+                <div class="bg-secondary rounded-xl overflow-hidden card-hover">
+                    <div class="h-48 bg-gray-800 flex items-center justify-center">
+                        <i class="fas fa-laptop text-6xl text-accent"></i>
+                    </div>
+                    <div class="p-6">
+                        <div class="flex justify-between items-start mb-3">
+                            <h3 class="text-xl font-bold">{{ .NamaProduk }}</h3>
+                            <span class="bg-accent text-xs font-medium px-3 py-1 rounded-full">Terlaris</span>
+                        </div>
+                        <p class="text-gray-400 mb-4">{{ .Deskripsi }}</p>
+                        <div class="flex justify-between items-center">
+                            <span class="text-2xl font-bold">Rp {{ .HargaProduk }}</span>
+                            <button class="add-to-cart bg-accent hover:bg-accent-dark px-4 py-2 rounded-lg font-medium transition-colors" data-product="Laptop Gaming Pro" data-price="15999000">
+                                <i class="fas fa-cart-plus mr-2"></i> Tambah
+                            </button>
+                        </div>
+                    </div>
+
+                {{ end }}
+                </div>
+
+            <!-- Tombol Lihat Semua Produk -->
+            <div class="text-center mt-12">
+                <a href="#" class="inline-block bg-secondary hover:bg-gray-800 px-8 py-3 rounded-lg font-medium border border-gray-700 transition-colors">
+                    Lihat Semua Produk
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <!-- News Section -->
+    <section id="news" class="py-16 bg-gray-900 border-t border-gray-800">
+        <div class="container mx-auto px-4">
+            <div class="text-center mb-12">
+                <h2 class="text-3xl md:text-4xl font-bold mb-4">Berita & Teknologi Terbaru</h2>
+                <p class="text-gray-400 max-w-2xl mx-auto">
+                    Ikuti perkembangan terbaru dalam dunia teknologi dan informasi produk terkini dari A2M Jaya Teknologi.
+                </p>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+                <!-- Berita 1 -->
+                <div class="bg-secondary rounded-xl overflow-hidden card-hover">
+                    <div class="h-48 bg-gradient-to-r from-accent to-blue-800 flex items-center justify-center">
+                        <i class="fas fa-microchip text-6xl text-white"></i>
+                    </div>
+                    <div class="p-6">
+                        <div class="flex items-center text-gray-400 text-sm mb-3">
+                            <i class="far fa-calendar mr-2"></i>
+                            <span>15 Juni 2023</span>
+                            <span class="mx-2">•</span>
+                            <i class="far fa-clock mr-1"></i>
+                            <span>3 min read</span>
+                        </div>
+                        <h3 class="text-xl font-bold mb-3">Perkembangan Teknologi AI dalam Hardware</h3>
+                        <p class="text-gray-400 mb-4">
+                            Bagaimana kecerdasan buatan mengubah desain dan performa hardware komputer masa depan.
+                        </p>
+                        <a href="#" class="text-accent hover:text-accent-dark font-medium flex items-center">
+                            Baca selengkapnya <i class="fas fa-arrow-right ml-2"></i>
+                        </a>
+                    </div>
+                </div>
+
+                <!-- Berita 2 -->
+                <div class="bg-secondary rounded-xl overflow-hidden card-hover">
+                    <div class="h-48 bg-gradient-to-r from-green-800 to-accent flex items-center justify-center">
+                        <i class="fas fa-wifi text-6xl text-white"></i>
+                    </div>
+                    <div class="p-6">
+                        <div class="flex items-center text-gray-400 text-sm mb-3">
+                            <i class="far fa-calendar mr-2"></i>
+                            <span>10 Juni 2023</span>
+                            <span class="mx-2">•</span>
+                            <i class="far fa-clock mr-1"></i>
+                            <span>5 min read</span>
+                        </div>
+                        <h3 class="text-xl font-bold mb-3">Wi-Fi 6E: Standar Baru Jaringan Nirkabel</h3>
+                        <p class="text-gray-400 mb-4">
+                            Pengenalan Wi-Fi 6E dan manfaatnya untuk performa jaringan yang lebih cepat dan stabil.
+                        </p>
+                        <a href="#" class="text-accent hover:text-accent-dark font-medium flex items-center">
+                            Baca selengkapnya <i class="fas fa-arrow-right ml-2"></i>
+                        </a>
+                    </div>
+                </div>
+
+                <!-- Berita 3 -->
+                <div class="bg-secondary rounded-xl overflow-hidden card-hover">
+                    <div class="h-48 bg-gradient-to-r from-purple-800 to-accent flex items-center justify-center">
+                        <i class="fas fa-laptop-code text-6xl text-white"></i>
+                    </div>
+                    <div class="p-6">
+                        <div class="flex items-center text-gray-400 text-sm mb-3">
+                            <i class="far fa-calendar mr-2"></i>
+                            <span>5 Juni 2023</span>
+                            <span class="mx-2">•</span>
+                            <i class="far fa-clock mr-1"></i>
+                            <span>4 min read</span>
+                        </div>
+                        <h3 class="text-xl font-bold mb-3">Optimasi PC untuk Creative Professionals</h3>
+                        <p class="text-gray-400 mb-4">
+                            Tips memilih dan mengkonfigurasi PC workstation terbaik untuk kebutuhan desain dan kreatif.
+                        </p>
+                        <a href="#" class="text-accent hover:text-accent-dark font-medium flex items-center">
+                            Baca selengkapnya <i class="fas fa-arrow-right ml-2"></i>
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Contact Section -->
+    <section id="contact" class="py-16 bg-gray-900 border-t border-gray-800">
+        <div class="container mx-auto px-4">
+            <div class="text-center mb-12">
+                <h2 class="text-3xl md:text-4xl font-bold mb-4">Hubungi Kami</h2>
+                <p class="text-gray-400 max-w-2xl mx-auto">
+                    Tertarik dengan produk kami? Butuh konsultasi teknologi? Tim kami siap membantu Anda menemukan solusi terbaik.
+                </p>
+            </div>
+
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-12">
+                <!-- Informasi Kontak -->
+                <div>
+                    <h3 class="text-2xl font-bold mb-6">Informasi Kontak</h3>
+                    
+                    <div class="space-y-6">
+                        <div class="flex items-start">
+                            <div class="bg-accent p-3 rounded-lg mr-4">
+                                <i class="fas fa-map-marker-alt text-white"></i>
+                            </div>
+                            <div>
+                                <h4 class="font-bold text-lg mb-1">Alamat Kantor</h4>
+                                <p class="text-gray-400">Jl. Teknologi No. 123, Gedung A2M Lantai 8, Jakarta Selatan 12950</p>
+                            </div>
+                        </div>
+                        
+                        <div class="flex items-start">
+                            <div class="bg-accent p-3 rounded-lg mr-4">
+                                <i class="fas fa-phone-alt text-white"></i>
+                            </div>
+                            <div>
+                                <h4 class="font-bold text-lg mb-1">Telepon</h4>
+                                <p class="text-gray-400">(021) 1234-5678</p>
+                                <p class="text-gray-400">(021) 8765-4321</p>
+                            </div>
+                        </div>
+                        
+                        <div class="flex items-start">
+                            <div class="bg-accent p-3 rounded-lg mr-4">
+                                <i class="fas fa-envelope text-white"></i>
+                            </div>
+                            <div>
+                                <h4 class="font-bold text-lg mb-1">Email</h4>
+                                <p class="text-gray-400">info@a2mjayateknologi.co.id</p>
+                                <p class="text-gray-400">sales@a2mjayateknologi.co.id</p>
+                            </div>
+                        </div>
+                        
+                        <div class="flex items-start">
+                            <div class="bg-accent p-3 rounded-lg mr-4">
+                                <i class="fas fa-clock text-white"></i>
+                            </div>
+                            <div>
+                                <h4 class="font-bold text-lg mb-1">Jam Operasional</h4>
+                                <p class="text-gray-400">Senin - Jumat: 08:00 - 17:00 WIB</p>
+                                <p class="text-gray-400">Sabtu: 09:00 - 14:00 WIB</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Form Kontak -->
+                <div>
+                    <h3 class="text-2xl font-bold mb-6">Kirim Pesan</h3>
+                    
+                    <form id="contact-form" class="space-y-6">
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                            <div>
+                                <label for="name" class="block text-gray-300 mb-2">Nama Lengkap</label>
+                                <input type="text" id="name" class="w-full bg-gray-800 border border-gray-700 rounded-lg px-4 py-3 focus:outline-none focus:ring-2 focus:ring-accent" required>
+                            </div>
+                            <div>
+                                <label for="email" class="block text-gray-300 mb-2">Email</label>
+                                <input type="email" id="email" class="w-full bg-gray-800 border border-gray-700 rounded-lg px-4 py-3 focus:outline-none focus:ring-2 focus:ring-accent" required>
+                            </div>
+                        </div>
+                        
+                        <div>
+                            <label for="subject" class="block text-gray-300 mb-2">Subjek</label>
+                            <input type="text" id="subject" class="w-full bg-gray-800 border border-gray-700 rounded-lg px-4 py-3 focus:outline-none focus:ring-2 focus:ring-accent" required>
+                        </div>
+                        
+                        <div>
+                            <label for="message" class="block text-gray-300 mb-2">Pesan</label>
+                            <textarea id="message" rows="5" class="w-full bg-gray-800 border border-gray-700 rounded-lg px-4 py-3 focus:outline-none focus:ring-2 focus:ring-accent" required></textarea>
+                        </div>
+                        
+                        <button type="submit" class="bg-accent hover:bg-accent-dark w-full py-3 rounded-lg font-medium transition-colors">
+                            Kirim Pesan
+                        </button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="bg-gray-900 border-t border-gray-800 py-12">
+        <div class="container mx-auto px-4">
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
+                <!-- Company Info -->
+                <div>
+                    <div class="flex items-center mb-6">
+                        <div class="bg-accent p-2 rounded-lg mr-3">
+                            <i class="fas fa-microchip text-white"></i>
+                        </div>
+                        <div class="text-2xl font-bold text-white">
+                            A2M <span class="text-accent">Jaya</span> Teknologi
+                        </div>
+                    </div>
+                    <p class="text-gray-400 mb-6">
+                        Penyedia solusi teknologi terdepan dengan produk berkualitas tinggi dan layanan terbaik untuk mendukung transformasi digital bisnis Anda.
+                    </p>
+                    <div class="flex space-x-4">
+                        <a href="#" class="bg-gray-800 hover:bg-accent w-10 h-10 rounded-full flex items-center justify-center transition-colors">
+                            <i class="fab fa-facebook-f"></i>
+                        </a>
+                        <a href="#" class="bg-gray-800 hover:bg-accent w-10 h-10 rounded-full flex items-center justify-center transition-colors">
+                            <i class="fab fa-twitter"></i>
+                        </a>
+                        <a href="#" class="bg-gray-800 hover:bg-accent w-10 h-10 rounded-full flex items-center justify-center transition-colors">
+                            <i class="fab fa-instagram"></i>
+                        </a>
+                        <a href="#" class="bg-gray-800 hover:bg-accent w-10 h-10 rounded-full flex items-center justify-center transition-colors">
+                            <i class="fab fa-linkedin-in"></i>
+                        </a>
+                    </div>
+                </div>
+
+                <!-- Quick Links -->
+                <div>
+                    <h3 class="text-xl font-bold mb-6">Tautan Cepat</h3>
+                    <ul class="space-y-3">
+                        <li><a href="#home" class="text-gray-400 hover:text-accent transition-colors">Home</a></li>
+                        <li><a href="#produk" class="text-gray-400 hover:text-accent transition-colors">Produk</a></li>
+                        <li><a href="#news" class="text-gray-400 hover:text-accent transition-colors">News</a></li>
+                        <li><a href="#contact" class="text-gray-400 hover:text-accent transition-colors">Contact</a></li>
+                        <li><a href="#" class="text-gray-400 hover:text-accent transition-colors">Tentang Kami</a></li>
+                        <li><a href="#" class="text-gray-400 hover:text-accent transition-colors">Karir</a></li>
+                    </ul>
+                </div>
+
+                <!-- Product Categories -->
+                <div>
+                    <h3 class="text-xl font-bold mb-6">Kategori Produk</h3>
+                    <ul class="space-y-3">
+                        <li><a href="#" class="text-gray-400 hover:text-accent transition-colors">PC & Laptop</a></li>
+                        <li><a href="#" class="text-gray-400 hover:text-accent transition-colors">Jaringan & Wi-Fi</a></li>
+                        <li><a href="#" class="text-gray-400 hover:text-accent transition-colors">Komponen Hardware</a></li>
+                        <li><a href="#" class="text-gray-400 hover:text-accent transition-colors">Server & Storage</a></li>
+                        <li><a href="#" class="text-gray-400 hover:text-accent transition-colors">Aksesoris Komputer</a></li>
+                        <li><a href="#" class="text-gray-400 hover:text-accent transition-colors">Software & Lisensi</a></li>
+                    </ul>
+                </div>
+
+                <!-- Newsletter -->
+                <div>
+                    <h3 class="text-xl font-bold mb-6">Newsletter</h3>
+                    <p class="text-gray-400 mb-4">
+                        Dapatkan informasi terbaru tentang produk, promosi, dan berita teknologi langsung ke email Anda.
+                    </p>
+                    <form class="flex">
+                        <input type="email" placeholder="Email Anda" class="flex-1 bg-gray-800 border border-gray-700 rounded-l-lg px-4 py-3 focus:outline-none focus:ring-2 focus:ring-accent">
+                        <button type="submit" class="bg-accent hover:bg-accent-dark px-4 rounded-r-lg">
+                            <i class="fas fa-paper-plane"></i>
+                        </button>
+                    </form>
+                    <p class="text-gray-500 text-sm mt-3">
+                        Kami tidak akan membagikan email Anda kepada siapa pun.
+                    </p>
+                </div>
+            </div>
+
+            <!-- Copyright -->
+            <div class="border-t border-gray-800 mt-12 pt-8 text-center text-gray-500">
+                <p>&copy; 2023 A2M Jaya Teknologi. Hak cipta dilindungi undang-undang.</p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- JavaScript -->
+    <script>
+        // Mobile menu toggle
+        document.getElementById('mobile-menu-button').addEventListener('click', function() {
+            const menu = document.getElementById('mobile-menu');
+            menu.classList.toggle('hidden');
+        });
+
+        // Cart functionality
+        let cartCount = 3;
+        let cartItems = [
+            { name: 'Laptop Gaming Pro', price: 15999000 },
+            { name: 'Router Wi-Fi 6', price: 1850000 },
+            { name: 'PC Workstation', price: 12500000 }
+        ];
+
+        // Update cart summary
+        function updateCartSummary() {
+            const totalItems = cartItems.length;
+            const totalPrice = cartItems.reduce((sum, item) => sum + item.price, 0);
+            
+            // Format price to IDR
+            const formattedPrice = new Intl.NumberFormat('id-ID', {
+                style: 'currency',
+                currency: 'IDR',
+                minimumFractionDigits: 0
+            }).format(totalPrice);
+            
+            document.getElementById('cart-count').textContent = totalItems;
+            document.getElementById('cart-summary').textContent = `${totalItems} items (${formattedPrice})`;
+        }
+
+        // Add to cart functionality
+        document.querySelectorAll('.add-to-cart').forEach(button => {
+            button.addEventListener('click', function() {
+                const productName = this.getAttribute('data-product');
+                const productPrice = parseInt(this.getAttribute('data-price'));
+                
+                // Add item to cart
+                cartItems.push({ name: productName, price: productPrice });
+                cartCount++;
+                
+                // Update cart UI
+                updateCartSummary();
+                
+                // Show notification
+                showNotification(`${productName} telah ditambahkan ke keranjang!`);
+            });
+        });
+
+        // Remove from cart
+        document.querySelectorAll('.dropdown-content .fa-times').forEach(button => {
+            button.addEventListener('click', function() {
+                // In a real app, you would remove the specific item from cart
+                // For this demo, we'll just remove the last item
+                if (cartItems.length > 0) {
+                    cartItems.pop();
+                    updateCartSummary();
+                    showNotification('Item telah dihapus dari keranjang!');
+                }
+            });
+        });
+
+        // Notification function
+        function showNotification(message) {
+            // Create notification element
+            const notification = document.createElement('div');
+            notification.className = 'fixed top-4 right-4 bg-accent text-white px-6 py-3 rounded-lg shadow-lg z-50 transition-all transform translate-x-full';
+            notification.textContent = message;
+            notification.id = 'notification';
+            
+            document.body.appendChild(notification);
+            
+            // Animate in
+            setTimeout(() => {
+                notification.classList.remove('translate-x-full');
+                notification.classList.add('translate-x-0');
+            }, 10);
+            
+            // Remove after 3 seconds
+            setTimeout(() => {
+                notification.classList.remove('translate-x-0');
+                notification.classList.add('translate-x-full');
+                
+                setTimeout(() => {
+                    document.body.removeChild(notification);
+                }, 300);
+            }, 3000);
+        }
+
+        // Category filter functionality
+        document.querySelectorAll('.category-btn').forEach(button => {
+            button.addEventListener('click', function() {
+                // Remove active class from all buttons
+                document.querySelectorAll('.category-btn').forEach(btn => {
+                    btn.classList.remove('bg-accent', 'text-white');
+                    btn.classList.add('bg-secondary', 'hover:bg-gray-800');
+                });
+                
+                // Add active class to clicked button
+                this.classList.remove('bg-secondary', 'hover:bg-gray-800');
+                this.classList.add('bg-accent', 'text-white');
+                
+                // In a real app, you would filter products here
+                // For this demo, we'll just show a notification
+                const category = this.textContent.trim();
+                if (category !== 'Semua') {
+                    showNotification(`Menampilkan produk kategori: ${category}`);
+                } else {
+                    showNotification('Menampilkan semua produk');
+                }
+            });
+        });
+
+        // Contact form submission
+        document.getElementById('contact-form').addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            // Get form values
+            const name = document.getElementById('name').value;
+            const email = document.getElementById('email').value;
+            
+            // In a real app, you would send this data to the server
+            // For this demo, we'll just show a notification
+            showNotification(`Terima kasih ${name}! Pesan Anda telah dikirim. Kami akan membalas ke ${email} segera.`);
+            
+            // Reset form
+            this.reset();
+        });
+
+        // Smooth scrolling for anchor links
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                
+                const targetId = this.getAttribute('href');
+                if (targetId === '#') return;
+                
+                const targetElement = document.querySelector(targetId);
+                if (targetElement) {
+                    window.scrollTo({
+                        top: targetElement.offsetTop - 80,
+                        behavior: 'smooth'
+                    });
+                    
+                    // Close mobile menu if open
+                    const mobileMenu = document.getElementById('mobile-menu');
+                    if (!mobileMenu.classList.contains('hidden')) {
+                        mobileMenu.classList.add('hidden');
+                    }
+                }
+            });
+        });
+
+        // Initialize cart summary
+        updateCartSummary();
+    </script>
+</body>
+</html>
