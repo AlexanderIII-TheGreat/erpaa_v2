@@ -32,11 +32,12 @@
             background: linear-gradient(to bottom right, #eff6ff, #f3f4f6, #f9fafb);
         }
         
-        /* Struktur layout utama */
+        /* Struktur layout utama - RESPONSIVE */
         .app-container {
             display: flex;
             min-height: 100vh;
             width: 100%;
+            position: relative;
         }
         
         .main-wrapper {
@@ -45,6 +46,8 @@
             flex-direction: column;
             max-height: 100vh;
             overflow: hidden;
+            width: 100%;
+            transition: margin-left 0.3s ease;
         }
         
         .content-wrapper {
@@ -52,8 +55,97 @@
             overflow-y: auto;
             overflow-x: hidden;
             -webkit-overflow-scrolling: touch;
-            padding: 2rem;
+            padding: 1rem;
             background: linear-gradient(to bottom, #f8fafc, #f1f5f9);
+        }
+        
+        @media (min-width: 768px) {
+            .content-wrapper {
+                padding: 1.5rem;
+            }
+        }
+        
+        @media (min-width: 1024px) {
+            .content-wrapper {
+                padding: 2rem;
+            }
+        }
+        
+        /* Sidebar Responsive */
+        .sidebar-overlay {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-color: rgba(0, 0, 0, 0.5);
+            z-index: 40;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+        
+        .sidebar-overlay.active {
+            display: block;
+            opacity: 1;
+        }
+        
+        .sidebar-container {
+            position: fixed;
+            top: 0;
+            left: 0;
+            height: 100vh;
+            width: 16rem;
+            transform: translateX(-100%);
+            transition: transform 0.3s ease;
+            z-index: 50;
+            overflow-y: auto;
+        }
+        
+        @media (min-width: 1024px) {
+            .sidebar-container {
+                position: relative;
+                transform: translateX(0);
+                height: 100vh;
+                flex-shrink: 0;
+            }
+            
+            .sidebar-overlay {
+                display: none !important;
+            }
+        }
+        
+        .sidebar-container.active {
+            transform: translateX(0);
+        }
+        
+        .main-wrapper.sidebar-open {
+            margin-left: 0;
+        }
+        
+        @media (min-width: 1024px) {
+            .main-wrapper.sidebar-open {
+                margin-left: 0;
+            }
+        }
+        
+        /* Mobile menu button */
+        .mobile-menu-btn {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 40px;
+            height: 40px;
+            border-radius: 8px;
+            background: #f1f5f9;
+            color: #4a5568;
+            border: 1px solid #e2e8f0;
+        }
+        
+        @media (min-width: 1024px) {
+            .mobile-menu-btn {
+                display: none;
+            }
         }
         
         /* Custom animations */
@@ -86,7 +178,29 @@
             }
             to {
                 opacity: 1;
-                transform: translateX(0);
+                transform: translateY(0);
+            }
+        }
+        
+        @keyframes slideDown {
+            from {
+                opacity: 0;
+                transform: translateY(-20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        
+        @keyframes slideUp {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
             }
         }
         
@@ -163,6 +277,39 @@
             30% { transform: translateY(-8px); }
         }
         
+        @keyframes notificationSlideIn {
+            0% {
+                opacity: 0;
+                transform: translateX(100%);
+            }
+            70% {
+                opacity: 1;
+                transform: translateX(-10px);
+            }
+            100% {
+                opacity: 1;
+                transform: translateX(0);
+            }
+        }
+        
+        @keyframes expandDown {
+            from {
+                max-height: 70px;
+            }
+            to {
+                max-height: 300px;
+            }
+        }
+        
+        @keyframes collapseUp {
+            from {
+                max-height: 300px;
+            }
+            to {
+                max-height: 70px;
+            }
+        }
+        
         .animate-fade-in-up {
             animation: fadeInUp 0.6s ease-out forwards;
         }
@@ -201,20 +348,42 @@
             animation: ripple 0.6s linear forwards;
         }
         
+        .animate-slide-down {
+            animation: slideDown 0.3s ease-out forwards;
+        }
+        
+        .animate-slide-up {
+            animation: slideUp 0.3s ease-out forwards;
+        }
+        
+        .animate-notification-slide-in {
+            animation: notificationSlideIn 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
+        }
+        
+        .animate-expand-down {
+            animation: expandDown 0.4s ease-out forwards;
+            overflow: hidden;
+        }
+        
+        .animate-collapse-up {
+            animation: collapseUp 0.4s ease-out forwards;
+            overflow: hidden;
+        }
+        
         /* Custom scrollbar */
         ::-webkit-scrollbar {
-            width: 8px;
-            height: 8px;
+            width: 6px;
+            height: 6px;
         }
         
         ::-webkit-scrollbar-track {
             background: var(--neutral-gray);
-            border-radius: 4px;
+            border-radius: 3px;
         }
         
         ::-webkit-scrollbar-thumb {
             background: linear-gradient(135deg, #4A90E2, #2A6EBB);
-            border-radius: 4px;
+            border-radius: 3px;
         }
         
         ::-webkit-scrollbar-thumb:hover {
@@ -295,8 +464,15 @@
         
         .horizontal-card {
             flex: 0 0 auto;
-            width: 320px;
-            min-height: 180px;
+            width: 300px;
+            min-height: 200px;
+        }
+        
+        @media (max-width: 640px) {
+            .horizontal-card {
+                width: 280px;
+                min-height: 220px;
+            }
         }
         
         /* Progress bars */
@@ -603,7 +779,7 @@
         /* ================= PERBAIKAN KONSISTENSI GRID ================= */
         /* Perbaikan untuk konsistensi ukuran grid - BARU DITAMBAHKAN */
         .grid-section-card {
-            min-height: 500px;
+            min-height: auto;
             height: 100%;
             display: flex;
             flex-direction: column;
@@ -649,7 +825,7 @@
         
         /* Pastikan semua card memiliki tinggi yang konsisten */
         section.animate-on-scroll > .bg-white {
-            min-height: 500px;
+            min-height: auto;
             height: 100%;
         }
         
@@ -664,12 +840,13 @@
         
         /* Perbaikan tinggi horizontal card */
         .horizontal-scroll-container .horizontal-card {
-            height: 240px;
+            height: auto;
+            min-height: 240px;
         }
         
         /* Perbaikan untuk card dalam grid */
         .grid-cols-1.lg\:grid-cols-2 .bg-white {
-            min-height: 500px;
+            min-height: auto;
         }
         
         /* Spacing konsisten untuk semua card body */
@@ -683,43 +860,573 @@
         .grid-section-card .border-b {
             flex-shrink: 0;
         }
+        
+        /* ================= SISTEM NOTIFIKASI BARU ================= */
+        /* Container untuk notifikasi popup */
+        .notification-toast-container {
+            position: fixed;
+            top: 90px;
+            right: 20px;
+            z-index: 1000;
+            width: 350px;
+            max-width: 90vw;
+        }
+        
+        /* Notifikasi Toast - kecil dan compact */
+        .notification-toast {
+            background: white;
+            border-radius: 10px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+            overflow: hidden;
+            margin-bottom: 12px;
+            max-height: 70px;
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            transform: translateX(120%);
+            opacity: 0;
+            border-left: 4px solid;
+        }
+        
+        .notification-toast.show {
+            transform: translateX(0);
+            opacity: 1;
+        }
+        
+        .notification-toast.hide {
+            transform: translateX(120%);
+            opacity: 0;
+            margin-bottom: 0;
+            max-height: 0;
+        }
+        
+        /* Tipe notifikasi - gradasi warna */
+        .notification-toast.critical {
+            border-left-color: #F56565;
+            background: linear-gradient(135deg, #FFF5F5, #FED7D7);
+        }
+        
+        .notification-toast.warning {
+            border-left-color: #ECC94B;
+            background: linear-gradient(135deg, #FFFAF0, #FEEBC8);
+        }
+        
+        .notification-toast.info {
+            border-left-color: #4A90E2;
+            background: linear-gradient(135deg, #EBF8FF, #BEE3F8);
+        }
+        
+        .notification-toast.success {
+            border-left-color: #48BB78;
+            background: linear-gradient(135deg, #F0FFF4, #C6F6D5);
+        }
+        
+        /* Header notifikasi (compact) */
+        .notification-toast-header {
+            padding: 12px 16px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            cursor: pointer;
+            min-height: 70px;
+        }
+        
+        .notification-toast-content {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            flex: 1;
+            overflow: hidden;
+        }
+        
+        .notification-toast-icon {
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+            font-size: 16px;
+        }
+        
+        .notification-toast.critical .notification-toast-icon {
+            background: linear-gradient(135deg, #F56565, #C53030);
+            color: white;
+        }
+        
+        .notification-toast.warning .notification-toast-icon {
+            background: linear-gradient(135deg, #ECC94B, #D69E2E);
+            color: white;
+        }
+        
+        .notification-toast.info .notification-toast-icon {
+            background: linear-gradient(135deg, #4A90E2, #2A6EBB);
+            color: white;
+        }
+        
+        .notification-toast.success .notification-toast-icon {
+            background: linear-gradient(135deg, #48BB78, #38A169);
+            color: white;
+        }
+        
+        .notification-toast-text {
+            flex: 1;
+            overflow: hidden;
+        }
+        
+        .notification-toast-title {
+            font-size: 14px;
+            font-weight: 600;
+            margin-bottom: 2px;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+        
+        .notification-toast.critical .notification-toast-title {
+            color: #C53030;
+        }
+        
+        .notification-toast.warning .notification-toast-title {
+            color: #975A16;
+        }
+        
+        .notification-toast.info .notification-toast-title {
+            color: #2C5282;
+        }
+        
+        .notification-toast.success .notification-toast-title {
+            color: #276749;
+        }
+        
+        .notification-toast-preview {
+            font-size: 12px;
+            color: #718096;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+        
+        .notification-toast-actions {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            margin-left: 8px;
+        }
+        
+        .notification-toast-expand-btn {
+            background: transparent;
+            border: none;
+            color: #A0AEC0;
+            cursor: pointer;
+            padding: 4px;
+            border-radius: 4px;
+            transition: all 0.2s;
+            width: 24px;
+            height: 24px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .notification-toast-expand-btn:hover {
+            background: rgba(0, 0, 0, 0.05);
+            color: #718096;
+        }
+        
+        .notification-toast-expand-btn i {
+            transition: transform 0.3s ease;
+        }
+        
+        .notification-toast-close-btn {
+            background: transparent;
+            border: none;
+            color: #A0AEC0;
+            cursor: pointer;
+            padding: 4px;
+            border-radius: 4px;
+            transition: all 0.2s;
+            width: 24px;
+            height: 24px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .notification-toast-close-btn:hover {
+            background: rgba(0, 0, 0, 0.05);
+            color: #718096;
+        }
+        
+        /* Body notifikasi (expanded) */
+        .notification-toast-body {
+            padding: 0 16px 16px 64px;
+            font-size: 13px;
+            color: #4A5568;
+            line-height: 1.5;
+            display: none;
+            max-height: 200px;
+            overflow-y: auto;
+        }
+        
+        .notification-toast-footer {
+            padding: 12px 16px 12px 64px;
+            border-top: 1px solid rgba(0, 0, 0, 0.05);
+            display: none;
+            gap: 8px;
+        }
+        
+        .notification-toast.expanded {
+            max-height: 350px;
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
+        }
+        
+        .notification-toast.expanded .notification-toast-body,
+        .notification-toast.expanded .notification-toast-footer {
+            display: block;
+        }
+        
+        .notification-toast.expanded .notification-toast-expand-btn i {
+            transform: rotate(180deg);
+        }
+        
+        /* Tombol aksi dalam notifikasi */
+        .notification-action-btn {
+            padding: 6px 12px;
+            border-radius: 6px;
+            font-size: 12px;
+            font-weight: 500;
+            cursor: pointer;
+            border: none;
+            transition: all 0.2s;
+        }
+        
+        .notification-action-btn.primary {
+            background: linear-gradient(135deg, #4A90E2, #2A6EBB);
+            color: white;
+        }
+        
+        .notification-action-btn.primary:hover {
+            background: linear-gradient(135deg, #2A6EBB, #4A90E2);
+            transform: translateY(-1px);
+        }
+        
+        .notification-action-btn.secondary {
+            background: rgba(0, 0, 0, 0.05);
+            color: #4A5568;
+        }
+        
+        .notification-action-btn.secondary:hover {
+            background: rgba(0, 0, 0, 0.1);
+        }
+        
+        /* Badge untuk jumlah notifikasi */
+        .notification-badge {
+            position: absolute;
+            top: -5px;
+            right: -5px;
+            background: linear-gradient(135deg, #F56565, #C53030);
+            color: white;
+            border-radius: 50%;
+            width: 18px;
+            height: 18px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 10px;
+            font-weight: bold;
+            animation: pulseSoft 2s infinite;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+        }
+        
+        /* Panel notifikasi dari bell icon */
+        .notification-panel {
+            position: fixed;
+            top: 80px;
+            right: 20px;
+            width: 380px;
+            max-width: 90vw;
+            max-height: 500px;
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15);
+            z-index: 1001;
+            overflow: hidden;
+            display: none;
+            flex-direction: column;
+        }
+        
+        .notification-panel.show {
+            display: flex;
+            animation: slideDown 0.3s ease-out;
+        }
+        
+        .notification-panel-header {
+            padding: 16px;
+            border-bottom: 1px solid #E2E8F0;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background: #F7FAFC;
+        }
+        
+        .notification-panel-title {
+            font-size: 16px;
+            font-weight: 600;
+            color: #2D3748;
+        }
+        
+        .notification-panel-close {
+            background: transparent;
+            border: none;
+            color: #718096;
+            cursor: pointer;
+            padding: 4px;
+            border-radius: 4px;
+            transition: all 0.2s;
+        }
+        
+        .notification-panel-close:hover {
+            background: rgba(0, 0, 0, 0.05);
+            color: #4A5568;
+        }
+        
+        .notification-panel-body {
+            flex: 1;
+            overflow-y: auto;
+            padding: 0;
+            max-height: 400px;
+        }
+        
+        .notification-panel-empty {
+            padding: 40px 20px;
+            text-align: center;
+            color: #A0AEC0;
+        }
+        
+        .notification-panel-empty i {
+            font-size: 48px;
+            margin-bottom: 16px;
+            opacity: 0.5;
+        }
+        
+        .notification-panel-item {
+            padding: 16px;
+            border-bottom: 1px solid #F1F5F9;
+            cursor: pointer;
+            transition: background 0.2s;
+            display: flex;
+            align-items: flex-start;
+            gap: 12px;
+        }
+        
+        .notification-panel-item:hover {
+            background: #F7FAFC;
+        }
+        
+        .notification-panel-item.unread {
+            background: #EBF8FF;
+        }
+        
+        .notification-panel-item.unread:hover {
+            background: #E1F0FF;
+        }
+        
+        .notification-panel-item-icon {
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+            font-size: 14px;
+            margin-top: 2px;
+        }
+        
+        .notification-panel-item.critical .notification-panel-item-icon {
+            background: linear-gradient(135deg, #F56565, #C53030);
+            color: white;
+        }
+        
+        .notification-panel-item.warning .notification-panel-item-icon {
+            background: linear-gradient(135deg, #ECC94B, #D69E2E);
+            color: white;
+        }
+        
+        .notification-panel-item.info .notification-panel-item-icon {
+            background: linear-gradient(135deg, #4A90E2, #2A6EBB);
+            color: white;
+        }
+        
+        .notification-panel-item.success .notification-panel-item-icon {
+            background: linear-gradient(135deg, #48BB78, #38A169);
+            color: white;
+        }
+        
+        .notification-panel-item-content {
+            flex: 1;
+            min-width: 0;
+        }
+        
+        .notification-panel-item-title {
+            font-size: 14px;
+            font-weight: 600;
+            margin-bottom: 4px;
+            color: #2D3748;
+        }
+        
+        .notification-panel-item-message {
+            font-size: 13px;
+            color: #718096;
+            line-height: 1.4;
+            margin-bottom: 8px;
+            display: -webkit-box;
+            -webkit-line-clamp: 2;
+            -webkit-box-orient: vertical;
+            overflow: hidden;
+        }
+        
+        .notification-panel-item-time {
+            font-size: 11px;
+            color: #A0AEC0;
+        }
+        
+        .notification-panel-footer {
+            padding: 12px 16px;
+            border-top: 1px solid #E2E8F0;
+            text-align: center;
+        }
+        
+        .notification-panel-clear-btn {
+            background: transparent;
+            border: none;
+            color: #4A90E2;
+            font-size: 14px;
+            font-weight: 500;
+            cursor: pointer;
+            padding: 8px 16px;
+            border-radius: 6px;
+            transition: all 0.2s;
+        }
+        
+        .notification-panel-clear-btn:hover {
+            background: #EBF8FF;
+        }
+        
+        /* Responsive adjustments */
+        @media (max-width: 768px) {
+            .grid-section-card .p-5 {
+                padding: 1rem;
+            }
+            
+            .grid-cols-1.md\:grid-cols-2.lg\:grid-cols-4 {
+                grid-template-columns: repeat(2, 1fr);
+                gap: 0.75rem;
+            }
+            
+            .card-body-scrollable {
+                max-height: 300px;
+            }
+            
+            .ai-assistant-panel {
+                width: 90vw !important;
+                height: 70vh !important;
+                right: 5vw !important;
+                top: 15vh !important;
+            }
+            
+            .notification-toast-container {
+                top: 80px;
+                right: 10px;
+                width: 320px;
+            }
+            
+            .notification-panel {
+                right: 10px;
+                width: 95vw;
+                max-height: 70vh;
+            }
+        }
+        
+        @media (max-width: 640px) {
+            .grid-cols-1.md\:grid-cols-2.lg\:grid-cols-4 {
+                grid-template-columns: 1fr;
+                gap: 0.75rem;
+            }
+            
+            #aiAssistantPanel {
+                width: 95vw !important;
+                right: 2.5vw !important;
+            }
+            
+            .header-container {
+                padding-left: 1rem;
+                padding-right: 1rem;
+            }
+            
+            .flex.justify-between.items-center {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 1rem;
+            }
+            
+            .flex.justify-between.items-center > div:last-child {
+                width: 100%;
+                justify-content: space-between;
+            }
+            
+            .notification-toast-container {
+                width: 300px;
+                top: 100px;
+            }
+        }
         /* ================= AKHIR PERBAIKAN KONSISTENSI GRID ================= */
     </style>
 </head>
 <body class="page-transition">
+    <!-- Sidebar Overlay for Mobile -->
+    <div class="sidebar-overlay" id="sidebarOverlay"></div>
+    
+    <!-- Notification Toast Container -->
+    <div class="notification-toast-container" id="notificationContainer"></div>
+    
     <div class="app-container">
         <!-- Sidebar -->
-       <aside class="w-64 bg-white/90 border-r border-gray-200/50 flex flex-col shadow-sm glass-effect">
-    <div class="p-6 border-b border-gray-100/50">
-        <div class="flex items-center space-x-3">
-            <div class="w-10 h-10 rounded-lg bg-gradient-to-br from-blue-400 to-blue-600 flex items-center justify-center animate-float">
-                <i class="fas fa-chart-line text-white"></i>
-            </div>
-            <h1 class="text-xl font-bold text-gray-800">A2M ERPAA</h1>
-        </div>
-    </div>
-    
-    <nav class="flex-1 p-4 space-y-2">
-        <!-- Dashboard dengan Submenu -->
-        <div class="mb-2">
-            <div class="flex items-center justify-between p-3 rounded-lg bg-blue-50 text-blue-600 cursor-pointer smooth-transition hover:bg-blue-100 hover-lift ripple-effect" id="dashboard-menu">
+        <aside class="sidebar-container bg-white/90 border-r border-gray-200/50 flex flex-col shadow-sm glass-effect" id="sidebar">
+            <div class="p-4 md:p-6 border-b border-gray-100/50 flex justify-between items-center">
                 <div class="flex items-center space-x-3">
-                    <i class="fas fa-tachometer-alt w-5 text-center"></i>
-                    <span class="font-medium">Business Monitoring</span>
+                    <div class="w-10 h-10 rounded-lg bg-gradient-to-br from-blue-400 to-blue-600 flex items-center justify-center animate-float">
+                        <i class="fas fa-chart-line text-white"></i>
+                    </div>
+                    <h1 class="text-xl font-bold text-gray-800">A2M ERPAA</h1>
                 </div>
-                <i class="fas fa-chevron-down text-sm" id="dashboard-chevron"></i>
+                <button class="lg:hidden text-gray-500 hover:text-gray-700" id="closeSidebar">
+                    <i class="fas fa-times text-xl"></i>
+                </button>
             </div>
-            <div class="ml-8 mt-1 space-y-1" id="dashboard-submenu">
-                <a href="/dashboard/" class="block p-2 text-sm rounded-lg bg-blue-100 text-blue-600 smooth-transition hover:bg-blue-200 hover-lift ripple-effect">
-                    <i class="fas fa-chart-bar w-4 text-center mr-2"></i>
-                    Dashboard Overview
-                </a>
-                <a href="/dashboard/daily/" class="block p-2 text-sm rounded-lg text-gray-700 smooth-transition hover:bg-gray-100 hover-lift ripple-effect">
-                    <i class="fas fa-briefcase w-4 text-center mr-2"></i>
-                    Daily Business Brief
-                </a>
-            </div>
-        </div>
+            
+            <nav class="flex-1 p-4 space-y-2">
+                <!-- Dashboard dengan Submenu -->
+                <div class="mb-2">
+                    <div class="flex items-center justify-between p-3 rounded-lg bg-blue-50 text-blue-600 cursor-pointer smooth-transition hover:bg-blue-100 hover-lift ripple-effect" id="dashboard-menu">
+                        <div class="flex items-center space-x-3">
+                            <i class="fas fa-tachometer-alt w-5 text-center"></i>
+                            <span class="font-medium">Business Monitoring</span>
+                        </div>
+                        <i class="fas fa-chevron-down text-sm" id="dashboard-chevron"></i>
+                    </div>
+                    <div class="ml-8 mt-1 space-y-1" id="dashboard-submenu">
+                        <a href="/dashboard/" class="block p-2 text-sm rounded-lg bg-blue-100 text-blue-600 smooth-transition hover:bg-blue-200 hover-lift ripple-effect">
+                            <i class="fas fa-chart-bar w-4 text-center mr-2"></i>
+                            Dashboard Overview
+                        </a>
+                        <a href="/dashboard/daily/" class="block p-2 text-sm rounded-lg text-gray-700 smooth-transition hover:bg-gray-100 hover-lift ripple-effect">
+                            <i class="fas fa-briefcase w-4 text-center mr-2"></i>
+                            Daily Business Brief
+                        </a>
+                    </div>
+                </div>
+                
                 <a href="/product/" class="flex items-center space-x-3 p-3 rounded-lg text-gray-700 smooth-transition hover:bg-gray-100 hover-lift ripple-effect">
                     <i class="fas fa-boxes w-5 text-center"></i>
                     <span class="font-medium">Product Management</span>
@@ -756,25 +1463,33 @@
         </aside>
         
         <!-- Main Content -->
-        <div class="main-wrapper">
+        <div class="main-wrapper" id="mainWrapper">
             <!-- Header with AI Assistant in top right -->
-            <header class="sticky top-0 z-20 bg-white/80 glass-effect border-b border-gray-200/50 px-8 py-4 shrink-0">
-                <div class="flex justify-between items-center">
-                    <div>
-                        <h2 class="text-2xl font-bold text-gray-800 initial-animate">Dashboard Overview</h2>
-                        <p class="text-gray-600 initial-animate" style="animation-delay: 0.1s">Ringkasan performa bisnis Anda hari ini</p>
+            <header class="sticky top-0 z-20 bg-white/80 glass-effect border-b border-gray-200/50 px-4 md:px-8 py-4 shrink-0">
+                <div class="flex justify-between items-center header-container">
+                    <div class="flex items-center space-x-4">
+                        <!-- Mobile Menu Button -->
+                        <button class="mobile-menu-btn lg:hidden" id="mobileMenuBtn">
+                            <i class="fas fa-bars"></i>
+                        </button>
+                        <div>
+                            <h2 class="text-xl md:text-2xl font-bold text-gray-800 initial-animate">
+                            <i class="fas fa-chart-bar text-blue-600 mr-2 md:mr-3"></i>
+                                Dashboard Overview</h2>
+                            <p class="text-gray-600 text-sm md:text-base initial-animate" style="animation-delay: 0.1s">Ringkasan performa bisnis Anda hari ini</p>
+                        </div>
                     </div>
-                    <div class="flex items-center space-x-6">
+                    <div class="flex items-center space-x-3 md:space-x-6">
                         <!-- AI Assistant Button - Enhanced -->
-                        <div class="relative">
-                            <button id="aiAssistantBtn" class="flex items-center space-x-2 px-4 py-2 rounded-lg bg-gradient-to-r from-blue-500 to-blue-600 text-white smooth-transition hover:from-blue-600 hover:to-blue-700 hover-lift shadow-md relative overflow-hidden group">
+                        <div class="relative ai-assistant-container">
+                            <button id="aiAssistantBtn" class="flex items-center space-x-2 px-3 py-2 md:px-4 md:py-2 rounded-lg bg-gradient-to-r from-blue-500 to-blue-600 text-white smooth-transition hover:from-blue-600 hover:to-blue-700 hover-lift shadow-md relative overflow-hidden group touch-friendly-btn">
                                 <i class="fas fa-robot"></i>
-                                <span class="font-medium">AI Assistant</span>
-                                <div class="absolute inset-0 bg-gradient-to-r from-cyan-500 to-blue-500 opacity-0 group-hover:opacity-20 smooth-transition"></div>
+                                <span class="font-medium hidden md:inline">AI Assistant</span>
+                                <span class="font-medium md:hidden">AI</span>
                             </button>
                             
                             <!-- Enhanced AI Assistant Panel -->
-                            <div id="aiAssistantPanel" class="fixed right-8 top-20 w-96 bg-white rounded-xl shadow-2xl border border-gray-200 hidden animate-fade-in-up z-50 overflow-hidden" style="height: 600px;">
+                            <div id="aiAssistantPanel" class="fixed right-4 md:right-8 top-16 md:top-20 w-11/12 md:w-96 bg-white rounded-xl shadow-2xl border border-gray-200 hidden animate-fade-in-up z-50 overflow-hidden" style="height: 500px; max-height: 80vh;">
                                 <!-- AI Assistant Header -->
                                 <div class="bg-gradient-to-r from-blue-500 to-blue-600 p-4 text-white">
                                     <div class="flex justify-between items-center">
@@ -798,14 +1513,14 @@
                                     </div>
                                     
                                     <!-- AI Mode Selector -->
-                                    <div class="flex space-x-2 mt-4">
-                                        <button class="ai-mode-btn active flex-1 py-2 rounded-lg bg-white/20 text-sm font-medium smooth-transition hover:bg-white/30" data-mode="dashboard">
+                                    <div class="flex space-x-2 mt-4 overflow-x-auto">
+                                        <button class="ai-mode-btn active flex-1 py-2 rounded-lg bg-white/20 text-sm font-medium smooth-transition hover:bg-white/30 whitespace-nowrap" data-mode="dashboard">
                                             <i class="fas fa-tachometer-alt mr-1"></i> Dashboard
                                         </button>
-                                        <button class="ai-mode-btn flex-1 py-2 rounded-lg bg-white/10 text-sm font-medium smooth-transition hover:bg-white/20" data-mode="sales">
+                                        <button class="ai-mode-btn flex-1 py-2 rounded-lg bg-white/10 text-sm font-medium smooth-transition hover:bg-white/20 whitespace-nowrap" data-mode="sales">
                                             <i class="fas fa-chart-line mr-1"></i> Penjualan
                                         </button>
-                                        <button class="ai-mode-btn flex-1 py-2 rounded-lg bg-white/10 text-sm font-medium smooth-transition hover:bg-white/20" data-mode="inventory">
+                                        <button class="ai-mode-btn flex-1 py-2 rounded-lg bg-white/10 text-sm font-medium smooth-transition hover:bg-white/20 whitespace-nowrap" data-mode="inventory">
                                             <i class="fas fa-warehouse mr-1"></i> Inventory
                                         </button>
                                     </div>
@@ -814,7 +1529,7 @@
                                 <!-- AI Assistant Content -->
                                 <div class="flex flex-col h-full">
                                     <!-- AI Chat Container -->
-                                    <div id="aiChatContainer" class="flex-1 overflow-y-auto p-4 space-y-3" style="max-height: 380px;">
+                                    <div id="aiChatContainer" class="flex-1 overflow-y-auto p-4 space-y-3">
                                         <!-- Initial AI Message -->
                                         <div class="ai-message assistant">
                                             <div class="flex items-start space-x-2">
@@ -900,7 +1615,13 @@
                             </div>
                         </div>
                         
-                        <div class="flex items-center space-x-4">
+                        <div class="flex items-center space-x-2 md:space-x-4">
+                            <!-- Notifications Button with Badge -->
+                            <div class="relative">
+                                <i class="fas fa-bell text-gray-500 text-xl hover:text-blue-500 smooth-transition cursor-pointer ripple-effect" id="notificationBell"></i>
+                                <span class="notification-badge" id="notificationBadge">3</span>
+                            </div>
+                            
                             <!-- Logout Button di Navbar -->
                             <form action="/logout/" method="post" class="ml-2">
                                 <button type="submit" class="nav-logout-btn flex items-center space-x-2 text-sm font-medium ripple-effect">
@@ -908,15 +1629,12 @@
                                     <span>Logout</span>
                                 </button>
                             </form>
-                            
-                            <div class="relative">
-                                <i class="fas fa-bell text-gray-500 text-xl hover:text-blue-500 smooth-transition cursor-pointer ripple-effect" id="notificationBell"></i>
-                                <span class="absolute -top-1 -right-1 w-3 h-3 bg-red-500 rounded-full animate-pulse-soft"></span>
-                            </div>
-                            <!-- TANGGAL SEDERHANA - HANYA TANGGAL -->
-                            <div class="text-sm text-gray-600">
+
+                                                        <!-- Tanggal Sederhana -->
+                            <div class="text-sm text-gray-600 hidden md:block">
                                 <span id="currentDate" class="font-medium">Selasa, 2 Januari 2026</span>
                             </div>
+                            
                         </div>
                     </div>
                 </div>
@@ -926,14 +1644,14 @@
             <div class="content-wrapper">
                 <!-- Bagian "Hari Ini" - Dashboard Overview -->
                 <section class="force-render">
-                    <div class="flex items-center justify-between mb-6">
+                    <div class="flex flex-col md:flex-row md:items-center justify-between mb-6 gap-4">
                         <h3 class="text-lg font-semibold text-gray-800">Ringkasan Performa Hari Ini</h3>
-                        <div class="flex items-center space-x-4">
-                            <div class="flex space-x-2">
-                                <button class="dashboard-filter active px-4 py-2 rounded-lg text-sm font-medium ripple-effect" data-filter="all">Semua</button>
-                                <button class="dashboard-filter px-4 py-2 rounded-lg text-sm font-medium bg-gray-100 ripple-effect" data-filter="critical">Kritis</button>
-                                <button class="dashboard-filter px-4 py-2 rounded-lg text-sm font-medium bg-gray-100 ripple-effect" data-filter="performance">Performa</button>
-                                <button class="dashboard-filter px-4 py-2 rounded-lg text-sm font-medium bg-gray-100 ripple-effect" data-filter="sales">Penjualan</button>
+                        <div class="flex flex-col md:flex-row items-start md:items-center space-y-2 md:space-y-0 md:space-x-4">
+                            <div class="flex flex-wrap gap-2">
+                                <button class="dashboard-filter active px-3 py-1.5 md:px-4 md:py-2 rounded-lg text-sm font-medium ripple-effect" data-filter="all">Semua</button>
+                                <button class="dashboard-filter px-3 py-1.5 md:px-4 md:py-2 rounded-lg text-sm font-medium bg-gray-100 ripple-effect" data-filter="critical">Kritis</button>
+                                <button class="dashboard-filter px-3 py-1.5 md:px-4 md:py-2 rounded-lg text-sm font-medium bg-gray-100 ripple-effect" data-filter="performance">Performa</button>
+                                <button class="dashboard-filter px-3 py-1.5 md:px-4 md:py-2 rounded-lg text-sm font-medium bg-gray-100 ripple-effect" data-filter="sales">Penjualan</button>
                             </div>
                             <button class="text-blue-600 text-sm font-medium flex items-center space-x-1 smooth-transition hover:text-blue-800 group" id="refreshDashboardBtn">
                                 <i class="fas fa-sync-alt mr-1"></i> <span>Perbarui</span>
@@ -941,71 +1659,71 @@
                         </div>
                     </div>
                     
-                    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
+                    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 md:gap-6 mb-8">
                         <!-- Total Pendapatan -->
-                        <div class="bg-white rounded-xl shadow-sm border border-gray-200 p-5 hover-lift gradient-blue initial-animate" style="animation-delay: 0.1s">
+                        <div class="bg-white rounded-xl shadow-sm border border-gray-200 p-4 md:p-5 hover-lift gradient-blue initial-animate" style="animation-delay: 0.1s">
                             <div class="flex justify-between items-start">
                                 <div>
                                     <p class="text-sm text-gray-600">Total Pendapatan</p>
-                                    <p class="text-2xl font-bold text-gray-800 mt-1">Rp 42.8Jt</p>
+                                    <p class="text-xl md:text-2xl font-bold text-gray-800 mt-1">Rp 42.8Jt</p>
                                     <div class="flex items-center mt-2">
                                         <span class="text-xs text-green-600 data-trend-up mr-2">8.5%</span>
                                         <span class="text-xs text-gray-600">vs minggu lalu</span>
                                     </div>
                                 </div>
-                                <div class="w-12 h-12 rounded-full bg-gradient-to-r from-blue-100 to-blue-200 flex items-center justify-center">
-                                    <i class="fas fa-money-bill-wave text-blue-600 text-xl"></i>
+                                <div class="w-10 h-10 md:w-12 md:h-12 rounded-full bg-gradient-to-r from-blue-100 to-blue-200 flex items-center justify-center">
+                                    <i class="fas fa-money-bill-wave text-blue-600 text-lg md:text-xl"></i>
                                 </div>
                             </div>
                         </div>
                         
                         <!-- Total Pesanan -->
-                        <div class="bg-white rounded-xl shadow-sm border border-gray-200 p-5 hover-lift gradient-green initial-animate" style="animation-delay: 0.2s">
+                        <div class="bg-white rounded-xl shadow-sm border border-gray-200 p-4 md:p-5 hover-lift gradient-green initial-animate" style="animation-delay: 0.2s">
                             <div class="flex justify-between items-start">
                                 <div>
                                     <p class="text-sm text-gray-600">Total Pesanan</p>
-                                    <p class="text-2xl font-bold text-gray-800 mt-1">364</p>
+                                    <p class="text-xl md:text-2xl font-bold text-gray-800 mt-1">364</p>
                                     <div class="flex items-center mt-2">
                                         <span class="text-xs text-green-600 data-trend-up mr-2">12%</span>
                                         <span class="text-xs text-gray-600">vs kemarin</span>
                                     </div>
                                 </div>
-                                <div class="w-12 h-12 rounded-full bg-gradient-to-r from-green-100 to-green-200 flex items-center justify-center">
-                                    <i class="fas fa-shopping-cart text-green-600 text-xl"></i>
+                                <div class="w-10 h-10 md:w-12 md:h-12 rounded-full bg-gradient-to-r from-green-100 to-green-200 flex items-center justify-center">
+                                    <i class="fas fa-shopping-cart text-green-600 text-lg md:text-xl"></i>
                                 </div>
                             </div>
                         </div>
                         
                         <!-- Rata-rata Nilai Order -->
-                        <div class="bg-white rounded-xl shadow-sm border border-gray-200 p-5 hover-lift gradient-purple initial-animate" style="animation-delay: 0.3s">
+                        <div class="bg-white rounded-xl shadow-sm border border-gray-200 p-4 md:p-5 hover-lift gradient-purple initial-animate" style="animation-delay: 0.3s">
                             <div class="flex justify-between items-start">
                                 <div>
                                     <p class="text-sm text-gray-600">Rata-rata Nilai Order</p>
-                                    <p class="text-2xl font-bold text-gray-800 mt-1">Rp 117.600</p>
+                                    <p class="text-xl md:text-2xl font-bold text-gray-800 mt-1">Rp 117.600</p>
                                     <div class="flex items-center mt-2">
                                         <span class="text-xs text-green-600 data-trend-up mr-2">3.2%</span>
                                         <span class="text-xs text-gray-600">naik Rp 3.650</span>
                                     </div>
                                 </div>
-                                <div class="w-12 h-12 rounded-full bg-gradient-to-r from-purple-100 to-purple-200 flex items-center justify-center">
-                                    <i class="fas fa-chart-bar text-purple-600 text-xl"></i>
+                                <div class="w-10 h-10 md:w-12 md:h-12 rounded-full bg-gradient-to-r from-purple-100 to-purple-200 flex items-center justify-center">
+                                    <i class="fas fa-chart-bar text-purple-600 text-lg md:text-xl"></i>
                                 </div>
                             </div>
                         </div>
                         
                         <!-- Produk Stok Kritis -->
-                        <div class="bg-white rounded-xl shadow-sm border border-gray-200 p-5 hover-lift gradient-red initial-animate" style="animation-delay: 0.4s">
+                        <div class="bg-white rounded-xl shadow-sm border border-gray-200 p-4 md:p-5 hover-lift gradient-red initial-animate" style="animation-delay: 0.4s">
                             <div class="flex justify-between items-start">
                                 <div>
                                     <p class="text-sm text-gray-600">Produk Stok Kritis</p>
-                                    <p class="text-2xl font-bold text-gray-800 mt-1">3</p>
+                                    <p class="text-xl md:text-2xl font-bold text-gray-800 mt-1">3</p>
                                     <div class="flex items-center mt-2">
                                         <span class="text-xs text-red-600 data-trend-down mr-2">+1</span>
                                         <span class="text-xs text-gray-600">dari kemarin</span>
                                     </div>
                                 </div>
-                                <div class="w-12 h-12 rounded-full bg-gradient-to-r from-red-100 to-red-200 flex items-center justify-center">
-                                    <i class="fas fa-exclamation-triangle text-red-600 text-xl"></i>
+                                <div class="w-10 h-10 md:w-12 md:h-12 rounded-full bg-gradient-to-r from-red-100 to-red-200 flex items-center justify-center">
+                                    <i class="fas fa-exclamation-triangle text-red-600 text-lg md:text-xl"></i>
                                 </div>
                             </div>
                         </div>
@@ -1014,7 +1732,7 @@
                 
                 <!-- Prioritas Hari Ini - Horizontal Scroll -->
                 <section class="animate-on-scroll delay-100">
-                    <div class="flex items-center justify-between mb-4">
+                    <div class="flex flex-col md:flex-row md:items-center justify-between mb-4 gap-2">
                         <h3 class="text-lg font-semibold text-gray-800">Prioritas Hari Ini</h3>
                         <div class="flex items-center space-x-2">
                             <span class="text-xs px-3 py-1 bg-blue-100 text-blue-700 rounded-full animate-pulse-soft">3 Prioritas</span>
@@ -1026,12 +1744,12 @@
                     
                     <div class="horizontal-scroll-container">
                         <!-- Card 1: Stok Produk A -->
-                        <div class="horizontal-card bg-white rounded-xl shadow-sm border border-red-100 p-5 hover-lift gradient-red initial-animate" style="animation-delay: 0.2s">
+                        <div class="horizontal-card bg-white rounded-xl shadow-sm border border-red-100 p-4 md:p-5 hover-lift gradient-red initial-animate" style="animation-delay: 0.2s">
                             <div class="flex justify-between items-start h-full">
                                 <div class="flex-1">
                                     <div class="flex items-center space-x-2 mb-3">
                                         <span class="status-indicator status-critical"></span>
-                                        <h4 class="font-semibold text-gray-800">Stok Produk A Tinggal 5 Unit</h4>
+                                        <h4 class="font-semibold text-gray-800 text-sm md:text-base">Stok Produk A Tinggal 5 Unit</h4>
                                     </div>
                                     <p class="text-gray-600 text-sm mb-4">
                                         <span class="font-medium">Perlu diisi ulang dalam 2 hari.</span> 
@@ -1059,19 +1777,19 @@
                                         </button>
                                     </div>
                                 </div>
-                                <div class="w-14 h-14 rounded-full bg-gradient-to-r from-red-100 to-red-200 flex items-center justify-center ml-4 flex-shrink-0 animate-pulse-soft">
-                                    <i class="fas fa-exclamation-triangle text-red-500 text-xl"></i>
+                                <div class="w-10 h-10 md:w-14 md:h-14 rounded-full bg-gradient-to-r from-red-100 to-red-200 flex items-center justify-center ml-3 md:ml-4 flex-shrink-0 animate-pulse-soft">
+                                    <i class="fas fa-exclamation-triangle text-red-500 text-lg md:text-xl"></i>
                                 </div>
                             </div>
                         </div>
                         
                         <!-- Card 2: Margin Produk C -->
-                        <div class="horizontal-card bg-white rounded-xl shadow-sm border border-yellow-100 p-5 hover-lift gradient-orange initial-animate" style="animation-delay: 0.3s">
+                        <div class="horizontal-card bg-white rounded-xl shadow-sm border border-yellow-100 p-4 md:p-5 hover-lift gradient-orange initial-animate" style="animation-delay: 0.3s">
                             <div class="flex justify-between items-start h-full">
                                 <div class="flex-1">
                                     <div class="flex items-center space-x-2 mb-3">
                                         <span class="status-indicator status-warning"></span>
-                                        <h4 class="font-semibold text-gray-800">Margin Produk C Turun 13%</h4>
+                                        <h4 class="font-semibold text-gray-800 text-sm md:text-base">Margin Produk C Turun 13%</h4>
                                     </div>
                                     <p class="text-gray-600 text-sm mb-4">
                                         <span class="font-medium">Karena biaya pengiriman meningkat 18%.</span> 
@@ -1099,19 +1817,19 @@
                                         </button>
                                     </div>
                                 </div>
-                                <div class="w-14 h-14 rounded-full bg-gradient-to-r from-yellow-100 to-yellow-200 flex items-center justify-center ml-4 flex-shrink-0">
-                                    <i class="fas fa-chart-line text-yellow-500 text-xl"></i>
+                                <div class="w-10 h-10 md:w-14 md:h-14 rounded-full bg-gradient-to-r from-yellow-100 to-yellow-200 flex items-center justify-center ml-3 md:ml-4 flex-shrink-0">
+                                    <i class="fas fa-chart-line text-yellow-500 text-lg md:text-xl"></i>
                                 </div>
                             </div>
                         </div>
                         
                         <!-- Card 3: Performa Tokopedia -->
-                        <div class="horizontal-card bg-white rounded-xl shadow-sm border border-green-100 p-5 hover-lift gradient-green initial-animate" style="animation-delay: 0.4s">
+                        <div class="horizontal-card bg-white rounded-xl shadow-sm border border-green-100 p-4 md:p-5 hover-lift gradient-green initial-animate" style="animation-delay: 0.4s">
                             <div class="flex justify-between items-start h-full">
                                 <div class="flex-1">
                                     <div class="flex items-center space-x-2 mb-3">
                                         <span class="status-indicator status-good"></span>
-                                        <h4 class="font-semibold text-gray-800">Performa Tokopedia +18%</h4>
+                                        <h4 class="font-semibold text-gray-800 text-sm md:text-base">Performa Tokopedia +18%</h4>
                                     </div>
                                     <p class="text-gray-600 text-sm mb-4">
                                         <span class="font-medium">Penjualan meningkat signifikan.</span> 
@@ -1139,19 +1857,19 @@
                                         </button>
                                     </div>
                                 </div>
-                                <div class="w-14 h-14 rounded-full bg-gradient-to-r from-green-100 to-green-200 flex items-center justify-center ml-4 flex-shrink-0">
-                                    <i class="fas fa-store text-green-500 text-xl"></i>
+                                <div class="w-10 h-10 md:w-14 md:h-14 rounded-full bg-gradient-to-r from-green-100 to-green-200 flex items-center justify-center ml-3 md:ml-4 flex-shrink-0">
+                                    <i class="fas fa-store text-green-500 text-lg md:text-xl"></i>
                                 </div>
                             </div>
                         </div>
                         
                         <!-- Card 4: Website Traffic -->
-                        <div class="horizontal-card bg-white rounded-xl shadow-sm border border-blue-100 p-5 hover-lift gradient-blue initial-animate" style="animation-delay: 0.5s">
+                        <div class="horizontal-card bg-white rounded-xl shadow-sm border border-blue-100 p-4 md:p-5 hover-lift gradient-blue initial-animate" style="animation-delay: 0.5s">
                             <div class="flex justify-between items-start h-full">
                                 <div class="flex-1">
                                     <div class="flex items-center space-x-2 mb-3">
                                         <span class="status-indicator status-warning"></span>
-                                        <h4 class="font-semibold text-gray-800">Traffic Website Turun 15%</h4>
+                                        <h4 class="font-semibold text-gray-800 text-sm md:text-base">Traffic Website Turun 15%</h4>
                                     </div>
                                     <p class="text-gray-600 text-sm mb-4">
                                         <span class="font-medium">Konversi tetap stabil di 2.8%.</span> 
@@ -1179,8 +1897,8 @@
                                         </button>
                                     </div>
                                 </div>
-                                <div class="w-14 h-14 rounded-full bg-gradient-to-r from-blue-100 to-blue-200 flex items-center justify-center ml-4 flex-shrink-0">
-                                    <i class="fas fa-globe text-blue-500 text-xl"></i>
+                                <div class="w-10 h-10 md:w-14 md:h-14 rounded-full bg-gradient-to-r from-blue-100 to-blue-200 flex items-center justify-center ml-3 md:ml-4 flex-shrink-0">
+                                    <i class="fas fa-globe text-blue-500 text-lg md:text-xl"></i>
                                 </div>
                             </div>
                         </div>
@@ -1188,7 +1906,7 @@
                 </section>
                 
                 <!-- Penjualan & Performa Marketplace -->
-                <div class="grid grid-cols-1 lg:grid-cols-2 gap-8 mt-8">
+                <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 md:gap-8 mt-6 md:mt-8">
                     <!-- Analisis Penjualan - DIPERBAIKI -->
                     <section class="animate-on-scroll delay-200">
                         <div class="flex items-center justify-between mb-4">
@@ -1199,9 +1917,9 @@
                         </div>
                         
                         <div class="bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden hover-lift force-render grid-section-card">
-                            <div class="p-5 border-b border-gray-100 gradient-blue">
-                                <div class="flex items-center justify-between">
-                                    <div class="flex items-center space-x-3">
+                            <div class="p-4 md:p-5 border-b border-gray-100 gradient-blue">
+                                <div class="flex flex-col md:flex-row md:items-center justify-between">
+                                    <div class="flex items-center space-x-3 mb-3 md:mb-0">
                                         <div class="w-10 h-10 rounded-full bg-gradient-to-r from-blue-100 to-blue-200 flex items-center justify-center animate-pulse-soft">
                                             <i class="fas fa-chart-line text-blue-600"></i>
                                         </div>
@@ -1210,14 +1928,14 @@
                                             <p class="text-sm text-gray-600">7 hari terakhir vs periode sebelumnya</p>
                                         </div>
                                     </div>
-                                    <div class="text-right">
+                                    <div class="text-left md:text-right">
                                         <p class="text-2xl font-bold text-gray-800">+8.5%</p>
                                         <p class="text-xs text-gray-600">Pertumbuhan</p>
                                     </div>
                                 </div>
                             </div>
                             
-                            <div class="p-5 card-content-wrapper">
+                            <div class="p-4 md:p-5 card-content-wrapper">
                                 <div class="card-body-scrollable">
                                     <div class="space-y-4 mb-6">
                                         <div>
@@ -1254,7 +1972,7 @@
                                         </div>
                                     </div>
                                     
-                                    <div class="grid grid-cols-3 gap-4 mb-6">
+                                    <div class="grid grid-cols-2 md:grid-cols-3 gap-3 md:gap-4 mb-6">
                                         <div class="bg-blue-50 p-3 rounded-lg hover-lift smooth-transition gpu-accelerate">
                                             <p class="text-xs font-medium text-gray-700 mb-1">Rata-rata Harian</p>
                                             <p class="text-lg font-bold text-gray-800">Rp 5.8Jt</p>
@@ -1267,7 +1985,7 @@
                                             <p class="text-xs text-gray-600">Naik 8%</p>
                                         </div>
                                         
-                                        <div class="bg-purple-50 p-3 rounded-lg hover-lift smooth-transition gpu-accelerate">
+                                        <div class="bg-purple-50 p-3 rounded-lg hover-lift smooth-transition gpu-accelerate col-span-2 md:col-span-1">
                                             <p class="text-xs font-medium text-gray-700 mb-1">Konversi</p>
                                             <p class="text-lg font-bold text-gray-800">3.2%</p>
                                             <p class="text-xs text-gray-600">Stabil</p>
@@ -1295,21 +2013,19 @@
                         </div>
                         
                         <div class="bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden hover-lift force-render grid-section-card">
-                            <div class="p-5 border-b border-gray-100 gradient-purple">
-                                <div class="flex items-center justify-between">
-                                    <div class="flex items-center space-x-3">
-                                        <div class="w-10 h-10 rounded-full bg-gradient-to-r from-purple-100 to-purple-200 flex items-center justify-center animate-pulse-soft">
-                                            <i class="fas fa-shopping-cart text-purple-600"></i>
-                                        </div>
-                                        <div>
-                                            <h4 class="font-bold text-gray-800">Distribusi Penjualan per Platform</h4>
-                                            <p class="text-sm text-gray-600">7 hari terakhir vs periode sebelumnya</p>
-                                        </div>
+                            <div class="p-4 md:p-5 border-b border-gray-100 gradient-purple">
+                                <div class="flex items-center space-x-3">
+                                    <div class="w-10 h-10 rounded-full bg-gradient-to-r from-purple-100 to-purple-200 flex items-center justify-center animate-pulse-soft">
+                                        <i class="fas fa-shopping-cart text-purple-600"></i>
+                                    </div>
+                                    <div>
+                                        <h4 class="font-bold text-gray-800">Distribusi Penjualan per Platform</h4>
+                                        <p class="text-sm text-gray-600">7 hari terakhir vs periode sebelumnya</p>
                                     </div>
                                 </div>
                             </div>
                             
-                            <div class="p-5 card-content-wrapper">
+                            <div class="p-4 md:p-5 card-content-wrapper">
                                 <div class="card-body-scrollable">
                                     <div class="space-y-4 mb-6">
                                         <div class="flex items-center justify-between p-3 bg-gray-50 rounded-lg hover-lift smooth-transition gpu-accelerate">
@@ -1377,7 +2093,7 @@
                                         </div>
                                     </div>
                                     
-                                    <div class="grid grid-cols-2 gap-4 mb-6">
+                                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
                                         <div class="bg-blue-50 p-3 rounded-lg hover-lift smooth-transition gpu-accelerate">
                                             <p class="text-xs font-medium text-gray-700 mb-1">Konversi Tertinggi</p>
                                             <p class="text-lg font-bold text-gray-800">4.2%</p>
@@ -1404,7 +2120,7 @@
                 </div>
                 
                 <!-- Analisis Produk & Inventory -->
-                <div class="grid grid-cols-1 lg:grid-cols-2 gap-8 mt-8">
+                <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 md:gap-8 mt-6 md:mt-8">
                     <!-- Analisis Produk - DIPERBAIKI -->
                     <section class="animate-on-scroll delay-400">
                         <div class="flex items-center justify-between mb-4">
@@ -1413,7 +2129,7 @@
                         </div>
                         
                         <div class="bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden hover-lift force-render grid-section-card">
-                            <div class="p-5 border-b border-gray-100 gradient-cyan">
+                            <div class="p-4 md:p-5 border-b border-gray-100 gradient-cyan">
                                 <div class="flex items-center space-x-3">
                                     <div class="w-10 h-10 rounded-full bg-gradient-to-r from-cyan-100 to-cyan-200 flex items-center justify-center animate-pulse-soft">
                                         <i class="fas fa-boxes text-cyan-600"></i>
@@ -1425,7 +2141,7 @@
                                 </div>
                             </div>
                             
-                            <div class="p-5 card-content-wrapper">
+                            <div class="p-4 md:p-5 card-content-wrapper">
                                 <div class="card-body-scrollable">
                                     <div class="space-y-4 mb-6">
                                         <div class="flex items-center justify-between p-3 bg-gray-50 rounded-lg hover-lift smooth-transition gpu-accelerate">
@@ -1533,7 +2249,7 @@
                         </div>
                         
                         <div class="bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden hover-lift force-render grid-section-card">
-                            <div class="p-5 border-b border-gray-100 gradient-green">
+                            <div class="p-4 md:p-5 border-b border-gray-100 gradient-green">
                                 <div class="flex items-center justify-between">
                                     <div class="flex items-center space-x-3">
                                         <div class="w-10 h-10 rounded-full bg-gradient-to-r from-green-100 to-green-200 flex items-center justify-center animate-pulse-soft">
@@ -1547,7 +2263,7 @@
                                 </div>
                             </div>
                             
-                            <div class="p-5 card-content-wrapper">
+                            <div class="p-4 md:p-5 card-content-wrapper">
                                 <div class="card-body-scrollable">
                                     <div class="grid grid-cols-3 gap-4 mb-6">
                                         <div class="text-center hover-lift smooth-transition gpu-accelerate">
@@ -1628,8 +2344,586 @@
         </div>
     </div>
 
+    <!-- Notification Panel (dari bell icon) -->
+    <div class="notification-panel" id="notificationPanel">
+        <div class="notification-panel-header">
+            <div class="notification-panel-title">Notifikasi</div>
+            <button class="notification-panel-close" id="closeNotificationPanel">
+                <i class="fas fa-times"></i>
+            </button>
+        </div>
+        <div class="notification-panel-body" id="notificationPanelBody">
+            <!-- Notifikasi akan dimuat di sini -->
+        </div>
+        <div class="notification-panel-footer">
+            <button class="notification-panel-clear-btn" id="markAllReadBtn">
+                Tandai Semua Sudah Dibaca
+            </button>
+        </div>
+    </div>
+
     <!-- JavaScript untuk interaktivitas -->
     <script>
+        // ================= SISTEM NOTIFIKASI POP-UP =================
+        
+        class NotificationSystem {
+            constructor() {
+                this.notifications = [];
+                this.container = document.getElementById('notificationContainer');
+                this.badge = document.getElementById('notificationBadge');
+                this.panel = document.getElementById('notificationPanel');
+                this.panelBody = document.getElementById('notificationPanelBody');
+                this.notificationQueue = [];
+                this.currentNotification = null;
+                this.autoCheckInterval = null;
+                this.init();
+            }
+            
+            init() {
+                // Load notifications from localStorage
+                this.loadNotifications();
+                
+                // Setup notification bell click
+                const notificationBell = document.getElementById('notificationBell');
+                if (notificationBell) {
+                    notificationBell.addEventListener('click', () => {
+                        this.toggleNotificationPanel();
+                    });
+                }
+                
+                // Setup panel close button
+                const closePanelBtn = document.getElementById('closeNotificationPanel');
+                if (closePanelBtn) {
+                    closePanelBtn.addEventListener('click', () => {
+                        this.hideNotificationPanel();
+                    });
+                }
+                
+                // Setup mark all as read button
+                const markAllReadBtn = document.getElementById('markAllReadBtn');
+                if (markAllReadBtn) {
+                    markAllReadBtn.addEventListener('click', () => {
+                        this.markAllAsRead();
+                        this.updatePanel();
+                    });
+                }
+                
+                // Close panel when clicking outside
+                document.addEventListener('click', (e) => {
+                    if (this.panel.classList.contains('show') && 
+                        !this.panel.contains(e.target) && 
+                        !document.getElementById('notificationBell').contains(e.target)) {
+                        this.hideNotificationPanel();
+                    }
+                });
+                
+                // Start auto-check for critical conditions
+                this.startAutoCheck();
+                
+                // Show initial notification after page load
+                setTimeout(() => {
+                    this.checkCriticalConditions();
+                    this.showNextNotification();
+                }, 2000);
+                
+                // Update badge
+                this.updateBadge();
+            }
+            
+            loadNotifications() {
+                // Simulate loading notifications from server
+                const storedNotifications = localStorage.getItem('dashboardNotifications');
+                if (storedNotifications) {
+                    this.notifications = JSON.parse(storedNotifications);
+                } else {
+                    // Default notifications
+                    this.notifications = [
+                        {
+                            id: 1,
+                            type: 'critical',
+                            title: 'Stok Produk A Hampir Habis!',
+                            message: 'Stok Produk A hanya tersisa 5 unit. Berdasarkan rata-rata penjualan 3 unit/hari, stok akan habis dalam 2 hari. Segera lakukan restok untuk menghindari kehabisan stok dan kehilangan penjualan.',
+                            timestamp: new Date().toISOString(),
+                            read: false,
+                            action: 'restock',
+                            actionLabel: 'Restok Sekarang',
+                            product: 'Produk A',
+                            stockLevel: 5,
+                            daysLeft: 2,
+                            priority: 10 // Prioritas tinggi
+                        },
+                        {
+                            id: 2,
+                            type: 'warning',
+                            title: 'Penjualan Produk C Menurun',
+                            message: 'Penjualan Produk C turun 13% dalam 7 hari terakhir. Margin produk juga menurun dari 37% ke 24% karena biaya pengiriman meningkat 18%. Perlu evaluasi strategi harga dan pengiriman.',
+                            timestamp: new Date(Date.now() - 3600000).toISOString(), // 1 hour ago
+                            read: false,
+                            action: 'analyze',
+                            actionLabel: 'Analisis Detail',
+                            product: 'Produk C',
+                            salesDrop: 13,
+                            marginDrop: 13,
+                            priority: 7 // Prioritas menengah
+                        },
+                        {
+                            id: 3,
+                            type: 'info',
+                            title: 'Performa Tokopedia Meningkat',
+                            message: 'Penjualan di Tokopedia meningkat 18% minggu ini dengan konversi naik dari 2.8% ke 3.4%. Produk X dan Y menyumbang 72% dari pertumbuhan. Pertimbangkan untuk meningkatkan budget iklan di platform ini.',
+                            timestamp: new Date(Date.now() - 7200000).toISOString(), // 2 hours ago
+                            read: true,
+                            action: 'view',
+                            actionLabel: 'Lihat Detail',
+                            platform: 'Tokopedia',
+                            growth: 18,
+                            priority: 3 // Prioritas rendah
+                        }
+                    ];
+                    this.saveNotifications();
+                }
+                
+                // Sort notifications by priority (highest first)
+                this.notifications.sort((a, b) => {
+                    // First by priority (higher number = more important)
+                    if (b.priority !== a.priority) {
+                        return (b.priority || 0) - (a.priority || 0);
+                    }
+                    // Then by unread status
+                    if (a.read !== b.read) {
+                        return a.read ? 1 : -1;
+                    }
+                    // Then by timestamp (newest first)
+                    return new Date(b.timestamp) - new Date(a.timestamp);
+                });
+                
+                this.updateBadge();
+            }
+            
+            saveNotifications() {
+                localStorage.setItem('dashboardNotifications', JSON.stringify(this.notifications));
+                this.updateBadge();
+            }
+            
+            updateBadge() {
+                if (!this.badge) return;
+                
+                const unreadCount = this.notifications.filter(n => !n.read).length;
+                
+                if (unreadCount > 0) {
+                    this.badge.textContent = unreadCount > 9 ? '9+' : unreadCount;
+                    this.badge.style.display = 'flex';
+                } else {
+                    this.badge.style.display = 'none';
+                }
+            }
+            
+            addToQueue(notification) {
+                // Check if similar notification is already in queue
+                const exists = this.notificationQueue.some(n => 
+                    n.id === notification.id || 
+                    (n.type === notification.type && n.product === notification.product)
+                );
+                
+                if (!exists) {
+                    this.notificationQueue.push(notification);
+                    this.notificationQueue.sort((a, b) => (b.priority || 0) - (a.priority || 0));
+                    
+                    // If no notification is currently showing, show the next one
+                    if (!this.currentNotification) {
+                        this.showNextNotification();
+                    }
+                }
+            }
+            
+            showNextNotification() {
+                if (this.notificationQueue.length === 0 || this.currentNotification) {
+                    return;
+                }
+                
+                // Get the next notification from queue (highest priority first)
+                const notification = this.notificationQueue.shift();
+                this.currentNotification = notification;
+                
+                // Show the notification toast
+                this.showNotificationToast(notification);
+                
+                // Auto-remove after 8 seconds if not interacted with
+                setTimeout(() => {
+                    if (this.currentNotification && this.currentNotification.id === notification.id) {
+                        this.removeNotificationToast(notification.id);
+                    }
+                }, 8000);
+            }
+            
+            showNotificationToast(notification) {
+                // Create notification element
+                const notificationId = `toast-${notification.id}-${Date.now()}`;
+                const toast = document.createElement('div');
+                toast.className = `notification-toast ${notification.type}`;
+                toast.id = notificationId;
+                toast.dataset.notificationId = notification.id;
+                
+                // Determine icon based on type
+                let icon = 'fas fa-info-circle';
+                if (notification.type === 'critical') icon = 'fas fa-exclamation-triangle';
+                if (notification.type === 'warning') icon = 'fas fa-exclamation-circle';
+                if (notification.type === 'success') icon = 'fas fa-check-circle';
+                
+                // Create preview message (truncated)
+                const previewMessage = notification.message.length > 60 
+                    ? notification.message.substring(0, 60) + '...' 
+                    : notification.message;
+                
+                toast.innerHTML = `
+                    <div class="notification-toast-header" data-notification-id="${notificationId}">
+                        <div class="notification-toast-content">
+                            <div class="notification-toast-icon">
+                                <i class="${icon}"></i>
+                            </div>
+                            <div class="notification-toast-text">
+                                <div class="notification-toast-title">${notification.title}</div>
+                                <div class="notification-toast-preview">${previewMessage}</div>
+                            </div>
+                        </div>
+                        <div class="notification-toast-actions">
+                            <button class="notification-toast-expand-btn" data-notification-id="${notificationId}">
+                                <i class="fas fa-chevron-down"></i>
+                            </button>
+                            <button class="notification-toast-close-btn" data-notification-id="${notificationId}">
+                                <i class="fas fa-times"></i>
+                            </button>
+                        </div>
+                    </div>
+                    <div class="notification-toast-body">
+                        ${notification.message}
+                    </div>
+                    <div class="notification-toast-footer">
+                        <div class="text-xs text-gray-500 mb-2">
+                            <i class="far fa-clock mr-1"></i>
+                            ${this.formatTime(notification.timestamp)}
+                        </div>
+                        <div class="flex gap-2">
+                            <button class="notification-action-btn secondary" data-action="dismiss" data-notification-id="${notificationId}">
+                                Nanti
+                            </button>
+                            <button class="notification-action-btn primary" data-action="${notification.action || 'view'}" data-notification-id="${notificationId}">
+                                ${notification.actionLabel || 'Lihat Detail'}
+                            </button>
+                        </div>
+                    </div>
+                `;
+                
+                // Add to container
+                this.container.appendChild(toast);
+                
+                // Animate in after a short delay
+                setTimeout(() => {
+                    toast.classList.add('show');
+                }, 10);
+                
+                // Setup event listeners
+                this.setupToastEvents(toast, notification, notificationId);
+                
+                // Mark as read
+                this.markAsRead(notification.id);
+            }
+            
+            setupToastEvents(toast, notification, toastId) {
+                // Header click to expand/collapse
+                const header = toast.querySelector('.notification-toast-header');
+                header.addEventListener('click', (e) => {
+                    if (!e.target.closest('.notification-toast-actions')) {
+                        toast.classList.toggle('expanded');
+                    }
+                });
+                
+                // Expand button
+                const expandBtn = toast.querySelector('.notification-toast-expand-btn');
+                expandBtn.addEventListener('click', (e) => {
+                    e.stopPropagation();
+                    toast.classList.toggle('expanded');
+                });
+                
+                // Close button
+                const closeBtn = toast.querySelector('.notification-toast-close-btn');
+                closeBtn.addEventListener('click', (e) => {
+                    e.stopPropagation();
+                    this.removeNotificationToast(notification.id);
+                });
+                
+                // Action buttons
+                const actionBtn = toast.querySelector('.notification-action-btn.primary');
+                if (actionBtn) {
+                    actionBtn.addEventListener('click', (e) => {
+                        e.stopPropagation();
+                        this.handleNotificationAction(notification);
+                        this.removeNotificationToast(notification.id);
+                    });
+                }
+                
+                const dismissBtn = toast.querySelector('.notification-action-btn.secondary');
+                if (dismissBtn) {
+                    dismissBtn.addEventListener('click', (e) => {
+                        e.stopPropagation();
+                        this.removeNotificationToast(notification.id);
+                    });
+                }
+            }
+            
+            removeNotificationToast(notificationId) {
+                const toast = document.querySelector(`.notification-toast[data-notification-id="${notificationId}"]`);
+                if (toast) {
+                    toast.classList.remove('show');
+                    toast.classList.add('hide');
+                    
+                    setTimeout(() => {
+                        if (toast.parentNode) {
+                            toast.parentNode.removeChild(toast);
+                        }
+                        
+                        // Clear current notification
+                        if (this.currentNotification && this.currentNotification.id === notificationId) {
+                            this.currentNotification = null;
+                            // Show next notification if available
+                            setTimeout(() => this.showNextNotification(), 500);
+                        }
+                    }, 300);
+                }
+            }
+            
+            handleNotificationAction(notification) {
+                switch(notification.action) {
+                    case 'restock':
+                        showNotification(`Membuka halaman restok untuk ${notification.product}`, 'info');
+                        // In a real app: window.location.href = `/inventory/restock?product=${notification.product}`;
+                        break;
+                        
+                    case 'analyze':
+                        showNotification(`Menganalisis ${notification.product}...`, 'info');
+                        // Open AI Assistant and ask about the product
+                        setTimeout(() => {
+                            this.openAIAssistant(`Analisis ${notification.product}`);
+                        }, 300);
+                        break;
+                        
+                    case 'view':
+                    default:
+                        showNotification(`Membuka detail ${notification.title}`, 'info');
+                        break;
+                }
+            }
+            
+            openAIAssistant(question) {
+                const aiPanel = document.getElementById('aiAssistantPanel');
+                const aiBtn = document.getElementById('aiAssistantBtn');
+                
+                if (aiPanel.classList.contains('hidden')) {
+                    aiBtn.click();
+                }
+                
+                setTimeout(() => {
+                    const aiInput = document.getElementById('aiQuestionInput');
+                    aiInput.value = question;
+                    document.getElementById('sendAIQuestion').click();
+                }, 500);
+            }
+            
+            markAsRead(notificationId) {
+                const notification = this.notifications.find(n => n.id === notificationId);
+                if (notification && !notification.read) {
+                    notification.read = true;
+                    notification.readAt = new Date().toISOString();
+                    this.saveNotifications();
+                }
+            }
+            
+            markAllAsRead() {
+                this.notifications.forEach(notification => {
+                    if (!notification.read) {
+                        notification.read = true;
+                        notification.readAt = new Date().toISOString();
+                    }
+                });
+                this.saveNotifications();
+            }
+            
+            formatTime(timestamp) {
+                const date = new Date(timestamp);
+                const now = new Date();
+                const diffMs = now - date;
+                const diffMins = Math.floor(diffMs / 60000);
+                const diffHours = Math.floor(diffMs / 3600000);
+                const diffDays = Math.floor(diffMs / 86400000);
+                
+                if (diffMins < 1) return 'Baru saja';
+                if (diffMins < 60) return `${diffMins} menit yang lalu`;
+                if (diffHours < 24) return `${diffHours} jam yang lalu`;
+                if (diffDays < 7) return `${diffDays} hari yang lalu`;
+                
+                return date.toLocaleDateString('id-ID', {
+                    day: 'numeric',
+                    month: 'short',
+                    year: 'numeric'
+                });
+            }
+            
+            checkCriticalConditions() {
+                // Simulate checking for critical conditions
+                const conditions = this.simulateConditionChecks();
+                
+                conditions.forEach(condition => {
+                    // Check if similar notification already exists and is unread
+                    const existingNotification = this.notifications.find(n => 
+                        n.type === condition.type && 
+                        n.product === condition.product &&
+                        !n.read &&
+                        new Date() - new Date(n.timestamp) < 3600000 // Within 1 hour
+                    );
+                    
+                    if (!existingNotification) {
+                        const newNotification = {
+                            id: Date.now(),
+                            type: condition.type,
+                            title: condition.title,
+                            message: condition.message,
+                            timestamp: new Date().toISOString(),
+                            read: false,
+                            action: condition.action,
+                            actionLabel: condition.actionLabel,
+                            product: condition.product,
+                            priority: condition.priority,
+                            ...condition.data
+                        };
+                        
+                        // Add to notifications list
+                        this.notifications.unshift(newNotification);
+                        this.saveNotifications();
+                        
+                        // Add to queue for showing as toast
+                        this.addToQueue(newNotification);
+                    }
+                });
+            }
+            
+            simulateConditionChecks() {
+                const conditions = [];
+                
+                // Simulate random critical events
+                const random = Math.random();
+                
+                // Critical: Product A stock is very low (always check)
+                conditions.push({
+                    type: 'critical',
+                    title: 'Stok Produk A Sangat Rendah!',
+                    message: 'Stok Produk A hanya tersisa 3 unit. Berdasarkan penjualan terakhir, stok akan habis dalam 1 hari. Segera lakukan restok untuk menghindari kehabisan stok.',
+                    action: 'restock',
+                    actionLabel: 'Restok Sekarang',
+                    product: 'Produk A',
+                    priority: 10,
+                    data: { stockLevel: 3, daysLeft: 1 }
+                });
+                
+                // Warning: Product D stock is getting low (50% chance)
+                if (random < 0.5) {
+                    conditions.push({
+                        type: 'warning',
+                        title: 'Stok Produk D Menipis',
+                        message: 'Stok Produk D tersisa 6 unit. Perlu dipersiapkan restok dalam 3 hari untuk menjaga ketersediaan produk.',
+                        action: 'restock',
+                        actionLabel: 'Persiapkan Restok',
+                        product: 'Produk D',
+                        priority: 7,
+                        data: { stockLevel: 6, daysLeft: 3 }
+                    });
+                }
+                
+                // Info: Sales trend notification (30% chance)
+                if (random < 0.3) {
+                    conditions.push({
+                        type: 'info',
+                        title: 'Trend Penjualan Produk Z Turun',
+                        message: 'Penjualan Produk Z menurun 8% dalam 3 hari terakhir. Perlu evaluasi strategi pemasaran dan harga.',
+                        action: 'analyze',
+                        actionLabel: 'Analisis Trend',
+                        product: 'Produk Z',
+                        priority: 3,
+                        data: { salesDrop: 8, period: '3 hari' }
+                    });
+                }
+                
+                return conditions;
+            }
+            
+            startAutoCheck() {
+                // Check for critical conditions every 3 minutes
+                this.autoCheckInterval = setInterval(() => {
+                    this.checkCriticalConditions();
+                }, 180000); // 3 minutes
+            }
+            
+            toggleNotificationPanel() {
+                if (this.panel.classList.contains('show')) {
+                    this.hideNotificationPanel();
+                } else {
+                    this.showNotificationPanel();
+                }
+            }
+            
+            showNotificationPanel() {
+                this.updatePanel();
+                this.panel.classList.add('show');
+            }
+            
+            hideNotificationPanel() {
+                this.panel.classList.remove('show');
+            }
+            
+            updatePanel() {
+                if (!this.panelBody) return;
+                
+                if (this.notifications.length === 0) {
+                    this.panelBody.innerHTML = `
+                        <div class="notification-panel-empty">
+                            <i class="fas fa-bell-slash"></i>
+                            <p>Tidak ada notifikasi</p>
+                        </div>
+                    `;
+                    return;
+                }
+                
+                this.panelBody.innerHTML = this.notifications.map(notification => `
+                    <div class="notification-panel-item ${notification.type} ${notification.read ? '' : 'unread'}" data-id="${notification.id}">
+                        <div class="notification-panel-item-icon">
+                            <i class="fas fa-${notification.type === 'critical' ? 'exclamation-triangle' : 
+                                            notification.type === 'warning' ? 'exclamation-circle' : 
+                                            notification.type === 'success' ? 'check-circle' : 
+                                            'info-circle'}"></i>
+                        </div>
+                        <div class="notification-panel-item-content">
+                            <div class="notification-panel-item-title">${notification.title}</div>
+                            <div class="notification-panel-item-message">${notification.message}</div>
+                            <div class="notification-panel-item-time">${this.formatTime(notification.timestamp)}</div>
+                        </div>
+                    </div>
+                `).join('');
+                
+                // Add click event to panel items
+                this.panelBody.querySelectorAll('.notification-panel-item').forEach(item => {
+                    item.addEventListener('click', () => {
+                        const notificationId = parseInt(item.dataset.id);
+                        const notification = this.notifications.find(n => n.id === notificationId);
+                        if (notification) {
+                            this.handleNotificationAction(notification);
+                            this.markAsRead(notificationId);
+                            this.hideNotificationPanel();
+                            this.updatePanel();
+                        }
+                    });
+                });
+            }
+        }
+        
         // ================= FUNGSI UTAMA =================
         
         // Fungsi untuk update tanggal sederhana
@@ -1731,26 +3025,109 @@
             }, 50);
         }
         
+        // Sidebar functions
+        function openSidebar() {
+            const sidebar = document.getElementById('sidebar');
+            const overlay = document.getElementById('sidebarOverlay');
+            const mainWrapper = document.getElementById('mainWrapper');
+            
+            sidebar.classList.add('active');
+            overlay.classList.add('active');
+            mainWrapper.classList.add('sidebar-open');
+            document.body.style.overflow = 'hidden';
+        }
+        
+        function closeSidebar() {
+            const sidebar = document.getElementById('sidebar');
+            const overlay = document.getElementById('sidebarOverlay');
+            const mainWrapper = document.getElementById('mainWrapper');
+            
+            sidebar.classList.remove('active');
+            overlay.classList.remove('active');
+            mainWrapper.classList.remove('sidebar-open');
+            document.body.style.overflow = '';
+        }
+        
+        function toggleSidebar() {
+            const sidebar = document.getElementById('sidebar');
+            if (sidebar.classList.contains('active')) {
+                closeSidebar();
+            } else {
+                openSidebar();
+            }
+        }
+        
+        // Check screen size and adjust sidebar
+        function checkScreenSize() {
+            if (window.innerWidth >= 1024) {
+                // Desktop - always show sidebar
+                const sidebar = document.getElementById('sidebar');
+                const overlay = document.getElementById('sidebarOverlay');
+                const mainWrapper = document.getElementById('mainWrapper');
+                
+                sidebar.classList.add('active');
+                overlay.classList.remove('active');
+                mainWrapper.classList.remove('sidebar-open');
+                document.body.style.overflow = '';
+            } else {
+                // Mobile - close sidebar by default
+                closeSidebar();
+            }
+        }
+        
         // ================= EVENT LISTENERS =================
         
         document.addEventListener('DOMContentLoaded', function() {
-            // 1. Inisialisasi tanggal
+            // 1. Inisialisasi sistem notifikasi
+            const notificationSystem = new NotificationSystem();
+            
+            // 2. Inisialisasi tanggal
             updateDate();
             
-            // 2. Inisialisasi Scroll Animator
+            // 3. Inisialisasi Scroll Animator
             const animator = new ScrollAnimator();
             
-            // 3. Force render semua konten
+            // 4. Force render semua konten
             forceRenderAllContent();
             
-            // 4. Render tambahan setelah semua aset dimuat
+            // 5. Check screen size and setup sidebar
+            checkScreenSize();
+            
+            // 6. Setup sidebar event listeners
+            const mobileMenuBtn = document.getElementById('mobileMenuBtn');
+            const closeSidebarBtn = document.getElementById('closeSidebar');
+            const sidebarOverlay = document.getElementById('sidebarOverlay');
+            
+            if (mobileMenuBtn) {
+                mobileMenuBtn.addEventListener('click', toggleSidebar);
+            }
+            
+            if (closeSidebarBtn) {
+                closeSidebarBtn.addEventListener('click', closeSidebar);
+            }
+            
+            if (sidebarOverlay) {
+                sidebarOverlay.addEventListener('click', closeSidebar);
+            }
+            
+            // Close sidebar when clicking on a link (for mobile)
+            const sidebarLinks = document.querySelectorAll('#sidebar a');
+            sidebarLinks.forEach(link => {
+                link.addEventListener('click', () => {
+                    if (window.innerWidth < 1024) {
+                        closeSidebar();
+                    }
+                });
+            });
+            
+            // 7. Render tambahan setelah semua aset dimuat
             window.addEventListener('load', function() {
                 setTimeout(forceRenderAllContent, 100);
                 // Pastikan grid memiliki tinggi yang sama
                 setTimeout(equalizeGridHeights, 300);
             });
             
-            // 5. AI Assistant Panel
+            // 8. AI Assistant Panel
             const aiAssistantBtn = document.getElementById('aiAssistantBtn');
             const aiAssistantPanel = document.getElementById('aiAssistantPanel');
             const closeAIPanel = document.getElementById('closeAIPanel');
@@ -1776,7 +3153,7 @@
                 }
             });
             
-            // 6. AI Mode Selector
+            // 9. AI Mode Selector
             const aiModeButtons = document.querySelectorAll('.ai-mode-btn');
             aiModeButtons.forEach(button => {
                 button.addEventListener('click', function() {
@@ -1814,7 +3191,7 @@
                 addAIMessage(`Mode AI telah diubah ke: ${mode.charAt(0).toUpperCase() + mode.slice(1)}. Bagaimana saya bisa membantu Anda?`, 'assistant');
             }
             
-            // 7. AI Quick Questions - khusus dashboard
+            // 10. AI Quick Questions - khusus dashboard
             const aiQuickQuestions = document.querySelectorAll('.ai-quick-question');
             
             aiQuickQuestions.forEach(button => {
@@ -1831,7 +3208,7 @@
                 });
             });
             
-            // 8. Send AI Question
+            // 11. Send AI Question
             const aiQuestionInput = document.getElementById('aiQuestionInput');
             const sendAIQuestion = document.getElementById('sendAIQuestion');
             
@@ -1857,7 +3234,7 @@
                 }
             });
             
-            // 9. Dashboard Filter Buttons
+            // 12. Dashboard Filter Buttons
             const dashboardFilters = document.querySelectorAll('.dashboard-filter');
             dashboardFilters.forEach(filter => {
                 filter.addEventListener('click', function() {
@@ -1911,7 +3288,7 @@
                 }
             }
             
-            // 10. Refresh Dashboard Button
+            // 13. Refresh Dashboard Button
             const refreshDashboardBtn = document.getElementById('refreshDashboardBtn');
             
             function refreshDashboardData() {
@@ -1927,6 +3304,9 @@
                     showNotification('Data dashboard berhasil diperbarui!', 'success');
                     
                     simulateDashboardDataChanges();
+                    
+                    // Check for new notifications after refresh
+                    notificationSystem.checkCriticalConditions();
                 }, 2000);
             }
             
@@ -1934,7 +3314,7 @@
             
             function simulateDashboardDataChanges() {
                 // Update metrics with slight random changes
-                const metrics = document.querySelectorAll('.text-2xl.font-bold.text-gray-800');
+                const metrics = document.querySelectorAll('.text-xl.font-bold.text-gray-800, .text-2xl.font-bold.text-gray-800');
                 metrics.forEach(metric => {
                     const currentText = metric.textContent;
                     
@@ -1990,159 +3370,40 @@
             }
 
             // Toggle submenu dashboard
-const dashboardMenu = document.getElementById('dashboard-menu');
-const dashboardSubmenu = document.getElementById('dashboard-submenu');
-const dashboardChevron = document.getElementById('dashboard-chevron');
+            const dashboardMenu = document.getElementById('dashboard-menu');
+            const dashboardSubmenu = document.getElementById('dashboard-submenu');
+            const dashboardChevron = document.getElementById('dashboard-chevron');
 
-if (dashboardMenu && dashboardSubmenu) {
-    // Buka submenu dashboard secara default
-    dashboardSubmenu.classList.remove('hidden');
-    dashboardChevron.classList.remove('fa-chevron-down');
-    dashboardChevron.classList.add('fa-chevron-up');
-    
-    dashboardMenu.addEventListener('click', function(e) {
-        e.preventDefault();
-        e.stopPropagation();
-        
-        dashboardSubmenu.classList.toggle('hidden');
-        
-        if (dashboardSubmenu.classList.contains('hidden')) {
-            dashboardChevron.classList.remove('fa-chevron-up');
-            dashboardChevron.classList.add('fa-chevron-down');
-        } else {
-            dashboardChevron.classList.remove('fa-chevron-down');
-            dashboardChevron.classList.add('fa-chevron-up');
-        }
-    });
-}
-
-// Toggle submenu inventory
-const inventoryMenu = document.getElementById('inventory-menu');
-const inventorySubmenu = document.getElementById('inventory-submenu');
-const inventoryChevron = document.getElementById('inventory-chevron');
-
-if (inventoryMenu && inventorySubmenu) {
-    inventoryMenu.addEventListener('click', function(e) {
-        e.preventDefault();
-        e.stopPropagation();
-        
-        inventorySubmenu.classList.toggle('hidden');
-        
-        if (inventorySubmenu.classList.contains('hidden')) {
-            inventoryChevron.classList.remove('fa-chevron-up');
-            inventoryChevron.classList.add('fa-chevron-down');
-        } else {
-            inventoryChevron.classList.remove('fa-chevron-down');
-            inventoryChevron.classList.add('fa-chevron-up');
-        }
-    });
-}
-
-// Highlight active menu based on current URL
-function highlightActiveMenu() {
-    const currentPath = window.location.pathname;
-    
-    // Dashboard submenu items
-    const dashboardLinks = document.querySelectorAll('#dashboard-submenu a');
-    dashboardLinks.forEach(link => {
-        if (link.getAttribute('href') === currentPath) {
-            link.classList.add('bg-blue-100', 'text-blue-600');
-            link.classList.remove('text-gray-700');
-        } else {
-            link.classList.remove('bg-blue-100', 'text-blue-600');
-            link.classList.add('text-gray-700');
-        }
-    });
-    
-    // Inventory submenu items
-    const inventoryLinks = document.querySelectorAll('#inventory-submenu a');
-    inventoryLinks.forEach(link => {
-        if (link.getAttribute('href') === currentPath) {
-            link.classList.add('bg-blue-100', 'text-blue-600', 'font-medium');
-            link.classList.remove('text-gray-700');
-        } else {
-            link.classList.remove('bg-blue-100', 'text-blue-600', 'font-medium');
-            link.classList.add('text-gray-700');
-        }
-    });
-    
-    // Main menu items
-    const mainLinks = document.querySelectorAll('aside nav > a:not(.submenu-item)');
-    mainLinks.forEach(link => {
-        if (link.getAttribute('href') === currentPath) {
-            link.classList.add('bg-blue-50', 'text-blue-600');
-            link.classList.remove('text-gray-700');
-        } else {
-            link.classList.remove('bg-blue-50', 'text-blue-600');
-            link.classList.add('text-gray-700');
-        }
-    });
-}
-
-// Call on page load
-document.addEventListener('DOMContentLoaded', highlightActiveMenu);
-            
-            // 11. Interactive notification bell
-            const notificationBell = document.getElementById('notificationBell');
-            if (notificationBell) {
-                notificationBell.addEventListener('click', function() {
-                    const notificationPopup = document.createElement('div');
-                    notificationPopup.className = 'fixed top-20 right-8 w-72 bg-white rounded-xl shadow-lg border border-gray-200 p-4 animate-fade-in-up z-40';
-                    notificationPopup.innerHTML = `
-                        <div class="flex justify-between items-center mb-3">
-                            <h4 class="font-bold text-gray-800">Notifikasi Dashboard</h4>
-                            <button class="text-gray-400 hover:text-gray-600 close-notif">
-                                <i class="fas fa-times"></i>
-                            </button>
-                        </div>
-                        <div class="space-y-3">
-                            <div class="flex items-start space-x-3 p-2 rounded-lg bg-red-50">
-                                <i class="fas fa-exclamation-circle text-red-500 mt-1"></i>
-                                <div>
-                                    <p class="text-sm font-medium">Stok Produk A hampir habis</p>
-                                    <p class="text-xs text-gray-600">Hanya tersisa 5 unit</p>
-                                </div>
-                            </div>
-                            <div class="flex items-start space-x-3 p-2 rounded-lg bg-green-50">
-                                <i class="fas fa-check-circle text-green-500 mt-1"></i>
-                                <div>
-                                    <p class="text-sm font-medium">Penjualan hari ini +15%</p>
-                                    <p class="text-xs text-gray-600">Rp 6.8 juta tercapai</p>
-                                </div>
-                            </div>
-                            <div class="flex items-start space-x-3 p-2 rounded-lg bg-blue-50">
-                                <i class="fas fa-info-circle text-blue-500 mt-1"></i>
-                                <div>
-                                    <p class="text-sm font-medium">AI telah menganalisis data baru</p>
-                                    <p class="text-xs text-gray-600">3 rekomendasi tersedia</p>
-                                </div>
-                            </div>
-                        </div>
-                    `;
+            if (dashboardMenu && dashboardSubmenu) {
+                // Buka submenu dashboard secara default
+                dashboardSubmenu.classList.remove('hidden');
+                dashboardChevron.classList.remove('fa-chevron-down');
+                dashboardChevron.classList.add('fa-chevron-up');
+                
+                dashboardMenu.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    e.stopPropagation();
                     
-                    document.body.appendChild(notificationPopup);
+                    dashboardSubmenu.classList.toggle('hidden');
                     
-                    const closeBtn = notificationPopup.querySelector('.close-notif');
-                    closeBtn.addEventListener('click', function() {
-                        notificationPopup.remove();
-                    });
-                    
-                    setTimeout(() => {
-                        if (notificationPopup.parentNode) {
-                            notificationPopup.remove();
-                        }
-                    }, 5000);
+                    if (dashboardSubmenu.classList.contains('hidden')) {
+                        dashboardChevron.classList.remove('fa-chevron-up');
+                        dashboardChevron.classList.add('fa-chevron-down');
+                    } else {
+                        dashboardChevron.classList.remove('fa-chevron-down');
+                        dashboardChevron.classList.add('fa-chevron-up');
+                    }
                 });
             }
             
-            // 12. Initialize with a welcome message from AI
+            // 14. Initialize with a welcome message from AI
             setTimeout(() => {
                 if (!document.querySelector('.ai-message.user')) {
                     addAIMessage("Selamat datang di Dashboard Flashboard! Saya dapat membantu Anda menganalisis performa bisnis, mengidentifikasi peluang, dan memberikan rekomendasi optimasi. Apa yang ingin Anda ketahui hari ini?", 'assistant');
                 }
             }, 1000);
             
-            // 13. Progress bar animations
+            // 15. Progress bar animations
             const progressBars = document.querySelectorAll('.progress-bar-fill');
             const observer = new IntersectionObserver((entries) => {
                 entries.forEach(entry => {
@@ -2162,22 +3423,28 @@ document.addEventListener('DOMContentLoaded', highlightActiveMenu);
             
             progressBars.forEach(bar => observer.observe(bar));
             
-            // 14. Auto-refresh dashboard data setiap 60 detik
+            // 16. Auto-refresh dashboard data setiap 60 detik
             setInterval(simulateDashboardDataChanges, 60000);
             
-            // 15. Tambahkan event listener untuk scroll dan resize
+            // 17. Tambahkan event listener untuk scroll dan resize
             window.addEventListener('scroll', function() {
                 animator.observer.disconnect();
                 animator.init();
             });
             
             window.addEventListener('resize', function() {
+                checkScreenSize();
                 setTimeout(forceRenderAllContent, 100);
                 setTimeout(equalizeGridHeights, 200);
             });
             
-            // 16. Set tinggi grid saat pertama kali dimuat
+            // 18. Set tinggi grid saat pertama kali dimuat
             setTimeout(equalizeGridHeights, 500);
+            
+            // 19. Simulasikan notifikasi penting setelah beberapa detik
+            setTimeout(() => {
+                notificationSystem.checkCriticalConditions();
+            }, 3000);
         });
         
         // ================= FUNGSI BANTUAN =================
@@ -2337,7 +3604,7 @@ document.addEventListener('DOMContentLoaded', highlightActiveMenu);
                 1. Produk A mungkin habis (tinggal 5 unit)<br>
                 2. Traffic website terus menurun (-15%)<br>
                 3. Kompetitor launching produk serupa<br><br>
-                <strong>Rekomendasi:</strong> Siapkan notifikasi out-of-stock untuk Produk A, dan persiapkan campaign marketing untuk website.`;
+                <strong>Rekomendasi:</strong> Siapkan notifikasi out-of-stok untuk Produk A, dan persiapkan campaign marketing untuk website.`;
                 
                 actions = `<div class="mt-2 flex space-x-2">
                     <button class="text-xs px-2 py-1 bg-blue-100 text-blue-700 rounded smooth-transition hover:bg-blue-200">Lihat Prediksi Detail</button>
@@ -2433,6 +3700,19 @@ document.addEventListener('DOMContentLoaded', highlightActiveMenu);
                         }
                     }, 300);
                 }
+            }, 3000);
+        }
+    </script>
+    
+    <!-- Push Notification Service -->
+    <script src="../src/pushNotification.js"></script>
+    <script>
+        // Start push notification demo mode
+        if (window.PushNotificationService) {
+            // Start demo mode after page load
+            setTimeout(() => {
+                window.PushNotificationService.startDemoMode();
+                console.log('🔔 Push notification demo mode aktif - notifikasi setiap 20 detik');
             }, 3000);
         }
     </script>

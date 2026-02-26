@@ -32,11 +32,12 @@
             background: linear-gradient(to bottom right, #eff6ff, #f3f4f6, #f9fafb);
         }
         
-        /* Struktur layout utama */
+        /* Struktur layout utama - RESPONSIVE */
         .app-container {
             display: flex;
             min-height: 100vh;
             width: 100%;
+            position: relative;
         }
         
         .main-wrapper {
@@ -45,6 +46,8 @@
             flex-direction: column;
             max-height: 100vh;
             overflow: hidden;
+            width: 100%;
+            transition: margin-left 0.3s ease;
         }
         
         .content-wrapper {
@@ -52,8 +55,97 @@
             overflow-y: auto;
             overflow-x: hidden;
             -webkit-overflow-scrolling: touch;
-            padding: 2rem;
+            padding: 1rem;
             background: linear-gradient(to bottom, #f8fafc, #f1f5f9);
+        }
+        
+        @media (min-width: 768px) {
+            .content-wrapper {
+                padding: 1.5rem;
+            }
+        }
+        
+        @media (min-width: 1024px) {
+            .content-wrapper {
+                padding: 2rem;
+            }
+        }
+        
+        /* Sidebar Responsive */
+        .sidebar-overlay {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-color: rgba(0, 0, 0, 0.5);
+            z-index: 40;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+        
+        .sidebar-overlay.active {
+            display: block;
+            opacity: 1;
+        }
+        
+        .sidebar-container {
+            position: fixed;
+            top: 0;
+            left: 0;
+            height: 100vh;
+            width: 16rem;
+            transform: translateX(-100%);
+            transition: transform 0.3s ease;
+            z-index: 50;
+            overflow-y: auto;
+        }
+        
+        @media (min-width: 1024px) {
+            .sidebar-container {
+                position: relative;
+                transform: translateX(0);
+                height: 100vh;
+                flex-shrink: 0;
+            }
+            
+            .sidebar-overlay {
+                display: none !important;
+            }
+        }
+        
+        .sidebar-container.active {
+            transform: translateX(0);
+        }
+        
+        .main-wrapper.sidebar-open {
+            margin-left: 0;
+        }
+        
+        @media (min-width: 1024px) {
+            .main-wrapper.sidebar-open {
+                margin-left: 0;
+            }
+        }
+        
+        /* Mobile menu button */
+        .mobile-menu-btn {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 40px;
+            height: 40px;
+            border-radius: 8px;
+            background: #f1f5f9;
+            color: #4a5568;
+            border: 1px solid #e2e8f0;
+        }
+        
+        @media (min-width: 1024px) {
+            .mobile-menu-btn {
+                display: none;
+            }
         }
         
         /* Custom animations */
@@ -119,6 +211,11 @@
             }
         }
         
+        @keyframes typingDot {
+            0%, 60%, 100% { transform: translateY(0); }
+            30% { transform: translateY(-8px); }
+        }
+        
         @keyframes slideInFromLeft {
             from {
                 opacity: 0;
@@ -156,11 +253,6 @@
                 transform: scale(4);
                 opacity: 0;
             }
-        }
-        
-        @keyframes typingDot {
-            0%, 60%, 100% { transform: translateY(0); }
-            30% { transform: translateY(-8px); }
         }
         
         .animate-fade-in-up {
@@ -266,37 +358,6 @@
         
         .gradient-red {
             background: linear-gradient(135deg, #FED7D7 0%, #F5F7FA 100%);
-        }
-        
-        /* Horizontal scroll container */
-        .horizontal-scroll-container {
-            display: flex;
-            overflow-x: auto;
-            padding: 1rem 0.5rem;
-            gap: 1rem;
-            scrollbar-width: thin;
-            scrollbar-color: #CBD5E0 #F5F7FA;
-            -webkit-overflow-scrolling: touch;
-        }
-        
-        .horizontal-scroll-container::-webkit-scrollbar {
-            height: 6px;
-        }
-        
-        .horizontal-scroll-container::-webkit-scrollbar-track {
-            background: #F5F7FA;
-            border-radius: 3px;
-        }
-        
-        .horizontal-scroll-container::-webkit-scrollbar-thumb {
-            background: linear-gradient(135deg, #4A90E2, #2A6EBB);
-            border-radius: 3px;
-        }
-        
-        .horizontal-card {
-            flex: 0 0 auto;
-            width: 320px;
-            min-height: 180px;
         }
         
         /* Progress bars */
@@ -543,7 +604,7 @@
         .ai-typing-dot:nth-child(2) { animation-delay: 0.2s; }
         .ai-typing-dot:nth-child(3) { animation-delay: 0.4s; }
         
-        /* Container untuk pertanyaan cepat AI - DIPERBAIKI */
+        /* Container untuk pertanyaan cepat AI */
         .ai-quick-questions-container {
             display: flex;
             overflow-x: auto;
@@ -689,15 +750,20 @@
             contain: layout style paint;
         }
         
-        /* Untuk horizontal card */
-        .horizontal-card-initial {
-            animation: slideInFromLeft 0.6s ease-out forwards;
+        /* Logout button di navbar */
+        .nav-logout-btn {
+            padding: 8px 16px;
+            border-radius: 8px;
+            background: #FEF2F2;
+            color: #DC2626;
+            border: 1px solid #FECACA;
+            transition: all 0.3s ease;
         }
         
-        /* Untuk memastikan konten yang sudah visible tetap visible */
-        .force-visible {
-            opacity: 1 !important;
-            transform: translateY(0) !important;
+        .nav-logout-btn:hover {
+            background: #FEE2E2;
+            border-color: #FCA5A5;
+            transform: translateY(-2px);
         }
         
         /* Shipping-specific styles */
@@ -745,41 +811,585 @@
             box-shadow: 0 0 0 3px rgba(74, 144, 226, 0.3);
         }
         
-        /* Logout button di navbar */
-        .nav-logout-btn {
-            padding: 8px 16px;
-            border-radius: 8px;
-            background: #FEF2F2;
-            color: #DC2626;
-            border: 1px solid #FECACA;
-            transition: all 0.3s ease;
+        /* Touch-friendly buttons */
+        .touch-friendly-btn {
+            min-height: 44px;
+            min-width: 44px;
         }
         
-        .nav-logout-btn:hover {
-            background: #FEE2E2;
-            border-color: #FCA5A5;
-            transform: translateY(-2px);
+        /* ================= SISTEM NOTIFIKASI BARU ================= */
+        /* Container untuk notifikasi popup */
+        .notification-toast-container {
+            position: fixed;
+            top: 90px;
+            right: 20px;
+            z-index: 1000;
+            width: 350px;
+            max-width: 90vw;
+        }
+        
+        /* Notifikasi Toast - kecil dan compact */
+        .notification-toast {
+            background: white;
+            border-radius: 10px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+            overflow: hidden;
+            margin-bottom: 12px;
+            max-height: 70px;
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            transform: translateX(120%);
+            opacity: 0;
+            border-left: 4px solid;
+        }
+        
+        .notification-toast.show {
+            transform: translateX(0);
+            opacity: 1;
+        }
+        
+        .notification-toast.hide {
+            transform: translateX(120%);
+            opacity: 0;
+            margin-bottom: 0;
+            max-height: 0;
+        }
+        
+        /* Tipe notifikasi - gradasi warna */
+        .notification-toast.critical {
+            border-left-color: #F56565;
+            background: linear-gradient(135deg, #FFF5F5, #FED7D7);
+        }
+        
+        .notification-toast.warning {
+            border-left-color: #ECC94B;
+            background: linear-gradient(135deg, #FFFAF0, #FEEBC8);
+        }
+        
+        .notification-toast.info {
+            border-left-color: #4A90E2;
+            background: linear-gradient(135deg, #EBF8FF, #BEE3F8);
+        }
+        
+        .notification-toast.success {
+            border-left-color: #48BB78;
+            background: linear-gradient(135deg, #F0FFF4, #C6F6D5);
+        }
+        
+        /* Header notifikasi (compact) */
+        .notification-toast-header {
+            padding: 12px 16px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            cursor: pointer;
+            min-height: 70px;
+        }
+        
+        .notification-toast-content {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            flex: 1;
+            overflow: hidden;
+        }
+        
+        .notification-toast-icon {
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+            font-size: 16px;
+        }
+        
+        .notification-toast.critical .notification-toast-icon {
+            background: linear-gradient(135deg, #F56565, #C53030);
+            color: white;
+        }
+        
+        .notification-toast.warning .notification-toast-icon {
+            background: linear-gradient(135deg, #ECC94B, #D69E2E);
+            color: white;
+        }
+        
+        .notification-toast.info .notification-toast-icon {
+            background: linear-gradient(135deg, #4A90E2, #2A6EBB);
+            color: white;
+        }
+        
+        .notification-toast.success .notification-toast-icon {
+            background: linear-gradient(135deg, #48BB78, #38A169);
+            color: white;
+        }
+        
+        .notification-toast-text {
+            flex: 1;
+            overflow: hidden;
+        }
+        
+        .notification-toast-title {
+            font-size: 14px;
+            font-weight: 600;
+            margin-bottom: 2px;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+        
+        .notification-toast.critical .notification-toast-title {
+            color: #C53030;
+        }
+        
+        .notification-toast.warning .notification-toast-title {
+            color: #975A16;
+        }
+        
+        .notification-toast.info .notification-toast-title {
+            color: #2C5282;
+        }
+        
+        .notification-toast.success .notification-toast-title {
+            color: #276749;
+        }
+        
+        .notification-toast-preview {
+            font-size: 12px;
+            color: #718096;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+        
+        .notification-toast-actions {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            margin-left: 8px;
+        }
+        
+        .notification-toast-expand-btn {
+            background: transparent;
+            border: none;
+            color: #A0AEC0;
+            cursor: pointer;
+            padding: 4px;
+            border-radius: 4px;
+            transition: all 0.2s;
+            width: 24px;
+            height: 24px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .notification-toast-expand-btn:hover {
+            background: rgba(0, 0, 0, 0.05);
+            color: #718096;
+        }
+        
+        .notification-toast-expand-btn i {
+            transition: transform 0.3s ease;
+        }
+        
+        .notification-toast-close-btn {
+            background: transparent;
+            border: none;
+            color: #A0AEC0;
+            cursor: pointer;
+            padding: 4px;
+            border-radius: 4px;
+            transition: all 0.2s;
+            width: 24px;
+            height: 24px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .notification-toast-close-btn:hover {
+            background: rgba(0, 0, 0, 0.05);
+            color: #718096;
+        }
+        
+        /* Body notifikasi (expanded) */
+        .notification-toast-body {
+            padding: 0 16px 16px 64px;
+            font-size: 13px;
+            color: #4A5568;
+            line-height: 1.5;
+            display: none;
+            max-height: 200px;
+            overflow-y: auto;
+        }
+        
+        .notification-toast-footer {
+            padding: 12px 16px 12px 64px;
+            border-top: 1px solid rgba(0, 0, 0, 0.05);
+            display: none;
+            gap: 8px;
+        }
+        
+        .notification-toast.expanded {
+            max-height: 350px;
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
+        }
+        
+        .notification-toast.expanded .notification-toast-body,
+        .notification-toast.expanded .notification-toast-footer {
+            display: block;
+        }
+        
+        .notification-toast.expanded .notification-toast-expand-btn i {
+            transform: rotate(180deg);
+        }
+        
+        /* Tombol aksi dalam notifikasi */
+        .notification-action-btn {
+            padding: 6px 12px;
+            border-radius: 6px;
+            font-size: 12px;
+            font-weight: 500;
+            cursor: pointer;
+            border: none;
+            transition: all 0.2s;
+        }
+        
+        .notification-action-btn.primary {
+            background: linear-gradient(135deg, #4A90E2, #2A6EBB);
+            color: white;
+        }
+        
+        .notification-action-btn.primary:hover {
+            background: linear-gradient(135deg, #2A6EBB, #4A90E2);
+            transform: translateY(-1px);
+        }
+        
+        .notification-action-btn.secondary {
+            background: rgba(0, 0, 0, 0.05);
+            color: #4A5568;
+        }
+        
+        .notification-action-btn.secondary:hover {
+            background: rgba(0, 0, 0, 0.1);
+        }
+        
+        /* Badge untuk jumlah notifikasi */
+        .notification-badge {
+            position: absolute;
+            top: -5px;
+            right: -5px;
+            background: linear-gradient(135deg, #F56565, #C53030);
+            color: white;
+            border-radius: 50%;
+            width: 18px;
+            height: 18px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 10px;
+            font-weight: bold;
+            animation: pulseSoft 2s infinite;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+        }
+        
+        /* Panel notifikasi dari bell icon */
+        .notification-panel {
+            position: fixed;
+            top: 80px;
+            right: 20px;
+            width: 380px;
+            max-width: 90vw;
+            max-height: 500px;
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15);
+            z-index: 1001;
+            overflow: hidden;
+            display: none;
+            flex-direction: column;
+        }
+        
+        .notification-panel.show {
+            display: flex;
+            animation: slideInRight 0.3s ease-out;
+        }
+        
+        .notification-panel-header {
+            padding: 16px;
+            border-bottom: 1px solid #E2E8F0;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background: #F7FAFC;
+        }
+        
+        .notification-panel-title {
+            font-size: 16px;
+            font-weight: 600;
+            color: #2D3748;
+        }
+        
+        .notification-panel-close {
+            background: transparent;
+            border: none;
+            color: #718096;
+            cursor: pointer;
+            padding: 4px;
+            border-radius: 4px;
+            transition: all 0.2s;
+        }
+        
+        .notification-panel-close:hover {
+            background: rgba(0, 0, 0, 0.05);
+            color: #4A5568;
+        }
+        
+        .notification-panel-body {
+            flex: 1;
+            overflow-y: auto;
+            padding: 0;
+            max-height: 400px;
+        }
+        
+        .notification-panel-empty {
+            padding: 40px 20px;
+            text-align: center;
+            color: #A0AEC0;
+        }
+        
+        .notification-panel-empty i {
+            font-size: 48px;
+            margin-bottom: 16px;
+            opacity: 0.5;
+        }
+        
+        .notification-panel-item {
+            padding: 16px;
+            border-bottom: 1px solid #F1F5F9;
+            cursor: pointer;
+            transition: background 0.2s;
+            display: flex;
+            align-items: flex-start;
+            gap: 12px;
+        }
+        
+        .notification-panel-item:hover {
+            background: #F7FAFC;
+        }
+        
+        .notification-panel-item.unread {
+            background: #EBF8FF;
+        }
+        
+        .notification-panel-item.unread:hover {
+            background: #E1F0FF;
+        }
+        
+        .notification-panel-item-icon {
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+            font-size: 14px;
+            margin-top: 2px;
+        }
+        
+        .notification-panel-item.critical .notification-panel-item-icon {
+            background: linear-gradient(135deg, #F56565, #C53030);
+            color: white;
+        }
+        
+        .notification-panel-item.warning .notification-panel-item-icon {
+            background: linear-gradient(135deg, #ECC94B, #D69E2E);
+            color: white;
+        }
+        
+        .notification-panel-item.info .notification-panel-item-icon {
+            background: linear-gradient(135deg, #4A90E2, #2A6EBB);
+            color: white;
+        }
+        
+        .notification-panel-item.success .notification-panel-item-icon {
+            background: linear-gradient(135deg, #48BB78, #38A169);
+            color: white;
+        }
+        
+        .notification-panel-item-content {
+            flex: 1;
+            min-width: 0;
+        }
+        
+        .notification-panel-item-title {
+            font-size: 14px;
+            font-weight: 600;
+            margin-bottom: 4px;
+            color: #2D3748;
+        }
+        
+        .notification-panel-item-message {
+            font-size: 13px;
+            color: #718096;
+            line-height: 1.4;
+            margin-bottom: 8px;
+            display: -webkit-box;
+            -webkit-line-clamp: 2;
+            -webkit-box-orient: vertical;
+            overflow: hidden;
+        }
+        
+        .notification-panel-item-time {
+            font-size: 11px;
+            color: #A0AEC0;
+        }
+        
+        .notification-panel-footer {
+            padding: 12px 16px;
+            border-top: 1px solid #E2E8F0;
+            text-align: center;
+        }
+        
+        .notification-panel-clear-btn {
+            background: transparent;
+            border: none;
+            color: #4A90E2;
+            font-size: 14px;
+            font-weight: 500;
+            cursor: pointer;
+            padding: 8px 16px;
+            border-radius: 6px;
+            transition: all 0.2s;
+        }
+        
+        .notification-panel-clear-btn:hover {
+            background: #EBF8FF;
+        }
+        
+        /* Responsive adjustments */
+        @media (max-width: 768px) {
+            .grid-cols-1.md\:grid-cols-2.lg\:grid-cols-4 {
+                grid-template-columns: repeat(2, 1fr) !important;
+                gap: 0.75rem !important;
+            }
+            
+            #aiAssistantPanel {
+                width: 90vw !important;
+                height: 70vh !important;
+                right: 5vw !important;
+                top: 15vh !important;
+            }
+            
+            .ai-assistant-panel {
+                width: 90vw !important;
+                height: 70vh !important;
+                right: 5vw !important;
+                top: 15vh !important;
+            }
+            
+            .notification-toast-container {
+                top: 80px;
+                right: 10px;
+                width: 320px;
+            }
+            
+            .notification-panel {
+                right: 10px;
+                width: 95vw;
+                max-height: 70vh;
+            }
+        }
+        
+        @media (max-width: 640px) {
+            .grid-cols-1.md\:grid-cols-2.lg\:grid-cols-4 {
+                grid-template-columns: 1fr !important;
+                gap: 0.75rem !important;
+            }
+            
+            .grid-cols-1.lg\:grid-cols-2 {
+                grid-template-columns: 1fr !important;
+                gap: 1rem !important;
+            }
+            
+            #aiAssistantPanel {
+                width: 95vw !important;
+                right: 2.5vw !important;
+            }
+            
+            .header-container {
+                padding-left: 1rem;
+                padding-right: 1rem;
+            }
+            
+            .flex.justify-between.items-center {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 1rem;
+            }
+            
+            .flex.justify-between.items-center > div:last-child {
+                width: 100%;
+                justify-content: space-between;
+            }
+            
+            .shipping-filter {
+                padding: 6px 10px !important;
+                font-size: 12px !important;
+            }
+            
+            .courier-logo {
+                width: 30px !important;
+                height: 30px !important;
+                font-size: 11px !important;
+            }
+            
+            .timeline {
+                padding-left: 20px !important;
+            }
+            
+            .timeline-item::before {
+                left: -20px !important;
+                width: 10px !important;
+                height: 10px !important;
+            }
+            
+            .notification-toast-container {
+                width: 300px;
+                top: 100px;
+            }
         }
     </style>
 </head>
 <body class="page-transition">
+    <!-- Sidebar Overlay for Mobile -->
+    <div class="sidebar-overlay" id="sidebarOverlay"></div>
+    
+    <!-- Notification Toast Container -->
+    <div class="notification-toast-container" id="notificationContainer"></div>
+    
     <div class="app-container">
-        <!-- Sidebar dari halaman kedua -->
-        <aside class="w-64 bg-white/90 border-r border-gray-200/50 flex flex-col shadow-sm glass-effect">
-            <div class="p-6 border-b border-gray-100/50">
+        <!-- Sidebar -->
+        <aside class="sidebar-container bg-white/90 border-r border-gray-200/50 flex flex-col shadow-sm glass-effect" id="sidebar">
+            <div class="p-4 md:p-6 border-b border-gray-100/50 flex justify-between items-center">
                 <div class="flex items-center space-x-3">
                     <div class="w-10 h-10 rounded-lg bg-gradient-to-br from-blue-400 to-blue-600 flex items-center justify-center animate-float">
                         <i class="fas fa-chart-line text-white"></i>
                     </div>
                     <h1 class="text-xl font-bold text-gray-800">A2M ERPAA</h1>
                 </div>
+                <button class="lg:hidden text-gray-500 hover:text-gray-700" id="closeSidebar">
+                    <i class="fas fa-times text-xl"></i>
+                </button>
             </div>
             
             <nav class="flex-1 p-4 space-y-2">
-                <a href="/dashboard/" class="flex items-center space-x-3 p-3 rounded-lg text-gray-700 smooth-transition hover:bg-gray-100 hover-lift ripple-effect">
-                    <i class="fas fa-tachometer-alt w-5 text-center"></i>
-                    <span class="font-medium">Dashboard</span>
-                </a>
+          <a href="/dashboard/" class="flex items-center space-x-3 p-3 rounded-lg text-gray-700 smooth-transition hover:bg-gray-100 hover-lift ripple-effect">
+            <i class="fas fa-tachometer-alt w-5 text-center"></i>
+            <span class="font-medium">Businese Monitoring</span>
+          </a>
                 <a href="/product/" class="flex items-center space-x-3 p-3 rounded-lg text-gray-700 smooth-transition hover:bg-gray-100 hover-lift ripple-effect">
                     <i class="fas fa-boxes w-5 text-center"></i>
                     <span class="font-medium">Product Management</span>
@@ -816,26 +1426,34 @@
         </aside>
         
         <!-- Main Content -->
-        <div class="main-wrapper">
-            <!-- Header dari halaman kedua dengan modifikasi untuk Shipping -->
-            <header class="sticky top-0 z-20 bg-white/80 glass-effect border-b border-gray-200/50 px-8 py-4 shrink-0">
-                <div class="flex justify-between items-center">
-                    <div>
-                        <h2 class="text-2xl font-bold text-gray-800 initial-animate">Shipping Tracking</h2>
-                        <p class="text-gray-600 initial-animate" style="animation-delay: 0.1s">Monitor dan kelola semua pengiriman Anda</p>
+        <div class="main-wrapper" id="mainWrapper">
+            <!-- Header -->
+            <header class="sticky top-0 z-20 bg-white/80 glass-effect border-b border-gray-200/50 px-4 md:px-8 py-4 shrink-0">
+                <div class="flex justify-between items-center header-container">
+                    <div class="flex items-center space-x-4">
+                        <!-- Mobile Menu Button -->
+                        <button class="mobile-menu-btn lg:hidden" id="mobileMenuBtn">
+                            <i class="fas fa-bars"></i>
+                        </button>
+                        <div>
+                            <h2 class="text-xl md:text-2xl font-bold text-gray-800 initial-animate">
+                                <i class="fas fa-shipping-fast text-blue-600 mr-2 md:mr-3"></i>
+                                Shipping Tracking
+                            </h2>
+                            <p class="text-gray-600 text-sm md:text-base initial-animate" style="animation-delay: 0.1s">Monitor dan kelola semua pengiriman Anda</p>
+                        </div>
                     </div>
-                    <div class="flex items-center space-x-6">
-                        <!-- AI Assistant Button dari halaman pertama (untuk shipping) -->
-                        <div class="relative">
-                            <button id="aiAssistantBtn" class="flex items-center space-x-2 px-4 py-2 rounded-lg bg-gradient-to-r from-blue-500 to-blue-600 text-white smooth-transition hover:from-blue-600 hover:to-blue-700 hover-lift shadow-md relative overflow-hidden group">
+                    <div class="flex items-center space-x-3 md:space-x-6">
+                        <!-- AI Assistant Button -->
+                        <div class="relative ai-assistant-container">
+                            <button id="aiAssistantBtn" class="flex items-center space-x-2 px-3 py-2 md:px-4 md:py-2 rounded-lg bg-gradient-to-r from-blue-500 to-blue-600 text-white smooth-transition hover:from-blue-600 hover:to-blue-700 hover-lift shadow-md relative overflow-hidden group touch-friendly-btn">
                                 <i class="fas fa-robot"></i>
-                                <span class="font-medium">AI Assistant</span>
-                                <div class="absolute inset-0 bg-gradient-to-r from-cyan-500 to-blue-500 opacity-0 group-hover:opacity-20 smooth-transition"></div>
-                                <!-- <span class="absolute -top-1 -right-1 w-3 h-3 bg-green-400 rounded-full animate-pulse-soft"></span> -->
+                                <span class="font-medium hidden md:inline">AI Assistant</span>
+                                <span class="font-medium md:hidden">AI</span>
                             </button>
                             
-                            <!-- Enhanced AI Assistant Panel dari halaman pertama (untuk shipping) -->
-                            <div id="aiAssistantPanel" class="fixed right-8 top-20 w-96 bg-white rounded-xl shadow-2xl border border-gray-200 hidden animate-fade-in-up z-50 overflow-hidden" style="height: 600px;">
+                            <!-- Enhanced AI Assistant Panel -->
+                            <div id="aiAssistantPanel" class="fixed right-4 md:right-8 top-16 md:top-20 w-11/12 md:w-96 bg-white rounded-xl shadow-2xl border border-gray-200 hidden animate-fade-in-up z-50 overflow-hidden" style="height: 500px; max-height: 80vh;">
                                 <!-- AI Assistant Header -->
                                 <div class="bg-gradient-to-r from-blue-500 to-blue-600 p-4 text-white">
                                     <div class="flex justify-between items-center">
@@ -844,14 +1462,11 @@
                                                 <i class="fas fa-robot text-xl"></i>
                                             </div>
                                             <div>
-                                                <h3 class="font-bold text-lg">AI Assistant</h3>
+                                                <h3 class="font-bold text-lg">AI Shipping Assistant</h3>
                                                 <p class="text-sm text-blue-100">Siap membantu analisis pengiriman</p>
                                             </div>
                                         </div>
                                         <div class="flex items-center space-x-2">
-                                            <button class="w-8 h-8 rounded-full bg-white/20 flex items-center justify-center hover:bg-white/30 smooth-transition">
-                                                <i class="fas fa-cog"></i>
-                                            </button>
                                             <button id="closeAIPanel" class="w-8 h-8 rounded-full bg-white/20 flex items-center justify-center hover:bg-white/30 smooth-transition">
                                                 <i class="fas fa-times"></i>
                                             </button>
@@ -859,14 +1474,14 @@
                                     </div>
                                     
                                     <!-- AI Mode Selector untuk Shipping -->
-                                    <div class="flex space-x-2 mt-4">
-                                        <button class="ai-mode-btn active flex-1 py-2 rounded-lg bg-white/20 text-sm font-medium smooth-transition hover:bg-white/30" data-mode="shipping">
+                                    <div class="flex space-x-2 mt-4 overflow-x-auto">
+                                        <button class="ai-mode-btn active flex-1 py-2 rounded-lg bg-white/20 text-sm font-medium smooth-transition hover:bg-white/30 whitespace-nowrap" data-mode="shipping">
                                             <i class="fas fa-shipping-fast mr-1"></i> Pengiriman
                                         </button>
-                                        <button class="ai-mode-btn flex-1 py-2 rounded-lg bg-white/10 text-sm font-medium smooth-transition hover:bg-white/20" data-mode="optimization">
+                                        <button class="ai-mode-btn flex-1 py-2 rounded-lg bg-white/10 text-sm font-medium smooth-transition hover:bg-white/20 whitespace-nowrap" data-mode="optimization">
                                             <i class="fas fa-route mr-1"></i> Optimasi
                                         </button>
-                                        <button class="ai-mode-btn flex-1 py-2 rounded-lg bg-white/10 text-sm font-medium smooth-transition hover:bg-white/20" data-mode="analysis">
+                                        <button class="ai-mode-btn flex-1 py-2 rounded-lg bg-white/10 text-sm font-medium smooth-transition hover:bg-white/20 whitespace-nowrap" data-mode="analysis">
                                             <i class="fas fa-chart-line mr-1"></i> Analisis
                                         </button>
                                     </div>
@@ -875,7 +1490,7 @@
                                 <!-- AI Assistant Content -->
                                 <div class="flex flex-col h-full">
                                     <!-- AI Chat Container -->
-                                    <div id="aiChatContainer" class="flex-1 overflow-y-auto p-4 space-y-3" style="max-height: 380px;">
+                                    <div id="aiChatContainer" class="flex-1 overflow-y-auto p-4 space-y-3">
                                         <!-- Initial AI Message -->
                                         <div class="ai-message assistant">
                                             <div class="flex items-start space-x-2">
@@ -888,33 +1503,9 @@
                                                 </div>
                                             </div>
                                         </div>
-                                        
-                                        <!-- Sample conversation -->
-                                        <div class="ai-message user">
-                                            <div class="flex items-center justify-between">
-                                                <p>Kenapa pengiriman ecommerce saya sering terlambat?</p>
-                                                <i class="fas fa-user ml-2"></i>
-                                            </div>
-                                        </div>
-                                        
-                                        <div class="ai-message assistant">
-                                            <div class="flex items-start space-x-2">
-                                                <div class="w-6 h-6 rounded-full bg-blue-100 flex items-center justify-center flex-shrink-0 mt-1">
-                                                    <i class="fas fa-robot text-blue-600 text-xs"></i>
-                                                </div>
-                                                <div>
-                                                    <p class="font-medium text-gray-800 mb-1">Analisis Keterlambatan Pengiriman</p>
-                                                    <p class="text-gray-700 text-sm">Berdasarkan data 30 hari terakhir, keterlambatan disebabkan oleh: <br>1. <strong>Kurir GoSend di Jakarta Pusat (24% terlambat)</strong> - terutama di wilayah Jakarta Pusat<br>2. <strong>Puncak permintaan hari Senin</strong> - menyebabkan backlog<br>3. <strong>Produk berat >5kg</strong> - memerlukan waktu proses lebih lama</p>
-                                                    <div class="mt-2 flex space-x-2">
-                                                        <button class="text-xs px-2 py-1 bg-blue-100 text-blue-700 rounded smooth-transition hover:bg-blue-200">Lihat Detail</button>
-                                                        <button class="text-xs px-2 py-1 bg-green-100 text-green-700 rounded smooth-transition hover:bg-green-200">Rekomendasi</button>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
                                     </div>
                                     
-                                    <!-- AI Quick Actions - Container bisa di-scroll dengan scrollbar jelas -->
+                                    <!-- AI Quick Actions -->
                                     <div class="p-4 border-t border-gray-200">
                                         <p class="text-sm font-medium text-gray-700 mb-2">Pertanyaan Cepat Pengiriman:</p>
                                         <div class="ai-quick-questions-container">
@@ -955,8 +1546,14 @@
                             </div>
                         </div>
                         
-                        <div class="flex items-center space-x-4">
-                            <!-- Logout Button di Navbar dari halaman kedua -->
+                        <div class="flex items-center space-x-2 md:space-x-4">
+                            <!-- Notifications Button with Badge -->
+                            <div class="relative">
+                                <i class="fas fa-bell text-gray-500 text-xl hover:text-blue-500 smooth-transition cursor-pointer ripple-effect" id="notificationBell"></i>
+                                <span class="notification-badge" id="notificationBadge">3</span>
+                            </div>
+                            
+                            <!-- Logout Button di Navbar -->
                             <form action="/logout/" method="post" class="ml-2">
                                 <button type="submit" class="nav-logout-btn flex items-center space-x-2 text-sm font-medium ripple-effect">
                                     <i class="fas fa-sign-out-alt"></i>
@@ -964,102 +1561,99 @@
                                 </button>
                             </form>
                             
-                            <div class="relative">
-                                <i class="fas fa-bell text-gray-500 text-xl hover:text-blue-500 smooth-transition cursor-pointer ripple-effect" id="notificationBell"></i>
-                                <span class="absolute -top-1 -right-1 w-3 h-3 bg-red-500 rounded-full animate-pulse-soft"></span>
-                            </div>
-                            <div class="text-sm text-gray-600">
-                                <span class="font-medium">Selasa, 2 Jan 2026</span>
+                            <!-- Tanggal Sederhana -->
+                            <div class="text-sm text-gray-600 hidden md:block">
+                                <span id="currentDate" class="font-medium">Selasa, 2 Januari 2026</span>
                             </div>
                         </div>
                     </div>
                 </div>
             </header>
             
-            <!-- Content dari halaman pertama (Shipping Tracking) -->
+            <!-- Content -->
             <div class="content-wrapper">
                 <!-- Bagian "Hari Ini" - Shipping Overview -->
                 <section class="force-render">
-                    <div class="flex items-center justify-between mb-6">
+                    <div class="flex flex-col md:flex-row md:items-center justify-between mb-6 gap-4">
                         <h3 class="text-lg font-semibold text-gray-800">Ringkasan Pengiriman Hari Ini</h3>
                         <div class="flex items-center space-x-4">
-                            <div class="flex space-x-2">
-                                <button class="shipping-filter active px-4 py-2 rounded-lg text-sm font-medium ripple-effect" data-filter="all">Semua</button>
-                                <button class="shipping-filter px-4 py-2 rounded-lg text-sm font-medium bg-gray-100 ripple-effect" data-filter="delayed">Terlambat</button>
-                                <button class="shipping-filter px-4 py-2 rounded-lg text-sm font-medium bg-gray-100 ripple-effect" data-filter="transit">Dalam Perjalanan</button>
-                                <button class="shipping-filter px-4 py-2 rounded-lg text-sm font-medium bg-gray-100 ripple-effect" data-filter="delivered">Terkirim</button>
+                            <div class="flex space-x-2 overflow-x-auto pb-2">
+                                <button class="shipping-filter active px-4 py-2 rounded-lg text-sm font-medium ripple-effect whitespace-nowrap" data-filter="all">Semua</button>
+                                <button class="shipping-filter px-4 py-2 rounded-lg text-sm font-medium bg-gray-100 ripple-effect whitespace-nowrap" data-filter="delayed">Terlambat</button>
+                                <button class="shipping-filter px-4 py-2 rounded-lg text-sm font-medium bg-gray-100 ripple-effect whitespace-nowrap" data-filter="transit">Dalam Perjalanan</button>
+                                <button class="shipping-filter px-4 py-2 rounded-lg text-sm font-medium bg-gray-100 ripple-effect whitespace-nowrap" data-filter="delivered">Terkirim</button>
                             </div>
                             <button class="text-blue-600 text-sm font-medium flex items-center space-x-1 smooth-transition hover:text-blue-800 group" id="refreshShippingBtn">
-                                <i class="fas fa-sync-alt mr-1"></i> <span>Perbarui</span>
+                                <i class="fas fa-sync-alt mr-1"></i> <span class="hidden md:inline">Perbarui</span>
                             </button>
                         </div>
                     </div>
                     
-                    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
+                    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 md:gap-6 mb-8">
                         <!-- Total Pengiriman -->
-                        <div class="bg-white rounded-xl shadow-sm border border-gray-200 p-5 hover-lift gradient-blue initial-animate" style="animation-delay: 0.1s">
+                        <div class="bg-white rounded-xl shadow-sm border border-gray-200 p-4 md:p-5 hover-lift gradient-blue initial-animate" style="animation-delay: 0.1s">
                             <div class="flex justify-between items-start">
                                 <div>
                                     <p class="text-sm text-gray-600">Total Pengiriman</p>
-                                    <p class="text-2xl font-bold text-gray-800 mt-1">187</p>
+                                    <p class="text-xl md:text-2xl font-bold text-gray-800 mt-1">187</p>
                                     <div class="flex items-center mt-2">
                                         <span class="text-xs text-green-600 data-trend-up mr-2">8%</span>
                                         <span class="text-xs text-gray-600">dari kemarin</span>
                                     </div>
                                 </div>
-                                <div class="w-12 h-12 rounded-full bg-gradient-to-r from-blue-100 to-blue-200 flex items-center justify-center">
-                                    <i class="fas fa-box text-blue-600 text-xl"></i>
+                                <div class="w-10 h-10 md:w-12 md:h-12 rounded-full bg-gradient-to-r from-blue-100 to-blue-200 flex items-center justify-center">
+                                    <i class="fas fa-box text-blue-600 text-lg md:text-xl"></i>
                                 </div>
                             </div>
                         </div>
                         
                         <!-- Tepat Waktu -->
-                        <div class="bg-white rounded-xl shadow-sm border border-gray-200 p-5 hover-lift gradient-green initial-animate" style="animation-delay: 0.2s">
+                        <div class="bg-white rounded-xl shadow-sm border border-gray-200 p-4 md:p-5 hover-lift gradient-green initial-animate" style="animation-delay: 0.2s">
                             <div class="flex justify-between items-start">
                                 <div>
                                     <p class="text-sm text-gray-600">Tepat Waktu</p>
-                                    <p class="text-2xl font-bold text-gray-800 mt-1">162</p>
+                                    <p class="text-xl md:text-2xl font-bold text-gray-800 mt-1">162</p>
                                     <div class="flex items-center mt-2">
                                         <span class="text-xs text-green-600 data-trend-up mr-2">3%</span>
                                         <span class="text-xs text-gray-600">87% rate</span>
                                     </div>
                                 </div>
-                                <div class="w-12 h-12 rounded-full bg-gradient-to-r from-green-100 to-green-200 flex items-center justify-center">
-                                    <i class="fas fa-clock text-green-600 text-xl"></i>
+                                <div class="w-10 h-10 md:w-12 md:h-12 rounded-full bg-gradient-to-r from-green-100 to-green-200 flex items-center justify-center">
+                                    <i class="fas fa-clock text-green-600 text-lg md:text-xl"></i>
                                 </div>
                             </div>
                         </div>
                         
                         <!-- Terlambat -->
-                        <div class="bg-white rounded-xl shadow-sm border border-gray-200 p-5 hover-lift gradient-red initial-animate" style="animation-delay: 0.3s">
+                        <div class="bg-white rounded-xl shadow-sm border border-gray-200 p-4 md:p-5 hover-lift gradient-red initial-animate" style="animation-delay: 0.3s">
                             <div class="flex justify-between items-start">
                                 <div>
                                     <p class="text-sm text-gray-600">Terlambat</p>
-                                    <p class="text-2xl font-bold text-gray-800 mt-1">18</p>
+                                    <p class="text-xl md:text-2xl font-bold text-gray-800 mt-1">18</p>
                                     <div class="flex items-center mt-2">
                                         <span class="text-xs text-red-600 data-trend-down mr-2">12%</span>
                                         <span class="text-xs text-gray-600">9.6% rate</span>
                                     </div>
                                 </div>
-                                <div class="w-12 h-12 rounded-full bg-gradient-to-r from-red-100 to-red-200 flex items-center justify-center">
-                                    <i class="fas fa-exclamation-triangle text-red-600 text-xl"></i>
+                                <div class="w-10 h-10 md:w-12 md:h-12 rounded-full bg-gradient-to-r from-red-100 to-red-200 flex items-center justify-center">
+                                    <i class="fas fa-exclamation-triangle text-red-600 text-lg md:text-xl"></i>
                                 </div>
                             </div>
                         </div>
                         
                         <!-- Rata-rata Waktu -->
-                        <div class="bg-white rounded-xl shadow-sm border border-gray-200 p-5 hover-lift gradient-cyan initial-animate" style="animation-delay: 0.4s">
+                        <div class="bg-white rounded-xl shadow-sm border border-gray-200 p-4 md:p-5 hover-lift gradient-cyan initial-animate" style="animation-delay: 0.4s">
                             <div class="flex justify-between items-start">
                                 <div>
                                     <p class="text-sm text-gray-600">Rata-rata Waktu</p>
-                                    <p class="text-2xl font-bold text-gray-800 mt-1">2.3 hr</p>
+                                    <p class="text-xl md:text-2xl font-bold text-gray-800 mt-1">2.3 hr</p>
                                     <div class="flex items-center mt-2">
                                         <span class="text-xs text-green-600 data-trend-up mr-2">0.4 hr</span>
                                         <span class="text-xs text-gray-600">lebih cepat</span>
                                     </div>
                                 </div>
-                                <div class="w-12 h-12 rounded-full bg-gradient-to-r from-cyan-100 to-cyan-200 flex items-center justify-center">
-                                    <i class="fas fa-tachometer-alt text-cyan-600 text-xl"></i>
+                                <div class="w-10 h-10 md:w-12 md:h-12 rounded-full bg-gradient-to-r from-cyan-100 to-cyan-200 flex items-center justify-center">
+                                    <i class="fas fa-tachometer-alt text-cyan-600 text-lg md:text-xl"></i>
                                 </div>
                             </div>
                         </div>
@@ -1067,10 +1661,10 @@
                 </section>
                 
                 <!-- Daftar Pengiriman Aktif & Peta -->
-                <div class="grid grid-cols-1 lg:grid-cols-2 gap-8 mt-8">
+                <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 md:gap-8 mt-6 md:mt-8">
                     <!-- Daftar Pengiriman Aktif -->
                     <section class="animate-on-scroll delay-100">
-                        <div class="flex items-center justify-between mb-4">
+                        <div class="flex flex-col md:flex-row md:items-center justify-between mb-4 gap-2">
                             <h3 class="text-lg font-semibold text-gray-800">Pengiriman Aktif</h3>
                             <div class="flex items-center space-x-2">
                                 <span class="text-xs px-2 py-1 bg-blue-100 text-blue-700 rounded-full animate-pulse-soft">Real-time</span>
@@ -1081,9 +1675,9 @@
                         </div>
                         
                         <div class="bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden hover-lift force-render">
-                            <div class="p-5 border-b border-gray-100 gradient-blue">
-                                <div class="flex items-center justify-between">
-                                    <div class="flex items-center space-x-3">
+                            <div class="p-4 md:p-5 border-b border-gray-100 gradient-blue">
+                                <div class="flex flex-col md:flex-row md:items-center justify-between">
+                                    <div class="flex items-center space-x-3 mb-3 md:mb-0">
                                         <div class="w-10 h-10 rounded-full bg-gradient-to-r from-blue-100 to-blue-200 flex items-center justify-center animate-pulse-soft">
                                             <i class="fas fa-truck text-blue-600"></i>
                                         </div>
@@ -1092,7 +1686,7 @@
                                             <p class="text-sm text-gray-600">45 pengiriman sedang diproses</p>
                                         </div>
                                     </div>
-                                    <div class="text-right">
+                                    <div class="text-left md:text-right">
                                         <p class="text-2xl font-bold text-gray-800">45</p>
                                         <p class="text-xs text-gray-600">Aktif</p>
                                     </div>
@@ -1128,7 +1722,7 @@
                                             </td>
                                             <td class="py-3 px-4">
                                                 <span class="shipping-status status-in-transit">
-                                                    <i class="fas fa-truck"></i> Dalam Perjalanan
+                                                    <i class="fas fa-truck"></i> <span class="hidden sm:inline">Dalam Perjalanan</span>
                                                 </span>
                                             </td>
                                             <td class="py-3 px-4">
@@ -1153,7 +1747,7 @@
                                             </td>
                                             <td class="py-3 px-4">
                                                 <span class="shipping-status status-delayed">
-                                                    <i class="fas fa-clock"></i> Terlambat
+                                                    <i class="fas fa-clock"></i> <span class="hidden sm:inline">Terlambat</span>
                                                 </span>
                                             </td>
                                             <td class="py-3 px-4">
@@ -1178,7 +1772,7 @@
                                             </td>
                                             <td class="py-3 px-4">
                                                 <span class="shipping-status status-in-transit">
-                                                    <i class="fas fa-truck"></i> Dalam Perjalanan
+                                                    <i class="fas fa-truck"></i> <span class="hidden sm:inline">Dalam Perjalanan</span>
                                                 </span>
                                             </td>
                                             <td class="py-3 px-4">
@@ -1186,63 +1780,13 @@
                                                 <div class="text-xs text-green-600">On track</div>
                                             </td>
                                         </tr>
-                                        <tr class="hover:bg-blue-50/50">
-                                            <td class="py-3 px-4">
-                                                <div class="text-sm font-medium text-gray-900">#SH-7889</div>
-                                                <div class="text-xs text-gray-500">Produk D</div>
-                                            </td>
-                                            <td class="py-3 px-4">
-                                                <div class="text-sm font-medium text-gray-900">Bekasi</div>
-                                                <div class="text-xs text-gray-500">Maya Sari</div>
-                                            </td>
-                                            <td class="py-3 px-4">
-                                                <div class="flex items-center">
-                                                    <div class="courier-logo grab-logo mr-2">GR</div>
-                                                    <div class="text-sm">GrabExpress</div>
-                                                </div>
-                                            </td>
-                                            <td class="py-3 px-4">
-                                                <span class="shipping-status status-in-transit">
-                                                    <i class="fas fa-truck"></i> Dalam Perjalanan
-                                                </span>
-                                            </td>
-                                            <td class="py-3 px-4">
-                                                <div class="text-sm font-medium text-gray-900">Hari ini, 18:00</div>
-                                                <div class="text-xs text-green-600">Tepat waktu</div>
-                                            </td>
-                                        </tr>
-                                        <tr class="hover:bg-yellow-50/50">
-                                            <td class="py-3 px-4">
-                                                <div class="text-sm font-medium text-gray-900">#SH-7888</div>
-                                                <div class="text-xs text-gray-500">Produk F, G</div>
-                                            </td>
-                                            <td class="py-3 px-4">
-                                                <div class="text-sm font-medium text-gray-900">Tangerang</div>
-                                                <div class="text-xs text-gray-500">Budi Santoso</div>
-                                            </td>
-                                            <td class="py-3 px-4">
-                                                <div class="flex items-center">
-                                                    <div class="courier-logo jne-logo mr-2">JNE</div>
-                                                    <div class="text-sm">JNE YES</div>
-                                                </div>
-                                            </td>
-                                            <td class="py-3 px-4">
-                                                <span class="shipping-status status-delayed">
-                                                    <i class="fas fa-clock"></i> Terlambat
-                                                </span>
-                                            </td>
-                                            <td class="py-3 px-4">
-                                                <div class="text-sm font-medium text-gray-900">Kemarin, 20:00</div>
-                                                <div class="text-xs text-red-600">+24 jam</div>
-                                            </td>
-                                        </tr>
                                     </tbody>
                                 </table>
                             </div>
                             
                             <div class="p-4 border-t border-gray-200 bg-gray-50">
-                                <div class="flex justify-between items-center">
-                                    <p class="text-sm text-gray-600">Menampilkan 5 dari 45 pengiriman aktif</p>
+                                <div class="flex flex-col md:flex-row md:items-center justify-between gap-3">
+                                    <p class="text-sm text-gray-600">Menampilkan 3 dari 45 pengiriman aktif</p>
                                     <button class="text-blue-600 text-sm font-medium flex items-center space-x-1 smooth-transition hover:text-blue-800 group">
                                         <span>Lihat Semua</span>
                                         <i class="fas fa-chevron-right text-xs group-hover:translate-x-1 smooth-transition"></i>
@@ -1253,8 +1797,8 @@
                     </section>
                     
                     <!-- Tracking Detail & Peta -->
-                    <section class="animate-on-scroll delay-200">
-                        <div class="flex items-center justify-between mb-4">
+                    <section class="animate-on-scroll delay-200 mt-6 md:mt-0">
+                        <div class="flex flex-col md:flex-row md:items-center justify-between mb-4 gap-2">
                             <h3 class="text-lg font-semibold text-gray-800">Detail Tracking</h3>
                             <div class="flex items-center space-x-2">
                                 <span class="text-xs px-2 py-1 bg-green-100 text-green-700 rounded-full">Live Tracking</span>
@@ -1262,9 +1806,9 @@
                         </div>
                         
                         <div class="bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden hover-lift force-render">
-                            <div class="p-5 border-b border-gray-100 gradient-green">
-                                <div class="flex items-center justify-between">
-                                    <div class="flex items-center space-x-3">
+                            <div class="p-4 md:p-5 border-b border-gray-100 gradient-green">
+                                <div class="flex flex-col md:flex-row md:items-center justify-between">
+                                    <div class="flex items-center space-x-3 mb-3 md:mb-0">
                                         <div class="w-10 h-10 rounded-full bg-gradient-to-r from-green-100 to-green-200 flex items-center justify-center animate-pulse-soft">
                                             <i class="fas fa-map-marked-alt text-green-600"></i>
                                         </div>
@@ -1273,14 +1817,14 @@
                                             <p class="text-sm text-gray-600">Sarah Lee • Produk C • 2.5 kg</p>
                                         </div>
                                     </div>
-                                    <div class="text-right">
+                                    <div class="text-left md:text-right">
                                         <p class="text-lg font-bold text-red-600">Terlambat 2 jam</p>
                                         <p class="text-xs text-gray-600">Estimasi: 14:00</p>
                                     </div>
                                 </div>
                             </div>
                             
-                            <div class="p-5">
+                            <div class="p-4 md:p-5">
                                 <!-- Peta Placeholder -->
                                 <div class="map-placeholder mb-6">
                                     <i class="fas fa-map-marked-alt text-4xl text-gray-400 mb-2"></i>
@@ -1298,9 +1842,9 @@
                                     
                                     <div class="flex justify-between w-full mt-2 text-xs text-gray-600">
                                         <span>Gudang</span>
-                                        <span>Pusat Sortir</span>
+                                        <span class="hidden sm:inline">Pusat Sortir</span>
                                         <span>Dalam Perjalanan</span>
-                                        <span class="font-medium text-blue-600">Posisi Sekarang</span>
+                                        <span class="font-medium text-blue-600 hidden sm:inline">Posisi Sekarang</span>
                                         <span>Tujuan</span>
                                     </div>
                                 </div>
@@ -1327,16 +1871,12 @@
                                             <p class="text-sm text-gray-600">Estimasi: Hari ini, 11:30 • Menuju Bandung</p>
                                             <p class="text-xs text-yellow-600 mt-1"><i class="fas fa-exclamation-triangle mr-1"></i> Lalu lintas padat di Tol Cipularang</p>
                                         </div>
-                                        <div class="timeline-item">
-                                            <p class="font-medium text-gray-800">Estimasi Tiba</p>
-                                            <p class="text-sm text-gray-600">Hari ini, 16:00 • Bandung</p>
-                                        </div>
                                     </div>
                                 </div>
                                 
                                 <!-- Courier Info -->
                                 <div class="bg-blue-50 p-4 rounded-lg">
-                                    <div class="flex items-center justify-between mb-3">
+                                    <div class="flex flex-col md:flex-row md:items-center justify-between mb-3 gap-3">
                                         <div class="flex items-center space-x-3">
                                             <div class="courier-logo sicepat-logo">SC</div>
                                             <div>
@@ -1344,7 +1884,7 @@
                                                 <p class="text-sm text-gray-600">ID Kurir: SC-8921 • Andi Pratama</p>
                                             </div>
                                         </div>
-                                        <button class="text-blue-600 text-sm font-medium flex items-center space-x-1 smooth-transition hover:text-blue-800">
+                                        <button class="text-blue-600 text-sm font-medium flex items-center space-x-1 smooth-transition hover:text-blue-800 mt-2 md:mt-0">
                                             <i class="fas fa-phone-alt"></i>
                                             <span>Hubungi</span>
                                         </button>
@@ -1366,16 +1906,16 @@
                 </div>
                 
                 <!-- Analisis Keterlambatan & Performa Kurir -->
-                <div class="grid grid-cols-1 lg:grid-cols-2 gap-8 mt-8">
+                <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 md:gap-8 mt-6 md:mt-8">
                     <!-- Analisis Keterlambatan -->
                     <section class="animate-on-scroll delay-300">
-                        <div class="flex items-center justify-between mb-4">
+                        <div class="flex flex-col md:flex-row md:items-center justify-between mb-4 gap-2">
                             <h3 class="text-lg font-semibold text-gray-800">Analisis Keterlambatan</h3>
                             <span class="text-xs px-3 py-1 bg-red-100 text-red-700 rounded-full animate-pulse-soft">Perlu Perhatian</span>
                         </div>
                         
                         <div class="bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden hover-lift force-render">
-                            <div class="p-5 border-b border-gray-100 gradient-red">
+                            <div class="p-4 md:p-5 border-b border-gray-100 gradient-red">
                                 <div class="flex items-center space-x-3">
                                     <div class="w-10 h-10 rounded-full bg-gradient-to-r from-red-100 to-red-200 flex items-center justify-center animate-pulse-soft">
                                         <i class="fas fa-exclamation-triangle text-red-600"></i>
@@ -1387,7 +1927,7 @@
                                 </div>
                             </div>
                             
-                            <div class="p-5">
+                            <div class="p-4 md:p-5">
                                 <div class="space-y-4 mb-6">
                                     <div>
                                         <div class="flex justify-between items-center mb-1">
@@ -1421,17 +1961,6 @@
                                         </div>
                                         <p class="text-xs text-gray-600 mt-1">Memerlukan penanganan khusus dan waktu proses lebih lama</p>
                                     </div>
-                                    
-                                    <div>
-                                        <div class="flex justify-between items-center mb-1">
-                                            <span class="text-sm font-medium text-gray-700">Wilayah Luar Jawa</span>
-                                            <span class="text-sm font-medium text-purple-600">22% keterlambatan</span>
-                                        </div>
-                                        <div class="progress-bar">
-                                            <div class="progress-bar-fill bg-gradient-to-r from-purple-500 to-purple-400" style="width: 22%"></div>
-                                        </div>
-                                        <p class="text-xs text-gray-600 mt-1">Rata-rata keterlambatan 1.8 hari, terutama Sumatera & Kalimantan</p>
-                                    </div>
                                 </div>
                                 
                                 <div class="pt-4 border-t border-gray-200">
@@ -1442,8 +1971,7 @@
                                             <p class="text-xs text-gray-600">
                                                 1. Alihkan 30% pengiriman GoSend Jakarta Pusat ke JNE<br>
                                                 2. Tambah staf pengemasan hari Senin<br>
-                                                3. Implementasi sistem prioritas untuk produk berat<br>
-                                                4. Gunakan kurir khusus untuk wilayah luar Jawa
+                                                3. Implementasi sistem prioritas untuk produk berat
                                             </p>
                                         </div>
                                     </div>
@@ -1453,14 +1981,14 @@
                     </section>
                     
                     <!-- Performa Kurir -->
-                    <section class="animate-on-scroll delay-400">
-                        <div class="flex items-center justify-between mb-4">
+                    <section class="animate-on-scroll delay-400 mt-6 md:mt-0">
+                        <div class="flex flex-col md:flex-row md:items-center justify-between mb-4 gap-2">
                             <h3 class="text-lg font-semibold text-gray-800">Perbandingan Performa Kurir</h3>
                             <span class="text-xs px-3 py-1 bg-purple-100 text-purple-700 rounded-full">7 Hari Terakhir</span>
                         </div>
                         
                         <div class="bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden hover-lift force-render">
-                            <div class="p-5 border-b border-gray-100 gradient-purple">
+                            <div class="p-4 md:p-5 border-b border-gray-100 gradient-purple">
                                 <div class="flex items-center justify-between">
                                     <div class="flex items-center space-x-3">
                                         <div class="w-10 h-10 rounded-full bg-gradient-to-r from-purple-100 to-purple-200 flex items-center justify-center animate-pulse-soft">
@@ -1474,7 +2002,7 @@
                                 </div>
                             </div>
                             
-                            <div class="p-5">
+                            <div class="p-4 md:p-5">
                                 <div class="space-y-4 mb-6">
                                     <div class="flex items-center justify-between p-3 bg-gray-50 rounded-lg hover-lift smooth-transition gpu-accelerate">
                                         <div class="flex items-center space-x-3">
@@ -1517,20 +2045,6 @@
                                             <p class="text-xs text-gray-600">Rata-rata biaya</p>
                                         </div>
                                     </div>
-                                    
-                                    <div class="flex items-center justify-between p-3 bg-gray-50 rounded-lg hover-lift smooth-transition gpu-accelerate">
-                                        <div class="flex items-center space-x-3">
-                                            <div class="courier-logo grab-logo">GR</div>
-                                            <div>
-                                                <p class="font-medium text-gray-800">GrabExpress</p>
-                                                <p class="text-xs text-gray-600">67 pengiriman • 92% tepat waktu</p>
-                                            </div>
-                                        </div>
-                                        <div class="text-right">
-                                            <p class="text-sm font-bold text-yellow-600">Rp 16.200</p>
-                                            <p class="text-xs text-gray-600">Rata-rata biaya</p>
-                                        </div>
-                                    </div>
                                 </div>
                                 
                                 <div class="grid grid-cols-2 gap-4 mb-6">
@@ -1559,14 +2073,14 @@
                 </div>
                 
                 <!-- Dampak Keterlambatan terhadap Bisnis -->
-                <section class="animate-on-scroll delay-500 mt-8">
-                    <div class="flex items-center justify-between mb-4">
+                <section class="animate-on-scroll delay-500 mt-6 md:mt-8">
+                    <div class="flex flex-col md:flex-row md:items-center justify-between mb-4 gap-2">
                         <h3 class="text-lg font-semibold text-gray-800">Dampak Keterlambatan terhadap Bisnis</h3>
                         <span class="text-xs px-3 py-1 bg-orange-100 text-orange-700 rounded-full">Analisis AI</span>
                     </div>
                     
                     <div class="bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden hover-lift force-render">
-                        <div class="p-5 border-b border-gray-100 gradient-orange">
+                        <div class="p-4 md:p-5 border-b border-gray-100 gradient-orange">
                             <div class="flex items-center space-x-3">
                                 <div class="w-10 h-10 rounded-full bg-gradient-to-r from-orange-100 to-orange-200 flex items-center justify-center animate-pulse-soft">
                                     <i class="fas fa-chart-line text-orange-600"></i>
@@ -1578,8 +2092,8 @@
                             </div>
                         </div>
                         
-                        <div class="p-5">
-                            <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-6">
+                        <div class="p-4 md:p-5">
+                            <div class="grid grid-cols-1 md:grid-cols-3 gap-4 md:gap-6 mb-6">
                                 <div class="bg-red-50 p-4 rounded-lg hover-lift smooth-transition gpu-accelerate">
                                     <div class="flex items-center space-x-3 mb-3">
                                         <div class="w-10 h-10 rounded-full bg-red-100 flex items-center justify-center">
@@ -1590,7 +2104,7 @@
                                             <p class="text-xs text-gray-600">Untuk pengiriman terlambat</p>
                                         </div>
                                     </div>
-                                    <p class="text-2xl font-bold text-red-600">3.2/5</p>
+                                    <p class="text-xl md:text-2xl font-bold text-red-600">3.2/5</p>
                                     <p class="text-xs text-gray-600 mt-1">Turun 1.8 poin dari rata-rata</p>
                                 </div>
                                 
@@ -1604,7 +2118,7 @@
                                             <p class="text-xs text-gray-600">Pelanggan dengan pengiriman terlambat</p>
                                         </div>
                                     </div>
-                                    <p class="text-2xl font-bold text-yellow-600">28%</p>
+                                    <p class="text-xl md:text-2xl font-bold text-yellow-600">28%</p>
                                     <p class="text-xs text-gray-600 mt-1">vs 65% untuk pengiriman tepat waktu</p>
                                 </div>
                                 
@@ -1618,48 +2132,8 @@
                                             <p class="text-xs text-gray-600">Untuk pengiriman terlambat</p>
                                         </div>
                                     </div>
-                                    <p class="text-2xl font-bold text-blue-600">42%</p>
+                                    <p class="text-xl md:text-2xl font-bold text-blue-600">42%</p>
                                     <p class="text-xs text-gray-600 mt-1">dari total komplain pengiriman</p>
-                                </div>
-                            </div>
-                            
-                            <div class="space-y-4">
-                                <div>
-                                    <p class="font-medium text-gray-800 mb-2">Produk Paling Terdampak:</p>
-                                    <div class="flex items-center justify-between p-3 bg-gray-50 rounded-lg">
-                                        <div class="flex items-center space-x-3">
-                                            <div class="w-10 h-10 rounded-lg bg-gradient-to-r from-blue-100 to-blue-200 flex items-center justify-center">
-                                                <i class="fas fa-box text-blue-600"></i>
-                                            </div>
-                                            <div>
-                                                <p class="font-medium text-gray-800">Produk X</p>
-                                                <p class="text-xs text-gray-600">15 keterlambatan dalam 30 hari</p>
-                                            </div>
-                                        </div>
-                                        <div class="text-right">
-                                            <p class="text-sm font-bold text-red-600">-12% penjualan</p>
-                                            <p class="text-xs text-gray-600">Setelah keterlambatan</p>
-                                        </div>
-                                    </div>
-                                </div>
-                                
-                                <div>
-                                    <p class="font-medium text-gray-800 mb-2">Wilayah Paling Terdampak:</p>
-                                    <div class="flex items-center justify-between p-3 bg-gray-50 rounded-lg">
-                                        <div class="flex items-center space-x-3">
-                                            <div class="w-10 h-10 rounded-lg bg-gradient-to-r from-green-100 to-green-200 flex items-center justify-center">
-                                                <i class="fas fa-map-marker-alt text-green-600"></i>
-                                            </div>
-                                            <div>
-                                                <p class="font-medium text-gray-800">Jakarta Pusat</p>
-                                                <p class="text-xs text-gray-600">38% keterlambatan GoSend</p>
-                                            </div>
-                                        </div>
-                                        <div class="text-right">
-                                            <p class="text-sm font-bold text-red-600">-8% penjualan</p>
-                                            <p class="text-xs text-gray-600">Bulan lalu vs bulan sebelumnya</p>
-                                        </div>
-                                    </div>
                                 </div>
                             </div>
                             
@@ -1681,8 +2155,609 @@
         </div>
     </div>
 
+    <!-- Notification Panel (dari bell icon) -->
+    <div class="notification-panel" id="notificationPanel">
+        <div class="notification-panel-header">
+            <div class="notification-panel-title">Notifikasi Pengiriman</div>
+            <button class="notification-panel-close" id="closeNotificationPanel">
+                <i class="fas fa-times"></i>
+            </button>
+        </div>
+        <div class="notification-panel-body" id="notificationPanelBody">
+            <!-- Notifikasi akan dimuat di sini -->
+        </div>
+        <div class="notification-panel-footer">
+            <button class="notification-panel-clear-btn" id="markAllReadBtn">
+                Tandai Semua Sudah Dibaca
+            </button>
+        </div>
+    </div>
+
     <!-- JavaScript untuk interaktivitas -->
     <script>
+        // ================= SISTEM NOTIFIKASI POP-UP =================
+        
+        class NotificationSystem {
+            constructor() {
+                this.notifications = [];
+                this.container = document.getElementById('notificationContainer');
+                this.badge = document.getElementById('notificationBadge');
+                this.panel = document.getElementById('notificationPanel');
+                this.panelBody = document.getElementById('notificationPanelBody');
+                this.notificationQueue = [];
+                this.currentNotification = null;
+                this.autoCheckInterval = null;
+                this.init();
+            }
+            
+            init() {
+                // Load notifications from localStorage
+                this.loadNotifications();
+                
+                // Setup notification bell click
+                const notificationBell = document.getElementById('notificationBell');
+                if (notificationBell) {
+                    notificationBell.addEventListener('click', () => {
+                        this.toggleNotificationPanel();
+                    });
+                }
+                
+                // Setup panel close button
+                const closePanelBtn = document.getElementById('closeNotificationPanel');
+                if (closePanelBtn) {
+                    closePanelBtn.addEventListener('click', () => {
+                        this.hideNotificationPanel();
+                    });
+                }
+                
+                // Setup mark all as read button
+                const markAllReadBtn = document.getElementById('markAllReadBtn');
+                if (markAllReadBtn) {
+                    markAllReadBtn.addEventListener('click', () => {
+                        this.markAllAsRead();
+                        this.updatePanel();
+                    });
+                }
+                
+                // Close panel when clicking outside
+                document.addEventListener('click', (e) => {
+                    if (this.panel.classList.contains('show') && 
+                        !this.panel.contains(e.target) && 
+                        !document.getElementById('notificationBell').contains(e.target)) {
+                        this.hideNotificationPanel();
+                    }
+                });
+                
+                // Start auto-check for critical conditions
+                this.startAutoCheck();
+                
+                // Show initial notification after page load
+                setTimeout(() => {
+                    this.checkCriticalConditions();
+                    this.showNextNotification();
+                }, 2000);
+                
+                // Update badge
+                this.updateBadge();
+            }
+            
+            loadNotifications() {
+                // Simulate loading notifications from server
+                const storedNotifications = localStorage.getItem('shippingNotifications');
+                if (storedNotifications) {
+                    this.notifications = JSON.parse(storedNotifications);
+                } else {
+                    // Default notifications untuk shipping tracking
+                    this.notifications = [
+                        {
+                            id: 1,
+                            type: 'critical',
+                            title: 'Pengiriman #SH-7891 Terlambat 2 Jam!',
+                            message: 'Pengiriman #SH-7891 ke Bandung (Sarah Lee) terlambat 2 jam dari estimasi. Kurir SiCepat mengalami kemacetan di Tol Cipularang. Perkiraan tiba baru: 16:00.',
+                            timestamp: new Date().toISOString(),
+                            read: false,
+                            action: 'track',
+                            actionLabel: 'Lacak Sekarang',
+                            shippingId: 'SH-7891',
+                            delay: '2 jam',
+                            estimatedArrival: '16:00',
+                            priority: 10
+                        },
+                        {
+                            id: 2,
+                            type: 'warning',
+                            title: 'Tingkat Keterlambatan GoSend Meningkat',
+                            message: 'Pengiriman GoSend mengalami peningkatan keterlambatan sebesar 24% minggu ini, terutama di wilayah Jakarta Pusat. Rekomendasikan pertimbangkan alternatif kurir untuk wilayah tersebut.',
+                            timestamp: new Date(Date.now() - 3600000).toISOString(),
+                            read: false,
+                            action: 'analyze',
+                            actionLabel: 'Analisis Performa',
+                            courier: 'GoSend',
+                            delayIncrease: '24%',
+                            priority: 8
+                        },
+                        {
+                            id: 3,
+                            type: 'info',
+                            title: 'Pengiriman #SH-7892 Berhasil Dikirim',
+                            message: 'Pengiriman #SH-7892 ke Jakarta Pusat (John Doe) telah berhasil dikirim tepat waktu pada pukul 16:30. Pelanggan telah mengkonfirmasi penerimaan.',
+                            timestamp: new Date(Date.now() - 7200000).toISOString(),
+                            read: true,
+                            action: 'view',
+                            actionLabel: 'Lihat Detail',
+                            shippingId: 'SH-7892',
+                            status: 'delivered',
+                            priority: 3
+                        },
+                        {
+                            id: 4,
+                            type: 'info',
+                            title: 'JNE Memiliki Ketepatan Waktu 95%',
+                            message: 'JNE Regular menunjukkan performa terbaik dengan ketepatan waktu 95% dalam 7 hari terakhir. Biaya rata-rata Rp 12.500 per pengiriman.',
+                            timestamp: new Date(Date.now() - 10800000).toISOString(),
+                            read: true,
+                            action: 'view',
+                            actionLabel: 'Lihat Analisis',
+                            courier: 'JNE',
+                            onTimeRate: '95%',
+                            priority: 4
+                        }
+                    ];
+                    this.saveNotifications();
+                }
+                
+                // Sort notifications by priority (highest first)
+                this.notifications.sort((a, b) => {
+                    if (b.priority !== a.priority) {
+                        return (b.priority || 0) - (a.priority || 0);
+                    }
+                    if (a.read !== b.read) {
+                        return a.read ? 1 : -1;
+                    }
+                    return new Date(b.timestamp) - new Date(a.timestamp);
+                });
+                
+                this.updateBadge();
+            }
+            
+            saveNotifications() {
+                localStorage.setItem('shippingNotifications', JSON.stringify(this.notifications));
+                this.updateBadge();
+            }
+            
+            updateBadge() {
+                if (!this.badge) return;
+                
+                const unreadCount = this.notifications.filter(n => !n.read).length;
+                
+                if (unreadCount > 0) {
+                    this.badge.textContent = unreadCount > 9 ? '9+' : unreadCount;
+                    this.badge.style.display = 'flex';
+                } else {
+                    this.badge.style.display = 'none';
+                }
+            }
+            
+            addToQueue(notification) {
+                const exists = this.notificationQueue.some(n => 
+                    n.id === notification.id || 
+                    (n.type === notification.type && n.shippingId === notification.shippingId)
+                );
+                
+                if (!exists) {
+                    this.notificationQueue.push(notification);
+                    this.notificationQueue.sort((a, b) => (b.priority || 0) - (a.priority || 0));
+                    
+                    if (!this.currentNotification) {
+                        this.showNextNotification();
+                    }
+                }
+            }
+            
+            showNextNotification() {
+                if (this.notificationQueue.length === 0 || this.currentNotification) {
+                    return;
+                }
+                
+                const notification = this.notificationQueue.shift();
+                this.currentNotification = notification;
+                
+                this.showNotificationToast(notification);
+                
+                setTimeout(() => {
+                    if (this.currentNotification && this.currentNotification.id === notification.id) {
+                        this.removeNotificationToast(notification.id);
+                    }
+                }, 8000);
+            }
+            
+            showNotificationToast(notification) {
+                const notificationId = `toast-${notification.id}-${Date.now()}`;
+                const toast = document.createElement('div');
+                toast.className = `notification-toast ${notification.type}`;
+                toast.id = notificationId;
+                toast.dataset.notificationId = notification.id;
+                
+                let icon = 'fas fa-info-circle';
+                if (notification.type === 'critical') icon = 'fas fa-exclamation-triangle';
+                if (notification.type === 'warning') icon = 'fas fa-exclamation-circle';
+                if (notification.type === 'success') icon = 'fas fa-check-circle';
+                
+                const previewMessage = notification.message.length > 60 
+                    ? notification.message.substring(0, 60) + '...' 
+                    : notification.message;
+                
+                toast.innerHTML = `
+                    <div class="notification-toast-header" data-notification-id="${notificationId}">
+                        <div class="notification-toast-content">
+                            <div class="notification-toast-icon">
+                                <i class="${icon}"></i>
+                            </div>
+                            <div class="notification-toast-text">
+                                <div class="notification-toast-title">${notification.title}</div>
+                                <div class="notification-toast-preview">${previewMessage}</div>
+                            </div>
+                        </div>
+                        <div class="notification-toast-actions">
+                            <button class="notification-toast-expand-btn" data-notification-id="${notificationId}">
+                                <i class="fas fa-chevron-down"></i>
+                            </button>
+                            <button class="notification-toast-close-btn" data-notification-id="${notificationId}">
+                                <i class="fas fa-times"></i>
+                            </button>
+                        </div>
+                    </div>
+                    <div class="notification-toast-body">
+                        ${notification.message}
+                    </div>
+                    <div class="notification-toast-footer">
+                        <div class="text-xs text-gray-500 mb-2">
+                            <i class="far fa-clock mr-1"></i>
+                            ${this.formatTime(notification.timestamp)}
+                        </div>
+                        <div class="flex gap-2">
+                            <button class="notification-action-btn secondary" data-action="dismiss" data-notification-id="${notificationId}">
+                                Nanti
+                            </button>
+                            <button class="notification-action-btn primary" data-action="${notification.action || 'view'}" data-notification-id="${notificationId}">
+                                ${notification.actionLabel || 'Lihat Detail'}
+                            </button>
+                        </div>
+                    </div>
+                `;
+                
+                this.container.appendChild(toast);
+                
+                setTimeout(() => {
+                    toast.classList.add('show');
+                }, 10);
+                
+                this.setupToastEvents(toast, notification, notificationId);
+                
+                this.markAsRead(notification.id);
+            }
+            
+            setupToastEvents(toast, notification, toastId) {
+                const header = toast.querySelector('.notification-toast-header');
+                header.addEventListener('click', (e) => {
+                    if (!e.target.closest('.notification-toast-actions')) {
+                        toast.classList.toggle('expanded');
+                    }
+                });
+                
+                const expandBtn = toast.querySelector('.notification-toast-expand-btn');
+                expandBtn.addEventListener('click', (e) => {
+                    e.stopPropagation();
+                    toast.classList.toggle('expanded');
+                });
+                
+                const closeBtn = toast.querySelector('.notification-toast-close-btn');
+                closeBtn.addEventListener('click', (e) => {
+                    e.stopPropagation();
+                    this.removeNotificationToast(notification.id);
+                });
+                
+                const actionBtn = toast.querySelector('.notification-action-btn.primary');
+                if (actionBtn) {
+                    actionBtn.addEventListener('click', (e) => {
+                        e.stopPropagation();
+                        this.handleNotificationAction(notification);
+                        this.removeNotificationToast(notification.id);
+                    });
+                }
+                
+                const dismissBtn = toast.querySelector('.notification-action-btn.secondary');
+                if (dismissBtn) {
+                    dismissBtn.addEventListener('click', (e) => {
+                        e.stopPropagation();
+                        this.removeNotificationToast(notification.id);
+                    });
+                }
+            }
+            
+            removeNotificationToast(notificationId) {
+                const toast = document.querySelector(`.notification-toast[data-notification-id="${notificationId}"]`);
+                if (toast) {
+                    toast.classList.remove('show');
+                    toast.classList.add('hide');
+                    
+                    setTimeout(() => {
+                        if (toast.parentNode) {
+                            toast.parentNode.removeChild(toast);
+                        }
+                        
+                        if (this.currentNotification && this.currentNotification.id === notificationId) {
+                            this.currentNotification = null;
+                            setTimeout(() => this.showNextNotification(), 500);
+                        }
+                    }, 300);
+                }
+            }
+            
+            handleNotificationAction(notification) {
+                switch(notification.action) {
+                    case 'track':
+                        showNotification(`Melacak pengiriman ${notification.shippingId}...`, 'info');
+                        // Scroll ke section tracking
+                        const trackingSection = document.querySelector('section.animate-on-scroll.delay-200');
+                        if (trackingSection) {
+                            trackingSection.scrollIntoView({ behavior: 'smooth' });
+                        }
+                        break;
+                        
+                    case 'analyze':
+                        showNotification(`Menganalisis ${notification.courier || 'performansi'}...`, 'info');
+                        setTimeout(() => {
+                            this.openAIAssistant(`Analisis ${notification.courier || 'keterlambatan pengiriman'}`);
+                        }, 300);
+                        break;
+                        
+                    case 'view':
+                    default:
+                        showNotification(`Membuka detail ${notification.title}`, 'info');
+                        break;
+                }
+            }
+            
+            openAIAssistant(question) {
+                const aiPanel = document.getElementById('aiAssistantPanel');
+                const aiBtn = document.getElementById('aiAssistantBtn');
+                
+                if (aiPanel.classList.contains('hidden')) {
+                    aiBtn.click();
+                }
+                
+                setTimeout(() => {
+                    const aiInput = document.getElementById('aiQuestionInput');
+                    aiInput.value = question;
+                    document.getElementById('sendAIQuestion').click();
+                }, 500);
+            }
+            
+            markAsRead(notificationId) {
+                const notification = this.notifications.find(n => n.id === notificationId);
+                if (notification && !notification.read) {
+                    notification.read = true;
+                    notification.readAt = new Date().toISOString();
+                    this.saveNotifications();
+                }
+            }
+            
+            markAllAsRead() {
+                this.notifications.forEach(notification => {
+                    if (!notification.read) {
+                        notification.read = true;
+                        notification.readAt = new Date().toISOString();
+                    }
+                });
+                this.saveNotifications();
+            }
+            
+            formatTime(timestamp) {
+                const date = new Date(timestamp);
+                const now = new Date();
+                const diffMs = now - date;
+                const diffMins = Math.floor(diffMs / 60000);
+                const diffHours = Math.floor(diffMs / 3600000);
+                const diffDays = Math.floor(diffMs / 86400000);
+                
+                if (diffMins < 1) return 'Baru saja';
+                if (diffMins < 60) return `${diffMins} menit yang lalu`;
+                if (diffHours < 24) return `${diffHours} jam yang lalu`;
+                if (diffDays < 7) return `${diffDays} hari yang lalu`;
+                
+                return date.toLocaleDateString('id-ID', {
+                    day: 'numeric',
+                    month: 'short',
+                    year: 'numeric'
+                });
+            }
+            
+            checkCriticalConditions() {
+                const conditions = this.simulateShippingConditionChecks();
+                
+                conditions.forEach(condition => {
+                    const existingNotification = this.notifications.find(n => 
+                        n.type === condition.type && 
+                        n.shippingId === condition.shippingId &&
+                        !n.read &&
+                        new Date() - new Date(n.timestamp) < 3600000
+                    );
+                    
+                    if (!existingNotification) {
+                        const newNotification = {
+                            id: Date.now(),
+                            type: condition.type,
+                            title: condition.title,
+                            message: condition.message,
+                            timestamp: new Date().toISOString(),
+                            read: false,
+                            action: condition.action,
+                            actionLabel: condition.actionLabel,
+                            priority: condition.priority,
+                            ...condition.data
+                        };
+                        
+                        this.notifications.unshift(newNotification);
+                        this.saveNotifications();
+                        
+                        this.addToQueue(newNotification);
+                    }
+                });
+            }
+            
+            simulateShippingConditionChecks() {
+                const conditions = [];
+                const random = Math.random();
+                
+                // Critical: New delayed shipment (30% chance)
+                if (random < 0.3) {
+                    conditions.push({
+                        type: 'critical',
+                        title: 'Pengiriman #SH-7895 Terlambat 1.5 Jam',
+                        message: 'Pengiriman #SH-7895 ke Surabaya (Budi Santoso) terlambat 1.5 jam karena cuaca buruk. Estimasi tiba baru: 18:30.',
+                        action: 'track',
+                        actionLabel: 'Lacak Sekarang',
+                        priority: 9,
+                        data: { shippingId: 'SH-7895', delay: '1.5 jam', estimatedArrival: '18:30' }
+                    });
+                }
+                
+                // Warning: Courier performance drop (20% chance)
+                if (random < 0.2) {
+                    conditions.push({
+                        type: 'warning',
+                        title: 'Performa SiCepat Menurun',
+                        message: 'SiCepat mengalami penurunan ketepatan waktu menjadi 85% minggu ini di wilayah Jawa Barat. Pertimbangkan alternatif kurir.',
+                        action: 'analyze',
+                        actionLabel: 'Analisis Kurir',
+                        priority: 7,
+                        data: { courier: 'SiCepat', performance: '85%' }
+                    });
+                }
+                
+                // Info: Successful delivery (50% chance)
+                if (random < 0.5) {
+                    conditions.push({
+                        type: 'success',
+                        title: 'Pengiriman #SH-7894 Berhasil Dikirim',
+                        message: 'Pengiriman #SH-7894 ke Yogyakarta (Siti Nurhaliza) telah berhasil dikirim tepat waktu pada pukul 15:45. Pelanggan sangat puas.',
+                        action: 'view',
+                        actionLabel: 'Lihat Detail',
+                        priority: 3,
+                        data: { shippingId: 'SH-7894', status: 'delivered', time: '15:45' }
+                    });
+                }
+                
+                // Info: New shipment picked up (40% chance)
+                if (random < 0.4) {
+                    conditions.push({
+                        type: 'info',
+                        title: 'Pengiriman Baru #SH-7896 Diambil Kurir',
+                        message: 'Pengiriman #SH-7896 ke Bali (Wayan Budi) telah diambil kurir JNE. Estimasi tiba: besok, 13:00.',
+                        action: 'track',
+                        actionLabel: 'Lacak Pengiriman',
+                        priority: 5,
+                        data: { shippingId: 'SH-7896', courier: 'JNE', estimatedArrival: 'besok, 13:00' }
+                    });
+                }
+                
+                return conditions;
+            }
+            
+            startAutoCheck() {
+                this.autoCheckInterval = setInterval(() => {
+                    this.checkCriticalConditions();
+                }, 180000);
+            }
+            
+            toggleNotificationPanel() {
+                if (this.panel.classList.contains('show')) {
+                    this.hideNotificationPanel();
+                } else {
+                    this.showNotificationPanel();
+                }
+            }
+            
+            showNotificationPanel() {
+                this.updatePanel();
+                this.panel.classList.add('show');
+            }
+            
+            hideNotificationPanel() {
+                this.panel.classList.remove('show');
+            }
+            
+            updatePanel() {
+                if (!this.panelBody) return;
+                
+                if (this.notifications.length === 0) {
+                    this.panelBody.innerHTML = `
+                        <div class="notification-panel-empty">
+                            <i class="fas fa-bell-slash"></i>
+                            <p>Tidak ada notifikasi</p>
+                        </div>
+                    `;
+                    return;
+                }
+                
+                this.panelBody.innerHTML = this.notifications.map(notification => `
+                    <div class="notification-panel-item ${notification.type} ${notification.read ? '' : 'unread'}" data-id="${notification.id}">
+                        <div class="notification-panel-item-icon">
+                            <i class="fas fa-${notification.type === 'critical' ? 'exclamation-triangle' : 
+                                            notification.type === 'warning' ? 'exclamation-circle' : 
+                                            notification.type === 'success' ? 'check-circle' : 
+                                            'info-circle'}"></i>
+                        </div>
+                        <div class="notification-panel-item-content">
+                            <div class="notification-panel-item-title">${notification.title}</div>
+                            <div class="notification-panel-item-message">${notification.message}</div>
+                            <div class="notification-panel-item-time">${this.formatTime(notification.timestamp)}</div>
+                        </div>
+                    </div>
+                `).join('');
+                
+                this.panelBody.querySelectorAll('.notification-panel-item').forEach(item => {
+                    item.addEventListener('click', () => {
+                        const notificationId = parseInt(item.dataset.id);
+                        const notification = this.notifications.find(n => n.id === notificationId);
+                        if (notification) {
+                            this.handleNotificationAction(notification);
+                            this.markAsRead(notificationId);
+                            this.hideNotificationPanel();
+                            this.updatePanel();
+                        }
+                    });
+                });
+            }
+        }
+        
+        // ================= FUNGSI UTAMA =================
+        
+        // Fungsi untuk update tanggal
+        function updateDate() {
+            const now = new Date();
+            
+            // Format hari dalam Bahasa Indonesia
+            const days = ['Minggu', 'Senin', 'Selasa', 'Rabu', 'Kamis', 'Jumat', 'Sabtu'];
+            const months = ['Januari', 'Februari', 'Maret', 'April', 'Mei', 'Juni', 
+                           'Juli', 'Agustus', 'September', 'Oktober', 'November', 'Desember'];
+            
+            const dayName = days[now.getDay()];
+            const date = now.getDate();
+            const monthName = months[now.getMonth()];
+            const year = now.getFullYear();
+            
+            // Format untuk tanggal: "Selasa, 2 Januari 2026"
+            const formattedDate = `${dayName}, ${date} ${monthName} ${year}`;
+            
+            // Update elemen
+            const dateElement = document.getElementById('currentDate');
+            if (dateElement) {
+                dateElement.textContent = formattedDate;
+            }
+        }
+        
         // Scroll Animator untuk animasi saat scroll
         class ScrollAnimator {
             constructor() {
@@ -1729,19 +2804,105 @@
             }, 50);
         }
         
+        // Sidebar functions
+        function openSidebar() {
+            const sidebar = document.getElementById('sidebar');
+            const overlay = document.getElementById('sidebarOverlay');
+            const mainWrapper = document.getElementById('mainWrapper');
+            
+            sidebar.classList.add('active');
+            overlay.classList.add('active');
+            mainWrapper.classList.add('sidebar-open');
+            document.body.style.overflow = 'hidden';
+        }
+        
+        function closeSidebar() {
+            const sidebar = document.getElementById('sidebar');
+            const overlay = document.getElementById('sidebarOverlay');
+            const mainWrapper = document.getElementById('mainWrapper');
+            
+            sidebar.classList.remove('active');
+            overlay.classList.remove('active');
+            mainWrapper.classList.remove('sidebar-open');
+            document.body.style.overflow = '';
+        }
+        
+        function toggleSidebar() {
+            const sidebar = document.getElementById('sidebar');
+            if (sidebar.classList.contains('active')) {
+                closeSidebar();
+            } else {
+                openSidebar();
+            }
+        }
+        
+        // Check screen size and adjust sidebar
+        function checkScreenSize() {
+            if (window.innerWidth >= 1024) {
+                const sidebar = document.getElementById('sidebar');
+                const overlay = document.getElementById('sidebarOverlay');
+                const mainWrapper = document.getElementById('mainWrapper');
+                
+                sidebar.classList.add('active');
+                overlay.classList.remove('active');
+                mainWrapper.classList.remove('sidebar-open');
+                document.body.style.overflow = '';
+            } else {
+                closeSidebar();
+            }
+        }
+        
+        // ================= EVENT LISTENERS =================
+        
         document.addEventListener('DOMContentLoaded', function() {
-            // Inisialisasi Scroll Animator
+            // 1. Inisialisasi sistem notifikasi untuk shipping
+            const notificationSystem = new NotificationSystem();
+            
+            // 2. Inisialisasi tanggal
+            updateDate();
+            
+            // 3. Inisialisasi Scroll Animator
             const animator = new ScrollAnimator();
             
-            // Force render semua konten
+            // 4. Force render semua konten
             forceRenderAllContent();
             
-            // Render tambahan setelah semua aset dimuat
+            // 5. Check screen size and setup sidebar
+            checkScreenSize();
+            
+            // 6. Setup sidebar event listeners
+            const mobileMenuBtn = document.getElementById('mobileMenuBtn');
+            const closeSidebarBtn = document.getElementById('closeSidebar');
+            const sidebarOverlay = document.getElementById('sidebarOverlay');
+            
+            if (mobileMenuBtn) {
+                mobileMenuBtn.addEventListener('click', toggleSidebar);
+            }
+            
+            if (closeSidebarBtn) {
+                closeSidebarBtn.addEventListener('click', closeSidebar);
+            }
+            
+            if (sidebarOverlay) {
+                sidebarOverlay.addEventListener('click', closeSidebar);
+            }
+            
+            // Close sidebar when clicking on a link (for mobile)
+            const sidebarLinks = document.querySelectorAll('#sidebar a');
+            sidebarLinks.forEach(link => {
+                link.addEventListener('click', () => {
+                    if (window.innerWidth < 1024) {
+                        closeSidebar();
+                    }
+                });
+            });
+            
+            // 7. Render tambahan setelah semua aset dimuat
             window.addEventListener('load', function() {
                 setTimeout(forceRenderAllContent, 100);
             });
             
-            // AI Assistant Panel
+            // 8. AI Assistant Panel
             const aiAssistantBtn = document.getElementById('aiAssistantBtn');
             const aiAssistantPanel = document.getElementById('aiAssistantPanel');
             const closeAIPanel = document.getElementById('closeAIPanel');
@@ -1752,7 +2913,9 @@
                 aiAssistantPanel.classList.toggle('hidden');
                 setTimeout(() => {
                     const chatContainer = document.getElementById('aiChatContainer');
-                    chatContainer.scrollTop = chatContainer.scrollHeight;
+                    if (chatContainer) {
+                        chatContainer.scrollTop = chatContainer.scrollHeight;
+                    }
                 }, 100);
             });
             
@@ -1762,12 +2925,12 @@
             
             // Close AI panel when clicking outside
             document.addEventListener('click', function(e) {
-                if (!aiAssistantPanel.contains(e.target) && !aiAssistantBtn.contains(e.target)) {
+                if (aiAssistantPanel && !aiAssistantPanel.contains(e.target) && !aiAssistantBtn.contains(e.target)) {
                     aiAssistantPanel.classList.add('hidden');
                 }
             });
             
-            // AI Mode Selector
+            // 9. AI Mode Selector
             const aiModeButtons = document.querySelectorAll('.ai-mode-btn');
             aiModeButtons.forEach(button => {
                 button.addEventListener('click', function() {
@@ -1789,23 +2952,23 @@
                 
                 switch(mode) {
                     case 'shipping':
-                        aiHeader.textContent = 'AI Shipping Assistant';
-                        aiSubtitle.textContent = 'Menganalisis data dan tren pengiriman';
+                        if (aiHeader) aiHeader.textContent = 'AI Shipping Assistant';
+                        if (aiSubtitle) aiSubtitle.textContent = 'Menganalisis data dan tren pengiriman';
                         break;
                     case 'optimization':
-                        aiHeader.textContent = 'AI Optimization Assistant';
-                        aiSubtitle.textContent = 'Membantu optimasi logistik dan biaya';
+                        if (aiHeader) aiHeader.textContent = 'AI Optimization Assistant';
+                        if (aiSubtitle) aiSubtitle.textContent = 'Membantu optimasi logistik dan biaya';
                         break;
                     case 'analysis':
-                        aiHeader.textContent = 'AI Analysis Assistant';
-                        aiSubtitle.textContent = 'Analisis mendalam performa pengiriman';
+                        if (aiHeader) aiHeader.textContent = 'AI Analysis Assistant';
+                        if (aiSubtitle) aiSubtitle.textContent = 'Analisis mendalam performa pengiriman';
                         break;
                 }
                 
                 addAIMessage(`Mode AI telah diubah ke: ${mode.charAt(0).toUpperCase() + mode.slice(1)}. Bagaimana saya bisa membantu Anda?`, 'assistant');
             }
             
-            // AI Quick Questions - khusus shipping
+            // 10. AI Quick Questions - khusus shipping
             const aiQuickQuestions = document.querySelectorAll('.ai-quick-question');
             
             aiQuickQuestions.forEach(button => {
@@ -1822,218 +2985,37 @@
                 });
             });
             
-            // Send AI Question
+            // 11. Send AI Question
             const aiQuestionInput = document.getElementById('aiQuestionInput');
             const sendAIQuestion = document.getElementById('sendAIQuestion');
             
-            sendAIQuestion.addEventListener('click', function() {
-                if (aiQuestionInput.value.trim() !== '') {
-                    const question = aiQuestionInput.value;
-                    addAIMessage(question, 'user');
-                    aiQuestionInput.value = '';
-                    
-                    showTypingIndicator();
-                    
-                    setTimeout(() => {
-                        removeTypingIndicator();
-                        generateShippingAIResponse(question);
-                    }, 2000);
-                }
-            });
+            if (sendAIQuestion) {
+                sendAIQuestion.addEventListener('click', function() {
+                    if (aiQuestionInput && aiQuestionInput.value.trim() !== '') {
+                        const question = aiQuestionInput.value;
+                        addAIMessage(question, 'user');
+                        aiQuestionInput.value = '';
+                        
+                        showTypingIndicator();
+                        
+                        setTimeout(() => {
+                            removeTypingIndicator();
+                            generateShippingAIResponse(question);
+                        }, 2000);
+                    }
+                });
+            }
             
             // Enter key to send question
-            aiQuestionInput.addEventListener('keypress', function(e) {
-                if (e.key === 'Enter') {
-                    sendAIQuestion.click();
-                }
-            });
-            
-            // AI Chat Functions
-            function addAIMessage(text, sender) {
-                const chatContainer = document.getElementById('aiChatContainer');
-                const messageDiv = document.createElement('div');
-                messageDiv.className = `ai-message ${sender}`;
-                
-                if (sender === 'user') {
-                    messageDiv.innerHTML = `
-                        <div class="flex items-center justify-between">
-                            <p>${text}</p>
-                            <i class="fas fa-user ml-2"></i>
-                        </div>
-                    `;
-                } else {
-                    messageDiv.innerHTML = `
-                        <div class="flex items-start space-x-2">
-                            <div class="w-6 h-6 rounded-full bg-blue-100 flex items-center justify-center flex-shrink-0 mt-1">
-                                <i class="fas fa-robot text-blue-600 text-xs"></i>
-                            </div>
-                            <div>
-                                <p class="text-gray-700">${text}</p>
-                            </div>
-                        </div>
-                    `;
-                }
-                
-                chatContainer.appendChild(messageDiv);
-                chatContainer.scrollTop = chatContainer.scrollHeight;
+            if (aiQuestionInput) {
+                aiQuestionInput.addEventListener('keypress', function(e) {
+                    if (e.key === 'Enter') {
+                        if (sendAIQuestion) sendAIQuestion.click();
+                    }
+                });
             }
             
-            function showTypingIndicator() {
-                const chatContainer = document.getElementById('aiChatContainer');
-                const typingDiv = document.createElement('div');
-                typingDiv.className = 'ai-typing-indicator';
-                typingDiv.id = 'typingIndicator';
-                typingDiv.innerHTML = `
-                    <div class="w-6 h-6 rounded-full bg-blue-100 flex items-center justify-center flex-shrink-0 mr-2">
-                        <i class="fas fa-robot text-blue-600 text-xs"></i>
-                    </div>
-                    <div class="flex">
-                        <div class="ai-typing-dot"></div>
-                        <div class="ai-typing-dot"></div>
-                        <div class="ai-typing-dot"></div>
-                    </div>
-                `;
-                
-                chatContainer.appendChild(typingDiv);
-                chatContainer.scrollTop = chatContainer.scrollHeight;
-            }
-            
-            function removeTypingIndicator() {
-                const typingIndicator = document.getElementById('typingIndicator');
-                if (typingIndicator) {
-                    typingIndicator.remove();
-                }
-            }
-            
-            // Respons AI khusus untuk shipping
-            function generateShippingAIResponse(question) {
-                let response = '';
-                let actions = '';
-                
-                const questionLower = question.toLowerCase();
-                
-                if (questionLower.includes('kenapa') && questionLower.includes('lambat') || 
-                    questionLower.includes('keterlambatan') || questionLower.includes('terlambat')) {
-                    
-                    response = `Berdasarkan analisis data 30 hari terakhir, penyebab utama keterlambatan pengiriman ecommerce Anda adalah:<br><br>
-                    1. <strong>Kurir GoSend di Jakarta Pusat (24% terlambat)</strong> - Rata-rata keterlambatan 3.2 jam karena lalu lintas padat dan volume tinggi.<br>
-                    2. <strong>Hari Senin puncak permintaan</strong> - 18% keterlambatan terjadi hari Senin karena backlog dari akhir pekan.<br>
-                    3. <strong>Produk berat >5kg (12% terlambat)</strong> - Memerlukan penanganan khusus dan waktu proses lebih lama.<br>
-                    4. <strong>Wilayah luar Jawa (22% terlambat)</strong> - Rata-rata keterlambatan 1.8 hari karena jarak dan infrastruktur.<br><br>
-                    Rekomendasi saya: alihkan 30% pengiriman GoSend Jakarta Pusat ke JNE, tambah staf pengemasan hari Senin, dan gunakan kurir khusus untuk wilayah luar Jawa.`;
-                    
-                    actions = `<div class="mt-2 flex space-x-2">
-                        <button class="text-xs px-2 py-1 bg-blue-100 text-blue-700 rounded smooth-transition hover:bg-blue-200">Analisis Detail</button>
-                        <button class="text-xs px-2 py-1 bg-green-100 text-green-700 rounded smooth-transition hover:bg-green-200">Rekomendasi Lengkap</button>
-                    </div>`;
-                    
-                } else if (questionLower.includes('kurir') && questionLower.includes('terbaik') || 
-                          questionLower.includes('rekomendasi kurir')) {
-                    
-                    response = `Berdasarkan analisis performa 7 hari terakhir, rekomendasi kurir untuk bisnis Anda:<br><br>
-                    <strong>1. JNE Regular (Rating: ★★★★☆)</strong><br>
-                    • Ketepatan waktu: 95%<br>
-                    • Biaya rata-rata: Rp 12.500<br>
-                    • Rekomendasi: Untuk semua wilayah Jawa, produk reguler<br><br>
-                    <strong>2. SiCepat (Rating: ★★★★☆)</strong><br>
-                    • Ketepatan waktu: 88%<br>
-                    • Biaya rata-rata: Rp 13.800<br>
-                    • Rekomendasi: Untuk pengiriman cepat (<24 jam)<br><br>
-                    <strong>3. GrabExpress (Rating: ★★★☆☆)</strong><br>
-                    • Ketepatan waktu: 92%<br>
-                    • Biaya rata-rata: Rp 16.200<br>
-                    • Rekomendasi: Untuk pengiriman same-day di area metropolitan<br><br>
-                    <strong>Hindari untuk produk tertentu:</strong> GoSend untuk produk >3kg dan pengiriman Jakarta Pusat.`;
-                    
-                    actions = `<div class="mt-2 flex space-x-2">
-                        <button class="text-xs px-2 py-1 bg-blue-100 text-blue-700 rounded smooth-transition hover:bg-blue-200">Bandingkan Kurir</button>
-                        <button class="text-xs px-2 py-1 bg-purple-100 text-purple-700 rounded smooth-transition hover:bg-purple-200">Optimasi Otomatis</button>
-                    </div>`;
-                    
-                } else if (questionLower.includes('biaya') || questionLower.includes('optimasi biaya')) {
-                    
-                    response = `Analisis biaya pengiriman Anda menunjukkan peluang optimasi sebesar 12-18%:<br><br>
-                    <strong>Peluang Penghematan:</strong><br>
-                    1. <strong>GoSend → JNE</strong> untuk pengiriman Jakarta Pusat: Hemat Rp 6.000/pengiriman (32%)<br>
-                    2. <strong>GrabExpress → SiCepat</strong> untuk pengiriman >2kg: Hemat Rp 2.400/pengiriman (15%)<br>
-                    3. <strong>Konsolidasi pengiriman</strong> untuk order dari wilayah sama: Potensi hemat 8%<br>
-                    4. <strong>Negosiasi kontrak</strong> dengan JNE untuk volume >500 pengiriman/bulan: Potensi diskon 5-7%<br><br>
-                    Total potensi penghematan: Rp 2.8-4.2 juta/bulan berdasarkan volume saat ini.`;
-                    
-                    actions = `<div class="mt-2 flex space-x-2">
-                        <button class="text-xs px-2 py-1 bg-blue-100 text-blue-700 rounded smooth-transition hover:bg-blue-200">Simulasi Penghematan</button>
-                        <button class="text-xs px-2 py-1 bg-green-100 text-green-700 rounded smooth-transition hover:bg-green-200">Rencana Implementasi</button>
-                    </div>`;
-                    
-                } else if (questionLower.includes('prediksi') || questionLower.includes('besok')) {
-                    
-                    response = `Prediksi pengiriman untuk besok (3 Jan 2026):<br><br>
-                    <strong>Volume Pengiriman:</strong> 195-210 pengiriman (naik 8-12% dari hari ini)<br>
-                    <strong>Puncak Permintaan:</strong> 10:00-12:00 (45 pengiriman/jam)<br>
-                    <strong>Potensi Keterlambatan:</strong> 18-22 pengiriman (9-11%)<br><br>
-                    <strong>Faktor Risiko:</strong><br>
-                    1. Hujan diperkirakan pagi hari di Jakarta (berdampak pada pengiriman same-day)<br>
-                    2. Event besar di Bandung (berdampak pada pengiriman ke wilayah tersebut)<br>
-                    3. Libur sekolah (meningkatkan permintaan pengiriman ke residensial)<br><br>
-                    <strong>Rekomendasi Persiapan:</strong><br>
-                    • Tambah 2 staf pengemasan untuk shift pagi<br>
-                    • Prioritaskan pengiriman same-day sebelum jam 10:00<br>
-                    • Siapkan notifikasi otomatis untuk pelanggan di Bandung`;
-                    
-                    actions = `<div class="mt-2 flex space-x-2">
-                        <button class="text-xs px-2 py-1 bg-blue-100 text-blue-700 rounded smooth-transition hover:bg-blue-200">Lihat Prediksi Detail</button>
-                        <button class="text-xs px-2 py-1 bg-yellow-100 text-yellow-700 rounded smooth-transition hover:bg-yellow-200">Siapkan Mitigasi</button>
-                    </div>`;
-                    
-                } else if (questionLower.includes('produk') && questionLower.includes('sering') && questionLower.includes('terlambat')) {
-                    
-                    response = `Produk yang paling sering mengalami keterlambatan berdasarkan data 30 hari terakhir:<br><br>
-                    <strong>1. Produk X (15 keterlambatan)</strong><br>
-                    • Rata-rata keterlambatan: 4.2 jam<br>
-                    • Penyebab: Berat (5.2kg) memerlukan penanganan khusus<br>
-                    • Rekomendasi: Pisahkan pengiriman atau gunakan kurir khusus barang berat<br><br>
-                    <strong>2. Produk C (12 keterlambatan)</strong><br>
-                    • Rata-rata keterlambatan: 3.8 jam<br>
-                    • Penyebab: Sering dikirim via GoSend di Jakarta Pusat<br>
-                    • Rekomendasi: Alihkan ke JNE atau SiCepat<br><br>
-                    <strong>3. Produk F (9 keterlambatan)</strong><br>
-                    • Rata-rata keterlambatan: 2.5 hari<br>
-                    • Penyebab: Tujuan wilayah luar Jawa (Kalimantan)<br>
-                    • Rekomendasi: Gunakan kurir khusus wilayah luar Jawa`;
-                    
-                    actions = `<div class="mt-2 flex space-x-2">
-                        <button class="text-xs px-2 py-1 bg-blue-100 text-blue-700 rounded smooth-transition hover:bg-blue-200">Analisis Produk</button>
-                        <button class="text-xs px-2 py-1 bg-red-100 text-red-700 rounded smooth-transition hover:bg-red-200">Rencana Perbaikan</button>
-                    </div>`;
-                    
-                } else {
-                    response = `Saya telah menganalisis data pengiriman Anda. Berdasarkan informasi terkini, performa pengiriman Anda cukup baik dengan tingkat ketepatan waktu 87%, namun ada peluang optimasi di beberapa area khususnya untuk pengiriman GoSend dan wilayah luar Jawa. Apakah ada aspek spesifik pengiriman yang ingin Anda dalami lebih lanjut?`;
-                    actions = `<div class="mt-2 flex space-x-2">
-                        <button class="text-xs px-2 py-1 bg-blue-100 text-blue-700 rounded smooth-transition hover:bg-blue-200">Analisis Lengkap</button>
-                        <button class="text-xs px-2 py-1 bg-green-100 text-green-700 rounded smooth-transition hover:bg-green-200">Rekomendasi</button>
-                    </div>`;
-                }
-                
-                const chatContainer = document.getElementById('aiChatContainer');
-                const messageDiv = document.createElement('div');
-                messageDiv.className = 'ai-message assistant';
-                messageDiv.innerHTML = `
-                    <div class="flex items-start space-x-2">
-                        <div class="w-6 h-6 rounded-full bg-blue-100 flex items-center justify-center flex-shrink-0 mt-1">
-                            <i class="fas fa-robot text-blue-600 text-xs"></i>
-                        </div>
-                        <div>
-                            <p class="text-gray-700">${response}</p>
-                            ${actions}
-                        </div>
-                    </div>
-                `;
-                
-                chatContainer.appendChild(messageDiv);
-                chatContainer.scrollTop = chatContainer.scrollHeight;
-            }
-            
-            // Shipping Filter Buttons
+            // 12. Shipping Filter Buttons
             const shippingFilters = document.querySelectorAll('.shipping-filter');
             shippingFilters.forEach(filter => {
                 filter.addEventListener('click', function() {
@@ -2086,32 +3068,37 @@
                 }
             }
             
-            // Refresh Shipping Button
+            // 13. Refresh Shipping Button
             const refreshShippingBtn = document.getElementById('refreshShippingBtn');
-            
-            function refreshShippingData() {
-                refreshShippingBtn.innerHTML = '<i class="fas fa-spinner fa-spin mr-1"></i> Memperbarui...';
-                refreshShippingBtn.disabled = true;
-                
-                showNotification('Memperbarui data pengiriman...', 'info');
-                
-                setTimeout(() => {
-                    refreshShippingBtn.innerHTML = '<i class="fas fa-sync-alt mr-1"></i> Perbarui';
-                    refreshShippingBtn.disabled = false;
+            if (refreshShippingBtn) {
+                refreshShippingBtn.addEventListener('click', function() {
+                    refreshShippingBtn.innerHTML = '<i class="fas fa-spinner fa-spin mr-1"></i> Memperbarui...';
+                    refreshShippingBtn.disabled = true;
                     
-                    showNotification('Data pengiriman berhasil diperbarui!', 'success');
+                    showNotification('Memperbarui data pengiriman...', 'info');
                     
-                    simulateShippingDataChanges();
-                }, 2000);
+                    setTimeout(() => {
+                        refreshShippingBtn.innerHTML = '<i class="fas fa-sync-alt mr-1"></i> Perbarui';
+                        refreshShippingBtn.disabled = false;
+                        
+                        showNotification('Data pengiriman berhasil diperbarui!', 'success');
+                        
+                        simulateShippingDataChanges();
+                        
+                        // Check for new notifications after refresh
+                        notificationSystem.checkCriticalConditions();
+                    }, 2000);
+                });
             }
             
-            refreshShippingBtn.addEventListener('click', refreshShippingData);
-            
             function simulateShippingDataChanges() {
-                const metrics = document.querySelectorAll('.text-2xl.font-bold.text-gray-800, .text-lg.font-bold');
+                // Update metrics with slight random changes
+                const metrics = document.querySelectorAll('.text-xl.font-bold.text-gray-800, .text-2xl.font-bold.text-gray-800');
                 metrics.forEach(metric => {
-                    if (metric.textContent.match(/^\d+$/)) {
-                        const currentValue = parseInt(metric.textContent);
+                    const currentText = metric.textContent;
+                    
+                    if (currentText.match(/^\d+$/)) {
+                        const currentValue = parseInt(currentText);
                         if (!isNaN(currentValue)) {
                             const change = Math.floor(Math.random() * 5) - 2;
                             const newValue = Math.max(0, currentValue + change);
@@ -2125,124 +3112,40 @@
                     }
                 });
                 
+                // Update status indicators
                 const statusIndicators = document.querySelectorAll('.shipping-status');
                 statusIndicators.forEach(indicator => {
                     if (Math.random() > 0.7) {
                         if (indicator.classList.contains('status-delayed')) {
                             indicator.classList.remove('status-delayed');
                             indicator.classList.add('status-in-transit');
-                            indicator.innerHTML = '<i class="fas fa-truck"></i> Dalam Perjalanan';
+                            indicator.innerHTML = '<i class="fas fa-truck"></i> <span class="hidden sm:inline">Dalam Perjalanan</span>';
                         } else if (indicator.classList.contains('status-in-transit')) {
                             indicator.classList.remove('status-in-transit');
                             indicator.classList.add('status-delivered');
-                            indicator.innerHTML = '<i class="fas fa-check-circle"></i> Terkirim';
+                            indicator.innerHTML = '<i class="fas fa-check-circle"></i> <span class="hidden sm:inline">Terkirim</span>';
                         }
+                    }
+                });
+                
+                // Update timeline items
+                const timelineItems = document.querySelectorAll('.timeline-item:not(.completed)');
+                timelineItems.forEach(item => {
+                    if (Math.random() > 0.5 && !item.classList.contains('completed')) {
+                        item.classList.add('completed');
                     }
                 });
             }
             
-            // Notification System
-            function showNotification(message, type = 'info') {
-                const notification = document.createElement('div');
-                notification.className = `fixed top-24 right-8 px-4 py-3 rounded-lg shadow-lg z-50 animate-slide-in-right`;
-                
-                let bgColor = 'bg-blue-100 text-blue-800 border border-blue-200';
-                let icon = 'fas fa-info-circle';
-                
-                if (type === 'success') {
-                    bgColor = 'bg-green-100 text-green-800 border border-green-200';
-                    icon = 'fas fa-check-circle';
-                } else if (type === 'warning') {
-                    bgColor = 'bg-yellow-100 text-yellow-800 border border-yellow-200';
-                    icon = 'fas fa-exclamation-triangle';
-                } else if (type === 'error') {
-                    bgColor = 'bg-red-100 text-red-800 border border-red-200';
-                    icon = 'fas fa-times-circle';
-                }
-                
-                notification.className += ` ${bgColor}`;
-                notification.innerHTML = `
-                    <div class="flex items-center space-x-3">
-                        <i class="${icon}"></i>
-                        <span>${message}</span>
-                    </div>
-                `;
-                
-                document.body.appendChild(notification);
-                
-                setTimeout(() => {
-                    if (notification.parentNode) {
-                        notification.style.animation = 'slideInRight 0.3s reverse forwards';
-                        setTimeout(() => {
-                            if (notification.parentNode) {
-                                notification.remove();
-                            }
-                        }, 300);
-                    }
-                }, 3000);
-            }
-            
-            // Interactive notification bell
-            const notificationBell = document.getElementById('notificationBell');
-            if (notificationBell) {
-                notificationBell.addEventListener('click', function() {
-                    const notificationPopup = document.createElement('div');
-                    notificationPopup.className = 'fixed top-20 right-8 w-72 bg-white rounded-xl shadow-lg border border-gray-200 p-4 animate-fade-in-up z-40';
-                    notificationPopup.innerHTML = `
-                        <div class="flex justify-between items-center mb-3">
-                            <h4 class="font-bold text-gray-800">Notifikasi Pengiriman</h4>
-                            <button class="text-gray-400 hover:text-gray-600 close-notif">
-                                <i class="fas fa-times"></i>
-                            </button>
-                        </div>
-                        <div class="space-y-3">
-                            <div class="flex items-start space-x-3 p-2 rounded-lg bg-red-50">
-                                <i class="fas fa-exclamation-circle text-red-500 mt-1"></i>
-                                <div>
-                                    <p class="text-sm font-medium">Pengiriman #SH-7891 terlambat 2 jam</p>
-                                    <p class="text-xs text-gray-600">Menuju Bandung • Sarah Lee</p>
-                                </div>
-                            </div>
-                            <div class="flex items-start space-x-3 p-2 rounded-lg bg-green-50">
-                                <i class="fas fa-check-circle text-green-500 mt-1"></i>
-                                <div>
-                                    <p class="text-sm font-medium">Pengiriman #SH-7890 telah tiba</p>
-                                    <p class="text-xs text-gray-600">Surabaya • Ahmad R.</p>
-                                </div>
-                            </div>
-                            <div class="flex items-start space-x-3 p-2 rounded-lg bg-blue-50">
-                                <i class="fas fa-info-circle text-blue-500 mt-1"></i>
-                                <div>
-                                    <p class="text-sm font-medium">AI telah menganalisis pola keterlambatan</p>
-                                    <p class="text-xs text-gray-600">3 rekomendasi tersedia</p>
-                                </div>
-                            </div>
-                        </div>
-                    `;
-                    
-                    document.body.appendChild(notificationPopup);
-                    
-                    const closeBtn = notificationPopup.querySelector('.close-notif');
-                    closeBtn.addEventListener('click', function() {
-                        notificationPopup.remove();
-                    });
-                    
-                    setTimeout(() => {
-                        if (notificationPopup.parentNode) {
-                            notificationPopup.remove();
-                        }
-                    }, 5000);
-                });
-            }
-            
-            // Initialize with a welcome message from AI
+            // 14. Initialize with a welcome message from AI
             setTimeout(() => {
-                if (!document.querySelector('.ai-message.user')) {
+                const chatContainer = document.getElementById('aiChatContainer');
+                if (chatContainer && !document.querySelector('.ai-message.user')) {
                     addAIMessage("Selamat datang di halaman Shipping Tracking! Saya dapat membantu Anda menganalisis performa pengiriman, mengidentifikasi keterlambatan, dan memberikan rekomendasi optimasi. Apa yang ingin Anda ketahui hari ini?", 'assistant');
                 }
             }, 1000);
             
-            // Progress bar animations
+            // 15. Progress bar animations
             const progressBars = document.querySelectorAll('.progress-bar-fill');
             const observer = new IntersectionObserver((entries) => {
                 entries.forEach(entry => {
@@ -2262,19 +3165,277 @@
             
             progressBars.forEach(bar => observer.observe(bar));
             
-            // Auto-refresh shipping data setiap 60 detik
+            // 16. Auto-refresh shipping data setiap 60 detik
             setInterval(simulateShippingDataChanges, 60000);
             
-            // Tambahkan event listener untuk scroll dan resize
+            // 17. Tambahkan event listener untuk scroll dan resize
             window.addEventListener('scroll', function() {
                 animator.observer.disconnect();
                 animator.init();
             });
             
             window.addEventListener('resize', function() {
+                checkScreenSize();
                 setTimeout(forceRenderAllContent, 100);
             });
+            
+            // 18. Auto-update date setiap menit
+            setInterval(updateDate, 60000);
+            
+            // 19. Simulasikan notifikasi penting setelah beberapa detik
+            setTimeout(() => {
+                notificationSystem.checkCriticalConditions();
+            }, 3000);
         });
+        
+        // ================= FUNGSI BANTUAN =================
+        
+        // AI Chat Functions
+        function addAIMessage(text, sender) {
+            const chatContainer = document.getElementById('aiChatContainer');
+            if (!chatContainer) return;
+            
+            const messageDiv = document.createElement('div');
+            messageDiv.className = `ai-message ${sender}`;
+            
+            if (sender === 'user') {
+                messageDiv.innerHTML = `
+                    <div class="flex items-center justify-between">
+                        <p>${text}</p>
+                        <i class="fas fa-user ml-2"></i>
+                    </div>
+                `;
+            } else {
+                messageDiv.innerHTML = `
+                    <div class="flex items-start space-x-2">
+                        <div class="w-6 h-6 rounded-full bg-blue-100 flex items-center justify-center flex-shrink-0 mt-1">
+                            <i class="fas fa-robot text-blue-600 text-xs"></i>
+                        </div>
+                        <div>
+                            <p class="text-gray-700">${text}</p>
+                        </div>
+                    </div>
+                `;
+            }
+            
+            chatContainer.appendChild(messageDiv);
+            chatContainer.scrollTop = chatContainer.scrollHeight;
+        }
+        
+        function showTypingIndicator() {
+            const chatContainer = document.getElementById('aiChatContainer');
+            if (!chatContainer) return;
+            
+            const typingDiv = document.createElement('div');
+            typingDiv.className = 'ai-typing-indicator';
+            typingDiv.id = 'typingIndicator';
+            typingDiv.innerHTML = `
+                <div class="w-6 h-6 rounded-full bg-blue-100 flex items-center justify-center flex-shrink-0 mr-2">
+                    <i class="fas fa-robot text-blue-600 text-xs"></i>
+                </div>
+                <div class="flex">
+                    <div class="ai-typing-dot"></div>
+                    <div class="ai-typing-dot"></div>
+                    <div class="ai-typing-dot"></div>
+                </div>
+            `;
+            
+            chatContainer.appendChild(typingDiv);
+            chatContainer.scrollTop = chatContainer.scrollHeight;
+        }
+        
+        function removeTypingIndicator() {
+            const typingIndicator = document.getElementById('typingIndicator');
+            if (typingIndicator) {
+                typingIndicator.remove();
+            }
+        }
+        
+        // Respons AI khusus untuk shipping
+        function generateShippingAIResponse(question) {
+            let response = '';
+            let actions = '';
+            
+            const questionLower = question.toLowerCase();
+            
+            if (questionLower.includes('keterlambatan') || questionLower.includes('terlambat') || 
+                (questionLower.includes('kenapa') && questionLower.includes('lambat'))) {
+                
+                response = `Berdasarkan analisis data 30 hari terakhir, penyebab utama keterlambatan pengiriman Anda adalah:<br><br>
+                1. <strong>Kurir GoSend di Jakarta Pusat (24% terlambat)</strong> - Rata-rata keterlambatan 3.2 jam karena lalu lintas padat dan volume tinggi.<br>
+                2. <strong>Hari Senin puncak permintaan</strong> - 18% keterlambatan terjadi hari Senin karena backlog dari akhir pekan.<br>
+                3. <strong>Produk berat >5kg (12% terlambat)</strong> - Memerlukan penanganan khusus dan waktu proses lebih lama.<br>
+                4. <strong>Wilayah luar Jawa (22% terlambat)</strong> - Rata-rata keterlambatan 1.8 hari karena jarak dan infrastruktur.<br><br>
+                Rekomendasi saya: alihkan 30% pengiriman GoSend Jakarta Pusat ke JNE, tambah staf pengemasan hari Senin, dan gunakan kurir khusus untuk wilayah luar Jawa.`;
+                
+                actions = `<div class="mt-2 flex space-x-2">
+                    <button class="text-xs px-2 py-1 bg-blue-100 text-blue-700 rounded smooth-transition hover:bg-blue-200">Analisis Detail</button>
+                    <button class="text-xs px-2 py-1 bg-green-100 text-green-700 rounded smooth-transition hover:bg-green-200">Rekomendasi Lengkap</button>
+                </div>`;
+                
+            } else if (questionLower.includes('kurir') && questionLower.includes('terbaik') || 
+                      questionLower.includes('rekomendasi kurir')) {
+                
+                response = `Berdasarkan analisis performa 7 hari terakhir, rekomendasi kurir untuk bisnis Anda:<br><br>
+                <strong>1. JNE Regular (Rating: ★★★★☆)</strong><br>
+                • Ketepatan waktu: 95%<br>
+                • Biaya rata-rata: Rp 12.500<br>
+                • Rekomendasi: Untuk semua wilayah Jawa, produk reguler<br><br>
+                <strong>2. SiCepat (Rating: ★★★★☆)</strong><br>
+                • Ketepatan waktu: 88%<br>
+                • Biaya rata-rata: Rp 13.800<br>
+                • Rekomendasi: Untuk pengiriman cepat (<24 jam)<br><br>
+                <strong>3. GrabExpress (Rating: ★★★☆☆)</strong><br>
+                • Ketepatan waktu: 92%<br>
+                • Biaya rata-rata: Rp 16.200<br>
+                • Rekomendasi: Untuk pengiriman same-day di area metropolitan<br><br>
+                <strong>Hindari untuk produk tertentu:</strong> GoSend untuk produk >3kg dan pengiriman Jakarta Pusat.`;
+                
+                actions = `<div class="mt-2 flex space-x-2">
+                    <button class="text-xs px-2 py-1 bg-blue-100 text-blue-700 rounded smooth-transition hover:bg-blue-200">Bandingkan Kurir</button>
+                    <button class="text-xs px-2 py-1 bg-purple-100 text-purple-700 rounded smooth-transition hover:bg-purple-200">Optimasi Otomatis</button>
+                </div>`;
+                
+            } else if (questionLower.includes('optimasi') || questionLower.includes('biaya') || 
+                      questionLower.includes('efisiensi')) {
+                
+                response = `Analisis optimasi biaya pengiriman Anda:<br><br>
+                <strong>Peluang Penghematan:</strong><br>
+                1. <strong>Konsolidasi pengiriman JNE</strong> - Potensi penghematan 15% dengan menggabungkan pengiriman ke wilayah yang sama.<br>
+                2. <strong>Negosiasi kontrak dengan SiCepat</strong> - Volume saat ini memungkinkan diskon 8-12%.<br>
+                3. <strong>Penggunaan kurir regional</strong> - Untuk Bali & luar Jawa, pertimbangkan kurir lokal dengan harga 20% lebih murah.<br>
+                4. <strong>Optimasi kemasan</strong> - 23% paket memiliki dimensi tidak optimal, berpotensi hemat Rp 2.300 per paket.<br><br>
+                Total potensi penghematan: <strong>Rp 1.8 juta/bulan</strong>.`;
+                
+                actions = `<div class="mt-2 flex space-x-2">
+                    <button class="text-xs px-2 py-1 bg-blue-100 text-blue-700 rounded smooth-transition hover:bg-blue-200">Rencana Optimasi</button>
+                    <button class="text-xs px-2 py-1 bg-green-100 text-green-700 rounded smooth-transition hover:bg-green-200">Simulasi Penghematan</button>
+                </div>`;
+                
+            } else if (questionLower.includes('prediksi') || questionLower.includes('besok') || 
+                      questionLower.includes('ramalan')) {
+                
+                response = `Prediksi pengiriman untuk besok berdasarkan data historis dan tren:<br><br>
+                <strong>Volume Pengiriman:</strong> 45-52 paket (naik 8% dari hari ini)<br>
+                <strong>Estimasi Keterlambatan:</strong> 5-8 paket (11-15%)<br>
+                <strong>Kurir dengan beban tertinggi:</strong> JNE (65%), SiCepat (25%), GoSend (10%)<br>
+                <strong>Wilayah dengan risiko tinggi:</strong> Jakarta Pusat, Surabaya Timur<br><br>
+                <strong>Rekomendasi Persiapan:</strong><br>
+                1. Siapkan tambahan staf pengemasan untuk pagi hari<br>
+                2. Alokasikan 20% pengiriman GoSend ke kurir alternatif<br>
+                3. Prioritaskan pengiriman untuk pelanggan premium`;
+                
+                actions = `<div class="mt-2 flex space-x-2">
+                    <button class="text-xs px-2 py-1 bg-blue-100 text-blue-700 rounded smooth-transition hover:bg-blue-200">Lihat Prediksi Detail</button>
+                    <button class="text-xs px-2 py-1 bg-yellow-100 text-yellow-700 rounded smooth-transition hover:bg-yellow-200">Siapkan Mitigasi</button>
+                </div>`;
+                
+            } else if (questionLower.includes('wilayah') || questionLower.includes('area') || 
+                      questionLower.includes('daerah')) {
+                
+                response = `Analisis performa pengiriman per wilayah:<br><br>
+                <strong>1. Jakarta Pusat (Rating: ★★☆☆☆)</strong><br>
+                • Ketepatan waktu: 72%<br>
+                • Rata-rata keterlambatan: 3.1 jam<br>
+                • Kurir utama: GoSend (45%), JNE (35%), SiCepat (20%)<br>
+                • Rekomendasi: Kurangi penggunaan GoSend, tingkatkan JNE<br><br>
+                <strong>2. Bandung (Rating: ★★★☆☆)</strong><br>
+                • Ketepatan waktu: 84%<br>
+                • Rata-rata keterlambatan: 1.8 jam<br>
+                • Kurir utama: SiCepat (55%), JNE (45%)<br>
+                • Rekomendasi: Pertahankan mix saat ini<br><br>
+                <strong>3. Surabaya (Rating: ★★★★☆)</strong><br>
+                • Ketepatan waktu: 91%<br>
+                • Rata-rata keterlambatan: 0.9 jam<br>
+                • Kurir utama: JNE (70%), SiCepat (30%)<br>
+                • Rekomendasi: Optimalkan jadwal pengambilan`;
+                
+                actions = `<div class="mt-2 flex space-x-2">
+                    <button class="text-xs px-2 py-1 bg-blue-100 text-blue-700 rounded smooth-transition hover:bg-blue-200">Peta Performa</button>
+                    <button class="text-xs px-2 py-1 bg-green-100 text-green-700 rounded smooth-transition hover:bg-green-200">Strategi Regional</button>
+                </div>`;
+                
+            } else {
+                response = `Saya telah menganalisis data pengiriman Anda. Berdasarkan informasi terkini, performa pengiriman Anda cukup baik dengan tingkat ketepatan waktu 87%, namun ada peluang optimasi di beberapa area khususnya untuk pengiriman GoSend dan wilayah luar Jawa. Apakah ada aspek spesifik pengiriman yang ingin Anda dalami lebih lanjut?`;
+                actions = `<div class="mt-2 flex space-x-2">
+                    <button class="text-xs px-2 py-1 bg-blue-100 text-blue-700 rounded smooth-transition hover:bg-blue-200">Analisis Lengkap</button>
+                    <button class="text-xs px-2 py-1 bg-green-100 text-green-700 rounded smooth-transition hover:bg-green-200">Rekomendasi</button>
+                </div>`;
+            }
+            
+            const chatContainer = document.getElementById('aiChatContainer');
+            if (!chatContainer) return;
+            
+            const messageDiv = document.createElement('div');
+            messageDiv.className = 'ai-message assistant';
+            messageDiv.innerHTML = `
+                <div class="flex items-start space-x-2">
+                    <div class="w-6 h-6 rounded-full bg-blue-100 flex items-center justify-center flex-shrink-0 mt-1">
+                        <i class="fas fa-robot text-blue-600 text-xs"></i>
+                    </div>
+                    <div>
+                        <p class="text-gray-700">${response}</p>
+                        ${actions}
+                    </div>
+                </div>
+            `;
+            
+            chatContainer.appendChild(messageDiv);
+            chatContainer.scrollTop = chatContainer.scrollHeight;
+        }
+        
+        // Notification System (untuk notifikasi sederhana)
+        function showNotification(message, type = 'info') {
+            const notification = document.createElement('div');
+            notification.className = `fixed top-24 right-8 px-4 py-3 rounded-lg shadow-lg z-50 animate-slide-in-right hidden md:block`;
+            
+            let bgColor = 'bg-blue-100 text-blue-800 border border-blue-200';
+            let icon = 'fas fa-info-circle';
+            
+            if (type === 'success') {
+                bgColor = 'bg-green-100 text-green-800 border border-green-200';
+                icon = 'fas fa-check-circle';
+            } else if (type === 'warning') {
+                bgColor = 'bg-yellow-100 text-yellow-800 border border-yellow-200';
+                icon = 'fas fa-exclamation-triangle';
+            } else if (type === 'error') {
+                bgColor = 'bg-red-100 text-red-800 border border-red-200';
+                icon = 'fas fa-times-circle';
+            }
+            
+            notification.className += ` ${bgColor}`;
+            notification.innerHTML = `
+                <div class="flex items-center space-x-3">
+                    <i class="${icon}"></i>
+                    <span>${message}</span>
+                </div>
+            `;
+            
+            document.body.appendChild(notification);
+            
+            setTimeout(() => {
+                if (notification.parentNode) {
+                    notification.style.animation = 'slideInRight 0.3s reverse forwards';
+                    setTimeout(() => {
+                        if (notification.parentNode) {
+                            notification.remove();
+                        }
+                    }, 300);
+                }
+            }, 3000);
+        }
+    </script>
+    
+    <!-- Push Notification Service -->
+    <script src="../src/pushNotification.js"></script>
+    <script>
+        // Start push notification demo mode
+        if (window.PushNotificationService) {
+            setTimeout(() => {
+                window.PushNotificationService.startDemoMode();
+                console.log('🔔 Push notification demo mode aktif - notifikasi setiap 20 detik');
+            }, 3000);
+        }
     </script>
 </body>
 </html>

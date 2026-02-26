@@ -6,15 +6,10 @@ import (
 	"os"
 
 	_ "github.com/go-sql-driver/mysql"
-	"github.com/joho/godotenv"
 )
 
 
 func DataCon() *sql.DB{
-	err := godotenv.Load(".env")
-	if err != nil {
-		panic(err)
-	}
 
 	HOST := os.Getenv("DB_HOST")
 	USER := os.Getenv("DB_USERNAME")
@@ -31,6 +26,4 @@ func DataCon() *sql.DB{
 	}
 
 	return result
-
-
 }

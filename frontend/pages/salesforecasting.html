@@ -34,11 +34,12 @@
             background: linear-gradient(to bottom right, #eff6ff, #f3f4f6, #f9fafb);
         }
         
-        /* Struktur layout utama */
+        /* Struktur layout utama - RESPONSIVE */
         .app-container {
             display: flex;
             min-height: 100vh;
             width: 100%;
+            position: relative;
         }
         
         .main-wrapper {
@@ -47,6 +48,8 @@
             flex-direction: column;
             max-height: 100vh;
             overflow: hidden;
+            width: 100%;
+            transition: margin-left 0.3s ease;
         }
         
         .content-wrapper {
@@ -54,8 +57,97 @@
             overflow-y: auto;
             overflow-x: hidden;
             -webkit-overflow-scrolling: touch;
-            padding: 2rem;
+            padding: 1rem;
             background: linear-gradient(to bottom, #f8fafc, #f1f5f9);
+        }
+        
+        @media (min-width: 768px) {
+            .content-wrapper {
+                padding: 1.5rem;
+            }
+        }
+        
+        @media (min-width: 1024px) {
+            .content-wrapper {
+                padding: 2rem;
+            }
+        }
+        
+        /* Sidebar Responsive */
+        .sidebar-overlay {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-color: rgba(0, 0, 0, 0.5);
+            z-index: 40;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+        
+        .sidebar-overlay.active {
+            display: block;
+            opacity: 1;
+        }
+        
+        .sidebar-container {
+            position: fixed;
+            top: 0;
+            left: 0;
+            height: 100vh;
+            width: 16rem;
+            transform: translateX(-100%);
+            transition: transform 0.3s ease;
+            z-index: 50;
+            overflow-y: auto;
+        }
+        
+        @media (min-width: 1024px) {
+            .sidebar-container {
+                position: relative;
+                transform: translateX(0);
+                height: 100vh;
+                flex-shrink: 0;
+            }
+            
+            .sidebar-overlay {
+                display: none !important;
+            }
+        }
+        
+        .sidebar-container.active {
+            transform: translateX(0);
+        }
+        
+        .main-wrapper.sidebar-open {
+            margin-left: 0;
+        }
+        
+        @media (min-width: 1024px) {
+            .main-wrapper.sidebar-open {
+                margin-left: 0;
+            }
+        }
+        
+        /* Mobile menu button */
+        .mobile-menu-btn {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 40px;
+            height: 40px;
+            border-radius: 8px;
+            background: #f1f5f9;
+            color: #4a5568;
+            border: 1px solid #e2e8f0;
+        }
+        
+        @media (min-width: 1024px) {
+            .mobile-menu-btn {
+                display: none;
+            }
         }
         
         /* Custom animations */
@@ -89,6 +181,28 @@
             to {
                 opacity: 1;
                 transform: translateX(0);
+            }
+        }
+        
+        @keyframes slideDown {
+            from {
+                opacity: 0;
+                transform: translateY(-20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        
+        @keyframes slideUp {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
             }
         }
         
@@ -165,6 +279,39 @@
             30% { transform: translateY(-8px); }
         }
         
+        @keyframes notificationSlideIn {
+            0% {
+                opacity: 0;
+                transform: translateX(100%);
+            }
+            70% {
+                opacity: 1;
+                transform: translateX(-10px);
+            }
+            100% {
+                opacity: 1;
+                transform: translateX(0);
+            }
+        }
+        
+        @keyframes expandDown {
+            from {
+                max-height: 70px;
+            }
+            to {
+                max-height: 300px;
+            }
+        }
+        
+        @keyframes collapseUp {
+            from {
+                max-height: 300px;
+            }
+            to {
+                max-height: 70px;
+            }
+        }
+        
         .animate-fade-in-up {
             animation: fadeInUp 0.6s ease-out forwards;
         }
@@ -201,6 +348,28 @@
         
         .animate-ripple {
             animation: ripple 0.6s linear forwards;
+        }
+        
+        .animate-slide-down {
+            animation: slideDown 0.3s ease-out forwards;
+        }
+        
+        .animate-slide-up {
+            animation: slideUp 0.3s ease-out forwards;
+        }
+        
+        .animate-notification-slide-in {
+            animation: notificationSlideIn 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
+        }
+        
+        .animate-expand-down {
+            animation: expandDown 0.4s ease-out forwards;
+            overflow: hidden;
+        }
+        
+        .animate-collapse-up {
+            animation: collapseUp 0.4s ease-out forwards;
+            overflow: hidden;
         }
         
         /* Custom scrollbar */
@@ -268,37 +437,6 @@
         
         .gradient-red {
             background: linear-gradient(135deg, #FED7D7 0%, #F5F7FA 100%);
-        }
-        
-        /* Horizontal scroll container */
-        .horizontal-scroll-container {
-            display: flex;
-            overflow-x: auto;
-            padding: 1rem 0.5rem;
-            gap: 1rem;
-            scrollbar-width: thin;
-            scrollbar-color: #CBD5E0 #F5F7FA;
-            -webkit-overflow-scrolling: touch;
-        }
-        
-        .horizontal-scroll-container::-webkit-scrollbar {
-            height: 6px;
-        }
-        
-        .horizontal-scroll-container::-webkit-scrollbar-track {
-            background: #F5F7FA;
-            border-radius: 3px;
-        }
-        
-        .horizontal-scroll-container::-webkit-scrollbar-thumb {
-            background: linear-gradient(135deg, #4A90E2, #2A6EBB);
-            border-radius: 3px;
-        }
-        
-        .horizontal-card {
-            flex: 0 0 auto;
-            width: 320px;
-            min-height: 180px;
         }
         
         /* Progress bars */
@@ -469,7 +607,7 @@
         .ai-typing-dot:nth-child(2) { animation-delay: 0.2s; }
         .ai-typing-dot:nth-child(3) { animation-delay: 0.4s; }
         
-        /* Container untuk pertanyaan cepat AI - DIPERBAIKI */
+        /* Container untuk pertanyaan cepat AI */
         .ai-quick-questions-container {
             display: flex;
             overflow-x: auto;
@@ -622,6 +760,18 @@
             width: 100%;
         }
         
+        @media (max-width: 768px) {
+            .chart-container {
+                height: 250px;
+            }
+        }
+        
+        @media (max-width: 640px) {
+            .chart-container {
+                height: 200px;
+            }
+        }
+        
         /* Logout button di navbar */
         .nav-logout-btn {
             padding: 8px 16px;
@@ -637,26 +787,589 @@
             border-color: #FCA5A5;
             transform: translateY(-2px);
         }
+        
+        /* ================= SISTEM NOTIFIKASI BARU ================= */
+        /* Container untuk notifikasi popup */
+        .notification-toast-container {
+            position: fixed;
+            top: 90px;
+            right: 20px;
+            z-index: 1000;
+            width: 350px;
+            max-width: 90vw;
+        }
+        
+        /* Notifikasi Toast - kecil dan compact */
+        .notification-toast {
+            background: white;
+            border-radius: 10px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+            overflow: hidden;
+            margin-bottom: 12px;
+            max-height: 70px;
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            transform: translateX(120%);
+            opacity: 0;
+            border-left: 4px solid;
+        }
+        
+        .notification-toast.show {
+            transform: translateX(0);
+            opacity: 1;
+        }
+        
+        .notification-toast.hide {
+            transform: translateX(120%);
+            opacity: 0;
+            margin-bottom: 0;
+            max-height: 0;
+        }
+        
+        /* Tipe notifikasi - gradasi warna */
+        .notification-toast.critical {
+            border-left-color: #F56565;
+            background: linear-gradient(135deg, #FFF5F5, #FED7D7);
+        }
+        
+        .notification-toast.warning {
+            border-left-color: #ECC94B;
+            background: linear-gradient(135deg, #FFFAF0, #FEEBC8);
+        }
+        
+        .notification-toast.info {
+            border-left-color: #4A90E2;
+            background: linear-gradient(135deg, #EBF8FF, #BEE3F8);
+        }
+        
+        .notification-toast.success {
+            border-left-color: #48BB78;
+            background: linear-gradient(135deg, #F0FFF4, #C6F6D5);
+        }
+        
+        /* Header notifikasi (compact) */
+        .notification-toast-header {
+            padding: 12px 16px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            cursor: pointer;
+            min-height: 70px;
+        }
+        
+        .notification-toast-content {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            flex: 1;
+            overflow: hidden;
+        }
+        
+        .notification-toast-icon {
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+            font-size: 16px;
+        }
+        
+        .notification-toast.critical .notification-toast-icon {
+            background: linear-gradient(135deg, #F56565, #C53030);
+            color: white;
+        }
+        
+        .notification-toast.warning .notification-toast-icon {
+            background: linear-gradient(135deg, #ECC94B, #D69E2E);
+            color: white;
+        }
+        
+        .notification-toast.info .notification-toast-icon {
+            background: linear-gradient(135deg, #4A90E2, #2A6EBB);
+            color: white;
+        }
+        
+        .notification-toast.success .notification-toast-icon {
+            background: linear-gradient(135deg, #48BB78, #38A169);
+            color: white;
+        }
+        
+        .notification-toast-text {
+            flex: 1;
+            overflow: hidden;
+        }
+        
+        .notification-toast-title {
+            font-size: 14px;
+            font-weight: 600;
+            margin-bottom: 2px;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+        
+        .notification-toast.critical .notification-toast-title {
+            color: #C53030;
+        }
+        
+        .notification-toast.warning .notification-toast-title {
+            color: #975A16;
+        }
+        
+        .notification-toast.info .notification-toast-title {
+            color: #2C5282;
+        }
+        
+        .notification-toast.success .notification-toast-title {
+            color: #276749;
+        }
+        
+        .notification-toast-preview {
+            font-size: 12px;
+            color: #718096;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+        
+        .notification-toast-actions {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            margin-left: 8px;
+        }
+        
+        .notification-toast-expand-btn {
+            background: transparent;
+            border: none;
+            color: #A0AEC0;
+            cursor: pointer;
+            padding: 4px;
+            border-radius: 4px;
+            transition: all 0.2s;
+            width: 24px;
+            height: 24px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .notification-toast-expand-btn:hover {
+            background: rgba(0, 0, 0, 0.05);
+            color: #718096;
+        }
+        
+        .notification-toast-expand-btn i {
+            transition: transform 0.3s ease;
+        }
+        
+        .notification-toast-close-btn {
+            background: transparent;
+            border: none;
+            color: #A0AEC0;
+            cursor: pointer;
+            padding: 4px;
+            border-radius: 4px;
+            transition: all 0.2s;
+            width: 24px;
+            height: 24px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .notification-toast-close-btn:hover {
+            background: rgba(0, 0, 0, 0.05);
+            color: #718096;
+        }
+        
+        /* Body notifikasi (expanded) */
+        .notification-toast-body {
+            padding: 0 16px 16px 64px;
+            font-size: 13px;
+            color: #4A5568;
+            line-height: 1.5;
+            display: none;
+            max-height: 200px;
+            overflow-y: auto;
+        }
+        
+        .notification-toast-footer {
+            padding: 12px 16px 12px 64px;
+            border-top: 1px solid rgba(0, 0, 0, 0.05);
+            display: none;
+            gap: 8px;
+        }
+        
+        .notification-toast.expanded {
+            max-height: 350px;
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
+        }
+        
+        .notification-toast.expanded .notification-toast-body,
+        .notification-toast.expanded .notification-toast-footer {
+            display: block;
+        }
+        
+        .notification-toast.expanded .notification-toast-expand-btn i {
+            transform: rotate(180deg);
+        }
+        
+        /* Tombol aksi dalam notifikasi */
+        .notification-action-btn {
+            padding: 6px 12px;
+            border-radius: 6px;
+            font-size: 12px;
+            font-weight: 500;
+            cursor: pointer;
+            border: none;
+            transition: all 0.2s;
+        }
+        
+        .notification-action-btn.primary {
+            background: linear-gradient(135deg, #4A90E2, #2A6EBB);
+            color: white;
+        }
+        
+        .notification-action-btn.primary:hover {
+            background: linear-gradient(135deg, #2A6EBB, #4A90E2);
+            transform: translateY(-1px);
+        }
+        
+        .notification-action-btn.secondary {
+            background: rgba(0, 0, 0, 0.05);
+            color: #4A5568;
+        }
+        
+        .notification-action-btn.secondary:hover {
+            background: rgba(0, 0, 0, 0.1);
+        }
+        
+        /* Badge untuk jumlah notifikasi */
+        .notification-badge {
+            position: absolute;
+            top: -5px;
+            right: -5px;
+            background: linear-gradient(135deg, #F56565, #C53030);
+            color: white;
+            border-radius: 50%;
+            width: 18px;
+            height: 18px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 10px;
+            font-weight: bold;
+            animation: pulseSoft 2s infinite;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+        }
+        
+        /* Panel notifikasi dari bell icon */
+        .notification-panel {
+            position: fixed;
+            top: 80px;
+            right: 20px;
+            width: 380px;
+            max-width: 90vw;
+            max-height: 500px;
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15);
+            z-index: 1001;
+            overflow: hidden;
+            display: none;
+            flex-direction: column;
+        }
+        
+        .notification-panel.show {
+            display: flex;
+            animation: slideDown 0.3s ease-out;
+        }
+        
+        .notification-panel-header {
+            padding: 16px;
+            border-bottom: 1px solid #E2E8F0;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background: #F7FAFC;
+        }
+        
+        .notification-panel-title {
+            font-size: 16px;
+            font-weight: 600;
+            color: #2D3748;
+        }
+        
+        .notification-panel-close {
+            background: transparent;
+            border: none;
+            color: #718096;
+            cursor: pointer;
+            padding: 4px;
+            border-radius: 4px;
+            transition: all 0.2s;
+        }
+        
+        .notification-panel-close:hover {
+            background: rgba(0, 0, 0, 0.05);
+            color: #4A5568;
+        }
+        
+        .notification-panel-body {
+            flex: 1;
+            overflow-y: auto;
+            padding: 0;
+            max-height: 400px;
+        }
+        
+        .notification-panel-empty {
+            padding: 40px 20px;
+            text-align: center;
+            color: #A0AEC0;
+        }
+        
+        .notification-panel-empty i {
+            font-size: 48px;
+            margin-bottom: 16px;
+            opacity: 0.5;
+        }
+        
+        .notification-panel-item {
+            padding: 16px;
+            border-bottom: 1px solid #F1F5F9;
+            cursor: pointer;
+            transition: background 0.2s;
+            display: flex;
+            align-items: flex-start;
+            gap: 12px;
+        }
+        
+        .notification-panel-item:hover {
+            background: #F7FAFC;
+        }
+        
+        .notification-panel-item.unread {
+            background: #EBF8FF;
+        }
+        
+        .notification-panel-item.unread:hover {
+            background: #E1F0FF;
+        }
+        
+        .notification-panel-item-icon {
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+            font-size: 14px;
+            margin-top: 2px;
+        }
+        
+        .notification-panel-item.critical .notification-panel-item-icon {
+            background: linear-gradient(135deg, #F56565, #C53030);
+            color: white;
+        }
+        
+        .notification-panel-item.warning .notification-panel-item-icon {
+            background: linear-gradient(135deg, #ECC94B, #D69E2E);
+            color: white;
+        }
+        
+        .notification-panel-item.info .notification-panel-item-icon {
+            background: linear-gradient(135deg, #4A90E2, #2A6EBB);
+            color: white;
+        }
+        
+        .notification-panel-item.success .notification-panel-item-icon {
+            background: linear-gradient(135deg, #48BB78, #38A169);
+            color: white;
+        }
+        
+        .notification-panel-item-content {
+            flex: 1;
+            min-width: 0;
+        }
+        
+        .notification-panel-item-title {
+            font-size: 14px;
+            font-weight: 600;
+            margin-bottom: 4px;
+            color: #2D3748;
+        }
+        
+        .notification-panel-item-message {
+            font-size: 13px;
+            color: #718096;
+            line-height: 1.4;
+            margin-bottom: 8px;
+            display: -webkit-box;
+            -webkit-line-clamp: 2;
+            -webkit-box-orient: vertical;
+            overflow: hidden;
+        }
+        
+        .notification-panel-item-time {
+            font-size: 11px;
+            color: #A0AEC0;
+        }
+        
+        .notification-panel-footer {
+            padding: 12px 16px;
+            border-top: 1px solid #E2E8F0;
+            text-align: center;
+        }
+        
+        .notification-panel-clear-btn {
+            background: transparent;
+            border: none;
+            color: #4A90E2;
+            font-size: 14px;
+            font-weight: 500;
+            cursor: pointer;
+            padding: 8px 16px;
+            border-radius: 6px;
+            transition: all 0.2s;
+        }
+        
+        .notification-panel-clear-btn:hover {
+            background: #EBF8FF;
+        }
+        
+        /* Responsive adjustments */
+        @media (max-width: 768px) {
+            .grid-section-card .p-5 {
+                padding: 1rem;
+            }
+            
+            .ai-assistant-panel {
+                width: 90vw !important;
+                height: 70vh !important;
+                right: 5vw !important;
+                top: 15vh !important;
+            }
+            
+            .notification-toast-container {
+                top: 80px;
+                right: 10px;
+                width: 320px;
+            }
+            
+            .notification-panel {
+                right: 10px;
+                width: 95vw;
+                max-height: 70vh;
+            }
+        }
+        
+        @media (max-width: 640px) {
+            .grid-cols-1.md\:grid-cols-2.lg\:grid-cols-4 {
+                grid-template-columns: 1fr;
+                gap: 0.75rem;
+            }
+            
+            #aiAssistantPanel {
+                width: 95vw !important;
+                right: 2.5vw !important;
+                top: 12vh !important;
+            }
+            
+            .header-container {
+                padding-left: 1rem;
+                padding-right: 1rem;
+            }
+            
+            .flex.justify-between.items-center {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 1rem;
+            }
+            
+            .flex.justify-between.items-center > div:last-child {
+                width: 100%;
+                justify-content: space-between;
+            }
+            
+            .notification-toast-container {
+                width: 300px;
+                top: 100px;
+            }
+            
+            /* Mobile-specific adjustments */
+            .forecast-card {
+                padding: 1rem !important;
+            }
+            
+            .grid-cols-1.lg\:grid-cols-3 {
+                grid-template-columns: 1fr;
+                gap: 0.75rem;
+            }
+            
+            .grid-cols-1.lg\:grid-cols-2 {
+                grid-template-columns: 1fr;
+                gap: 0.75rem;
+            }
+            
+            .flex.items-start.p-4 {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+            
+            .table-responsive {
+                overflow-x: auto;
+                -webkit-overflow-scrolling: touch;
+            }
+            
+            .shipping-table {
+                min-width: 800px;
+            }
+        }
+        
+        /* Touch-friendly buttons */
+        .touch-friendly-btn {
+            min-height: 44px;
+            min-width: 44px;
+        }
+        
+        /* Table responsive */
+        .table-responsive {
+            overflow-x: auto;
+            -webkit-overflow-scrolling: touch;
+        }
     </style>
 </head>
 <body class="page-transition">
+    <!-- Sidebar Overlay for Mobile -->
+    <div class="sidebar-overlay" id="sidebarOverlay"></div>
+    
+    <!-- Notification Toast Container -->
+    <div class="notification-toast-container" id="notificationContainer"></div>
+    
     <div class="app-container">
-        <!-- Sidebar dari halaman kedua -->
-        <aside class="w-64 bg-white/90 border-r border-gray-200/50 flex flex-col shadow-sm glass-effect">
-            <div class="p-6 border-b border-gray-100/50">
+        <!-- Sidebar -->
+        <aside class="sidebar-container bg-white/90 border-r border-gray-200/50 flex flex-col shadow-sm glass-effect" id="sidebar">
+            <div class="p-4 md:p-6 border-b border-gray-100/50 flex justify-between items-center">
                 <div class="flex items-center space-x-3">
                     <div class="w-10 h-10 rounded-lg bg-gradient-to-br from-blue-400 to-blue-600 flex items-center justify-center animate-float">
                         <i class="fas fa-chart-line text-white"></i>
                     </div>
-                    <h1 class="text-xl font-bold text-gray-800">Flashboard</h1>
+                    <h1 class="text-xl font-bold text-gray-800">A2M ERPAA</h1>
                 </div>
+                <button class="lg:hidden text-gray-500 hover:text-gray-700" id="closeSidebar">
+                    <i class="fas fa-times text-xl"></i>
+                </button>
             </div>
             
             <nav class="flex-1 p-4 space-y-2">
-                <a href="/dashboard/" class="flex items-center space-x-3 p-3 rounded-lg text-gray-700 smooth-transition hover:bg-gray-100 hover-lift ripple-effect">
-                    <i class="fas fa-tachometer-alt w-5 text-center"></i>
-                    <span class="font-medium">Dashboard</span>
-                </a>
+          <a href="/dashboard/" class="flex items-center space-x-3 p-3 rounded-lg text-gray-700 smooth-transition hover:bg-gray-100 hover-lift ripple-effect">
+            <i class="fas fa-tachometer-alt w-5 text-center"></i>
+            <span class="font-medium">Businese Monitoring</span>
+          </a>
+                
                 <a href="/product/" class="flex items-center space-x-3 p-3 rounded-lg text-gray-700 smooth-transition hover:bg-gray-100 hover-lift ripple-effect">
                     <i class="fas fa-boxes w-5 text-center"></i>
                     <span class="font-medium">Product Management</span>
@@ -693,26 +1406,34 @@
         </aside>
         
         <!-- Main Content -->
-        <div class="main-wrapper">
-            <!-- Header dari halaman kedua dengan modifikasi untuk Sales Forecasting -->
-            <header class="sticky top-0 z-20 bg-white/80 glass-effect border-b border-gray-200/50 px-8 py-4 shrink-0">
-                <div class="flex justify-between items-center">
-                    <div>
-                        <h2 class="text-2xl font-bold text-gray-800 initial-animate">Sales Forecasting</h2>
-                        <p class="text-gray-600 initial-animate" style="animation-delay: 0.1s">Prediksi penjualan dan perencanaan stok berbasis AI</p>
+        <div class="main-wrapper" id="mainWrapper">
+            <!-- Header -->
+            <header class="sticky top-0 z-20 bg-white/80 glass-effect border-b border-gray-200/50 px-4 md:px-8 py-4 shrink-0">
+                <div class="flex justify-between items-center header-container">
+                    <div class="flex items-center space-x-4">
+                        <!-- Mobile Menu Button -->
+                        <button class="mobile-menu-btn lg:hidden" id="mobileMenuBtn">
+                            <i class="fas fa-bars"></i>
+                        </button>
+                        <div>
+                            <h2 class="text-xl md:text-2xl font-bold text-gray-800 initial-animate">
+                                <i class="fas fa-chart-bar text-blue-600 mr-2 md:mr-3"></i>
+                                Sales Forecasting
+                            </h2>
+                            <p class="text-gray-600 text-sm md:text-base initial-animate" style="animation-delay: 0.1s">Prediksi penjualan dan perencanaan stok berbasis AI</p>
+                        </div>
                     </div>
-                    <div class="flex items-center space-x-6">
-                        <!-- AI Assistant Button dari halaman pertama (untuk forecasting) -->
-                        <div class="relative">
-                            <button id="aiAssistantBtn" class="flex items-center space-x-2 px-4 py-2 rounded-lg bg-gradient-to-r from-blue-500 to-blue-600 text-white smooth-transition hover:from-blue-600 hover:to-blue-700 hover-lift shadow-md relative overflow-hidden group">
+                    <div class="flex items-center space-x-3 md:space-x-6">
+                        <!-- AI Assistant Button - Enhanced -->
+                        <div class="relative ai-assistant-container">
+                            <button id="aiAssistantBtn" class="flex items-center space-x-2 px-3 py-2 md:px-4 md:py-2 rounded-lg bg-gradient-to-r from-blue-500 to-blue-600 text-white smooth-transition hover:from-blue-600 hover:to-blue-700 hover-lift shadow-md relative overflow-hidden group touch-friendly-btn">
                                 <i class="fas fa-robot"></i>
-                                <span class="font-medium">AI Assistant</span>
-                                <div class="absolute inset-0 bg-gradient-to-r from-cyan-500 to-blue-500 opacity-0 group-hover:opacity-20 smooth-transition"></div>
-                    <!-- <span class="absolute -top-1 -right-1 w-3 h-3 bg-green-400 rounded-full animate-pulse-soft"></span> -->
+                                <span class="font-medium hidden md:inline">AI Assistant</span>
+                                <span class="font-medium md:hidden">AI</span>
                             </button>
                             
-                            <!-- Enhanced AI Assistant Panel dari halaman pertama (untuk forecasting) -->
-                            <div id="aiAssistantPanel" class="fixed right-8 top-20 w-96 bg-white rounded-xl shadow-2xl border border-gray-200 hidden animate-fade-in-up z-50 overflow-hidden" style="height: 600px;">
+                            <!-- Enhanced AI Assistant Panel -->
+                            <div id="aiAssistantPanel" class="fixed right-4 md:right-8 top-16 md:top-20 w-11/12 md:w-96 bg-white rounded-xl shadow-2xl border border-gray-200 hidden animate-fade-in-up z-50 overflow-hidden" style="height: 500px; max-height: 80vh;">
                                 <!-- AI Assistant Header -->
                                 <div class="bg-gradient-to-r from-blue-500 to-blue-600 p-4 text-white">
                                     <div class="flex justify-between items-center">
@@ -736,14 +1457,14 @@
                                     </div>
                                     
                                     <!-- AI Mode Selector untuk Forecasting -->
-                                    <div class="flex space-x-2 mt-4">
-                                        <button class="ai-mode-btn active flex-1 py-2 rounded-lg bg-white/20 text-sm font-medium smooth-transition hover:bg-white/30" data-mode="forecaster">
+                                    <div class="flex space-x-2 mt-4 overflow-x-auto">
+                                        <button class="ai-mode-btn active flex-1 py-2 rounded-lg bg-white/20 text-sm font-medium smooth-transition hover:bg-white/30 whitespace-nowrap" data-mode="forecaster">
                                             <i class="fas fa-chart-line mr-1"></i> Peramal
                                         </button>
-                                        <button class="ai-mode-btn flex-1 py-2 rounded-lg bg-white/10 text-sm font-medium smooth-transition hover:bg-white/20" data-mode="planner">
+                                        <button class="ai-mode-btn flex-1 py-2 rounded-lg bg-white/10 text-sm font-medium smooth-transition hover:bg-white/20 whitespace-nowrap" data-mode="planner">
                                             <i class="fas fa-calendar-alt mr-1"></i> Perencana
                                         </button>
-                                        <button class="ai-mode-btn flex-1 py-2 rounded-lg bg-white/10 text-sm font-medium smooth-transition hover:bg-white/20" data-mode="analyst">
+                                        <button class="ai-mode-btn flex-1 py-2 rounded-lg bg-white/10 text-sm font-medium smooth-transition hover:bg-white/20 whitespace-nowrap" data-mode="analyst">
                                             <i class="fas fa-search mr-1"></i> Analis Tren
                                         </button>
                                     </div>
@@ -791,7 +1512,7 @@
                                         </div>
                                     </div>
                                     
-                                    <!-- AI Quick Actions - Container bisa di-scroll dengan scrollbar jelas -->
+                                    <!-- AI Quick Actions -->
                                     <div class="p-4 border-t border-gray-200">
                                         <p class="text-sm font-medium text-gray-700 mb-2">Pertanyaan Cepat Forecasting:</p>
                                         <div class="ai-quick-questions-container">
@@ -832,8 +1553,14 @@
                             </div>
                         </div>
                         
-                        <div class="flex items-center space-x-4">
-                            <!-- Logout Button di Navbar dari halaman kedua -->
+                        <div class="flex items-center space-x-2 md:space-x-4">
+                            <!-- Notifications Button with Badge -->
+                            <div class="relative">
+                                <i class="fas fa-bell text-gray-500 text-xl hover:text-blue-500 smooth-transition cursor-pointer ripple-effect" id="notificationBell"></i>
+                                <span class="notification-badge" id="notificationBadge">3</span>
+                            </div>
+                            
+                            <!-- Logout Button di Navbar -->
                             <form action="/logout/" method="post" class="ml-2">
                                 <button type="submit" class="nav-logout-btn flex items-center space-x-2 text-sm font-medium ripple-effect">
                                     <i class="fas fa-sign-out-alt"></i>
@@ -841,29 +1568,26 @@
                                 </button>
                             </form>
                             
-                            <div class="relative">
-                                <i class="fas fa-bell text-gray-500 text-xl hover:text-blue-500 smooth-transition cursor-pointer ripple-effect" id="notificationBell"></i>
-                                <span class="absolute -top-1 -right-1 w-3 h-3 bg-red-500 rounded-full animate-pulse-soft"></span>
-                            </div>
-                            <div class="text-sm text-gray-600">
-                                <span class="font-medium">Selasa, 2 Jan 2026</span>
+                            <!-- Tanggal Sederhana -->
+                            <div class="text-sm text-gray-600 hidden md:block">
+                                <span id="currentDate" class="font-medium">Selasa, 2 Januari 2026</span>
                             </div>
                         </div>
                     </div>
                 </div>
             </header>
             
-            <!-- Content dari halaman pertama (Sales Forecasting) -->
+            <!-- Content -->
             <div class="content-wrapper">
                 <!-- Forecasting Overview Cards -->
                 <section class="force-render">
-                    <div class="flex items-center justify-between mb-6">
+                    <div class="flex flex-col md:flex-row md:items-center justify-between mb-6 gap-4">
                         <h3 class="text-lg font-semibold text-gray-800">Ringkasan Prediksi Penjualan</h3>
-                        <div class="flex items-center space-x-4">
+                        <div class="flex flex-col md:flex-row md:items-center space-y-4 md:space-y-0 md:space-x-4">
                             <div class="flex space-x-2">
-                                <button class="shipping-filter active px-4 py-2 rounded-lg text-sm font-medium ripple-effect" data-period="7">7 Hari</button>
-                                <button class="shipping-filter px-4 py-2 rounded-lg text-sm font-medium bg-gray-100 ripple-effect" data-period="30">30 Hari</button>
-                                <button class="shipping-filter px-4 py-2 rounded-lg text-sm font-medium bg-gray-100 ripple-effect" data-period="90">90 Hari</button>
+                                <button class="shipping-filter active px-3 py-2 md:px-4 md:py-2 rounded-lg text-sm font-medium ripple-effect bg-blue-500 text-white" data-period="7">7 Hari</button>
+                                <button class="shipping-filter px-3 py-2 md:px-4 md:py-2 rounded-lg text-sm font-medium bg-gray-100 ripple-effect" data-period="30">30 Hari</button>
+                                <button class="shipping-filter px-3 py-2 md:px-4 md:py-2 rounded-lg text-sm font-medium bg-gray-100 ripple-effect" data-period="90">90 Hari</button>
                             </div>
                             <button class="text-blue-600 text-sm font-medium flex items-center space-x-1 smooth-transition hover:text-blue-800 group" id="refreshForecastBtn">
                                 <i class="fas fa-sync-alt mr-1"></i> <span>Perbarui Prediksi</span>
@@ -871,20 +1595,20 @@
                         </div>
                     </div>
                     
-                    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
+                    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 md:gap-6 mb-8">
                         <!-- Total Forecasted Sales -->
-                        <div class="bg-white rounded-xl shadow-sm border border-gray-200 p-5 hover-lift gradient-blue initial-animate" style="animation-delay: 0.1s">
+                        <div class="bg-white rounded-xl shadow-sm border border-gray-200 p-4 md:p-5 hover-lift gradient-blue initial-animate" style="animation-delay: 0.1s">
                             <div class="flex justify-between items-start">
                                 <div>
                                     <p class="text-sm text-gray-600">Prediksi Penjualan (30 hari)</p>
-                                    <p class="text-2xl font-bold text-gray-800 mt-1">Rp 1.34 M</p>
+                                    <p class="text-xl md:text-2xl font-bold text-gray-800 mt-1">Rp 1.34 M</p>
                                     <div class="flex items-center mt-2">
                                         <span class="text-xs text-green-600 data-trend-up mr-2">+8.5%</span>
                                         <span class="text-xs text-gray-600">vs bulan lalu</span>
                                     </div>
                                 </div>
-                                <div class="w-12 h-12 rounded-full bg-gradient-to-r from-blue-100 to-blue-200 flex items-center justify-center">
-                                    <i class="fas fa-chart-line text-blue-600 text-xl"></i>
+                                <div class="w-10 h-10 md:w-12 md:h-12 rounded-full bg-gradient-to-r from-blue-100 to-blue-200 flex items-center justify-center">
+                                    <i class="fas fa-chart-line text-blue-600 text-lg md:text-xl"></i>
                                 </div>
                             </div>
                             <div class="mt-4">
@@ -896,18 +1620,18 @@
                         </div>
                         
                         <!-- Stock Requirements -->
-                        <div class="bg-white rounded-xl shadow-sm border border-gray-200 p-5 hover-lift gradient-green initial-animate" style="animation-delay: 0.2s">
+                        <div class="bg-white rounded-xl shadow-sm border border-gray-200 p-4 md:p-5 hover-lift gradient-green initial-animate" style="animation-delay: 0.2s">
                             <div class="flex justify-between items-start">
                                 <div>
                                     <p class="text-sm text-gray-600">Kebutuhan Stok (Minggu Depan)</p>
-                                    <p class="text-2xl font-bold text-gray-800 mt-1">142 Unit</p>
+                                    <p class="text-xl md:text-2xl font-bold text-gray-800 mt-1">142 Unit</p>
                                     <div class="flex items-center mt-2">
                                         <span class="text-xs text-green-600 data-trend-up mr-2">12 produk</span>
                                         <span class="text-xs text-gray-600">perlu restok</span>
                                     </div>
                                 </div>
-                                <div class="w-12 h-12 rounded-full bg-gradient-to-r from-green-100 to-green-200 flex items-center justify-center">
-                                    <i class="fas fa-boxes text-green-600 text-xl"></i>
+                                <div class="w-10 h-10 md:w-12 md:h-12 rounded-full bg-gradient-to-r from-green-100 to-green-200 flex items-center justify-center">
+                                    <i class="fas fa-boxes text-green-600 text-lg md:text-xl"></i>
                                 </div>
                             </div>
                             <div class="mt-4">
@@ -919,18 +1643,18 @@
                         </div>
                         
                         <!-- Growth Prediction -->
-                        <div class="bg-white rounded-xl shadow-sm border border-gray-200 p-5 hover-lift gradient-purple initial-animate" style="animation-delay: 0.3s">
+                        <div class="bg-white rounded-xl shadow-sm border border-gray-200 p-4 md:p-5 hover-lift gradient-purple initial-animate" style="animation-delay: 0.3s">
                             <div class="flex justify-between items-start">
                                 <div>
                                     <p class="text-sm text-gray-600">Prediksi Pertumbuhan</p>
-                                    <p class="text-2xl font-bold text-gray-800 mt-1">12.3%</p>
+                                    <p class="text-xl md:text-2xl font-bold text-gray-800 mt-1">12.3%</p>
                                     <div class="flex items-center mt-2">
                                         <span class="text-xs text-green-600 data-trend-up mr-2">Elektronik +18.5%</span>
                                         <span class="text-xs text-gray-600">tren tertinggi</span>
                                     </div>
                                 </div>
-                                <div class="w-12 h-12 rounded-full bg-gradient-to-r from-purple-100 to-purple-200 flex items-center justify-center">
-                                    <i class="fas fa-rocket text-purple-600 text-xl"></i>
+                                <div class="w-10 h-10 md:w-12 md:h-12 rounded-full bg-gradient-to-r from-purple-100 to-purple-200 flex items-center justify-center">
+                                    <i class="fas fa-rocket text-purple-600 text-lg md:text-xl"></i>
                                 </div>
                             </div>
                             <div class="mt-4">
@@ -942,18 +1666,18 @@
                         </div>
                         
                         <!-- Seasonal Impact -->
-                        <div class="bg-white rounded-xl shadow-sm border border-gray-200 p-5 hover-lift gradient-orange initial-animate" style="animation-delay: 0.4s">
+                        <div class="bg-white rounded-xl shadow-sm border border-gray-200 p-4 md:p-5 hover-lift gradient-orange initial-animate" style="animation-delay: 0.4s">
                             <div class="flex justify-between items-start">
                                 <div>
                                     <p class="text-sm text-gray-600">Dampak Musiman</p>
-                                    <p class="text-2xl font-bold text-gray-800 mt-1">+23%</p>
+                                    <p class="text-xl md:text-2xl font-bold text-gray-800 mt-1">+23%</p>
                                     <div class="flex items-center mt-2">
                                         <span class="text-xs text-green-600 data-trend-up mr-2">Musim liburan</span>
                                         <span class="text-xs text-gray-600">Januari 2026</span>
                                     </div>
                                 </div>
-                                <div class="w-12 h-12 rounded-full bg-gradient-to-r from-orange-100 to-orange-200 flex items-center justify-center">
-                                    <i class="fas fa-sun text-orange-600 text-xl"></i>
+                                <div class="w-10 h-10 md:w-12 md:h-12 rounded-full bg-gradient-to-r from-orange-100 to-orange-200 flex items-center justify-center">
+                                    <i class="fas fa-sun text-orange-600 text-lg md:text-xl"></i>
                                 </div>
                             </div>
                             <div class="mt-4">
@@ -967,7 +1691,7 @@
                 </section>
                 
                 <!-- Charts Section -->
-                <div class="grid grid-cols-1 lg:grid-cols-2 gap-8 mt-8">
+                <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 md:gap-8 mt-6 md:mt-8">
                     <!-- Sales Trend Chart -->
                     <section class="animate-on-scroll delay-100">
                         <div class="flex items-center justify-between mb-4">
@@ -977,30 +1701,30 @@
                             </div>
                         </div>
                         
-                        <div class="bg-white rounded-xl shadow-sm border border-gray-200 p-5 hover-lift force-render">
-                            <div class="p-5 border-b border-gray-100 gradient-blue">
-                                <div class="flex items-center justify-between">
+                        <div class="bg-white rounded-xl shadow-sm border border-gray-200 p-4 md:p-5 hover-lift force-render">
+                            <div class="p-4 md:p-5 border-b border-gray-100 gradient-blue">
+                                <div class="flex flex-col md:flex-row md:items-center justify-between gap-4">
                                     <div class="flex items-center space-x-3">
                                         <div class="w-10 h-10 rounded-full bg-gradient-to-r from-blue-100 to-blue-200 flex items-center justify-center animate-pulse-soft">
                                             <i class="fas fa-chart-line text-blue-600"></i>
                                         </div>
                                         <div>
-                                            <h4 class="font-bold text-gray-800">Aktual vs Prediksi 90 Hari</h4>
+                                            <h4 class="font-bold text-gray-800 text-sm md:text-base">Aktual vs Prediksi 90 Hari</h4>
                                             <p class="text-sm text-gray-600">Analisis berbasis data historis 12 bulan</p>
                                         </div>
                                     </div>
-                                    <div class="text-right">
-                                        <p class="text-2xl font-bold text-gray-800">Rp 1.34M</p>
+                                    <div class="text-left md:text-right">
+                                        <p class="text-xl md:text-2xl font-bold text-gray-800">Rp 1.34M</p>
                                         <p class="text-xs text-gray-600">Prediksi 30 hari</p>
                                     </div>
                                 </div>
                             </div>
                             
-                            <div class="p-5">
+                            <div class="p-4 md:p-5">
                                 <div class="chart-container">
                                     <canvas id="salesTrendChart"></canvas>
                                 </div>
-                                <div class="flex items-center justify-center space-x-6 mt-4 text-sm">
+                                <div class="flex flex-wrap items-center justify-center gap-4 md:gap-6 mt-4 text-sm">
                                     <div class="flex items-center">
                                         <div class="w-3 h-3 rounded-full bg-blue-500 mr-2"></div>
                                         <span class="text-gray-600">Aktual</span>
@@ -1026,18 +1750,18 @@
                         </div>
                         
                         <div class="bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden hover-lift force-render">
-                            <div class="p-5 border-b border-gray-100 gradient-green">
-                                <div class="flex items-center justify-between">
+                            <div class="p-4 md:p-5 border-b border-gray-100 gradient-green">
+                                <div class="flex flex-col md:flex-row md:items-center justify-between gap-4">
                                     <div class="flex items-center space-x-3">
                                         <div class="w-10 h-10 rounded-full bg-gradient-to-r from-green-100 to-green-200 flex items-center justify-center animate-pulse-soft">
                                             <i class="fas fa-box text-green-600"></i>
                                         </div>
                                         <div>
-                                            <h4 class="font-bold text-gray-800">Analisis per Kategori</h4>
+                                            <h4 class="font-bold text-gray-800 text-sm md:text-base">Analisis per Kategori</h4>
                                             <p class="text-sm text-gray-600">Berdasarkan tren dan data historis</p>
                                         </div>
                                     </div>
-                                    <select class="p-2 rounded-lg border border-gray-300 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent">
+                                    <select class="p-2 rounded-lg border border-gray-300 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent mt-3 md:mt-0">
                                         <option>Semua Kategori</option>
                                         <option>Elektronik</option>
                                         <option>Fashion</option>
@@ -1047,7 +1771,7 @@
                                 </div>
                             </div>
                             
-                            <div class="p-5">
+                            <div class="p-4 md:p-5">
                                 <div class="chart-container">
                                     <canvas id="productForecastChart"></canvas>
                                 </div>
@@ -1060,31 +1784,31 @@
                 </div>
                 
                 <!-- Detailed Forecasts Table -->
-                <section class="animate-on-scroll delay-300 mt-8">
-                    <div class="flex items-center justify-between mb-4">
+                <section class="animate-on-scroll delay-300 mt-6 md:mt-8">
+                    <div class="flex flex-col md:flex-row md:items-center justify-between mb-4 gap-2">
                         <h3 class="text-lg font-semibold text-gray-800">Detail Prediksi per Produk</h3>
                         <span class="text-xs px-3 py-1 bg-purple-100 text-purple-700 rounded-full">30 Hari ke Depan</span>
                     </div>
                     
                     <div class="bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden hover-lift force-render">
-                        <div class="p-5 border-b border-gray-100 gradient-purple">
+                        <div class="p-4 md:p-5 border-b border-gray-100 gradient-purple">
                             <div class="flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
                                 <div class="flex items-center space-x-3">
                                     <div class="w-10 h-10 rounded-full bg-gradient-to-r from-purple-100 to-purple-200 flex items-center justify-center animate-pulse-soft">
                                         <i class="fas fa-chart-bar text-purple-600"></i>
                                     </div>
                                     <div>
-                                        <h4 class="font-bold text-gray-800">Estimasi Penjualan dan Kebutuhan Stok</h4>
+                                        <h4 class="font-bold text-gray-800 text-sm md:text-base">Estimasi Penjualan dan Kebutuhan Stok</h4>
                                         <p class="text-sm text-gray-600">Berdasarkan analisis AI dan data historis</p>
                                     </div>
                                 </div>
-                                <button class="px-4 py-2 bg-gradient-to-r from-blue-500 to-blue-600 text-white rounded-lg font-medium smooth-transition hover:from-blue-600 hover:to-blue-700 hover-lift ripple-effect">
+                                <button class="px-4 py-2 bg-gradient-to-r from-blue-500 to-blue-600 text-white rounded-lg font-medium smooth-transition hover:from-blue-600 hover:to-blue-700 hover-lift ripple-effect mt-3 md:mt-0">
                                     <i class="fas fa-download mr-2"></i> Export Prediksi
                                 </button>
                             </div>
                         </div>
                         
-                        <div class="overflow-x-auto">
+                        <div class="table-responsive">
                             <table class="w-full shipping-table">
                                 <thead class="bg-gray-50">
                                     <tr>
@@ -1099,8 +1823,8 @@
                                     <tr class="hover:bg-blue-50/50">
                                         <td class="py-3 px-4">
                                             <div class="flex items-center">
-                                                <div class="w-10 h-10 rounded-lg bg-gradient-to-r from-blue-100 to-blue-200 flex items-center justify-center mr-3">
-                                                    <i class="fas fa-mobile-alt text-blue-600"></i>
+                                                <div class="w-8 h-8 md:w-10 md:h-10 rounded-lg bg-gradient-to-r from-blue-100 to-blue-200 flex items-center justify-center mr-2 md:mr-3">
+                                                    <i class="fas fa-mobile-alt text-blue-600 text-sm md:text-base"></i>
                                                 </div>
                                                 <div>
                                                     <div class="text-sm font-medium text-gray-900">Smartphone X Pro</div>
@@ -1117,12 +1841,12 @@
                                             <div class="text-xs text-gray-500">Stok saat ini: 42 unit</div>
                                         </td>
                                         <td class="py-3 px-4">
-                                            <span class="px-3 py-1 rounded-full text-xs font-medium bg-green-100 text-green-800">
+                                            <span class="px-2 py-1 rounded-full text-xs font-medium bg-green-100 text-green-800">
                                                 <span class="data-trend-up">Tinggi (+15%)</span>
                                             </span>
                                         </td>
                                         <td class="py-3 px-4">
-                                            <button class="px-3 py-1 text-xs bg-blue-100 text-blue-700 rounded-lg hover:bg-blue-200 smooth-transition">
+                                            <button class="px-2 py-1 text-xs bg-blue-100 text-blue-700 rounded-lg hover:bg-blue-200 smooth-transition">
                                                 Pesan Stok
                                             </button>
                                         </td>
@@ -1131,8 +1855,8 @@
                                     <tr class="hover:bg-yellow-50/50">
                                         <td class="py-3 px-4">
                                             <div class="flex items-center">
-                                                <div class="w-10 h-10 rounded-lg bg-gradient-to-r from-pink-100 to-pink-200 flex items-center justify-center mr-3">
-                                                    <i class="fas fa-tshirt text-pink-600"></i>
+                                                <div class="w-8 h-8 md:w-10 md:h-10 rounded-lg bg-gradient-to-r from-pink-100 to-pink-200 flex items-center justify-center mr-2 md:mr-3">
+                                                    <i class="fas fa-tshirt text-pink-600 text-sm md:text-base"></i>
                                                 </div>
                                                 <div>
                                                     <div class="text-sm font-medium text-gray-900">Kaos Premium Cotton</div>
@@ -1149,12 +1873,12 @@
                                             <div class="text-xs text-gray-500">Stok saat ini: 5 unit</div>
                                         </td>
                                         <td class="py-3 px-4">
-                                            <span class="px-3 py-1 rounded-full text-xs font-medium bg-red-100 text-red-800 animate-pulse-soft">
+                                            <span class="px-2 py-1 rounded-full text-xs font-medium bg-red-100 text-red-800 animate-pulse-soft">
                                                 <span class="data-trend-up">Kritis (+85%)</span>
                                             </span>
                                         </td>
                                         <td class="py-3 px-4">
-                                            <button class="px-3 py-1 text-xs bg-red-100 text-red-700 rounded-lg hover:bg-red-200 smooth-transition">
+                                            <button class="px-2 py-1 text-xs bg-red-100 text-red-700 rounded-lg hover:bg-red-200 smooth-transition">
                                                 Prioritas!
                                             </button>
                                         </td>
@@ -1163,8 +1887,8 @@
                                     <tr class="hover:bg-blue-50/50">
                                         <td class="py-3 px-4">
                                             <div class="flex items-center">
-                                                <div class="w-10 h-10 rounded-lg bg-gradient-to-r from-yellow-100 to-yellow-200 flex items-center justify-center mr-3">
-                                                    <i class="fas fa-home text-yellow-600"></i>
+                                                <div class="w-8 h-8 md:w-10 md:h-10 rounded-lg bg-gradient-to-r from-yellow-100 to-yellow-200 flex items-center justify-center mr-2 md:mr-3">
+                                                    <i class="fas fa-home text-yellow-600 text-sm md:text-base"></i>
                                                 </div>
                                                 <div>
                                                     <div class="text-sm font-medium text-gray-900">Lampu LED Smart Home</div>
@@ -1181,12 +1905,12 @@
                                             <div class="text-xs text-gray-500">Stok saat ini: 28 unit</div>
                                         </td>
                                         <td class="py-3 px-4">
-                                            <span class="px-3 py-1 rounded-full text-xs font-medium bg-green-100 text-green-800">
+                                            <span class="px-2 py-1 rounded-full text-xs font-medium bg-green-100 text-green-800">
                                                 <span class="data-trend-up">Stabil (+8%)</span>
                                             </span>
                                         </td>
                                         <td class="py-3 px-4">
-                                            <button class="px-3 py-1 text-xs bg-blue-100 text-blue-700 rounded-lg hover:bg-blue-200 smooth-transition">
+                                            <button class="px-2 py-1 text-xs bg-blue-100 text-blue-700 rounded-lg hover:bg-blue-200 smooth-transition">
                                                 Monitor
                                             </button>
                                         </td>
@@ -1195,8 +1919,8 @@
                                     <tr class="hover:bg-blue-50/50">
                                         <td class="py-3 px-4">
                                             <div class="flex items-center">
-                                                <div class="w-10 h-10 rounded-lg bg-gradient-to-r from-purple-100 to-purple-200 flex items-center justify-center mr-3">
-                                                    <i class="fas fa-spa text-purple-600"></i>
+                                                <div class="w-8 h-8 md:w-10 md:h-10 rounded-lg bg-gradient-to-r from-purple-100 to-purple-200 flex items-center justify-center mr-2 md:mr-3">
+                                                    <i class="fas fa-spa text-purple-600 text-sm md:text-base"></i>
                                                 </div>
                                                 <div>
                                                     <div class="text-sm font-medium text-gray-900">Essential Oil Set</div>
@@ -1213,12 +1937,12 @@
                                             <div class="text-xs text-gray-500">Stok saat ini: 65 unit</div>
                                         </td>
                                         <td class="py-3 px-4">
-                                            <span class="px-3 py-1 rounded-full text-xs font-medium bg-yellow-100 text-yellow-800">
+                                            <span class="px-2 py-1 rounded-full text-xs font-medium bg-yellow-100 text-yellow-800">
                                                 <span class="data-trend-up">Normal (+5%)</span>
                                             </span>
                                         </td>
                                         <td class="py-3 px-4">
-                                            <button class="px-3 py-1 text-xs bg-gray-100 text-gray-700 rounded-lg hover:bg-gray-200 smooth-transition">
+                                            <button class="px-2 py-1 text-xs bg-gray-100 text-gray-700 rounded-lg hover:bg-gray-200 smooth-transition">
                                                 Cukup
                                             </button>
                                         </td>
@@ -1227,8 +1951,8 @@
                                     <tr class="hover:bg-yellow-50/50">
                                         <td class="py-3 px-4">
                                             <div class="flex items-center">
-                                                <div class="w-10 h-10 rounded-lg bg-gradient-to-r from-blue-100 to-blue-200 flex items-center justify-center mr-3">
-                                                    <i class="fas fa-headphones text-blue-600"></i>
+                                                <div class="w-8 h-8 md:w-10 md:h-10 rounded-lg bg-gradient-to-r from-blue-100 to-blue-200 flex items-center justify-center mr-2 md:mr-3">
+                                                    <i class="fas fa-headphones text-blue-600 text-sm md:text-base"></i>
                                                 </div>
                                                 <div>
                                                     <div class="text-sm font-medium text-gray-900">Wireless Headphone Pro</div>
@@ -1245,12 +1969,12 @@
                                             <div class="text-xs text-gray-500">Stok saat ini: 8 unit</div>
                                         </td>
                                         <td class="py-3 px-4">
-                                            <span class="px-3 py-1 rounded-full text-xs font-medium bg-red-100 text-red-800">
+                                            <span class="px-2 py-1 rounded-full text-xs font-medium bg-red-100 text-red-800">
                                                 <span class="data-trend-up">Tinggi (+25%)</span>
                                             </span>
                                         </td>
                                         <td class="py-3 px-4">
-                                            <button class="px-3 py-1 text-xs bg-red-100 text-red-700 rounded-lg hover:bg-red-200 smooth-transition">
+                                            <button class="px-2 py-1 text-xs bg-red-100 text-red-700 rounded-lg hover:bg-red-200 smooth-transition">
                                                 Segera Restok
                                             </button>
                                         </td>
@@ -1260,7 +1984,7 @@
                         </div>
                         
                         <div class="p-4 border-t border-gray-200 bg-gray-50">
-                            <div class="flex justify-between items-center">
+                            <div class="flex flex-col md:flex-row md:items-center justify-between gap-2">
                                 <p class="text-sm text-gray-600">Menampilkan 5 dari 23 produk yang diprediksi</p>
                                 <button class="text-blue-600 text-sm font-medium flex items-center space-x-1 smooth-transition hover:text-blue-800 group">
                                     <span>Lihat Semua Produk</span>
@@ -1272,21 +1996,21 @@
                 </section>
                 
                 <!-- AI Insights & Settings -->
-                <div class="grid grid-cols-1 lg:grid-cols-3 gap-8 mt-8">
+                <div class="grid grid-cols-1 lg:grid-cols-3 gap-6 md:gap-8 mt-6 md:mt-8">
                     <!-- AI Forecasting Insights -->
                     <section class="lg:col-span-2 animate-on-scroll delay-400">
                         <div class="flex items-center justify-between mb-4">
                             <h3 class="text-lg font-semibold text-gray-800">Insight AI Forecasting</h3>
-                            <span class="text-xs px-3 py-1 bg-blue-100 text-blue-700 rounded-full animate-pulse-soft">Analisis Real-time</span>
+                            <span class="text-xs px-2 py-1 bg-blue-100 text-blue-700 rounded-full animate-pulse-soft">Analisis Real-time</span>
                         </div>
                         
-                        <div class="bg-gradient-to-r from-blue-50 to-cyan-50 rounded-xl shadow-sm border border-blue-100 p-5 hover-lift force-render">
+                        <div class="bg-gradient-to-r from-blue-50 to-cyan-50 rounded-xl shadow-sm border border-blue-100 p-4 md:p-5 hover-lift force-render">
                             <div class="flex items-center mb-4">
                                 <div class="w-10 h-10 rounded-full bg-gradient-to-r from-blue-100 to-blue-200 flex items-center justify-center mr-3">
                                     <i class="fas fa-brain text-blue-600"></i>
                                 </div>
                                 <div>
-                                    <h4 class="font-bold text-gray-800">Analisis berbasis data historis dan tren musiman</h4>
+                                    <h4 class="font-bold text-gray-800 text-sm md:text-base">Analisis berbasis data historis dan tren musiman</h4>
                                     <p class="text-sm text-gray-600">Rekomendasi AI untuk optimasi penjualan</p>
                                 </div>
                             </div>
@@ -1355,10 +2079,10 @@
                     <section class="animate-on-scroll delay-500">
                         <div class="flex items-center justify-between mb-4">
                             <h3 class="text-lg font-semibold text-gray-800">Pengaturan Forecasting</h3>
-                            <span class="text-xs px-3 py-1 bg-purple-100 text-purple-700 rounded-full">AI-Optimized</span>
+                            <span class="text-xs px-2 py-1 bg-purple-100 text-purple-700 rounded-full">AI-Optimized</span>
                         </div>
                         
-                        <div class="bg-white rounded-xl shadow-sm border border-gray-200 p-5 hover-lift force-render">
+                        <div class="bg-white rounded-xl shadow-sm border border-gray-200 p-4 md:p-5 hover-lift force-render">
                             <div class="space-y-4">
                                 <div>
                                     <label class="block text-sm font-medium text-gray-700 mb-2">Rentang Prediksi</label>
@@ -1372,7 +2096,7 @@
                                 
                                 <div>
                                     <label class="block text-sm font-medium text-gray-700 mb-2">Tingkat Keyakinan Minimum</label>
-                                    <div class="flex items-center space-x-4">
+                                    <div class="flex items-center space-x-2 md:space-x-4">
                                         <span class="text-sm text-gray-600">65%</span>
                                         <input type="range" min="50" max="95" value="75" class="w-full h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer">
                                         <span class="text-sm text-gray-600">95%</span>
@@ -1437,8 +2161,608 @@
         </div>
     </div>
 
+    <!-- Notification Panel (dari bell icon) -->
+    <div class="notification-panel" id="notificationPanel">
+        <div class="notification-panel-header">
+            <div class="notification-panel-title">Notifikasi Forecasting</div>
+            <button class="notification-panel-close" id="closeNotificationPanel">
+                <i class="fas fa-times"></i>
+            </button>
+        </div>
+        <div class="notification-panel-body" id="notificationPanelBody">
+            <!-- Notifikasi akan dimuat di sini -->
+        </div>
+        <div class="notification-panel-footer">
+            <button class="notification-panel-clear-btn" id="markAllReadBtn">
+                Tandai Semua Sudah Dibaca
+            </button>
+        </div>
+    </div>
+
     <!-- JavaScript untuk interaktivitas -->
     <script>
+        // ================= SISTEM NOTIFIKASI POP-UP =================
+        
+        class NotificationSystem {
+            constructor() {
+                this.notifications = [];
+                this.container = document.getElementById('notificationContainer');
+                this.badge = document.getElementById('notificationBadge');
+                this.panel = document.getElementById('notificationPanel');
+                this.panelBody = document.getElementById('notificationPanelBody');
+                this.notificationQueue = [];
+                this.currentNotification = null;
+                this.autoCheckInterval = null;
+                this.init();
+            }
+            
+            init() {
+                // Load notifications from localStorage
+                this.loadNotifications();
+                
+                // Setup notification bell click
+                const notificationBell = document.getElementById('notificationBell');
+                if (notificationBell) {
+                    notificationBell.addEventListener('click', () => {
+                        this.toggleNotificationPanel();
+                    });
+                }
+                
+                // Setup panel close button
+                const closePanelBtn = document.getElementById('closeNotificationPanel');
+                if (closePanelBtn) {
+                    closePanelBtn.addEventListener('click', () => {
+                        this.hideNotificationPanel();
+                    });
+                }
+                
+                // Setup mark all as read button
+                const markAllReadBtn = document.getElementById('markAllReadBtn');
+                if (markAllReadBtn) {
+                    markAllReadBtn.addEventListener('click', () => {
+                        this.markAllAsRead();
+                        this.updatePanel();
+                    });
+                }
+                
+                // Close panel when clicking outside
+                document.addEventListener('click', (e) => {
+                    if (this.panel.classList.contains('show') && 
+                        !this.panel.contains(e.target) && 
+                        !document.getElementById('notificationBell').contains(e.target)) {
+                        this.hideNotificationPanel();
+                    }
+                });
+                
+                // Start auto-check for critical conditions
+                this.startAutoCheck();
+                
+                // Show initial notification after page load
+                setTimeout(() => {
+                    this.checkCriticalConditions();
+                    this.showNextNotification();
+                }, 2000);
+                
+                // Update badge
+                this.updateBadge();
+            }
+            
+            loadNotifications() {
+                // Simulate loading notifications from server
+                const storedNotifications = localStorage.getItem('forecastingNotifications');
+                if (storedNotifications) {
+                    this.notifications = JSON.parse(storedNotifications);
+                } else {
+                    // Default notifications - khusus untuk Sales Forecasting
+                    this.notifications = [
+                        {
+                            id: 1,
+                            type: 'critical',
+                            title: 'Stok Kaos Premium Cotton Akan Habis!',
+                            message: 'Berdasarkan prediksi penjualan, Kaos Premium Cotton akan habis dalam 3-5 hari. Produk ini diprediksi terjual 65-72 unit dalam 30 hari ke depan. Segera lakukan restok 60 unit untuk menghindari kehilangan penjualan.',
+                            timestamp: new Date().toISOString(),
+                            read: false,
+                            action: 'restock',
+                            actionLabel: 'Restok Sekarang',
+                            product: 'Kaos Premium Cotton',
+                            stockLevel: 5,
+                            daysLeft: 3,
+                            priority: 10
+                        },
+                        {
+                            id: 2,
+                            type: 'critical',
+                            title: 'Wireless Headphone Pro Stok Kritis',
+                            message: 'Stok Wireless Headphone Pro hanya 8 unit. Prediksi penjualan 30 hari: 38-44 unit. Stok akan habis dalam 5-7 hari. Produk ini memberikan margin 31% dan termasuk dalam top 5 produk terlaris.',
+                            timestamp: new Date(Date.now() - 3600000).toISOString(),
+                            read: false,
+                            action: 'restock',
+                            actionLabel: 'Pesan Sekarang',
+                            product: 'Wireless Headphone Pro',
+                            stockLevel: 8,
+                            daysLeft: 5,
+                            priority: 9
+                        },
+                        {
+                            id: 3,
+                            type: 'warning',
+                            title: 'Akurasi Prediksi Meningkat 2.1%',
+                            message: 'Model prediksi AI telah diperbarui. Akurasi prediksi 7 hari meningkat dari 92.1% menjadi 94.2%. Prediksi untuk minggu depan: Rp 5.9-6.3 juta dengan tingkat kepercayaan 89%.',
+                            timestamp: new Date(Date.now() - 7200000).toISOString(),
+                            read: true,
+                            action: 'view',
+                            actionLabel: 'Lihat Detail',
+                            product: 'System',
+                            accuracyImprovement: 2.1,
+                            priority: 5
+                        },
+                        {
+                            id: 4,
+                            type: 'info',
+                            title: 'Pola Musiman Terdeteksi',
+                            message: 'Analisis AI mendeteksi pola musiman untuk Januari: penjualan diprediksi meningkat 23% selama musim liburan. Persiapkan stok tambahan 15-20% untuk produk elektronik dan fashion.',
+                            timestamp: new Date(Date.now() - 10800000).toISOString(),
+                            read: true,
+                            action: 'analyze',
+                            actionLabel: 'Analisis Tren',
+                            product: 'Seasonal Pattern',
+                            seasonalIncrease: 23,
+                            priority: 6
+                        }
+                    ];
+                    this.saveNotifications();
+                }
+                
+                // Sort notifications by priority (highest first)
+                this.notifications.sort((a, b) => {
+                    if (b.priority !== a.priority) {
+                        return (b.priority || 0) - (a.priority || 0);
+                    }
+                    if (a.read !== b.read) {
+                        return a.read ? 1 : -1;
+                    }
+                    return new Date(b.timestamp) - new Date(a.timestamp);
+                });
+                
+                this.updateBadge();
+            }
+            
+            saveNotifications() {
+                localStorage.setItem('forecastingNotifications', JSON.stringify(this.notifications));
+                this.updateBadge();
+            }
+            
+            updateBadge() {
+                if (!this.badge) return;
+                
+                const unreadCount = this.notifications.filter(n => !n.read).length;
+                
+                if (unreadCount > 0) {
+                    this.badge.textContent = unreadCount > 9 ? '9+' : unreadCount;
+                    this.badge.style.display = 'flex';
+                } else {
+                    this.badge.style.display = 'none';
+                }
+            }
+            
+            addToQueue(notification) {
+                const exists = this.notificationQueue.some(n => 
+                    n.id === notification.id || 
+                    (n.type === notification.type && n.product === notification.product)
+                );
+                
+                if (!exists) {
+                    this.notificationQueue.push(notification);
+                    this.notificationQueue.sort((a, b) => (b.priority || 0) - (a.priority || 0));
+                    
+                    if (!this.currentNotification) {
+                        this.showNextNotification();
+                    }
+                }
+            }
+            
+            showNextNotification() {
+                if (this.notificationQueue.length === 0 || this.currentNotification) {
+                    return;
+                }
+                
+                const notification = this.notificationQueue.shift();
+                this.currentNotification = notification;
+                
+                this.showNotificationToast(notification);
+                
+                setTimeout(() => {
+                    if (this.currentNotification && this.currentNotification.id === notification.id) {
+                        this.removeNotificationToast(notification.id);
+                    }
+                }, 8000);
+            }
+            
+            showNotificationToast(notification) {
+                const notificationId = `toast-${notification.id}-${Date.now()}`;
+                const toast = document.createElement('div');
+                toast.className = `notification-toast ${notification.type}`;
+                toast.id = notificationId;
+                toast.dataset.notificationId = notification.id;
+                
+                let icon = 'fas fa-info-circle';
+                if (notification.type === 'critical') icon = 'fas fa-exclamation-triangle';
+                if (notification.type === 'warning') icon = 'fas fa-exclamation-circle';
+                if (notification.type === 'success') icon = 'fas fa-check-circle';
+                
+                const previewMessage = notification.message.length > 60 
+                    ? notification.message.substring(0, 60) + '...' 
+                    : notification.message;
+                
+                toast.innerHTML = `
+                    <div class="notification-toast-header" data-notification-id="${notificationId}">
+                        <div class="notification-toast-content">
+                            <div class="notification-toast-icon">
+                                <i class="${icon}"></i>
+                            </div>
+                            <div class="notification-toast-text">
+                                <div class="notification-toast-title">${notification.title}</div>
+                                <div class="notification-toast-preview">${previewMessage}</div>
+                            </div>
+                        </div>
+                        <div class="notification-toast-actions">
+                            <button class="notification-toast-expand-btn" data-notification-id="${notificationId}">
+                                <i class="fas fa-chevron-down"></i>
+                            </button>
+                            <button class="notification-toast-close-btn" data-notification-id="${notificationId}">
+                                <i class="fas fa-times"></i>
+                            </button>
+                        </div>
+                    </div>
+                    <div class="notification-toast-body">
+                        ${notification.message}
+                    </div>
+                    <div class="notification-toast-footer">
+                        <div class="text-xs text-gray-500 mb-2">
+                            <i class="far fa-clock mr-1"></i>
+                            ${this.formatTime(notification.timestamp)}
+                        </div>
+                        <div class="flex gap-2">
+                            <button class="notification-action-btn secondary" data-action="dismiss" data-notification-id="${notificationId}">
+                                Nanti
+                            </button>
+                            <button class="notification-action-btn primary" data-action="${notification.action || 'view'}" data-notification-id="${notificationId}">
+                                ${notification.actionLabel || 'Lihat Detail'}
+                            </button>
+                        </div>
+                    </div>
+                `;
+                
+                this.container.appendChild(toast);
+                
+                setTimeout(() => {
+                    toast.classList.add('show');
+                }, 10);
+                
+                this.setupToastEvents(toast, notification, notificationId);
+                
+                this.markAsRead(notification.id);
+            }
+            
+            setupToastEvents(toast, notification, toastId) {
+                const header = toast.querySelector('.notification-toast-header');
+                header.addEventListener('click', (e) => {
+                    if (!e.target.closest('.notification-toast-actions')) {
+                        toast.classList.toggle('expanded');
+                    }
+                });
+                
+                const expandBtn = toast.querySelector('.notification-toast-expand-btn');
+                expandBtn.addEventListener('click', (e) => {
+                    e.stopPropagation();
+                    toast.classList.toggle('expanded');
+                });
+                
+                const closeBtn = toast.querySelector('.notification-toast-close-btn');
+                closeBtn.addEventListener('click', (e) => {
+                    e.stopPropagation();
+                    this.removeNotificationToast(notification.id);
+                });
+                
+                const actionBtn = toast.querySelector('.notification-action-btn.primary');
+                if (actionBtn) {
+                    actionBtn.addEventListener('click', (e) => {
+                        e.stopPropagation();
+                        this.handleNotificationAction(notification);
+                        this.removeNotificationToast(notification.id);
+                    });
+                }
+                
+                const dismissBtn = toast.querySelector('.notification-action-btn.secondary');
+                if (dismissBtn) {
+                    dismissBtn.addEventListener('click', (e) => {
+                        e.stopPropagation();
+                        this.removeNotificationToast(notification.id);
+                    });
+                }
+            }
+            
+            removeNotificationToast(notificationId) {
+                const toast = document.querySelector(`.notification-toast[data-notification-id="${notificationId}"]`);
+                if (toast) {
+                    toast.classList.remove('show');
+                    toast.classList.add('hide');
+                    
+                    setTimeout(() => {
+                        if (toast.parentNode) {
+                            toast.parentNode.removeChild(toast);
+                        }
+                        
+                        if (this.currentNotification && this.currentNotification.id === notificationId) {
+                            this.currentNotification = null;
+                            setTimeout(() => this.showNextNotification(), 500);
+                        }
+                    }, 300);
+                }
+            }
+            
+            handleNotificationAction(notification) {
+                switch(notification.action) {
+                    case 'restock':
+                        showNotification(`Membuka halaman restok untuk ${notification.product}`, 'info');
+                        break;
+                        
+                    case 'analyze':
+                        showNotification(`Menganalisis ${notification.product}...`, 'info');
+                        setTimeout(() => {
+                            this.openAIAssistant(`Analisis ${notification.product}`);
+                        }, 300);
+                        break;
+                        
+                    case 'view':
+                    default:
+                        showNotification(`Membuka detail ${notification.title}`, 'info');
+                        break;
+                }
+            }
+            
+            openAIAssistant(question) {
+                const aiPanel = document.getElementById('aiAssistantPanel');
+                const aiBtn = document.getElementById('aiAssistantBtn');
+                
+                if (aiPanel.classList.contains('hidden')) {
+                    aiBtn.click();
+                }
+                
+                setTimeout(() => {
+                    const aiInput = document.getElementById('aiQuestionInput');
+                    aiInput.value = question;
+                    document.getElementById('sendAIQuestion').click();
+                }, 500);
+            }
+            
+            markAsRead(notificationId) {
+                const notification = this.notifications.find(n => n.id === notificationId);
+                if (notification && !notification.read) {
+                    notification.read = true;
+                    notification.readAt = new Date().toISOString();
+                    this.saveNotifications();
+                }
+            }
+            
+            markAllAsRead() {
+                this.notifications.forEach(notification => {
+                    if (!notification.read) {
+                        notification.read = true;
+                        notification.readAt = new Date().toISOString();
+                    }
+                });
+                this.saveNotifications();
+            }
+            
+            formatTime(timestamp) {
+                const date = new Date(timestamp);
+                const now = new Date();
+                const diffMs = now - date;
+                const diffMins = Math.floor(diffMs / 60000);
+                const diffHours = Math.floor(diffMs / 3600000);
+                const diffDays = Math.floor(diffMs / 86400000);
+                
+                if (diffMins < 1) return 'Baru saja';
+                if (diffMins < 60) return `${diffMins} menit yang lalu`;
+                if (diffHours < 24) return `${diffHours} jam yang lalu`;
+                if (diffDays < 7) return `${diffDays} hari yang lalu`;
+                
+                return date.toLocaleDateString('id-ID', {
+                    day: 'numeric',
+                    month: 'short',
+                    year: 'numeric'
+                });
+            }
+            
+            checkCriticalConditions() {
+                const conditions = this.simulateConditionChecks();
+                
+                conditions.forEach(condition => {
+                    const existingNotification = this.notifications.find(n => 
+                        n.type === condition.type && 
+                        n.product === condition.product &&
+                        !n.read &&
+                        new Date() - new Date(n.timestamp) < 3600000
+                    );
+                    
+                    if (!existingNotification) {
+                        const newNotification = {
+                            id: Date.now(),
+                            type: condition.type,
+                            title: condition.title,
+                            message: condition.message,
+                            timestamp: new Date().toISOString(),
+                            read: false,
+                            action: condition.action,
+                            actionLabel: condition.actionLabel,
+                            product: condition.product,
+                            priority: condition.priority,
+                            ...condition.data
+                        };
+                        
+                        this.notifications.unshift(newNotification);
+                        this.saveNotifications();
+                        
+                        this.addToQueue(newNotification);
+                    }
+                });
+            }
+            
+            simulateConditionChecks() {
+                const conditions = [];
+                const random = Math.random();
+                
+                // Critical: Smartphone X Pro stock prediction
+                conditions.push({
+                    type: 'info',
+                    title: 'Smartphone X Pro Prediksi Tinggi',
+                    message: 'Smartphone X Pro diprediksi terjual 48-52 unit dalam 30 hari ke depan dengan revenue Rp 408-442 juta. Pertimbangkan untuk menambah stok 20 unit.',
+                    action: 'analyze',
+                    actionLabel: 'Analisis Prediksi',
+                    product: 'Smartphone X Pro',
+                    priority: 7,
+                    data: { predictedSales: '48-52', revenue: '408-442' }
+                });
+                
+                // Warning: Seasonal pattern detected (50% chance)
+                if (random < 0.5) {
+                    conditions.push({
+                        type: 'info',
+                        title: 'Pola Weekend Terdeteksi',
+                        message: 'Analisis menunjukkan penjualan meningkat 35% di weekend. Pertimbangkan untuk meningkatkan stok 15% untuk produk elektronik menjelang weekend.',
+                        action: 'analyze',
+                        actionLabel: 'Lihat Pola',
+                        product: 'Weekend Pattern',
+                        priority: 4,
+                        data: { weekendIncrease: 35 }
+                    });
+                }
+                
+                // Info: Essential Oil Set prediction (30% chance)
+                if (random < 0.3) {
+                    conditions.push({
+                        type: 'success',
+                        title: 'Essential Oil Set Margin Optimal',
+                        message: 'Essential Oil Set memiliki margin 45% dengan prediksi penjualan stabil 42-48 unit bulan depan. Produk ini memberikan keuntungan optimal.',
+                        action: 'view',
+                        actionLabel: 'Detail Prediksi',
+                        product: 'Essential Oil Set',
+                        priority: 5,
+                        data: { margin: 45, predictedSales: '42-48' }
+                    });
+                }
+                
+                // Warning: Accuracy improvement (20% chance)
+                if (random < 0.2) {
+                    conditions.push({
+                        type: 'success',
+                        title: 'Model Prediksi Dioptimalkan',
+                        message: 'Model AI forecasting telah dioptimalkan. Akurasi prediksi 30 hari meningkat 1.5% menjadi 89%.',
+                        action: 'analyze',
+                        actionLabel: 'Lihat Model',
+                        product: 'AI Model',
+                        priority: 6,
+                        data: { accuracyImprovement: 1.5 }
+                    });
+                }
+                
+                return conditions;
+            }
+            
+            startAutoCheck() {
+                this.autoCheckInterval = setInterval(() => {
+                    this.checkCriticalConditions();
+                }, 180000);
+            }
+            
+            toggleNotificationPanel() {
+                if (this.panel.classList.contains('show')) {
+                    this.hideNotificationPanel();
+                } else {
+                    this.showNotificationPanel();
+                }
+            }
+            
+            showNotificationPanel() {
+                this.updatePanel();
+                this.panel.classList.add('show');
+            }
+            
+            hideNotificationPanel() {
+                this.panel.classList.remove('show');
+            }
+            
+            updatePanel() {
+                if (!this.panelBody) return;
+                
+                if (this.notifications.length === 0) {
+                    this.panelBody.innerHTML = `
+                        <div class="notification-panel-empty">
+                            <i class="fas fa-bell-slash"></i>
+                            <p>Tidak ada notifikasi</p>
+                        </div>
+                    `;
+                    return;
+                }
+                
+                this.panelBody.innerHTML = this.notifications.map(notification => `
+                    <div class="notification-panel-item ${notification.type} ${notification.read ? '' : 'unread'}" data-id="${notification.id}">
+                        <div class="notification-panel-item-icon">
+                            <i class="fas fa-${notification.type === 'critical' ? 'exclamation-triangle' : 
+                                            notification.type === 'warning' ? 'exclamation-circle' : 
+                                            notification.type === 'success' ? 'check-circle' : 
+                                            'info-circle'}"></i>
+                        </div>
+                        <div class="notification-panel-item-content">
+                            <div class="notification-panel-item-title">${notification.title}</div>
+                            <div class="notification-panel-item-message">${notification.message}</div>
+                            <div class="notification-panel-item-time">${this.formatTime(notification.timestamp)}</div>
+                        </div>
+                    </div>
+                `).join('');
+                
+                this.panelBody.querySelectorAll('.notification-panel-item').forEach(item => {
+                    item.addEventListener('click', () => {
+                        const notificationId = parseInt(item.dataset.id);
+                        const notification = this.notifications.find(n => n.id === notificationId);
+                        if (notification) {
+                            this.handleNotificationAction(notification);
+                            this.markAsRead(notificationId);
+                            this.hideNotificationPanel();
+                            this.updatePanel();
+                        }
+                    });
+                });
+            }
+        }
+        
+        // ================= FUNGSI UTAMA =================
+        
+        // Fungsi untuk update tanggal sederhana
+        function updateDate() {
+            const now = new Date();
+            
+            // Format hari dalam Bahasa Indonesia
+            const days = ['Minggu', 'Senin', 'Selasa', 'Rabu', 'Kamis', 'Jumat', 'Sabtu'];
+            const months = ['Januari', 'Februari', 'Maret', 'April', 'Mei', 'Juni', 
+                           'Juli', 'Agustus', 'September', 'Oktober', 'November', 'Desember'];
+            
+            const dayName = days[now.getDay()];
+            const date = now.getDate();
+            const monthName = months[now.getMonth()];
+            const year = now.getFullYear();
+            
+            // Format untuk tanggal: "Selasa, 2 Januari 2026"
+            const formattedDate = `${dayName}, ${date} ${monthName} ${year}`;
+            
+            // Update elemen
+            const dateElement = document.getElementById('currentDate');
+            if (dateElement) {
+                dateElement.textContent = formattedDate;
+            }
+        }
+        
         // Scroll Animator untuk animasi saat scroll
         class ScrollAnimator {
             constructor() {
@@ -1485,19 +2809,129 @@
             }, 50);
         }
         
+        // Sidebar functions
+        function openSidebar() {
+            const sidebar = document.getElementById('sidebar');
+            const overlay = document.getElementById('sidebarOverlay');
+            const mainWrapper = document.getElementById('mainWrapper');
+            
+            sidebar.classList.add('active');
+            overlay.classList.add('active');
+            mainWrapper.classList.add('sidebar-open');
+            document.body.style.overflow = 'hidden';
+        }
+        
+        function closeSidebar() {
+            const sidebar = document.getElementById('sidebar');
+            const overlay = document.getElementById('sidebarOverlay');
+            const mainWrapper = document.getElementById('mainWrapper');
+            
+            sidebar.classList.remove('active');
+            overlay.classList.remove('active');
+            mainWrapper.classList.remove('sidebar-open');
+            document.body.style.overflow = '';
+        }
+        
+        function toggleSidebar() {
+            const sidebar = document.getElementById('sidebar');
+            if (sidebar.classList.contains('active')) {
+                closeSidebar();
+            } else {
+                openSidebar();
+            }
+        }
+        
+        // Check screen size and adjust sidebar
+        function checkScreenSize() {
+            if (window.innerWidth >= 1024) {
+                // Desktop - always show sidebar
+                const sidebar = document.getElementById('sidebar');
+                const overlay = document.getElementById('sidebarOverlay');
+                const mainWrapper = document.getElementById('mainWrapper');
+                
+                sidebar.classList.add('active');
+                overlay.classList.remove('active');
+                mainWrapper.classList.remove('sidebar-open');
+                document.body.style.overflow = '';
+            } else {
+                // Mobile - close sidebar by default
+                closeSidebar();
+            }
+        }
+        
+        // ================= EVENT LISTENERS =================
+        
         document.addEventListener('DOMContentLoaded', function() {
-            // Inisialisasi Scroll Animator
+            // 1. Inisialisasi sistem notifikasi
+            const notificationSystem = new NotificationSystem();
+            
+            // 2. Inisialisasi tanggal
+            updateDate();
+            
+            // 3. Inisialisasi Scroll Animator
             const animator = new ScrollAnimator();
             
-            // Force render semua konten
+            // 4. Force render semua konten
             forceRenderAllContent();
             
-            // Render tambahan setelah semua aset dimuat
+            // 5. Check screen size and setup sidebar
+            checkScreenSize();
+            
+            // 6. Setup sidebar event listeners
+            const mobileMenuBtn = document.getElementById('mobileMenuBtn');
+            const closeSidebarBtn = document.getElementById('closeSidebar');
+            const sidebarOverlay = document.getElementById('sidebarOverlay');
+            
+            if (mobileMenuBtn) {
+                mobileMenuBtn.addEventListener('click', toggleSidebar);
+            }
+            
+            if (closeSidebarBtn) {
+                closeSidebarBtn.addEventListener('click', closeSidebar);
+            }
+            
+            if (sidebarOverlay) {
+                sidebarOverlay.addEventListener('click', closeSidebar);
+            }
+            
+            // Close sidebar when clicking on a link (for mobile)
+            const sidebarLinks = document.querySelectorAll('#sidebar a');
+            sidebarLinks.forEach(link => {
+                link.addEventListener('click', () => {
+                    if (window.innerWidth < 1024) {
+                        closeSidebar();
+                    }
+                });
+            });
+            
+            // 7. Toggle submenu dashboard
+            const dashboardMenu = document.getElementById('dashboard-menu');
+            const dashboardSubmenu = document.getElementById('dashboard-submenu');
+            const dashboardChevron = document.getElementById('dashboard-chevron');
+            
+            if (dashboardMenu && dashboardSubmenu) {
+                dashboardMenu.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    e.stopPropagation();
+                    
+                    dashboardSubmenu.classList.toggle('hidden');
+                    
+                    if (dashboardSubmenu.classList.contains('hidden')) {
+                        dashboardChevron.classList.remove('fa-chevron-up');
+                        dashboardChevron.classList.add('fa-chevron-down');
+                    } else {
+                        dashboardChevron.classList.remove('fa-chevron-down');
+                        dashboardChevron.classList.add('fa-chevron-up');
+                    }
+                });
+            }
+            
+            // 8. Render tambahan setelah semua aset dimuat
             window.addEventListener('load', function() {
                 setTimeout(forceRenderAllContent, 100);
             });
             
-            // Initialize Charts
+            // 9. Initialize Charts
             const salesTrendCtx = document.getElementById('salesTrendChart').getContext('2d');
             const productForecastCtx = document.getElementById('productForecastChart').getContext('2d');
             
@@ -1642,7 +3076,7 @@
                 }
             });
             
-            // AI Assistant Panel
+            // 10. AI Assistant Panel
             const aiAssistantBtn = document.getElementById('aiAssistantBtn');
             const aiAssistantPanel = document.getElementById('aiAssistantPanel');
             const closeAIPanel = document.getElementById('closeAIPanel');
@@ -1668,7 +3102,7 @@
                 }
             });
             
-            // AI Mode Selector
+            // 11. AI Mode Selector
             const aiModeButtons = document.querySelectorAll('.ai-mode-btn');
             aiModeButtons.forEach(button => {
                 button.addEventListener('click', function() {
@@ -1706,7 +3140,7 @@
                 addAIMessage(`Mode AI telah diubah ke: ${mode.charAt(0).toUpperCase() + mode.slice(1)}. Bagaimana saya bisa membantu forecasting Anda?`, 'assistant');
             }
             
-            // AI Quick Questions - khusus forecasting
+            // 12. AI Quick Questions - khusus forecasting
             const aiQuickQuestions = document.querySelectorAll('.ai-quick-question');
             
             aiQuickQuestions.forEach(button => {
@@ -1723,7 +3157,7 @@
                 });
             });
             
-            // Send AI Question
+            // 13. Send AI Question
             const aiQuestionInput = document.getElementById('aiQuestionInput');
             const sendAIQuestion = document.getElementById('sendAIQuestion');
             
@@ -1749,215 +3183,7 @@
                 }
             });
             
-            // AI Chat Functions
-            function addAIMessage(text, sender) {
-                const chatContainer = document.getElementById('aiChatContainer');
-                const messageDiv = document.createElement('div');
-                messageDiv.className = `ai-message ${sender}`;
-                
-                if (sender === 'user') {
-                    messageDiv.innerHTML = `
-                        <div class="flex items-center justify-between">
-                            <p>${text}</p>
-                            <i class="fas fa-user ml-2"></i>
-                        </div>
-                    `;
-                } else {
-                    messageDiv.innerHTML = `
-                        <div class="flex items-start space-x-2">
-                            <div class="w-6 h-6 rounded-full bg-blue-100 flex items-center justify-center flex-shrink-0 mt-1">
-                                <i class="fas fa-robot text-blue-600 text-xs"></i>
-                            </div>
-                            <div>
-                                <p class="text-gray-700">${text}</p>
-                            </div>
-                        </div>
-                    `;
-                }
-                
-                chatContainer.appendChild(messageDiv);
-                chatContainer.scrollTop = chatContainer.scrollHeight;
-            }
-            
-            function showTypingIndicator() {
-                const chatContainer = document.getElementById('aiChatContainer');
-                const typingDiv = document.createElement('div');
-                typingDiv.className = 'ai-typing-indicator';
-                typingDiv.id = 'typingIndicator';
-                typingDiv.innerHTML = `
-                    <div class="w-6 h-6 rounded-full bg-blue-100 flex items-center justify-center flex-shrink-0 mr-2">
-                        <i class="fas fa-robot text-blue-600 text-xs"></i>
-                    </div>
-                    <div class="flex">
-                        <div class="ai-typing-dot"></div>
-                        <div class="ai-typing-dot"></div>
-                        <div class="ai-typing-dot"></div>
-                    </div>
-                `;
-                
-                chatContainer.appendChild(typingDiv);
-                chatContainer.scrollTop = chatContainer.scrollHeight;
-            }
-            
-            function removeTypingIndicator() {
-                const typingIndicator = document.getElementById('typingIndicator');
-                if (typingIndicator) {
-                    typingIndicator.remove();
-                }
-            }
-            
-            // Respons AI khusus untuk forecasting
-            function generateForecastingAIResponse(question) {
-                let response = '';
-                let actions = '';
-                
-                const questionLower = question.toLowerCase();
-                
-                if (questionLower.includes('prediksi') && questionLower.includes('30 hari') || 
-                    questionLower.includes('bulan depan')) {
-                    
-                    response = `Berdasarkan analisis data 12 bulan terakhir, prediksi penjualan 30 hari ke depan: <span class="font-semibold text-blue-700">Rp 1.34-1.42 Miliar</span> (naik 8.5-12%). Detail prediksi:<br><br>
-                    1. <strong>Kategori Elektronik</strong>: Diprediksi tumbuh 18.5% dengan penjualan Rp 620-680 juta.<br>
-                    2. <strong>Produk Teratas</strong>: Smartphone X Pro (48-52 unit), Wireless Headphone Pro (38-44 unit).<br>
-                    3. <strong>Faktor Pengaruh</strong>: Musim liburan (+23%), event tahun baru, dan promosi akhir bulan.<br>
-                    4. <strong>Rekomendasi Stok</strong>: Tambah 20 unit untuk Smartphone X Pro, 35 unit untuk Wireless Headphone Pro.<br><br>
-                    Tingkat kepercayaan prediksi: 87.5% berdasarkan akurasi historis.`;
-                    
-                    actions = `<div class="mt-2 flex space-x-2">
-                        <button class="text-xs px-2 py-1 bg-blue-100 text-blue-700 rounded smooth-transition hover:bg-blue-200">Detail Prediksi</button>
-                        <button class="text-xs px-2 py-1 bg-green-100 text-green-700 rounded smooth-transition hover:bg-green-200">Export Laporan</button>
-                    </div>`;
-                    
-                } else if (questionLower.includes('analisis') && questionLower.includes('tren') || 
-                          questionLower.includes('musiman')) {
-                    
-                    response = `Analisis tren penjualan menunjukkan pola musiman yang kuat:<br><br>
-                    <strong>1. Pola Musiman Tahunan:</strong><br>
-                    • Januari: +23% (musim liburan)<br>
-                    • Juni-Juli: +18% (libur sekolah)<br>
-                    • Desember: +32% (natal & tahun baru)<br><br>
-                    <strong>2. Pola Mingguan:</strong><br>
-                    • Weekend: +35% vs weekday<br>
-                    • Jumat-Minggu: 52% dari total penjualan mingguan<br><br>
-                    <strong>3. Tren Kategori:</strong><br>
-                    • Elektronik: Stabil +15% per bulan<br>
-                    • Fashion: Meningkat di weekend (+28%)<br>
-                    • Rumah Tangga: Konsisten +8-10%<br><br>
-                    Rekomendasi: Optimalkan stok untuk weekend dan persiapkan promosi musiman.`;
-                    
-                    actions = `<div class="mt-2 flex space-x-2">
-                        <button class="text-xs px-2 py-1 bg-blue-100 text-blue-700 rounded smooth-transition hover:bg-blue-200">Grafik Tren</button>
-                        <button class="text-xs px-2 py-1 bg-yellow-100 text-yellow-700 rounded smooth-transition hover:bg-yellow-200">Data Historis</button>
-                    </div>`;
-                    
-                } else if (questionLower.includes('kebutuhan') && questionLower.includes('stok') || 
-                          questionLower.includes('minggu depan')) {
-                    
-                    response = `Analisis kebutuhan stok minggu depan:<br><br>
-                    <strong>Total Kebutuhan: 142 unit untuk 12 produk</strong><br><br>
-                    <strong>Prioritas Tinggi (Restok Segera):</strong><br>
-                    1. Kaos Premium Cotton: +60 unit (stok kritis: 5 unit)<br>
-                    2. Wireless Headphone Pro: +35 unit (stok rendah: 8 unit)<br><br>
-                    <strong>Prioritas Menengah (Monitor):</strong><br>
-                    3. Smartphone X Pro: +20 unit (stok cukup: 42 unit)<br>
-                    4. Lampu LED Smart Home: +15 unit (stok cukup: 28 unit)<br><br>
-                    <strong>Rekomendasi:</strong> Lakukan restok hari ini untuk 5 produk dengan tingkat penjualan >20 unit/minggu. Total estimasi biaya restok: Rp 450-500 juta.`;
-                    
-                    actions = `<div class="mt-2 flex space-x-2">
-                        <button class="text-xs px-2 py-1 bg-blue-100 text-blue-700 rounded smooth-transition hover:bg-blue-200">List Produk</button>
-                        <button class="text-xs px-2 py-1 bg-red-100 text-red-700 rounded smooth-transition hover:bg-red-200">Restok Prioritas</button>
-                    </div>`;
-                    
-                } else if (questionLower.includes('produk') && questionLower.includes('pertumbuhan') && 
-                          questionLower.includes('tertinggi')) {
-                    
-                    response = `Produk dengan prediksi pertumbuhan tertinggi 30 hari ke depan:<br><br>
-                    <strong>1. Smartphone X Pro (+15%)</strong><br>
-                    • Margin: 42%<br>
-                    • Repeat rate: 28%<br>
-                    • Prediksi: 48-52 unit (Rp 408-442 juta)<br><br>
-                    <strong>2. Wireless Headphone Pro (+25%)</strong><br>
-                    • Margin: 38%<br>
-                    • Repeat rate: 32%<br>
-                    • Prediksi: 38-44 unit (Rp 49.4-57.2 juta)<br><br>
-                    <strong>3. Essential Oil Set (+12%)</strong><br>
-                    • Margin: 45%<br>
-                    • Repeat rate: 65% (sangat tinggi)<br>
-                    • Prediksi: 42-48 unit (Rp 10.5-11.9 juta)<br><br>
-                    <strong>Kategori Terbaik:</strong> Elektronik secara keseluruhan +18.5%`;
-                    
-                    actions = `<div class="mt-2 flex space-x-2">
-                        <button class="text-xs px-2 py-1 bg-blue-100 text-blue-700 rounded smooth-transition hover:bg-blue-200">Analisis Produk</button>
-                        <button class="text-xs px-2 py-1 bg-purple-100 text-purple-700 rounded smooth-transition hover:bg-purple-200">Optimasi Kategori</button>
-                    </div>`;
-                    
-                } else if (questionLower.includes('faktor') && questionLower.includes('cuaca')) {
-                    
-                    response = `Analisis pengaruh cuaca terhadap penjualan:<br><br>
-                    <strong>Korelasi Cuaca-Penjualan:</strong><br>
-                    1. <strong>Hujan > 50mm/hari</strong>: Penjualan online +22%, offline -18%<br>
-                    2. <strong>Suhu > 30°C</strong>: Minuman +45%, elektronik pendingin +32%<br>
-                    3. <strong>Kelembaban tinggi</strong>: Produk kesehatan +28%, dehumidifier +35%<br><br>
-                    <strong>Prediksi Cuaca 7 Hari ke Depan:</strong><br>
-                    • Hari 1-3: Hujan ringan (prediksi penjualan online +15%)<br>
-                    • Hari 4-7: Cerah (prediksi penjualan offline +12%)<br><br>
-                    <strong>Rekomendasi:</strong> Tingkatkan stok produk kesehatan selama periode hujan, dan optimalkan promosi online saat cuaca buruk.`;
-                    
-                    actions = `<div class="mt-2 flex space-x-2">
-                        <button class="text-xs px-2 py-1 bg-blue-100 text-blue-700 rounded smooth-transition hover:bg-blue-200">Data Cuaca</button>
-                        <button class="text-xs px-2 py-1 bg-cyan-100 text-cyan-700 rounded smooth-transition hover:bg-cyan-200">Analisis Korelasi</button>
-                    </div>`;
-                    
-                } else if (questionLower.includes('rekomendasi') && questionLower.includes('harga')) {
-                    
-                    response = `Analisis harga optimal berdasarkan elastisitas permintaan:<br><br>
-                    <strong>1. Smartphone X Pro</strong><br>
-                    • Harga saat ini: Rp 8.5 juta<br>
-                    • Harga optimal: Rp 8.2-8.3 juta (+12% volume)<br>
-                    • Potensi revenue: +8% dengan diskon 3-4%<br><br>
-                    <strong>2. Kaos Premium Cotton</strong><br>
-                    • Harga saat ini: Rp 150.000<br>
-                    • Harga optimal: Rp 135.000 (+28% volume)<br>
-                    • Potensi revenue: +15% dengan diskon 10%<br><br>
-                    <strong>3. Wireless Headphone Pro</strong><br>
-                    • Harga saat ini: Rp 1.3 juta<br>
-                    • Harga optimal: Rp 1.25 juta (+18% volume)<br>
-                    • Potensi revenue: +9% dengan diskon 4%<br><br>
-                    <strong>Rekomendasi Umum:</strong> Implementasikan pricing dinamis dengan diskon 3-10% untuk produk dengan elastisitas tinggi.`;
-                    
-                    actions = `<div class="mt-2 flex space-x-2">
-                        <button class="text-xs px-2 py-1 bg-blue-100 text-blue-700 rounded smooth-transition hover:bg-blue-200">Simulasi Harga</button>
-                        <button class="text-xs px-2 py-1 bg-green-100 text-green-700 rounded smooth-transition hover:bg-green-200">Implementasi</button>
-                    </div>`;
-                    
-                } else {
-                    response = `Saya telah menganalisis data penjualan Anda. Prediksi 30 hari ke depan menunjukkan pertumbuhan 8.5-12% dengan total Rp 1.34-1.42 Miliar. 12 produk membutuhkan restok, dengan 2 produk dalam kondisi kritis. Akurasi prediksi saat ini: 94.2% (7 hari), 87.5% (30 hari). Ada pertanyaan spesifik tentang forecasting atau perencanaan stok?`;
-                    actions = `<div class="mt-2 flex space-x-2">
-                        <button class="text-xs px-2 py-1 bg-blue-100 text-blue-700 rounded smooth-transition hover:bg-blue-200">Laporan Lengkap</button>
-                        <button class="text-xs px-2 py-1 bg-green-100 text-green-700 rounded smooth-transition hover:bg-green-200">Rekomendasi</button>
-                    </div>`;
-                }
-                
-                const chatContainer = document.getElementById('aiChatContainer');
-                const messageDiv = document.createElement('div');
-                messageDiv.className = 'ai-message assistant';
-                messageDiv.innerHTML = `
-                    <div class="flex items-start space-x-2">
-                        <div class="w-6 h-6 rounded-full bg-blue-100 flex items-center justify-center flex-shrink-0 mt-1">
-                            <i class="fas fa-robot text-blue-600 text-xs"></i>
-                        </div>
-                        <div>
-                            <p class="text-gray-700">${response}</p>
-                            ${actions}
-                        </div>
-                    </div>
-                `;
-                
-                chatContainer.appendChild(messageDiv);
-                chatContainer.scrollTop = chatContainer.scrollHeight;
-            }
-            
-            // Period Filter Buttons
+            // 14. Period Filter Buttons
             const periodFilters = document.querySelectorAll('.shipping-filter');
             periodFilters.forEach(filter => {
                 filter.addEventListener('click', function() {
@@ -2012,23 +3238,30 @@
                 }
             }
             
-            // Refresh Forecast Button
+            // 15. Refresh Forecast Button
             const refreshForecastBtn = document.getElementById('refreshForecastBtn');
             const updateForecastBtn = document.getElementById('updateForecastBtn');
             
             function refreshForecastData() {
                 refreshForecastBtn.innerHTML = '<i class="fas fa-spinner fa-spin mr-1"></i> Memperbarui...';
                 refreshForecastBtn.disabled = true;
+                updateForecastBtn.innerHTML = '<i class="fas fa-spinner fa-spin mr-2"></i> Memproses...';
+                updateForecastBtn.disabled = true;
                 
                 showNotification('Memperbarui prediksi penjualan...', 'info');
                 
                 setTimeout(() => {
                     refreshForecastBtn.innerHTML = '<i class="fas fa-sync-alt mr-1"></i> Perbarui Prediksi';
                     refreshForecastBtn.disabled = false;
+                    updateForecastBtn.innerHTML = '<i class="fas fa-sync-alt mr-2"></i> Perbarui Prediksi';
+                    updateForecastBtn.disabled = false;
                     
                     showNotification('Prediksi penjualan berhasil diperbarui!', 'success');
                     
                     simulateForecastDataChanges();
+                    
+                    // Check for new notifications after refresh
+                    notificationSystem.checkCriticalConditions();
                 }, 2000);
             }
             
@@ -2037,7 +3270,7 @@
             
             function simulateForecastDataChanges() {
                 // Update forecast metrics
-                const metrics = document.querySelectorAll('.text-2xl.font-bold.text-gray-800');
+                const metrics = document.querySelectorAll('.text-xl.font-bold.text-gray-800, .text-2xl.font-bold.text-gray-800');
                 metrics.forEach(metric => {
                     if (metric.textContent.includes('Rp') || metric.textContent.includes('%')) {
                         const isCurrency = metric.textContent.includes('Rp');
@@ -2080,108 +3313,14 @@
                 });
             }
             
-            // Notification System
-            function showNotification(message, type = 'info') {
-                const notification = document.createElement('div');
-                notification.className = `fixed top-24 right-8 px-4 py-3 rounded-lg shadow-lg z-50 animate-slide-in-right`;
-                
-                let bgColor = 'bg-blue-100 text-blue-800 border border-blue-200';
-                let icon = 'fas fa-info-circle';
-                
-                if (type === 'success') {
-                    bgColor = 'bg-green-100 text-green-800 border border-green-200';
-                    icon = 'fas fa-check-circle';
-                } else if (type === 'warning') {
-                    bgColor = 'bg-yellow-100 text-yellow-800 border border-yellow-200';
-                    icon = 'fas fa-exclamation-triangle';
-                } else if (type === 'error') {
-                    bgColor = 'bg-red-100 text-red-800 border border-red-200';
-                    icon = 'fas fa-times-circle';
-                }
-                
-                notification.className += ` ${bgColor}`;
-                notification.innerHTML = `
-                    <div class="flex items-center space-x-3">
-                        <i class="${icon}"></i>
-                        <span>${message}</span>
-                    </div>
-                `;
-                
-                document.body.appendChild(notification);
-                
-                setTimeout(() => {
-                    if (notification.parentNode) {
-                        notification.style.animation = 'slideInRight 0.3s reverse forwards';
-                        setTimeout(() => {
-                            if (notification.parentNode) {
-                                notification.remove();
-                            }
-                        }, 300);
-                    }
-                }, 3000);
-            }
-            
-            // Interactive notification bell
-            const notificationBell = document.getElementById('notificationBell');
-            if (notificationBell) {
-                notificationBell.addEventListener('click', function() {
-                    const notificationPopup = document.createElement('div');
-                    notificationPopup.className = 'fixed top-20 right-8 w-72 bg-white rounded-xl shadow-lg border border-gray-200 p-4 animate-fade-in-up z-40';
-                    notificationPopup.innerHTML = `
-                        <div class="flex justify-between items-center mb-3">
-                            <h4 class="font-bold text-gray-800">Notifikasi Forecasting</h4>
-                            <button class="text-gray-400 hover:text-gray-600 close-notif">
-                                <i class="fas fa-times"></i>
-                            </button>
-                        </div>
-                        <div class="space-y-3">
-                            <div class="flex items-start space-x-3 p-2 rounded-lg bg-red-50">
-                                <i class="fas fa-exclamation-circle text-red-500 mt-1"></i>
-                                <div>
-                                    <p class="text-sm font-medium">Stok kritis terdeteksi</p>
-                                    <p class="text-xs text-gray-600">2 produk akan habis dalam 5 hari</p>
-                                </div>
-                            </div>
-                            <div class="flex items-start space-x-3 p-2 rounded-lg bg-green-50">
-                                <i class="fas fa-chart-line text-green-500 mt-1"></i>
-                                <div>
-                                    <p class="text-sm font-medium">Prediksi diperbarui</p>
-                                    <p class="text-xs text-gray-600">Akurasi meningkat 2.1%</p>
-                                </div>
-                            </div>
-                            <div class="flex items-start space-x-3 p-2 rounded-lg bg-blue-50">
-                                <i class="fas fa-calendar-alt text-blue-500 mt-1"></i>
-                                <div>
-                                    <p class="text-sm font-medium">Musim liburan mendatang</p>
-                                    <p class="text-xs text-gray-600">Prediksi +23% dalam 2 minggu</p>
-                                </div>
-                            </div>
-                        </div>
-                    `;
-                    
-                    document.body.appendChild(notificationPopup);
-                    
-                    const closeBtn = notificationPopup.querySelector('.close-notif');
-                    closeBtn.addEventListener('click', function() {
-                        notificationPopup.remove();
-                    });
-                    
-                    setTimeout(() => {
-                        if (notificationPopup.parentNode) {
-                            notificationPopup.remove();
-                        }
-                    }, 5000);
-                });
-            }
-            
-            // Initialize with a welcome message from AI
+            // 16. Initialize with a welcome message from AI
             setTimeout(() => {
                 if (!document.querySelector('.ai-message.user')) {
                     addAIMessage("Selamat datang di Sales Forecasting! Saya dapat membantu Anda menganalisis tren penjualan, membuat prediksi akurat, dan merencanakan kebutuhan stok. Apa yang ingin Anda ketahui hari ini?", 'assistant');
                 }
             }, 1000);
             
-            // Progress bar animations
+            // 17. Progress bar animations
             const progressBars = document.querySelectorAll('.progress-bar-fill');
             const observer = new IntersectionObserver((entries) => {
                 entries.forEach(entry => {
@@ -2201,24 +3340,243 @@
             
             progressBars.forEach(bar => observer.observe(bar));
             
-            // Auto-refresh forecast data setiap 120 detik
+            // 18. Auto-refresh forecast data setiap 120 detik
             setInterval(simulateForecastDataChanges, 120000);
             
-            // Tambahkan event listener untuk scroll dan resize
+            // 19. Tambahkan event listener untuk scroll dan resize
             window.addEventListener('scroll', function() {
                 animator.observer.disconnect();
                 animator.init();
             });
             
             window.addEventListener('resize', function() {
+                checkScreenSize();
                 setTimeout(forceRenderAllContent, 100);
             });
             
-            // Export button functionality
+            // 20. Export button functionality
             document.querySelector('button:contains("Export Prediksi")').addEventListener('click', function() {
                 showNotification('Laporan prediksi berhasil diexport ke Excel', 'success');
             });
+            
+            // 21. Highlight active menu item
+            function highlightActiveMenu() {
+                // Highlight Sales Forecasting menu
+                const salesForecastingLink = document.querySelector('a[href="/salesforecasting/"]');
+                if (salesForecastingLink) {
+                    salesForecastingLink.classList.add('bg-blue-50', 'text-blue-600');
+                    salesForecastingLink.classList.remove('text-gray-700');
+                }
+            }
+            
+            highlightActiveMenu();
+            
+            // 22. Simulasikan notifikasi penting setelah beberapa detik
+            setTimeout(() => {
+                notificationSystem.checkCriticalConditions();
+            }, 3000);
         });
+        
+        // ================= FUNGSI BANTUAN =================
+        
+        // AI Chat Functions
+        function addAIMessage(text, sender) {
+            const chatContainer = document.getElementById('aiChatContainer');
+            const messageDiv = document.createElement('div');
+            messageDiv.className = `ai-message ${sender}`;
+            
+            if (sender === 'user') {
+                messageDiv.innerHTML = `
+                    <div class="flex items-center justify-between">
+                        <p>${text}</p>
+                        <i class="fas fa-user ml-2"></i>
+                    </div>
+                `;
+            } else {
+                messageDiv.innerHTML = `
+                    <div class="flex items-start space-x-2">
+                        <div class="w-6 h-6 rounded-full bg-blue-100 flex items-center justify-center flex-shrink-0 mt-1">
+                            <i class="fas fa-robot text-blue-600 text-xs"></i>
+                        </div>
+                        <div>
+                            <p class="text-gray-700">${text}</p>
+                        </div>
+                    </div>
+                `;
+            }
+            
+            chatContainer.appendChild(messageDiv);
+            chatContainer.scrollTop = chatContainer.scrollHeight;
+        }
+        
+        function showTypingIndicator() {
+            const chatContainer = document.getElementById('aiChatContainer');
+            const typingDiv = document.createElement('div');
+            typingDiv.className = 'ai-typing-indicator';
+            typingDiv.id = 'typingIndicator';
+            typingDiv.innerHTML = `
+                <div class="w-6 h-6 rounded-full bg-blue-100 flex items-center justify-center flex-shrink-0 mr-2">
+                    <i class="fas fa-robot text-blue-600 text-xs"></i>
+                </div>
+                <div class="flex">
+                    <div class="ai-typing-dot"></div>
+                    <div class="ai-typing-dot"></div>
+                    <div class="ai-typing-dot"></div>
+                </div>
+            `;
+            
+            chatContainer.appendChild(typingDiv);
+            chatContainer.scrollTop = chatContainer.scrollHeight;
+        }
+        
+        function removeTypingIndicator() {
+            const typingIndicator = document.getElementById('typingIndicator');
+            if (typingIndicator) {
+                typingIndicator.remove();
+            }
+        }
+        
+        // Respons AI khusus untuk forecasting
+        function generateForecastingAIResponse(question) {
+            let response = '';
+            let actions = '';
+            
+            const questionLower = question.toLowerCase();
+            
+            if (questionLower.includes('prediksi') && questionLower.includes('30 hari') || 
+                questionLower.includes('bulan depan')) {
+                
+                response = `Berdasarkan analisis data 12 bulan terakhir, prediksi penjualan 30 hari ke depan: <span class="font-semibold text-blue-700">Rp 1.34-1.42 Miliar</span> (naik 8.5-12%). Detail prediksi:<br><br>
+                1. <strong>Kategori Elektronik</strong>: Diprediksi tumbuh 18.5% dengan penjualan Rp 620-680 juta.<br>
+                2. <strong>Produk Teratas</strong>: Smartphone X Pro (48-52 unit), Wireless Headphone Pro (38-44 unit).<br>
+                3. <strong>Faktor Pengaruh</strong>: Musim liburan (+23%), event tahun baru, dan promosi akhir bulan.<br>
+                4. <strong>Rekomendasi Stok</strong>: Tambah 20 unit untuk Smartphone X Pro, 35 unit untuk Wireless Headphone Pro.<br><br>
+                Tingkat kepercayaan prediksi: 87.5% berdasarkan akurasi historis.`;
+                
+                actions = `<div class="mt-2 flex space-x-2">
+                    <button class="text-xs px-2 py-1 bg-blue-100 text-blue-700 rounded smooth-transition hover:bg-blue-200">Detail Prediksi</button>
+                    <button class="text-xs px-2 py-1 bg-green-100 text-green-700 rounded smooth-transition hover:bg-green-200">Export Laporan</button>
+                </div>`;
+                
+            } else if (questionLower.includes('analisis') && questionLower.includes('tren') || 
+                      questionLower.includes('musiman')) {
+                
+                response = `Analisis tren penjualan menunjukkan pola musiman yang kuat:<br><br>
+                <strong>1. Pola Musiman Tahunan:</strong><br>
+                • Januari: +23% (musim liburan)<br>
+                • Juni-Juli: +18% (libur sekolah)<br>
+                • Desember: +32% (natal & tahun baru)<br><br>
+                <strong>2. Pola Mingguan:</strong><br>
+                • Weekend: +35% vs weekday<br>
+                • Jumat-Minggu: 52% dari total penjualan mingguan<br><br>
+                <strong>3. Tren Kategori:</strong><br>
+                • Elektronik: Stabil +15% per bulan<br>
+                • Fashion: Meningkat di weekend (+28%)<br>
+                • Rumah Tangga: Konsisten +8-10%<br><br>
+                Rekomendasi: Optimalkan stok untuk weekend dan persiapkan promosi musiman.`;
+                
+                actions = `<div class="mt-2 flex space-x-2">
+                    <button class="text-xs px-2 py-1 bg-blue-100 text-blue-700 rounded smooth-transition hover:bg-blue-200">Grafik Tren</button>
+                    <button class="text-xs px-2 py-1 bg-yellow-100 text-yellow-700 rounded smooth-transition hover:bg-yellow-200">Data Historis</button>
+                </div>`;
+                
+            } else if (questionLower.includes('kebutuhan') && questionLower.includes('stok') || 
+                      questionLower.includes('minggu depan')) {
+                
+                response = `Analisis kebutuhan stok minggu depan:<br><br>
+                <strong>Total Kebutuhan: 142 unit untuk 12 produk</strong><br><br>
+                <strong>Prioritas Tinggi (Restok Segera):</strong><br>
+                1. Kaos Premium Cotton: +60 unit (stok kritis: 5 unit)<br>
+                2. Wireless Headphone Pro: +35 unit (stok rendah: 8 unit)<br><br>
+                <strong>Prioritas Menengah (Monitor):</strong><br>
+                3. Smartphone X Pro: +20 unit (stok cukup: 42 unit)<br>
+                4. Lampu LED Smart Home: +15 unit (stok cukup: 28 unit)<br><br>
+                <strong>Rekomendasi:</strong> Lakukan restok hari ini untuk 5 produk dengan tingkat penjualan >20 unit/minggu. Total estimasi biaya restok: Rp 450-500 juta.`;
+                
+                actions = `<div class="mt-2 flex space-x-2">
+                    <button class="text-xs px-2 py-1 bg-blue-100 text-blue-700 rounded smooth-transition hover:bg-blue-200">List Produk</button>
+                    <button class="text-xs px-2 py-1 bg-red-100 text-red-700 rounded smooth-transition hover:bg-red-200">Restok Prioritas</button>
+                </div>`;
+                
+            } else {
+                response = `Saya telah menganalisis data penjualan Anda. Prediksi 30 hari ke depan menunjukkan pertumbuhan 8.5-12% dengan total Rp 1.34-1.42 Miliar. 12 produk membutuhkan restok, dengan 2 produk dalam kondisi kritis. Akurasi prediksi saat ini: 94.2% (7 hari), 87.5% (30 hari). Ada pertanyaan spesifik tentang forecasting atau perencanaan stok?`;
+                actions = `<div class="mt-2 flex space-x-2">
+                    <button class="text-xs px-2 py-1 bg-blue-100 text-blue-700 rounded smooth-transition hover:bg-blue-200">Laporan Lengkap</button>
+                    <button class="text-xs px-2 py-1 bg-green-100 text-green-700 rounded smooth-transition hover:bg-green-200">Rekomendasi</button>
+                </div>`;
+            }
+            
+            const chatContainer = document.getElementById('aiChatContainer');
+            const messageDiv = document.createElement('div');
+            messageDiv.className = 'ai-message assistant';
+            messageDiv.innerHTML = `
+                <div class="flex items-start space-x-2">
+                    <div class="w-6 h-6 rounded-full bg-blue-100 flex items-center justify-center flex-shrink-0 mt-1">
+                        <i class="fas fa-robot text-blue-600 text-xs"></i>
+                    </div>
+                    <div>
+                        <p class="text-gray-700">${response}</p>
+                        ${actions}
+                    </div>
+                </div>
+            `;
+            
+            chatContainer.appendChild(messageDiv);
+            chatContainer.scrollTop = chatContainer.scrollHeight;
+        }
+        
+        // Notification System
+        function showNotification(message, type = 'info') {
+            const notification = document.createElement('div');
+            notification.className = `fixed top-24 right-8 px-4 py-3 rounded-lg shadow-lg z-50 animate-slide-in-right hidden md:block`;
+            
+            let bgColor = 'bg-blue-100 text-blue-800 border border-blue-200';
+            let icon = 'fas fa-info-circle';
+            
+            if (type === 'success') {
+                bgColor = 'bg-green-100 text-green-800 border border-green-200';
+                icon = 'fas fa-check-circle';
+            } else if (type === 'warning') {
+                bgColor = 'bg-yellow-100 text-yellow-800 border border-yellow-200';
+                icon = 'fas fa-exclamation-triangle';
+            } else if (type === 'error') {
+                bgColor = 'bg-red-100 text-red-800 border border-red-200';
+                icon = 'fas fa-times-circle';
+            }
+            
+            notification.className += ` ${bgColor}`;
+            notification.innerHTML = `
+                <div class="flex items-center space-x-3">
+                    <i class="${icon}"></i>
+                    <span>${message}</span>
+                </div>
+            `;
+            
+            document.body.appendChild(notification);
+            
+            setTimeout(() => {
+                if (notification.parentNode) {
+                    notification.style.animation = 'slideInRight 0.3s reverse forwards';
+                    setTimeout(() => {
+                        if (notification.parentNode) {
+                            notification.remove();
+                        }
+                    }, 300);
+                }
+            }, 3000);
+        }
+    </script>
+    
+    <!-- Push Notification Service -->
+    <script src="../src/pushNotification.js"></script>
+    <script>
+        // Start push notification demo mode
+        if (window.PushNotificationService) {
+            setTimeout(() => {
+                window.PushNotificationService.startDemoMode();
+                console.log('🔔 Push notification demo mode aktif - notifikasi setiap 20 detik');
+            }, 3000);
+        }
     </script>
 </body>
 </html>

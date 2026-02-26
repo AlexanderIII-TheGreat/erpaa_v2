@@ -3,7 +3,7 @@ package repository
 import (
 	"context"
 	"database/sql"
-	"erpaa-backend/internal/model"
+	"erpaa/backend/internal/model"
 	"fmt"
 	"os"
 

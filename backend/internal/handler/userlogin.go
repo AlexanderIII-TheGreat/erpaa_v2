@@ -2,8 +2,8 @@ package handler
 
 import (
 	"context"
-	"erpaa-backend/internal/model"
-	"erpaa-backend/internal/repository"
+	"erpaa/backend/internal/model"
+	"erpaa/backend/internal/repository"
 	"log"
 	"net/http"
 	"time"
@@ -18,7 +18,6 @@ func NewHandlerUser(user repository.UserPatern) *HandlerUser {
 }
 
 func (h *HandlerUser) Registrasi(w http.ResponseWriter, r *http.Request) {
-	
 		if r.Method != http.MethodPost {
 			http.Error(w, "method tidak diizinkan", http.StatusMethodNotAllowed)
 			return

@@ -1,4 +1,4 @@
-module erpaa-backend
+module erpaa
 
 go 1.25.4
 

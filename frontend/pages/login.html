@@ -289,6 +289,264 @@
 
         .separator span { padding: 0 10px; }
 
+        /* Tombol Toggle Mobile */
+        .mobile-toggle-btn {
+            display: none;
+            background: var(--primary-color);
+            color: white;
+            border: none;
+            padding: 12px 30px;
+            border-radius: 15px;
+            font-weight: 600;
+            margin-top: 20px;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .mobile-toggle-btn:hover {
+            background: var(--primary-dark);
+            transform: translateY(-2px);
+        }
+
+        /* ============ RESPONSIVE DESIGN ============ */
+        
+        /* Tablet (768px - 1024px) */
+        @media (max-width: 1024px) {
+            .main-card {
+                width: 90vw;
+                height: 620px;
+                border-radius: 40px;
+            }
+            
+            .panel {
+                padding: 0 40px;
+            }
+            
+            h1.text-4xl {
+                font-size: 2rem;
+            }
+            
+            .overlay-content {
+                padding: 0 30px;
+            }
+            
+            .btn-ghost {
+                padding: 10px 30px;
+                font-size: 14px;
+            }
+        }
+
+        /* Tablet Kecil & HP Landscape (640px - 768px) */
+        @media (max-width: 768px) {
+            .main-card {
+                width: 95vw;
+                height: 580px;
+                border-radius: 35px;
+                overflow-y: auto;
+            }
+            
+            .panel {
+                padding: 0 30px;
+            }
+            
+            h1.text-4xl {
+                font-size: 1.8rem;
+                text-align: center;
+            }
+            
+            .custom-input {
+                padding: 14px 14px 14px 45px;
+                font-size: 14px;
+            }
+            
+            .input-group i {
+                left: 15px;
+                font-size: 14px;
+            }
+            
+            .btn-action {
+                padding: 14px;
+                font-size: 15px;
+            }
+            
+            /* Kurangi ukuran orbs di background */
+            .orb-1 { width: 400px; height: 400px; }
+            .orb-2 { width: 350px; height: 350px; }
+            .orb-3 { width: 300px; height: 300px; }
+        }
+
+        /* Mobile (lebar maksimum 640px) */
+        @media (max-width: 640px) {
+            body {
+                overflow-y: auto;
+                padding: 20px 0;
+                align-items: flex-start;
+            }
+            
+            .main-card {
+                width: 95vw;
+                height: auto;
+                min-height: 90vh;
+                flex-direction: column;
+                border-radius: 30px;
+                overflow: visible;
+            }
+            
+            /* Ubah layout menjadi vertikal di mobile */
+            .panel {
+                position: relative;
+                width: 100%;
+                height: auto;
+                opacity: 1;
+                transform: none !important;
+                padding: 40px 25px;
+                left: 0 !important;
+            }
+            
+            .sign-up-panel {
+                display: none;
+            }
+            
+            /* Tampilkan panel yang aktif */
+            .main-card.is-active .sign-in-panel {
+                display: none;
+            }
+            
+            .main-card.is-active .sign-up-panel {
+                display: flex;
+            }
+            
+            /* Sembunyikan overlay di mobile, ganti dengan tombol toggle */
+            .overlay-box {
+                display: none;
+            }
+            
+            /* Tombol toggle untuk mobile */
+            .mobile-toggle-btn {
+                display: inline-block;
+                width: 100%;
+                max-width: 280px;
+                margin: 25px auto 0;
+            }
+            
+            /* Animasi untuk orbs di mobile */
+            .orb {
+                filter: blur(60px);
+                opacity: 0.4;
+            }
+            
+            .orb-1 { width: 300px; height: 300px; top: 5%; left: -20%; }
+            .orb-2 { width: 250px; height: 250px; bottom: 5%; right: -15%; }
+            .orb-3 { width: 200px; height: 200px; top: 50%; left: 10%; }
+            
+            /* Perbaiki tinggi card di iOS */
+            @supports (-webkit-touch-callout: none) {
+                .main-card {
+                    min-height: -webkit-fill-available;
+                }
+            }
+        }
+
+        /* HP Kecil (lebar maksimum 375px) */
+        @media (max-width: 375px) {
+            .main-card {
+                width: 98vw;
+                border-radius: 25px;
+                min-height: 95vh;
+            }
+            
+            .panel {
+                padding: 30px 20px;
+            }
+            
+            h1.text-4xl {
+                font-size: 1.6rem;
+            }
+            
+            p.text-slate-400 {
+                font-size: 14px;
+                line-height: 1.4;
+            }
+            
+            .custom-input {
+                padding: 12px 12px 12px 40px;
+                font-size: 13px;
+                border-radius: 15px;
+            }
+            
+            .input-group i {
+                left: 12px;
+                font-size: 13px;
+            }
+            
+            .btn-action {
+                padding: 12px;
+                font-size: 14px;
+                border-radius: 15px;
+            }
+            
+            .separator {
+                font-size: 11px;
+            }
+            
+            .mobile-toggle-btn {
+                padding: 10px 20px;
+                font-size: 14px;
+            }
+        }
+
+        /* Landscape Mobile (height kecil) */
+        @media (max-height: 700px) and (max-width: 1024px) {
+            .main-card {
+                height: auto;
+                min-height: 90vh;
+                overflow-y: auto;
+            }
+            
+            .panel {
+                padding: 30px 40px;
+                justify-content: flex-start;
+                padding-top: 50px;
+            }
+            
+            .input-group {
+                margin-bottom: 15px;
+            }
+            
+            .btn-action {
+                margin-top: 5px;
+            }
+        }
+
+        /* Landscape HP (height kecil dan width lebih besar) */
+        @media (max-height: 600px) and (orientation: landscape) {
+            body {
+                padding: 10px 0;
+            }
+            
+            .main-card {
+                height: auto;
+                min-height: 95vh;
+                border-radius: 25px;
+            }
+            
+            .panel {
+                padding: 25px 30px;
+            }
+            
+            .input-group {
+                margin-bottom: 12px;
+            }
+            
+            .custom-input {
+                padding: 10px 10px 10px 40px;
+            }
+            
+            h1.text-4xl {
+                font-size: 1.5rem;
+                margin-bottom: 10px;
+            }
+        }
     </style>
 </head>
 <body>
@@ -305,70 +563,70 @@
             <h1 class="text-4xl font-extrabold text-slate-800 mb-2">Buat Akun</h1>
             <p class="text-slate-400 mb-6 text-center">Mulailah langkah cerdas untuk digitalisasi bisnis Anda bersama ERPAA.</p>
             
-            <!-- <div class="social-container">
-                <div class="social-btn"><i class="fab fa-google"></i></div>
-                <div class="social-btn"><i class="fab fa-facebook-f"></i></div>
-                <div class="social-btn"><i class="fab fa-apple"></i></div>
-            </div> -->
-
             <div class="separator"><span>Masukan data anda</span></div>
 
             <form action="/login/register" method="post">
-                            <div class="w-full">
-                <div class="input-group">
-                    <input type="text" placeholder="Masukan username" name="username" class="custom-input">
-                    <i class="fas fa-user"></i>
-                </div>
-                <div class="input-group">
-                    <input type="email" placeholder="Masukan email" name="email" class="custom-input">
-                    <i class="fas fa-envelope"></i>
-                </div>
-                <div class="input-group">
-                    <input type="password" placeholder="Masukan password" name="password" class="custom-input">
-                    <i class="fas fa-lock"></i>
-                </div>
-                <button class="btn-action" type="submit">Daftar Sekarang</button>
-            </div>
-            
-            <p class="mt-6 text-xs text-slate-400 px-8 text-center">
-                Dengan mendaftar, Anda menyetujui <span class="text-indigo-500 cursor-pointer">Syarat & Ketentuan</span> kami.
-            </p>
-            </form>
-
-        </section>
-        <section class="panel sign-in-panel">
-            
-               <form action="/login/auth" method="post">
-            <h1 class="text-4xl font-extrabold text-slate-800 mb-2">Selamat Datang</h1>
-            <p class="text-slate-400 mb-6 text-center">Senang melihat Anda kembali. Silakan akses portal Anda.</p>
-
-            <div class="w-full">
-                <div class="input-group">
-                    <input type="teks" placeholder="Username" name="username" class="custom-input">
-                    <i class="fas fa-user"></i>
-                </div>
-                <div class="input-group">
-                    <input type="password" name="password" placeholder="Password" class="custom-input">
-                    <i class="fas fa-lock"></i>
+                <div class="w-full">
+                    <div class="input-group">
+                        <input type="text" placeholder="Masukan username" name="username" class="custom-input">
+                        <i class="fas fa-user"></i>
+                    </div>
+                    <div class="input-group">
+                        <input type="email" placeholder="Masukan email" name="email" class="custom-input">
+                        <i class="fas fa-envelope"></i>
+                    </div>
+                    <div class="input-group">
+                        <input type="password" placeholder="Masukan password" name="password" class="custom-input">
+                        <i class="fas fa-lock"></i>
+                    </div>
+                    <button class="btn-action" type="submit">Daftar Sekarang</button>
                 </div>
                 
-                <div class="flex justify-between items-center mb-6">
-                    <label class="flex items-center text-xs text-slate-500 cursor-pointer">
-                        <input type="checkbox" class="mr-2 accent-indigo-600"> Ingat saya
-                    </label>
-                    <a href="#" class="text-xs text-indigo-600 font-bold hover:underline">Lupa Password?</a>
+                <p class="mt-6 text-xs text-slate-400 px-8 text-center">
+                    Dengan mendaftar, Anda menyetujui <span class="text-indigo-500 cursor-pointer">Syarat & Ketentuan</span> kami.
+                </p>
+            </form>
+            
+            <!-- Tombol toggle untuk mobile -->
+            <button class="mobile-toggle-btn" id="mobileToggleSignIn">
+                Sudah Punya Akun? Masuk
+            </button>
+        </section>
+        
+        <section class="panel sign-in-panel">
+                            <h1 class="text-4xl font-extrabold text-slate-800 mb-2">Selamat Datang</h1>
+            <form action="/login/auth" method="post">
+
+                <p class="text-slate-400 mb-6 text-center">Mari masuk dan kelola bisnis anda dengan software ERPAA multi fungsi yang terintegrasi oleh AI.</p>
+
+                <div class="w-full">
+                    <div class="input-group">
+                        <input type="text" placeholder="Username" name="username" class="custom-input">
+                        <i class="fas fa-user"></i>
+                    </div>
+                    <div class="input-group">
+                        <input type="password" name="password" placeholder="Password" class="custom-input">
+                        <i class="fas fa-lock"></i>
+                    </div>
+                    
+                    <div class="flex justify-between items-center mb-6">
+                        <label class="flex items-center text-xs text-slate-500 cursor-pointer">
+                            <input type="checkbox" class="mr-2 accent-indigo-600"> Ingat saya
+                        </label>
+                        <a href="#" class="text-xs text-indigo-600 font-bold hover:underline">Lupa Password?</a>
+                    </div>
+
+                    <button class="btn-action" type="submit">Masuk</button>
                 </div>
+                                <p class="mt-6 text-xs text-slate-400 px-8 text-center">
+                    Dengan menjadi pengguna, Anda menyetujui <span class="text-indigo-500 cursor-pointer">Syarat & Ketentuan</span> kami.
+                </p>
+            </form>
 
-                 <button class="btn-action" type="submit">Masuk</button>
-               </form>
-            </div>
-
-            <!-- <div class="separator"><span>Atau masuk dengan</span></div>
-
-            <div class="social-container">
-                <div class="social-btn"><i class="fab fa-google"></i></div>
-                <div class="social-btn"><i class="fab fa-linkedin-in"></i></div>
-            </div> -->
+            <!-- Tombol toggle untuk mobile -->
+            <button class="mobile-toggle-btn" id="mobileToggleSignUp">
+                Belum Punya Akun? Daftar
+            </button>
         </section>
 
         <div class="overlay-box">
@@ -398,14 +656,31 @@
         const card = document.getElementById('authCard');
         const signUpBtn = document.getElementById('triggerSignUp');
         const signInBtn = document.getElementById('triggerSignIn');
+        const mobileToggleSignUp = document.getElementById('mobileToggleSignUp');
+        const mobileToggleSignIn = document.getElementById('mobileToggleSignIn');
 
         // Fungsi berpindah halaman
         const toggleCard = () => {
             card.classList.toggle('is-active');
+            
+            // Animasi khusus untuk mobile (tanpa overlay)
+            if (window.innerWidth <= 640) {
+                gsap.from(card.querySelector('.panel'), {
+                    duration: 0.6,
+                    y: 20,
+                    opacity: 0,
+                    ease: "power2.out"
+                });
+            }
         };
 
+        // Event listeners untuk desktop
         signUpBtn.addEventListener('click', toggleCard);
         signInBtn.addEventListener('click', toggleCard);
+
+        // Event listeners untuk mobile
+        mobileToggleSignUp.addEventListener('click', toggleCard);
+        mobileToggleSignIn.addEventListener('click', toggleCard);
 
         // Animasi GSAP saat halaman pertama kali dibuka
         window.addEventListener('load', () => {
@@ -435,15 +710,27 @@
         });
 
         // Efek tambahan: Goyangan halus saat mouse bergerak (Parallax Ringan)
+        // Hanya untuk desktop (lebar > 768px)
         document.addEventListener('mousemove', (e) => {
-            const moveX = (e.clientX - window.innerWidth / 2) * 0.01;
-            const moveY = (e.clientY - window.innerHeight / 2) * 0.01;
-            
+            if (window.innerWidth > 768) {
+                const moveX = (e.clientX - window.innerWidth / 2) * 0.01;
+                const moveY = (e.clientY - window.innerHeight / 2) * 0.01;
+                
+                gsap.to(".main-card", {
+                    x: moveX,
+                    y: moveY,
+                    duration: 2,
+                    ease: "power2.out"
+                });
+            }
+        });
+
+        // Reset posisi card saat resize
+        window.addEventListener('resize', () => {
             gsap.to(".main-card", {
-                x: moveX,
-                y: moveY,
-                duration: 2,
-                ease: "power2.out"
+                x: 0,
+                y: 0,
+                duration: 0.5
             });
         });
     </script>

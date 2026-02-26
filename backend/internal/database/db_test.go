@@ -2,8 +2,8 @@ package database
 
 import (
 	"context"
-	"erpaa-backend/internal/model"
-	"erpaa-backend/internal/repository"
+	"erpaa/backend/internal/model"
+	"erpaa/backend/internal/repository"
 	"fmt"
 	"os"
 	"testing"
