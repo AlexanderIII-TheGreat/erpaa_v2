@@ -3,23 +3,22 @@ package server
 import (
 	"embed"
 	"fmt"
-	// Di dalam backend/server/server.go
-	"erpaa/backend/internal/database"
-	"erpaa/backend/internal/handler"
+
 	"erpaa/backend/internal/middlewares"
-	"erpaa/backend/internal/repository"
+	"erpaa/backend/internal/providers"
 	"html/template"
 	"io/fs"
 	"net/http"
 	"time"
+
+	"gorm.io/gorm"
 )
 
-func Server(templ embed.FS) error {
+func Server(templ embed.FS, db *gorm.DB) error {
 
-	UserPatern := repository.NewUserImplemen(database.DataCon())
-	UserHandler := handler.NewHandlerUser(UserPatern)
+	di := providers.InitializedApp(db)
 
-	cleanedfs, _ := fs.Sub(templ, "frontend/pages")
+	cleanedfs, _ := fs.Sub(templ, "pages")
 
 	render := func(w http.ResponseWriter, page string, data interface{}){
 		tmpl, err := template.ParseFS(cleanedfs, page)
@@ -77,12 +76,13 @@ func Server(templ embed.FS) error {
 		http.FileServer(http.Dir("C:/Users/user/erpaa/frontend/src")),
 	))
 
+	
 	// kelompok auth 
-	mux.HandleFunc("/login/auth",UserHandler.FindUser)
+	mux.HandleFunc("/login/auth",di.UserHandler.FindUser)
 
-	mux.HandleFunc("/login/register", UserHandler.Registrasi)
+	mux.HandleFunc("/login/register", di.UserHandler.Registrasi)
 
-	mux.HandleFunc("/logout/", UserHandler.Logout)
+	mux.HandleFunc("/logout/", di.UserHandler.Logout)
 
 	fmt.Println("server berjalan di port 8090")
 

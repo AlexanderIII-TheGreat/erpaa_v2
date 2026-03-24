@@ -2,80 +2,61 @@ package repository
 
 import (
 	"context"
-	"database/sql"
 	"erpaa/backend/internal/model"
 	"fmt"
-	"os"
-
-	"github.com/joho/godotenv"
+	"log"
+	"gorm.io/gorm"
 )
 
 type UserImpl struct {
-	DB *sql.DB
+	DB *gorm.DB
 }
 
-func NewUserImplemen(db *sql.DB) UserPatern{
+type UserPatern interface {
+	// FindById(ctx context.Context, id int) (error)
+	FindUserPassword(ctx context.Context, user string)(model.UserModel, error)
+	// FindAll(ctx context.Context)([]model.UserModel, error)
+	Insert(ctx context.Context, user model.UserModel)(error)
+	// Delete(ctx context.Context, id int)(error)
+	Update(ctx context.Context, id int, user model.UserModel)(error)
+}
+
+func NewUserImplemen(db *gorm.DB) UserPatern{
 	return &UserImpl{DB: db}
 }
 
-func (impl *UserImpl) FindUserPassword(ctx context.Context,username string) (*model.UserModel, error) {
-
-	// tetap pakai env
-	if err := godotenv.Load(".env"); err != nil {
-		return nil, err
+func (impl *UserImpl) FindUserPassword(ctx context.Context, username string) (model.UserModel, error) {
+	var data model.UserModel
+	err := impl.DB.WithContext(ctx).Find(&data).Where("username = ?", username).Error 
+	if err != nil {
+		log.Fatalf("gagal melakukan pengambilan username %v", err)
 	}
 
-	table := os.Getenv("DB_USER")
+	fmt.Printf("berhasil mengambil data username :%v", username)
+	
+	return data, nil
 
-	query := fmt.Sprintf(`
-		SELECT username, password
-		FROM %s
-		WHERE username = ?
-		LIMIT 1
-	`, table)
-
-	row := impl.DB.QueryRowContext(ctx, query, username)
-
-	var user model.UserModel
-	if err := row.Scan( &user.Username, &user.Password); err != nil {
-		return nil, err
-	}
-
-	return &user, nil
 }
 
-func (rpu *UserImpl) Insert(ctx context.Context, user model.UserModel)(error){
+func (impl *UserImpl) Insert(ctx context.Context, user model.UserModel)(error){
 
-	if err := godotenv.Load(".env"); err != nil {
-		return err
+	err := impl.DB.WithContext(ctx).Create(&user).Error
+	if err != nil {
+		log.Fatalf("gagal melakukan insert user %v",err)
 	}
+	
+	fmt.Println("berhasil melakukan insert username : %v", user)
+	return nil
+}
 
-	Table := os.Getenv("DB_USER")
-
-	script := fmt.Sprintf(`
-	INSERT INTO %v (username, email, password) VALUES (?,?,?)`, Table)
-
-	if _, err := rpu.DB.ExecContext(ctx, script, &user.Username, &user.Email, &user.Password ); err != nil {
-		return err
+func (impl *UserImpl) Update(ctx context.Context, id int, user model.UserModel) (error){
+	
+	err := impl.DB.WithContext(ctx).Model(&model.UserModel{}).Where("id = ?", id).Error
+	if err != nil {
+		log.Fatalf("gagal melakukan update data user :%v", id)
 	}
 
 	return nil
-	
-}
 
-func (rpu *UserImpl) Update(ctx context.Context, id int,  user model.UserModel) (error){
-	if err := godotenv.Load(".env"); err != nil {
-		return err
-	}
-
-	Table := os.Getenv("DB_USER")
-	Script := fmt.Sprintf("UPDATE FROM %v SET (username, email,password) VALUES (?,?,?) WHERE id = ?", Table)
-	
-
-	if _, err := rpu.DB.ExecContext(ctx,Script,&user.Username, &user.Email, &user.Password, id); err != nil {
-		return err
-	}
-
-	return nil
 }
 
